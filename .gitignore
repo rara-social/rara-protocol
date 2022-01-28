@@ -8,3 +8,8 @@ typechain
 #Hardhat files
 cache
 artifacts
+
+# OpenZeppelin
+.openzeppelin/dev-*.json
+.openzeppelin/.session
+.openzeppelin/unknown-*.json
