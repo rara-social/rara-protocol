@@ -26,12 +26,35 @@ contract MakerVault is IMakerVault, Initializable, MakerVaultStorageV1 {
         uint256 metaId
     );
 
+    /// @dev Event triggered when an NFT is deregistered from the system
+    event Deregistered(
+        address indexed nftContractAddress,
+        uint256 indexed nftID,
+        address indexed ownerAddress,
+        uint256 sourceId
+    );
+
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IAddressManager _addressManager) public initializer {
         addressManager = _addressManager;
     }
 
-    /// @dev Allows a NFT owner to register the NFT in the protocol.
+    /// @dev For the specified NFT, verify it is owned by the potential owner
+    function verifyOwnership(
+        address nftContractAddress,
+        uint256 nftID,
+        address potentialOwner
+    ) internal view returns (bool) {
+        // TODO: support ERC721 + other custom contracts
+        uint256 balance = IERC1155Upgradeable(nftContractAddress).balanceOf(
+            potentialOwner,
+            nftID
+        );
+
+        return balance > 0;
+    }
+
+    /// @dev Allows a NFT owner to register the NFT in the protocol so that reactions can be sold.
     /// Owner registering must own the NFT in the wallet calling function.
     function registerNFT(
         address nftContractAddress,
@@ -40,12 +63,10 @@ contract MakerVault is IMakerVault, Initializable, MakerVaultStorageV1 {
         uint256 optionBits
     ) external {
         // Verify ownership
-        // TODO: support ERC721 + other custom contracts
-        uint256 balance = IERC1155Upgradeable(nftContractAddress).balanceOf(
-            msg.sender,
-            nftID
+        require(
+            verifyOwnership(nftContractAddress, nftID, msg.sender),
+            "NFT not owned"
         );
-        require(balance > 0, "NFT not owned");
 
         // TODO: Block registration of a RaRa reaction NFT once Reaction Vault is built out
 
@@ -88,5 +109,28 @@ contract MakerVault is IMakerVault, Initializable, MakerVaultStorageV1 {
             currentSourceId,
             metaId
         );
+    }
+
+    /// @dev Allow an NFT owner to deregister and remove capability for reactions to be sold.
+    /// Caller must currently own the NFT being deregistered
+    function deregisterNFT(address nftContractAddress, uint256 nftID) external {
+        // Verify ownership
+        require(
+            verifyOwnership(nftContractAddress, nftID, msg.sender),
+            "NFT not owned"
+        );
+
+        // Look up source ID and verify it is valid
+        uint256 sourceId = nftToSourceLookup[nftContractAddress][nftID];
+        require(sourceId > 0, "NFT not found");
+
+        // Verify it is registered
+        NftDetails storage details = sourceToDetailsLookup[sourceId];
+        require(details.registered, "NFT not registered");
+
+        // Update the param
+        details.registered = false;
+
+        emit Deregistered(nftContractAddress, nftID, msg.sender, sourceId);
     }
 }

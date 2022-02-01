@@ -3,7 +3,12 @@ import { BigNumber } from "ethers";
 import { ethers } from "hardhat";
 import { ZERO_ADDRESS } from "../Scripts/constants";
 import { deploySystem } from "../Scripts/deploy";
-import { ALREADY_REGISTERED, NFT_NOT_OWNED } from "../Scripts/errors";
+import {
+  ALREADY_REGISTERED,
+  NFT_NOT_FOUND,
+  NFT_NOT_OWNED,
+  NFT_NOT_REGISTERED,
+} from "../Scripts/errors";
 
 describe("MakerVault", function () {
   it("Should get initialized with address manager", async function () {
@@ -15,7 +20,7 @@ describe("MakerVault", function () {
     expect(currentAddressManager).to.equal(addressManager.address);
   });
 
-  it("Should verify NFT ownership", async function () {
+  it("Should verify NFT ownership on register", async function () {
     const [OWNER] = await ethers.getSigners();
     const { makerVault, testingStandard1155 } = await deploySystem(OWNER);
 
@@ -120,5 +125,70 @@ describe("MakerVault", function () {
     expect(registered).to.equal(true);
     expect(owner).to.equal(ALICE.address);
     expect(creator).to.equal(BOB.address);
+  });
+
+  it("Should verify NFT ownership on deregister", async function () {
+    const [OWNER] = await ethers.getSigners();
+    const { makerVault, testingStandard1155 } = await deploySystem(OWNER);
+
+    // Since this is trying to deregister a non-existing NFT it should show the caller doesn't own it
+    await expect(
+      makerVault.deregisterNFT(testingStandard1155.address, "1")
+    ).to.revertedWith(NFT_NOT_OWNED);
+  });
+
+  it("Should register and deregister and check event", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const { makerVault, testingStandard1155, roleManager } = await deploySystem(
+      OWNER
+    );
+
+    // Mint an NFT to Alice
+    const NFT_ID = "1";
+    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
+    roleManager.grantRole(reactionMinterRole, OWNER.address);
+    testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
+
+    // Verify NFT unknown in the system can't be deregsitered
+    await expect(
+      makerVault
+        .connect(ALICE)
+        .deregisterNFT(testingStandard1155.address, NFT_ID)
+    ).to.revertedWith(NFT_NOT_FOUND);
+
+    // Register it
+    await makerVault
+      .connect(ALICE)
+      .registerNFT(testingStandard1155.address, NFT_ID, BOB.address, "0");
+
+    // First NFT in the system should have source ID of 1
+    const EXPECTED_SOURCE_ID = "1";
+
+    // Deregister it and check event params
+    await expect(
+      makerVault
+        .connect(ALICE)
+        .deregisterNFT(testingStandard1155.address, NFT_ID)
+    )
+      .to.emit(makerVault, "Deregistered")
+      .withArgs(
+        testingStandard1155.address,
+        BigNumber.from(NFT_ID),
+        ALICE.address,
+        EXPECTED_SOURCE_ID
+      );
+
+    // Second Deregister should fail
+    await expect(
+      makerVault
+        .connect(ALICE)
+        .deregisterNFT(testingStandard1155.address, NFT_ID)
+    ).to.revertedWith(NFT_NOT_REGISTERED);
+
+    // Verify the flag was set to false
+    const [registered] = await makerVault.sourceToDetailsLookup(
+      BigNumber.from(EXPECTED_SOURCE_ID)
+    );
+    expect(registered).to.equal(false);
   });
 });
