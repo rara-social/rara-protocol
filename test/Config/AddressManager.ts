@@ -1,22 +1,30 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { deploySystem } from "../Scripts/deploy";
 
 describe("AddressManager", function () {
-  it("Should set Maker Vault Address", async function () {
-    const MakerVault = await ethers.getContractFactory("AddressManager");
-    const deployedMakerVault = await MakerVault.deploy();
-    await deployedMakerVault.deployed();
+  it("Should get initialized with role manager", async function () {
+    const [OWNER] = await ethers.getSigners();
+    const { addressManager, roleManager } = await deploySystem(OWNER);
 
-    expect(await deployedMakerVault.makerVault()).to.equal(
-      "0x0000000000000000000000000000000000000000"
-    );
+    // Verify the role manager was set
+    const currentAddressManager = await addressManager.roleManager();
+    expect(currentAddressManager).to.equal(roleManager.address);
+  });
 
-    deployedMakerVault.setMakerVault(
-      "0x0000000000000000000000000000000000000001"
-    );
+  it("Should allow owner to set role manager address", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const { addressManager } = await deploySystem(OWNER);
 
-    expect(await deployedMakerVault.makerVault()).to.equal(
-      "0x0000000000000000000000000000000000000001"
-    );
+    // Set it to Alice's address
+    await addressManager.setRoleManager(ALICE.address);
+
+    // Verify it got set
+    const currentAddressManager = await addressManager.roleManager();
+    expect(currentAddressManager).to.equal(ALICE.address);
+
+    // Verify non owner can't update address
+    await expect(addressManager.connect(ALICE).setRoleManager(BOB.address)).to
+      .be.reverted;
   });
 });

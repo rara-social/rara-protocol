@@ -58,4 +58,41 @@ describe("RoleManager", function () {
     result = await manager.isReactionMinter(BOB.address);
     expect(result).to.equal(false);
   });
+
+  it("Should allow owner to set Reaction Burner", async function () {
+    // eslint-disable-next-line no-unused-vars
+    const [OWNER, ALICE, BOB, CAROL] = await ethers.getSigners();
+
+    // Deploy the RoleManger using the upgrades plugin with a proxy
+    const RoleManagerFactory = await ethers.getContractFactory("RoleManager");
+    const deployedManager = await upgrades.deployProxy(RoleManagerFactory, [
+      OWNER.address,
+    ]);
+
+    // This attach call is just for typings on the object (not necessary but helpful)
+    const manager = RoleManagerFactory.attach(deployedManager.address);
+
+    const reactionBurnerRole = await manager.REACTION_BURNER_ROLE();
+
+    // Verify bob does not haver permission
+    let result = await manager.hasRole(reactionBurnerRole, BOB.address);
+    expect(result).to.equal(false);
+
+    // Add BOB
+    await manager.grantRole(reactionBurnerRole, BOB.address);
+
+    // Verify it was set
+    result = await manager.isReactionBurner(BOB.address);
+    expect(result).to.equal(true);
+
+    // Verify a non owner (ALICE) can't set the permission
+    await expect(
+      manager.connect(ALICE).grantRole(reactionBurnerRole, CAROL.address)
+    ).to.be.reverted;
+
+    // Remove BOB and verify
+    await manager.revokeRole(reactionBurnerRole, BOB.address);
+    result = await manager.isReactionBurner(BOB.address);
+    expect(result).to.equal(false);
+  });
 });
