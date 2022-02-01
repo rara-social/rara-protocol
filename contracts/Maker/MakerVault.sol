@@ -10,7 +10,7 @@ import "./MakerVaultStorage.sol";
 
 /// @title MakerVault
 /// @dev This contract tracks registered NFTs.  Owners of an NFT can register
-/// and de-register any NFTs owned in their wallet.
+/// and deregister any NFTs owned in their wallet.
 /// Also, for the mappings, it is assumed the protocol will always look up the current owner of
 /// an NFT when running logic (which is why the owner address is not stored).  If desired, an
 /// off-chain indexer like The Graph can index registration addresses to NFTs.
@@ -44,7 +44,7 @@ contract MakerVault is IMakerVault, Initializable, MakerVaultStorageV1 {
         address nftContractAddress,
         uint256 nftID,
         address potentialOwner
-    ) internal view returns (bool) {
+    ) public view returns (bool) {
         // TODO: support ERC721 + other custom contracts
         uint256 balance = IERC1155Upgradeable(nftContractAddress).balanceOf(
             potentialOwner,
