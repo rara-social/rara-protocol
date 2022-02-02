@@ -23,11 +23,11 @@ const deploySystem = async (owner: SignerWithAddress) => {
   );
 
   // Deploy Maker Vault
-  const MakerVaultFactory = await ethers.getContractFactory("MakerVault");
-  const deployedMakerVault = await upgrades.deployProxy(MakerVaultFactory, [
+  const MakerRegistrarFactory = await ethers.getContractFactory("MakerRegistrar");
+  const deployedMakerRegistrar = await upgrades.deployProxy(MakerRegistrarFactory, [
     addressManager.address,
   ]);
-  const makerVault = MakerVaultFactory.attach(deployedMakerVault.address);
+  const makerRegistrar = MakerRegistrarFactory.attach(deployedMakerRegistrar.address);
 
   // Deploy Testing NFT Token 1155
   // NOTE: We are not granting any default permissions for minting in the role manager to the owner
@@ -45,7 +45,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   return {
     roleManager,
     addressManager,
-    makerVault,
+    makerRegistrar,
     testingStandard1155,
   };
 };

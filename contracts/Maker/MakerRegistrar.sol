@@ -5,16 +5,20 @@ import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
 import "../Permissions/IRoleManager.sol";
-import "./IMakerVault.sol";
-import "./MakerVaultStorage.sol";
+import "./IMakerRegistrar.sol";
+import "./MakerRegistrarStorage.sol";
 
-/// @title MakerVault
+/// @title MakerRegistrar
 /// @dev This contract tracks registered NFTs.  Owners of an NFT can register
 /// and deregister any NFTs owned in their wallet.
 /// Also, for the mappings, it is assumed the protocol will always look up the current owner of
 /// an NFT when running logic (which is why the owner address is not stored).  If desired, an
 /// off-chain indexer like The Graph can index registration addresses to NFTs.
-contract MakerVault is IMakerVault, Initializable, MakerVaultStorageV1 {
+contract MakerRegistrar is
+    IMakerRegistrar,
+    Initializable,
+    MakerRegistrarStorageV1
+{
     /// @dev Event triggered when an NFT is registered in the system
     event Registered(
         address indexed nftContractAddress,
