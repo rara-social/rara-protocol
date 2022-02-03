@@ -14,15 +14,11 @@ import "./MakerRegistrarStorage.sol";
 /// Also, for the mappings, it is assumed the protocol will always look up the current owner of
 /// an NFT when running logic (which is why the owner address is not stored).  If desired, an
 /// off-chain indexer like The Graph can index registration addresses to NFTs.
-contract MakerRegistrar is
-    IMakerRegistrar,
-    Initializable,
-    MakerRegistrarStorageV1
-{
+contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
     /// @dev Event triggered when an NFT is registered in the system
     event Registered(
         address indexed nftContractAddress,
-        uint256 indexed nftID,
+        uint256 indexed nftId,
         address indexed ownerAddress,
         address creatorAddress,
         uint256 optionBits,
@@ -33,7 +29,7 @@ contract MakerRegistrar is
     /// @dev Event triggered when an NFT is deregistered from the system
     event Deregistered(
         address indexed nftContractAddress,
-        uint256 indexed nftID,
+        uint256 indexed nftId,
         address indexed ownerAddress,
         uint256 sourceId
     );
@@ -46,13 +42,13 @@ contract MakerRegistrar is
     /// @dev For the specified NFT, verify it is owned by the potential owner
     function verifyOwnership(
         address nftContractAddress,
-        uint256 nftID,
+        uint256 nftId,
         address potentialOwner
     ) public view returns (bool) {
         // TODO: support ERC721 + other custom contracts
         uint256 balance = IERC1155Upgradeable(nftContractAddress).balanceOf(
             potentialOwner,
-            nftID
+            nftId
         );
 
         return balance > 0;
@@ -62,20 +58,20 @@ contract MakerRegistrar is
     /// Owner registering must own the NFT in the wallet calling function.
     function registerNFT(
         address nftContractAddress,
-        uint256 nftID,
+        uint256 nftId,
         address creatorAddress,
         uint256 optionBits
     ) external {
         // Verify ownership
         require(
-            verifyOwnership(nftContractAddress, nftID, msg.sender),
+            verifyOwnership(nftContractAddress, nftId, msg.sender),
             "NFT not owned"
         );
 
         // TODO: Block registration of a RaRa reaction NFT once Reaction Vault is built out
 
         // Look up the source ID
-        uint256 currentSourceId = nftToSourceLookup[nftContractAddress][nftID];
+        uint256 currentSourceId = nftToSourceLookup[nftContractAddress][nftId];
 
         // Check to see if the source ID is already set for this NFT
         if (currentSourceId > 0) {
@@ -91,11 +87,13 @@ contract MakerRegistrar is
 
         // Generate Meta ID
         uint256 metaId = uint256(
-            keccak256(abi.encode(META_PREFIX, currentSourceId, optionBits))
+            keccak256(
+                abi.encode(MAKER_META_PREFIX, currentSourceId, optionBits)
+            )
         );
 
         // Register in mappings
-        nftToSourceLookup[nftContractAddress][nftID] = currentSourceId;
+        nftToSourceLookup[nftContractAddress][nftId] = currentSourceId;
         metaToSourceLookup[metaId] = currentSourceId;
         sourceToDetailsLookup[currentSourceId] = NftDetails(
             true,
@@ -106,7 +104,7 @@ contract MakerRegistrar is
         // Emit event
         emit Registered(
             nftContractAddress,
-            nftID,
+            nftId,
             msg.sender,
             creatorAddress,
             optionBits,
@@ -117,15 +115,15 @@ contract MakerRegistrar is
 
     /// @dev Allow an NFT owner to deregister and remove capability for reactions to be sold.
     /// Caller must currently own the NFT being deregistered
-    function deregisterNFT(address nftContractAddress, uint256 nftID) external {
+    function deregisterNFT(address nftContractAddress, uint256 nftId) external {
         // Verify ownership
         require(
-            verifyOwnership(nftContractAddress, nftID, msg.sender),
+            verifyOwnership(nftContractAddress, nftId, msg.sender),
             "NFT not owned"
         );
 
         // Look up source ID and verify it is valid
-        uint256 sourceId = nftToSourceLookup[nftContractAddress][nftID];
+        uint256 sourceId = nftToSourceLookup[nftContractAddress][nftId];
         require(sourceId > 0, "NFT not found");
 
         // Verify it is registered
@@ -135,6 +133,6 @@ contract MakerRegistrar is
         // Update the param
         details.registered = false;
 
-        emit Deregistered(nftContractAddress, nftID, msg.sender, sourceId);
+        emit Deregistered(nftContractAddress, nftId, msg.sender, sourceId);
     }
 }
