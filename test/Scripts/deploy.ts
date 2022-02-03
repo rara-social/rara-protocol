@@ -22,7 +22,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
     deployedAddressManager.address
   );
 
-  // Deploy Maker Vault
+  // Deploy Maker Registrar
   const MakerRegistrarFactory = await ethers.getContractFactory("MakerRegistrar");
   const deployedMakerRegistrar = await upgrades.deployProxy(MakerRegistrarFactory, [
     addressManager.address,
