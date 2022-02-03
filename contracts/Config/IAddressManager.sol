@@ -2,6 +2,9 @@
 pragma solidity 0.8.9;
 
 import "../Permissions/IRoleManager.sol";
+import "../Parameters/IParameterManager.sol";
+import "../Maker/IMakerRegistrar.sol";
+import "../Token/IStandard1155.sol";
 
 interface IAddressManager {
     /// @dev Getter for the role manager address
@@ -9,4 +12,23 @@ interface IAddressManager {
 
     /// @dev Setter for the role manager address
     function setRoleManager(IRoleManager _roleManager) external;
+
+    /// @dev Getter for the role manager address
+    function getParameterManager() external returns (IParameterManager);
+
+    /// @dev Setter for the role manager address
+    function setParameterManager(IParameterManager _parameterManager) external;
+
+    /// @dev Getter for the maker registrar address
+    function getMakerRegistrar() external returns (IMakerRegistrar);
+
+    /// @dev Setter for the maker registrar address
+    function setMakerRegistrar(IMakerRegistrar _makerRegistrar) external;
+
+    /// @dev Getter for the reaction NFT contract address
+    function getReactionNftContract() external returns (IStandard1155);
+
+    /// @dev Setter for the reaction NFT contract address
+    function setReactionNftContract(IStandard1155 _reactionNftContract)
+        external;
 }
