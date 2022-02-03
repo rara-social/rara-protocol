@@ -9,12 +9,12 @@ import "./IMakerRegistrar.sol";
 /// When upgrading the protocol, inherit from this contract on the V2 version and change the
 /// MakerRegistrar to inherit from the later version.  This ensures there are no storage layout
 /// corruptions when upgrading.
-contract MakerRegistrarStorageV1 {
+abstract contract MakerRegistrarStorageV1 is IMakerRegistrar {
     /// @dev local reference to the address manager contract
     IAddressManager public addressManager;
 
     /// @dev prefix used in meta ID generation
-    string public constant META_PREFIX = "MAKER";
+    string public constant MAKER_META_PREFIX = "MAKER";
 
     /// @dev An incrementing unique number assigned to each NFT that is registered.
     /// De-registering and re-registering should use the existing source ID
@@ -24,10 +24,12 @@ contract MakerRegistrarStorageV1 {
     mapping(address => mapping(uint256 => uint256)) public nftToSourceLookup;
 
     /// @dev Mapping to look up source ID from meta ID key
-    mapping(uint256 => uint256) public metaToSourceLookup;
+    mapping(uint256 => uint256) public override metaToSourceLookup;
 
     /// @dev Mapping to look up nft details from source ID
-    mapping(uint256 => IMakerRegistrar.NftDetails) public sourceToDetailsLookup;
+    mapping(uint256 => IMakerRegistrar.NftDetails)
+        public
+        override sourceToDetailsLookup;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below
