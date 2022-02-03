@@ -2,9 +2,6 @@
 pragma solidity 0.8.9;
 
 import "../Permissions/IRoleManager.sol";
-import "../Parameters/IParameterManager.sol";
-import "../Maker/IMakerRegistrar.sol";
-import "../Token/IStandard1155.sol";
 
 /// @title AddressManagerStorage
 /// @dev This contract will hold all local variables for the AddressManager Contract
@@ -14,15 +11,6 @@ import "../Token/IStandard1155.sol";
 contract AddressManagerStorageV1 {
     /// @dev Local reference to the role manager contract
     IRoleManager public roleManager;
-
-    /// @dev Local reference to the payment manager contract
-    IParameterManager public parameterManager;
-
-    /// @dev Local reference to the maker registrar contract
-    IMakerRegistrar public makerRegistrar;
-
-    /// @dev Local reference to the reaction NFT contract
-    IStandard1155 public reactionNftContract;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below
