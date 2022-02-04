@@ -37,9 +37,8 @@ describe("MakerRegistrar", function () {
 
   it("Should allow NFT registration only once", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { makerRegistrar, roleManager, testingStandard1155 } = await deploySystem(
-      OWNER
-    );
+    const { makerRegistrar, roleManager, testingStandard1155 } =
+      await deploySystem(OWNER);
 
     // Mint an NFT to Alice
     const NFT_ID = "1";
@@ -63,9 +62,8 @@ describe("MakerRegistrar", function () {
 
   it("Should emit registration event and verify mappings", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { makerRegistrar, roleManager, testingStandard1155 } = await deploySystem(
-      OWNER
-    );
+    const { makerRegistrar, roleManager, testingStandard1155 } =
+      await deploySystem(OWNER);
 
     // Mint an NFT to Alice
     const NFT_ID = "1";
@@ -110,7 +108,10 @@ describe("MakerRegistrar", function () {
     // Verify lookups are set in the mapping
     // Verify source id from nft param
     expect(
-      await makerRegistrar.nftToSourceLookup(testingStandard1155.address, NFT_ID)
+      await makerRegistrar.nftToSourceLookup(
+        testingStandard1155.address,
+        NFT_ID
+      )
     ).to.equal(EXPECTED_SOURCE_ID);
 
     // Verify source from meta id
@@ -119,9 +120,10 @@ describe("MakerRegistrar", function () {
     );
 
     // Verify registration details from source id
-    const [registered, owner, creator] = await makerRegistrar.sourceToDetailsLookup(
-      BigNumber.from(EXPECTED_SOURCE_ID)
-    );
+    const [registered, owner, creator] =
+      await makerRegistrar.sourceToDetailsLookup(
+        BigNumber.from(EXPECTED_SOURCE_ID)
+      );
     expect(registered).to.equal(true);
     expect(owner).to.equal(ALICE.address);
     expect(creator).to.equal(BOB.address);
@@ -139,9 +141,8 @@ describe("MakerRegistrar", function () {
 
   it("Should register and deregister and check event", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { makerRegistrar, testingStandard1155, roleManager } = await deploySystem(
-      OWNER
-    );
+    const { makerRegistrar, testingStandard1155, roleManager } =
+      await deploySystem(OWNER);
 
     // Mint an NFT to Alice
     const NFT_ID = "1";

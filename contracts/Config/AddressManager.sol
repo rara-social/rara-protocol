@@ -1,16 +1,11 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.9;
 
-import "./IAddressManager.sol";
 import "./AddressManagerStorage.sol";
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract AddressManager is
-    IAddressManager,
-    Initializable,
-    AddressManagerStorageV1
-{
+contract AddressManager is Initializable, AddressManagerStorageV1 {
     /// @dev Verifies with the role manager that the calling address has ADMIN role
     modifier onlyAdmin() {
         require(roleManager.isAdmin(msg.sender), "Not Admin");
@@ -19,24 +14,22 @@ contract AddressManager is
 
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IRoleManager _roleManager) public initializer {
-        require(address(_roleManager) != address(0x0), "Invalid _roleManager");
+        require(address(_roleManager) != address(0x0), ZERO_INPUT);
         roleManager = _roleManager;
-    }
-
-    /// @dev Getter for the role manager address
-    function getRoleManager() external view returns (IRoleManager) {
-        return roleManager;
     }
 
     /// @dev Setter for the role manager address
     function setRoleManager(IRoleManager _roleManager) external onlyAdmin {
-        require(address(_roleManager) != address(0x0), "Invalid _roleManager");
-        roleManager = _roleManager;
-    }
+        // Sanity check
+        require(address(_roleManager) != address(0x0), ZERO_INPUT);
 
-    /// @dev Getter for the role manager address
-    function getParameterManager() external view returns (IParameterManager) {
-        return parameterManager;
+        // If the role manager address gets corrupted then this contract is DOA
+        // since no future updates can be performed via permission checks.
+        // Ensure the target address is valid and configured by requiring the current admin
+        // making this call is an admin on the new contract
+        require(_roleManager.isAdmin(msg.sender), "RM invalid");
+
+        roleManager = _roleManager;
     }
 
     /// @dev Setter for the role manager address
@@ -44,16 +37,8 @@ contract AddressManager is
         external
         onlyAdmin
     {
-        require(
-            address(_parameterManager) != address(0x0),
-            "Invalid _parameterManager"
-        );
+        require(address(_parameterManager) != address(0x0), ZERO_INPUT);
         parameterManager = _parameterManager;
-    }
-
-    /// @dev Getter for the maker registrar address
-    function getMakerRegistrar() external view returns (IMakerRegistrar) {
-        return makerRegistrar;
     }
 
     /// @dev Setter for the maker registrar address
@@ -61,16 +46,8 @@ contract AddressManager is
         external
         onlyAdmin
     {
-        require(
-            address(_makerRegistrar) != address(0x0),
-            "Invalid _makerRegistrar"
-        );
+        require(address(_makerRegistrar) != address(0x0), ZERO_INPUT);
         makerRegistrar = _makerRegistrar;
-    }
-
-    /// @dev Getter for the maker registrar address
-    function getReactionNftContract() external view returns (IStandard1155) {
-        return reactionNftContract;
     }
 
     /// @dev Setter for the maker registrar address
@@ -78,10 +55,7 @@ contract AddressManager is
         external
         onlyAdmin
     {
-        require(
-            address(_reactionNftContract) != address(0x0),
-            "Invalid _reactionNftContract"
-        );
+        require(address(_reactionNftContract) != address(0x0), ZERO_INPUT);
         reactionNftContract = _reactionNftContract;
     }
 }
