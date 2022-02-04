@@ -85,7 +85,7 @@ contract ReactionVault is
         ReactionInfo memory info;
 
         // Verify the NFT is registered
-        info.makerRegistrar = addressManager.getMakerRegistrar();
+        info.makerRegistrar = addressManager.makerRegistrar();
         info.sourceId = info.makerRegistrar.metaToSourceLookup(makerNftMetaId);
         (info.registered, info.owner, info.creator) = info
             .makerRegistrar
@@ -93,11 +93,9 @@ contract ReactionVault is
         require(info.registered, "NFT not registered");
 
         // Move the funds into the this contract from the buyer
-        info.parameterManager = addressManager.getParameterManager();
-        IERC20Upgradeable paymentToken = info
-            .parameterManager
-            .getPaymentToken();
-        info.reactionPrice = info.parameterManager.getReactionPrice();
+        info.parameterManager = addressManager.parameterManager();
+        IERC20Upgradeable paymentToken = info.parameterManager.paymentToken();
+        info.reactionPrice = info.parameterManager.reactionPrice();
         info.totalPurchasePrice = info.reactionPrice * quantity;
         paymentToken.safeTransferFrom(
             msg.sender,
@@ -111,7 +109,7 @@ contract ReactionVault is
         if (info.creator != address(0x0)) {
             // Calc the amount
             info.creatorCut =
-                (info.parameterManager.getSaleCreatorBasisPoints() *
+                (info.parameterManager.saleCreatorBasisPoints() *
                     info.totalPurchasePrice) /
                 10_000;
 
@@ -130,7 +128,7 @@ contract ReactionVault is
         if (referrer != address(0x0)) {
             // Calc the amount
             info.referrerCut =
-                (info.parameterManager.getSaleReferrerBasisPoints() *
+                (info.parameterManager.saleReferrerBasisPoints() *
                     info.totalPurchasePrice) /
                 10_000;
 
@@ -146,7 +144,7 @@ contract ReactionVault is
         // Next, allocate the amount to the curator liability
         uint256 saleCuratorLiabilityBasisPoints = info
             .parameterManager
-            .getSaleCuratorLiabilityBasisPoints();
+            .saleCuratorLiabilityBasisPoints();
         info.curatorLiabilityCut =
             (saleCuratorLiabilityBasisPoints * info.totalPurchasePrice) /
             10_000;
@@ -194,7 +192,7 @@ contract ReactionVault is
 
         // Mint NFTs to destination wallet
         IStandard1155 reactionNftContract = addressManager
-            .getReactionNftContract();
+            .reactionNftContract();
         reactionNftContract.mint(
             destinationWallet,
             info.reactionMetaId,

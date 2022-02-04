@@ -15,9 +15,7 @@ contract Standard1155 is
 {
     /// @dev verifies that the calling account has a role to enable minting tokens
     modifier onlyMinter() {
-        IRoleManager roleManager = IRoleManager(
-            addressManager.getRoleManager()
-        );
+        IRoleManager roleManager = IRoleManager(addressManager.roleManager());
         require(roleManager.isReactionMinter(msg.sender), "Not Minter");
         _;
     }
@@ -27,6 +25,7 @@ contract Standard1155 is
         public
         initializer
     {
+        // TODO: Should the URI be updateable?
         __ERC1155_init(_uri);
 
         addressManager = IAddressManager(_addressManager);
