@@ -46,7 +46,7 @@ contract ReactionVault is
     );
 
     event MakerRewardsGranted(
-        address referrer,
+        address maker,
         IERC20Upgradeable paymentToken,
         uint256 amount
     );
@@ -84,9 +84,12 @@ contract ReactionVault is
         // Create a struct to hold local vars (and prevent "stack too deep")
         ReactionInfo memory info;
 
-        // Verify the NFT is registered
+        // Get the NFT Source ID from the maker registrar
         info.makerRegistrar = addressManager.makerRegistrar();
         info.sourceId = info.makerRegistrar.metaToSourceLookup(makerNftMetaId);
+        require(info.sourceId != 0, "Unknown NFT");
+
+        // Verify it is registered
         (info.registered, info.owner, info.creator) = info
             .makerRegistrar
             .sourceToDetailsLookup(info.sourceId);
@@ -158,7 +161,7 @@ contract ReactionVault is
 
         // Assign awards to maker
         ownerToRewardsMapping[paymentToken][info.owner] += info.makerCut;
-        emit MakerRewardsGranted(referrer, paymentToken, info.makerCut);
+        emit MakerRewardsGranted(info.owner, paymentToken, info.makerCut);
 
         // Build the parameter version from the price details
         info.parameterVersion = uint256(

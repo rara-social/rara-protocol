@@ -3,6 +3,7 @@ import { BigNumber } from "ethers";
 import { ethers } from "hardhat";
 import { ZERO_ADDRESS } from "../Scripts/constants";
 import { deploySystem } from "../Scripts/deploy";
+import { deriveMakerNftMetaId } from "../Scripts/derivedParams";
 import {
   ALREADY_REGISTERED,
   NFT_NOT_FOUND,
@@ -73,11 +74,10 @@ describe("MakerRegistrar", function () {
     testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
 
     // Encode the params and hash it to get the meta URI
-    const encodedParams = ethers.utils.defaultAbiCoder.encode(
-      ["string", "uint256", "uint256"],
-      ["MAKER", 1, 0]
+    const derivedMetaId = deriveMakerNftMetaId(
+      BigNumber.from(1),
+      BigNumber.from(0)
     );
-    const derivedMetaId = ethers.utils.keccak256(encodedParams);
 
     // First one registered should have source ID 1
     const EXPECTED_SOURCE_ID = "1";

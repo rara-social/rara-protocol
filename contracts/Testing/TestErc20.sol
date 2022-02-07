@@ -4,7 +4,7 @@ pragma solidity 0.8.9;
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
 /// @title TestErc20
-/// @dev This contract implements the ERC20 standard and is used for testing purposes only
+/// @dev This contract implements the ERC20 standard and is used for unit testing purposes only
 /// Anyone can mint tokens
 contract TestErc20 is ERC20Upgradeable {
     /// @dev initializer to call after deployment, can only be called once

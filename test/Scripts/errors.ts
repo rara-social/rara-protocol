@@ -1,17 +1,23 @@
-const NFT_NOT_OWNED = "NFT not owned";
 const ALREADY_REGISTERED = "Already registered";
-const NFT_NOT_FOUND = "NFT not found";
-const NFT_NOT_REGISTERED = "NFT not registered";
-const INVALID_ZERO_PARAM = "Invalid 0 input";
-const NOT_ADMIN = "Not Admin";
 const INVALID_ROLE_MANAGER = "RM invalid";
+const INVALID_ZERO_PARAM = "Invalid 0 input";
+const NFT_NOT_FOUND = "NFT not found";
+const NFT_NOT_OWNED = "NFT not owned";
+const NFT_NOT_REGISTERED = "NFT not registered";
+const NOT_ADMIN = "Not Admin";
+const NO_BALANCE = "ERC20: transfer amount exceeds balance";
+const TRANSFER_NOT_ALLOWED = "ERC20: transfer amount exceeds allowance";
+const UNKNOWN_NFT = "Unknown NFT";
 
 export {
-  NFT_NOT_OWNED,
   ALREADY_REGISTERED,
-  NFT_NOT_FOUND,
-  NFT_NOT_REGISTERED,
-  INVALID_ZERO_PARAM,
-  NOT_ADMIN,
   INVALID_ROLE_MANAGER,
+  INVALID_ZERO_PARAM,
+  NFT_NOT_FOUND,
+  NFT_NOT_OWNED,
+  NFT_NOT_REGISTERED,
+  NOT_ADMIN,
+  NO_BALANCE,
+  TRANSFER_NOT_ALLOWED,
+  UNKNOWN_NFT,
 };

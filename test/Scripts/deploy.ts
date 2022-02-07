@@ -3,10 +3,10 @@ import { BigNumber } from "ethers";
 import { ethers, upgrades } from "hardhat";
 import { TEST_NFT_URI } from "./constants";
 
-const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
-const TEST_SALE_CURATOR_LIABILITY_BP = 5_000; // 50% goes to curator liability
-const TEST_SALE_CREATOR_BP = 200; // 2% goes to the creator
-const TEST_SALE_REFERRER_BP = 100; // 1% goes to the referrer
+export const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
+export const TEST_SALE_CURATOR_LIABILITY_BP = 5_000; // 50% goes to curator liability
+export const TEST_SALE_CREATOR_BP = 200; // 2% goes to the creator
+export const TEST_SALE_REFERRER_BP = 100; // 1% goes to the referrer
 
 const deploySystem = async (owner: SignerWithAddress) => {
   // Deploy the Role Manager first
@@ -89,7 +89,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
     "TEST",
     "TST",
   ]);
-  const testingErc20 = TestErc20Factory.attach(deployedTestErc20.address);
+  const paymentTokenErc20 = TestErc20Factory.attach(deployedTestErc20.address);
 
   // Update address manager
   await addressManager.setRoleManager(roleManager.address);
@@ -103,7 +103,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   roleManager.grantRole(minterRole, reactionVault.address);
 
   // Update the Parameters in the protocol
-  parameterManager.setPaymentToken(testingErc20.address);
+  parameterManager.setPaymentToken(paymentTokenErc20.address);
   parameterManager.setReactionPrice(TEST_REACTION_PRICE);
   parameterManager.setSaleCuratorLiabilityBasisPoints(
     TEST_SALE_CURATOR_LIABILITY_BP
@@ -113,14 +113,14 @@ const deploySystem = async (owner: SignerWithAddress) => {
 
   // Return objects for tests to use
   return {
-    roleManager,
     addressManager,
     makerRegistrar,
-    testingStandard1155,
     parameterManager,
+    paymentTokenErc20,
     reactionNFT1155,
     reactionVault,
-    testingErc20,
+    roleManager,
+    testingStandard1155,
   };
 };
 
