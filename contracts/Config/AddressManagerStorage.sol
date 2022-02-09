@@ -27,6 +27,12 @@ abstract contract AddressManagerStorageV1 is IAddressManager {
 
     /// @dev Local reference to the reaction NFT contract
     IStandard1155 public reactionNftContract;
+
+    /// @dev Local reference to the reaction vault
+    IReactionVault public reactionVault;
+
+    /// @dev Local reference to the default curator vault
+    IPermanentCuratorVault public defaultCuratorVault;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

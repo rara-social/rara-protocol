@@ -5,6 +5,8 @@ import "../Permissions/IRoleManager.sol";
 import "../Parameters/IParameterManager.sol";
 import "../Maker/IMakerRegistrar.sol";
 import "../Token/IStandard1155.sol";
+import "../Reactions/IReactionVault.sol";
+import "../PermanentCuratorVault/IPermanentCuratorVault.sol";
 
 interface IAddressManager {
     /// @dev Getter for the role manager address
@@ -30,5 +32,18 @@ interface IAddressManager {
 
     /// @dev Setter for the reaction NFT contract address
     function setReactionNftContract(IStandard1155 _reactionNftContract)
+        external;
+
+    /// @dev Getter for the reaction Vault contract address
+    function reactionVault() external returns (IReactionVault);
+
+    /// @dev Setter for the reaction Vault contract address
+    function setReactionVault(IReactionVault _reactionVault) external;
+
+    /// @dev Getter for the default Curator Vault contract address
+    function defaultCuratorVault() external returns (IPermanentCuratorVault);
+
+    /// @dev Setter for the default Curator Vault contract address
+    function setDefaultCuratorVault(IPermanentCuratorVault _defaultCuratorVault)
         external;
 }

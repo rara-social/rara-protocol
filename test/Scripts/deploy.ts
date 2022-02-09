@@ -53,21 +53,22 @@ const deploySystem = async (owner: SignerWithAddress) => {
   // Deploy Testing NFT Token 1155
   // NOTE: We are not granting any default permissions for minting in the role manager to the owner
   // because the tests of the protocol should not assume any roles are granted for external accounts.
-  const Standard1155Factory = await ethers.getContractFactory("Standard1155");
-  const deployedStandard1155 = await upgrades.deployProxy(Standard1155Factory, [
+  const Test1155Factory = await ethers.getContractFactory("TestErc1155");
+  const deployedTest1155 = await upgrades.deployProxy(Test1155Factory, [
     TEST_NFT_URI,
     addressManager.address,
   ]);
-  const testingStandard1155 = Standard1155Factory.attach(
-    deployedStandard1155.address
-  );
+  const testingStandard1155 = Test1155Factory.attach(deployedTest1155.address);
 
   // Deploy 1155 for NFT Reactions
+  const ReactionNft1155Factory = await ethers.getContractFactory(
+    "ReactionNft1155"
+  );
   const deployedReactionNFT1155 = await upgrades.deployProxy(
-    Standard1155Factory,
+    ReactionNft1155Factory,
     [TEST_NFT_URI, addressManager.address]
   );
-  const reactionNFT1155 = Standard1155Factory.attach(
+  const reactionNFT1155 = ReactionNft1155Factory.attach(
     deployedReactionNFT1155.address
   );
 
@@ -91,11 +92,36 @@ const deploySystem = async (owner: SignerWithAddress) => {
   ]);
   const paymentTokenErc20 = TestErc20Factory.attach(deployedTestErc20.address);
 
+  // Deploy the curator Shares Token Contract
+  const CuratorShares1155Factory = await ethers.getContractFactory(
+    "CuratorShares1155"
+  );
+  const deployedCuratorShares = await upgrades.deployProxy(
+    CuratorShares1155Factory,
+    [TEST_NFT_URI, addressManager.address]
+  );
+  const curatorShares = CuratorShares1155Factory.attach(
+    deployedCuratorShares.address
+  );
+
+  // Deploy the Default Curator Vault
+  const CuratorVaultFactory = await ethers.getContractFactory(
+    "PermanentCuratorVault"
+  );
+  const deployedCuratorVault = await upgrades.deployProxy(CuratorVaultFactory, [
+    addressManager.address,
+    400000,
+    curatorShares.address,
+  ]);
+  const curatorVault = CuratorVaultFactory.attach(deployedCuratorVault.address);
+
   // Update address manager
   await addressManager.setRoleManager(roleManager.address);
   await addressManager.setParameterManager(parameterManager.address);
   await addressManager.setMakerRegistrar(makerRegistrar.address);
   await addressManager.setReactionNftContract(reactionNFT1155.address);
+  await addressManager.setReactionVault(reactionVault.address);
+  await addressManager.setDefaultCuratorVault(curatorVault.address);
 
   // Update permissions in the Role Manager
   // Reaction Vault should be allowed to mint reactions
@@ -114,6 +140,8 @@ const deploySystem = async (owner: SignerWithAddress) => {
   // Return objects for tests to use
   return {
     addressManager,
+    curatorShares,
+    curatorVault,
     makerRegistrar,
     parameterManager,
     paymentTokenErc20,
