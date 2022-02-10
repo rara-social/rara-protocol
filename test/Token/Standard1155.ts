@@ -18,11 +18,11 @@ describe("Standard1155 Token", function () {
 
   it("Should mint tokens if authorized", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { testingStandard1155, roleManager } = await deploySystem(OWNER);
+    const { reactionNFT1155, roleManager } = await deploySystem(OWNER);
 
     // Verify Bob's non-authorized acct can't mint
     await expect(
-      testingStandard1155.connect(BOB).mint(ALICE.address, "1", "1000", [0])
+      reactionNFT1155.connect(BOB).mint(ALICE.address, "1", "1000", [0])
     ).to.be.reverted;
 
     // Grant authorization to Bob
@@ -30,19 +30,19 @@ describe("Standard1155 Token", function () {
     roleManager.grantRole(reactionMinterRole, BOB.address);
 
     // Mint again
-    testingStandard1155.connect(BOB).mint(ALICE.address, "1", "1000", [0]);
+    reactionNFT1155.connect(BOB).mint(ALICE.address, "1", "1000", [0]);
 
     // Verify balance
-    let balance = await testingStandard1155.balanceOf(ALICE.address, "1");
+    let balance = await reactionNFT1155.balanceOf(ALICE.address, "1");
     expect(balance.toString()).to.equal("1000");
 
     // Verify transfer
-    await testingStandard1155
+    await reactionNFT1155
       .connect(ALICE)
       .safeTransferFrom(ALICE.address, BOB.address, "1", "250", [0]);
 
     // Verify Bob balance
-    balance = await testingStandard1155.balanceOf(BOB.address, "1");
+    balance = await reactionNFT1155.balanceOf(BOB.address, "1");
     expect(balance.toString()).to.equal("250");
   });
 });

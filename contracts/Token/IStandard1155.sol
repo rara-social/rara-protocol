@@ -10,4 +10,10 @@ interface IStandard1155 {
         uint256 amount,
         bytes memory data
     ) external;
+
+    function burn(
+        address from,
+        uint256 id,
+        uint256 amount
+    ) external;
 }

@@ -123,4 +123,26 @@ describe("AddressManager", function () {
       addressManager.connect(ALICE).setReactionNftContract(BOB.address)
     ).to.revertedWith(NOT_ADMIN);
   });
+
+  it("Should allow owner to set reaction Vault address", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const { addressManager } = await deploySystem(OWNER);
+
+    // Verify the setter checks invalid input
+    await expect(addressManager.setReactionVault(ZERO_ADDRESS)).to.revertedWith(
+      INVALID_ZERO_PARAM
+    );
+
+    // Set it to Alice's address
+    await addressManager.setReactionVault(ALICE.address);
+
+    // Verify it got set
+    const currentVal = await addressManager.reactionVault();
+    expect(currentVal).to.equal(ALICE.address);
+
+    // Verify non owner can't update address
+    await expect(
+      addressManager.connect(ALICE).setReactionVault(BOB.address)
+    ).to.revertedWith(NOT_ADMIN);
+  });
 });

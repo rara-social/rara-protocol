@@ -58,4 +58,22 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
         require(address(_reactionNftContract) != address(0x0), ZERO_INPUT);
         reactionNftContract = _reactionNftContract;
     }
+
+    /// @dev Setter for the maker registrar address
+    function setReactionVault(IReactionVault _reactionVault)
+        external
+        onlyAdmin
+    {
+        require(address(_reactionVault) != address(0x0), ZERO_INPUT);
+        reactionVault = _reactionVault;
+    }
+
+    /// @dev Setter for the default curator vault address
+    function setDefaultCuratorVault(IPermanentCuratorVault _defaultCuratorVault)
+        external
+        onlyAdmin
+    {
+        require(address(_defaultCuratorVault) != address(0x0), ZERO_INPUT);
+        defaultCuratorVault = _defaultCuratorVault;
+    }
 }
