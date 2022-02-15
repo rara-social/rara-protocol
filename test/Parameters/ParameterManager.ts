@@ -131,4 +131,78 @@ describe("ParameterManager", function () {
       parameterManager.connect(ALICE).setSaleReferrerBasisPoints(val)
     ).to.be.revertedWith(NOT_ADMIN);
   });
+
+  it("Should allow owner to set spend Taker bp", async function () {
+    const [OWNER, ALICE] = await ethers.getSigners();
+    const { parameterManager } = await deploySystem(OWNER);
+
+    const val = 400;
+
+    // Verify the setter checks invalid input
+    await expect(parameterManager.setSpendTakerBasisPoints(0)).to.revertedWith(
+      INVALID_ZERO_PARAM
+    );
+
+    // Set it to Alice's address
+    await parameterManager.setSpendTakerBasisPoints(val);
+
+    // Verify it got set
+    const currentVal = await parameterManager.spendTakerBasisPoints();
+    expect(currentVal).to.equal(val);
+
+    // Verify non owner can't update address
+    await expect(
+      parameterManager.connect(ALICE).setSpendTakerBasisPoints(val)
+    ).to.be.revertedWith(NOT_ADMIN);
+  });
+
+  it("Should allow owner to set spend Referrer bp", async function () {
+    const [OWNER, ALICE] = await ethers.getSigners();
+    const { parameterManager } = await deploySystem(OWNER);
+
+    const val = 400;
+
+    // Verify the setter checks invalid input
+    await expect(
+      parameterManager.setSpendReferrerBasisPoints(0)
+    ).to.revertedWith(INVALID_ZERO_PARAM);
+
+    // Set it to Alice's address
+    await parameterManager.setSpendReferrerBasisPoints(val);
+
+    // Verify it got set
+    const currentVal = await parameterManager.spendReferrerBasisPoints();
+    expect(currentVal).to.equal(val);
+
+    // Verify non owner can't update address
+    await expect(
+      parameterManager.connect(ALICE).setSpendReferrerBasisPoints(val)
+    ).to.be.revertedWith(NOT_ADMIN);
+  });
+
+  it("Should allow owner to set allowed curator vault", async function () {
+    const [OWNER, ALICE] = await ethers.getSigners();
+    const { parameterManager } = await deploySystem(OWNER);
+
+    // Verify the setter checks invalid input
+    await expect(
+      parameterManager.setApprovedCuratorVaults(ZERO_ADDRESS, true)
+    ).to.revertedWith(INVALID_ZERO_PARAM);
+
+    // Set it to Alice's address
+    await parameterManager.setApprovedCuratorVaults(ALICE.address, true);
+
+    // Verify it got set
+    const currentVal = await parameterManager.approvedCuratorVaults(
+      ALICE.address
+    );
+    expect(currentVal).to.equal(true);
+
+    // Verify non owner can't update address
+    await expect(
+      parameterManager
+        .connect(ALICE)
+        .setApprovedCuratorVaults(ALICE.address, false)
+    ).to.be.revertedWith(NOT_ADMIN);
+  });
 });

@@ -9,7 +9,7 @@ import "./IPermanentCuratorVault.sol";
 /// When upgrading the protocol, inherit from this contract on the V2 version and change the
 /// CuratorVault to inherit from the later version.  This ensures there are no storage layout
 /// corruptions when upgrading.
-contract PermanentCuratorVaultStorageV1 is IPermanentCuratorVault {
+abstract contract PermanentCuratorVaultStorageV1 is IPermanentCuratorVault {
     /// @dev local reference to the address manager contract
     IAddressManager public addressManager;
 

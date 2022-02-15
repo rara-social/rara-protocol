@@ -21,7 +21,7 @@ import {
   UNKNOWN_NFT,
 } from "../Scripts/errors";
 
-describe("ReactionVault", function () {
+describe("ReactionVault Buy", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
     const { reactionVault, addressManager } = await deploySystem(OWNER);

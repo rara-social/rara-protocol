@@ -7,6 +7,8 @@ export const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost
 export const TEST_SALE_CURATOR_LIABILITY_BP = 5_000; // 50% goes to curator liability
 export const TEST_SALE_CREATOR_BP = 200; // 2% goes to the creator
 export const TEST_SALE_REFERRER_BP = 100; // 1% goes to the referrer
+export const TEST_SPEND_REFERRER_BP = 100; // 1% of curator liability goes to the referrer
+export const TEST_SPEND_TAKER_BP = 5_000; // 50% of curator liability goes to the taker
 
 const deploySystem = async (owner: SignerWithAddress) => {
   // Deploy the Role Manager first
@@ -126,16 +128,20 @@ const deploySystem = async (owner: SignerWithAddress) => {
   // Update permissions in the Role Manager
   // Reaction Vault should be allowed to mint reactions
   const minterRole = await roleManager.REACTION_MINTER_ROLE();
-  roleManager.grantRole(minterRole, reactionVault.address);
+  await roleManager.grantRole(minterRole, reactionVault.address);
+  const burnerRole = await roleManager.REACTION_BURNER_ROLE();
+  await roleManager.grantRole(burnerRole, reactionVault.address);
 
   // Update the Parameters in the protocol
-  parameterManager.setPaymentToken(paymentTokenErc20.address);
-  parameterManager.setReactionPrice(TEST_REACTION_PRICE);
-  parameterManager.setSaleCuratorLiabilityBasisPoints(
+  await parameterManager.setPaymentToken(paymentTokenErc20.address);
+  await parameterManager.setReactionPrice(TEST_REACTION_PRICE);
+  await parameterManager.setSaleCuratorLiabilityBasisPoints(
     TEST_SALE_CURATOR_LIABILITY_BP
   );
-  parameterManager.setSaleCreatorBasisPoints(TEST_SALE_CREATOR_BP);
-  parameterManager.setSaleReferrerBasisPoints(TEST_SALE_REFERRER_BP);
+  await parameterManager.setSaleCreatorBasisPoints(TEST_SALE_CREATOR_BP);
+  await parameterManager.setSaleReferrerBasisPoints(TEST_SALE_REFERRER_BP);
+  await parameterManager.setSpendTakerBasisPoints(TEST_SPEND_TAKER_BP);
+  await parameterManager.setSpendReferrerBasisPoints(TEST_SPEND_REFERRER_BP);
 
   // Return objects for tests to use
   return {

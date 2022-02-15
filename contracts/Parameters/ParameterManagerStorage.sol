@@ -34,6 +34,20 @@ abstract contract ParameterManagerStorageV1 is IParameterManager {
     /// @dev Basis points for the referrer during a reaction sale
     /// Basis points are percentage divided by 100 (e.g. 100 Basis Points is 1%)
     uint256 public saleReferrerBasisPoints;
+
+    /// @dev Basis points for the taker NFT owner.
+    /// This is the percentage of the Curator Liability being assigned to the taker
+    /// Basis points are percentage divided by 100 (e.g. 100 Basis Points is 1%)
+    uint256 public spendTakerBasisPoints;
+
+    /// @dev Basis points for the spend referrer.
+    /// This is the percentage of the Curator Liability being assigned to the referrer
+    /// Basis points are percentage divided by 100 (e.g. 100 Basis Points is 1%)
+    uint256 public spendReferrerBasisPoints;
+
+    /// @dev Mapping of the approved curator vaults (other than the default)
+    /// If set to true then it is allowed to be used.
+    mapping(address => bool) public approvedCuratorVaults;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

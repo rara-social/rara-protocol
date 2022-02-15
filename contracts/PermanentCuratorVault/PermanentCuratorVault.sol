@@ -63,7 +63,15 @@ contract PermanentCuratorVault is
 
     /// @dev get a unique token ID for a given nft address and nft ID
     function getTokenId(address nftAddress, uint256 nftId)
-        public
+        external
+        pure
+        returns (uint256)
+    {
+        return _getTokenId(nftAddress, nftId);
+    }
+
+    function _getTokenId(address nftAddress, uint256 nftId)
+        internal
         pure
         returns (uint256)
     {
@@ -78,9 +86,9 @@ contract PermanentCuratorVault is
         uint256 nftId,
         uint256 paymentAmount,
         address mintToAddress
-    ) public onlyReactionVault returns (uint256) {
+    ) external onlyReactionVault returns (uint256) {
         // Get the curator share token ID
-        uint256 curatorShareTokenId = getTokenId(nftAddress, nftId);
+        uint256 curatorShareTokenId = _getTokenId(nftAddress, nftId);
 
         // Move payment tokens in
         IParameterManager parameterManager = addressManager.parameterManager();
@@ -125,9 +133,9 @@ contract PermanentCuratorVault is
         address nftAddress,
         uint256 nftId,
         uint256 sharesToBurn
-    ) public returns (uint256) {
+    ) external returns (uint256) {
         // Get the curator share token ID
-        uint256 curatorShareTokenId = getTokenId(nftAddress, nftId);
+        uint256 curatorShareTokenId = _getTokenId(nftAddress, nftId);
 
         // Burn the curator shares
         curatorShares.burn(msg.sender, curatorShareTokenId, sharesToBurn);
