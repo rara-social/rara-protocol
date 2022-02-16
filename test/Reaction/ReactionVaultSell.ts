@@ -32,7 +32,6 @@ describe("ReactionVault Sell", function () {
         "0",
         "1",
         ZERO_ADDRESS,
-        ZERO_ADDRESS,
         ZERO_ADDRESS
       )
     ).to.be.revertedWith(NO_TOKENS_TO_BURN);
@@ -49,7 +48,6 @@ describe("ReactionVault Sell", function () {
         "0",
         "0",
         "0",
-        ZERO_ADDRESS,
         ZERO_ADDRESS,
         ZERO_ADDRESS
       )
@@ -134,7 +132,6 @@ describe("ReactionVault Sell", function () {
       TAKER_NFT_ID,
       REACTION_NFT_META_ID,
       REACTION_AMOUNT,
-      ZERO_ADDRESS,
       ZERO_ADDRESS,
       ZERO_ADDRESS
     );
@@ -281,7 +278,6 @@ describe("ReactionVault Sell", function () {
       REACTION_NFT_META_ID,
       REACTION_AMOUNT,
       REFERRER.address, // Referrer
-      ZERO_ADDRESS,
       ZERO_ADDRESS
     );
     const receipt = await transaction.wait();
@@ -384,8 +380,7 @@ describe("ReactionVault Sell", function () {
         REACTION_NFT_META_ID,
         REACTION_AMOUNT,
         ZERO_ADDRESS,
-        ALICE.address, // Invalid address
-        ZERO_ADDRESS
+        ALICE.address // Invalid address
       )
     ).to.be.revertedWith(INVALID_CURATOR_VAULT);
   });
@@ -497,8 +492,7 @@ describe("ReactionVault Sell", function () {
       REACTION_NFT_META_ID,
       REACTION_AMOUNT,
       ZERO_ADDRESS,
-      curatorVault.address, // Custom curator vault
-      ZERO_ADDRESS
+      curatorVault.address // Custom curator vault
     );
     const receipt = await transaction.wait();
 
@@ -565,105 +559,4 @@ describe("ReactionVault Sell", function () {
       )
     ).to.be.equal(expectedTakerCuratorShares);
   });
-
-  it("Should allow choosing different dest for spender rewards", async function () {
-    const [OWNER, ALICE, CREATOR, REFERRER, SPENDER_DEST] =
-      await ethers.getSigners();
-    const {
-      reactionVault,
-      testingStandard1155,
-      makerRegistrar,
-      roleManager,
-      paymentTokenErc20,
-      curatorVault,
-      curatorShares,
-    } = await deploySystem(OWNER);
-
-    // Now register an NFT and get the Meta ID
-    // Mint an NFT to Alice
-    const MAKER_NFT_ID = "1";
-    const TAKER_NFT_ID = "2";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
-    testingStandard1155.mint(ALICE.address, MAKER_NFT_ID, "1", [0]);
-
-    // Register it
-    await makerRegistrar
-      .connect(ALICE)
-      .registerNFT(
-        testingStandard1155.address,
-        MAKER_NFT_ID,
-        CREATOR.address,
-        "0"
-      );
-
-    // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
-      testingStandard1155.address,
-      MAKER_NFT_ID
-    );
-
-    // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
-
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE);
-
-    const REACTION_AMOUNT = BigNumber.from(1);
-
-    // Buy the reaction
-    await reactionVault.buyReaction(
-      MAKER_NFT_META_ID,
-      REACTION_AMOUNT,
-      OWNER.address, // Where reactions should end up
-      REFERRER.address, // Referrer
-      BigNumber.from(0)
-    );
-
-    // Derive the reaction meta ID
-    const REACTION_NFT_PARAMETER_VERSION = deriveReactionParameterVersion(
-      paymentTokenErc20.address,
-      TEST_REACTION_PRICE,
-      BigNumber.from(TEST_SALE_CURATOR_LIABILITY_BP)
-    );
-
-    const REACTION_NFT_META_ID = deriveReactionNftMetaId(
-      BigNumber.from(REACTION_NFT_PARAMETER_VERSION),
-      BigNumber.from(MAKER_NFT_META_ID),
-      BigNumber.from(0)
-    );
-
-    // Now spend it
-    const transaction = await reactionVault.spendReaction(
-      testingStandard1155.address,
-      TAKER_NFT_ID,
-      REACTION_NFT_META_ID,
-      REACTION_AMOUNT,
-      ZERO_ADDRESS,
-      ZERO_ADDRESS,
-      SPENDER_DEST.address // Override dest
-    );
-    await transaction.wait();
-
-    // Calculate expected amounts
-    const expectedSpenderCuratorShares = BigNumber.from("29084233246");
-    const curatorSharesId = await curatorVault.getTokenId(
-      testingStandard1155.address,
-      TAKER_NFT_ID
-    );
-    // Verify the spender dest got curator shares
-    expect(
-      await curatorShares.balanceOf(SPENDER_DEST.address, curatorSharesId)
-    ).to.be.equal(expectedSpenderCuratorShares);
-  });
-
-  /*  
-  Verify different target spender dest
-  */
 });

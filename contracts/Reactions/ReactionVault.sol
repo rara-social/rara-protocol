@@ -249,7 +249,6 @@ contract ReactionVault is
         IPermanentCuratorVault curatorVault;
         uint256 takerCuratorShares;
         uint256 spenderCuratorShares;
-        address spenderRewardsDestination;
     }
 
     /// @dev Spend a reaction targeted at a specified taker NFT
@@ -259,8 +258,7 @@ contract ReactionVault is
         uint256 reactionMetaId,
         uint256 reactionQuantity,
         address referrer,
-        address curatorVaultOverride,
-        address spenderRewardsDestOverride
+        address curatorVaultOverride
     ) external nonReentrant {
         // Verify quantity
         require(reactionQuantity > 0, "Invalid 0 input");
@@ -366,18 +364,12 @@ contract ReactionVault is
             info.takerCuratorShares
         );
 
-        // Override the target of where spender curator shares will end up, if set
-        info.spenderRewardsDestination = spenderRewardsDestOverride ==
-            address(0x0)
-            ? msg.sender
-            : spenderRewardsDestOverride;
-
         // Buy shares for the spender.  Shares get sent directly to their address.
         info.spenderCuratorShares = info.curatorVault.buyCuratorShares(
             takerNftAddress,
             takerNftId,
             info.spenderAmount,
-            info.spenderRewardsDestination
+            msg.sender
         );
 
         // Emit event for spender rewards
