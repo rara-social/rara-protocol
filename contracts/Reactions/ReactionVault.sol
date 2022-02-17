@@ -80,6 +80,7 @@ contract ReactionVault is
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IAddressManager _addressManager) public initializer {
         __ReentrancyGuard_init();
+        __ERC1155Holder_init();
         addressManager = _addressManager;
     }
 
