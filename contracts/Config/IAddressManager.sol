@@ -6,7 +6,7 @@ import "../Parameters/IParameterManager.sol";
 import "../Maker/IMakerRegistrar.sol";
 import "../Token/IStandard1155.sol";
 import "../Reactions/IReactionVault.sol";
-import "../PermanentCuratorVault/IPermanentCuratorVault.sol";
+import "../PermanentCuratorVault/ICuratorVault.sol";
 
 interface IAddressManager {
     /// @dev Getter for the role manager address
@@ -41,9 +41,9 @@ interface IAddressManager {
     function setReactionVault(IReactionVault _reactionVault) external;
 
     /// @dev Getter for the default Curator Vault contract address
-    function defaultCuratorVault() external returns (IPermanentCuratorVault);
+    function defaultCuratorVault() external returns (ICuratorVault);
 
     /// @dev Setter for the default Curator Vault contract address
-    function setDefaultCuratorVault(IPermanentCuratorVault _defaultCuratorVault)
+    function setDefaultCuratorVault(ICuratorVault _defaultCuratorVault)
         external;
 }

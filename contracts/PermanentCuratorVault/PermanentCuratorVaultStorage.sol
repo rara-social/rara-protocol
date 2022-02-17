@@ -2,14 +2,14 @@
 pragma solidity 0.8.9;
 
 import "../Config/IAddressManager.sol";
-import "./IPermanentCuratorVault.sol";
+import "./ICuratorVault.sol";
 
 /// @title PermanentCuratorVaultStorage
 /// @dev This contract will hold all local variables for the PermanentCuratorVault Contract
 /// When upgrading the protocol, inherit from this contract on the V2 version and change the
 /// CuratorVault to inherit from the later version.  This ensures there are no storage layout
 /// corruptions when upgrading.
-abstract contract PermanentCuratorVaultStorageV1 is IPermanentCuratorVault {
+abstract contract PermanentCuratorVaultStorageV1 is ICuratorVault {
     /// @dev local reference to the address manager contract
     IAddressManager public addressManager;
 
