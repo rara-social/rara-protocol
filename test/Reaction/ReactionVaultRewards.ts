@@ -107,5 +107,12 @@ describe.only("ReactionVault Withdraw ERC20", function () {
       .withdrawErc20Rewards(paymentTokenErc20.address);
     balance = await paymentTokenErc20.balanceOf(MAKER.address);
     expect(balance.toString()).to.be.equal(MAKER_CUT.toString());
+
+    // After rewards are withdrawn, a second attempt should fail
+    expect(
+      reactionVault
+        .connect(MAKER)
+        .withdrawErc20Rewards(paymentTokenErc20.address)
+    ).to.be.revertedWith(INVALID_ZERO_PARAM);
   });
 });
