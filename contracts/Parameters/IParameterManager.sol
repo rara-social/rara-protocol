@@ -38,4 +38,25 @@ interface IParameterManager {
     /// @dev Setter for the cut of purchase price going to the referrer
     function setSaleReferrerBasisPoints(uint256 _saleReferrerBasisPoints)
         external;
+
+    /// @dev Getter for the cut of spend curator liability going to the taker
+    function spendTakerBasisPoints() external returns (uint256);
+
+    /// @dev Setter for the cut of spend curator liability going to the taker
+    function setSpendTakerBasisPoints(uint256 _spendTakerBasisPoints) external;
+
+    /// @dev Getter for the cut of spend curator liability going to the taker
+    function spendReferrerBasisPoints() external returns (uint256);
+
+    /// @dev Setter for the cut of spend curator liability going to the referrer
+    function setSpendReferrerBasisPoints(uint256 _spendReferrerBasisPoints)
+        external;
+
+    /// @dev Getter for the check to see if a curator vault is allowed to be used
+    function approvedCuratorVaults(address potentialVault)
+        external
+        returns (bool);
+
+    /// @dev Setter for the list of curator vaults allowed to be used
+    function setApprovedCuratorVaults(address vault, bool approved) external;
 }

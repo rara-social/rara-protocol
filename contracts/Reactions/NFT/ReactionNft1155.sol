@@ -40,4 +40,6 @@ contract ReactionNft1155 is Standard1155 {
     ) external onlyBurner {
         _burn(from, id, amount);
     }
+
+    // TODO: Block transfer from and transfer to
 }

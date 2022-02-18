@@ -4,13 +4,14 @@ pragma solidity 0.8.9;
 import "../Config/IAddressManager.sol";
 import "./IReactionVault.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "./IReactionVault.sol";
 
 /// @title ReactionVaultStorage
 /// @dev This contract will hold all local variables for the ReactionVault Contract
 /// When upgrading the protocol, inherit from this contract on the V2 version and change the
 /// ReactionVault to inherit from the later version.  This ensures there are no storage layout
 /// corruptions when upgrading.
-contract ReactionVaultStorageV1 {
+contract ReactionVaultStorageV1 is IReactionVault {
     /// @dev prefix used in meta ID generation
     string public constant REACTION_META_PREFIX = "REACTION";
 
@@ -25,6 +26,11 @@ contract ReactionVaultStorageV1 {
     /// @dev tracks the purchase details for each reaction NFT
     mapping(uint256 => IReactionVault.ReactionPriceDetails)
         public reactionPriceDetailsMapping;
+
+    /// @dev tracks the rewards owed to an NFT owner in an 1155 token
+    /// NftAddress -> NftId -> RewardToken -> RewardTokenId -> balance
+    mapping(address => mapping(uint256 => mapping(address => mapping(uint256 => uint256))))
+        public nftOwnerRewards;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

@@ -58,4 +58,31 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
         require(_saleReferrerBasisPoints != 0, ZERO_INPUT);
         saleReferrerBasisPoints = _saleReferrerBasisPoints;
     }
+
+    /// @dev Setter for the spend taker basis points
+    function setSpendTakerBasisPoints(uint256 _spendTakerBasisPoints)
+        external
+        onlyAdmin
+    {
+        require(_spendTakerBasisPoints != 0, ZERO_INPUT);
+        spendTakerBasisPoints = _spendTakerBasisPoints;
+    }
+
+    /// @dev Setter for the spend referrer basis points
+    function setSpendReferrerBasisPoints(uint256 _spendReferrerBasisPoints)
+        external
+        onlyAdmin
+    {
+        require(_spendReferrerBasisPoints != 0, ZERO_INPUT);
+        spendReferrerBasisPoints = _spendReferrerBasisPoints;
+    }
+
+    /// @dev Setter for the list of curator vaults allowed to be used
+    function setApprovedCuratorVaults(address vault, bool approved)
+        external
+        onlyAdmin
+    {
+        require(vault != address(0x0), ZERO_INPUT);
+        approvedCuratorVaults[vault] = approved;
+    }
 }
