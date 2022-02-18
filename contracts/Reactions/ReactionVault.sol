@@ -416,4 +416,25 @@ contract ReactionVault is
             metaDataHash
         );
     }
+
+    /// @dev Allows an account that has been allocated rewards to withdraw
+    /// @param token ERC20 token that rewards are valued in
+    function withdrawErc20Rewards(IERC20Upgradeable token)
+        external
+        nonReentrant
+        returns (uint256)
+    {
+        // Get the amount owed
+        uint256 rewardAmount = ownerToRewardsMapping[token][msg.sender];
+        require(rewardAmount > 0, "Invalid 0 input");
+
+        // Reset amount back to 0
+        ownerToRewardsMapping[token][msg.sender] = 0;
+
+        // Send tokens
+        token.safeTransfer(msg.sender, rewardAmount);
+
+        // Return amount sent
+        return rewardAmount;
+    }
 }
