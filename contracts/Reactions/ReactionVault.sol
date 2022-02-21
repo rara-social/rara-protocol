@@ -84,6 +84,9 @@ contract ReactionVault is
         uint256 curatorShareAmount
     );
 
+    /// @dev Event emitted when an account withdraws ERC20 rewards
+    event ERC20RewardsClaimed(address token, uint256 amount, address recipient);
+
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IAddressManager _addressManager) public initializer {
         __ReentrancyGuard_init();
@@ -415,5 +418,29 @@ contract ReactionVault is
             referrer,
             metaDataHash
         );
+    }
+
+    /// @dev Allows an account that has been allocated rewards to withdraw
+    /// @param token ERC20 token that rewards are valued in
+    function withdrawErc20Rewards(IERC20Upgradeable token)
+        external
+        nonReentrant
+        returns (uint256)
+    {
+        // Get the amount owed
+        uint256 rewardAmount = ownerToRewardsMapping[token][msg.sender];
+        require(rewardAmount > 0, "Invalid 0 input");
+
+        // Reset amount back to 0
+        ownerToRewardsMapping[token][msg.sender] = 0;
+
+        // Send tokens
+        token.safeTransfer(msg.sender, rewardAmount);
+
+        // Emit event
+        emit ERC20RewardsClaimed(address(token), rewardAmount, msg.sender);
+
+        // Return amount sent
+        return rewardAmount;
     }
 }
