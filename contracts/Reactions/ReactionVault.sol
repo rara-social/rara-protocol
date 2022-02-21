@@ -247,7 +247,7 @@ contract ReactionVault is
         uint256 referrerCut;
         uint256 takerAmount;
         uint256 spenderAmount;
-        IPermanentCuratorVault curatorVault;
+        ICuratorVault curatorVault;
         uint256 takerCuratorShares;
         uint256 spenderCuratorShares;
     }
@@ -328,7 +328,7 @@ contract ReactionVault is
                 ),
                 "Err CuratorVault"
             );
-            info.curatorVault = IPermanentCuratorVault(curatorVaultOverride);
+            info.curatorVault = ICuratorVault(curatorVaultOverride);
         }
 
         // Get the token ID for this taker

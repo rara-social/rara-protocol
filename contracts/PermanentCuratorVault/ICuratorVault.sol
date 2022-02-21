@@ -4,7 +4,7 @@ pragma solidity 0.8.9;
 import "../Token/IStandard1155.sol";
 
 /// @dev Interface for the curator vault
-interface IPermanentCuratorVault {
+interface ICuratorVault {
     function getTokenId(address nftAddress, uint256 nftId)
         external
         returns (uint256);

@@ -69,7 +69,7 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
     }
 
     /// @dev Setter for the default curator vault address
-    function setDefaultCuratorVault(IPermanentCuratorVault _defaultCuratorVault)
+    function setDefaultCuratorVault(ICuratorVault _defaultCuratorVault)
         external
         onlyAdmin
     {
