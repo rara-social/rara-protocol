@@ -84,6 +84,9 @@ contract ReactionVault is
         uint256 curatorShareAmount
     );
 
+    /// @dev Event emitted when an account withdraws ERC20 rewards
+    event ERC20RewardsClaimed(address token, uint256 amount, address recipient);
+
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IAddressManager _addressManager) public initializer {
         __ReentrancyGuard_init();
@@ -433,6 +436,9 @@ contract ReactionVault is
 
         // Send tokens
         token.safeTransfer(msg.sender, rewardAmount);
+
+        // Emit event
+        emit ERC20RewardsClaimed(address(token), rewardAmount, msg.sender);
 
         // Return amount sent
         return rewardAmount;

@@ -11,7 +11,7 @@ import {
 import { deriveMakerNftMetaId } from "../Scripts/derivedParams";
 import { INVALID_ZERO_PARAM } from "../Scripts/errors";
 
-describe.only("ReactionVault Withdraw ERC20", function () {
+describe("ReactionVault Withdraw ERC20", function () {
   it("Should buy a single reaction", async function () {
     const [OWNER, MAKER, CREATOR, REFERRER, ALICE] = await ethers.getSigners();
     const {
@@ -87,10 +87,15 @@ describe.only("ReactionVault Withdraw ERC20", function () {
       reactionVault.withdrawErc20Rewards(ALICE.address)
     ).to.be.revertedWith(INVALID_ZERO_PARAM);
 
-    // Withdraw creator rewards
-    await reactionVault
-      .connect(CREATOR)
-      .withdrawErc20Rewards(paymentTokenErc20.address);
+    // Withdraw creator rewards and event
+    await expect(
+      reactionVault
+        .connect(CREATOR)
+        .withdrawErc20Rewards(paymentTokenErc20.address)
+    )
+      .to.emit(reactionVault, "ERC20RewardsClaimed")
+      .withArgs(paymentTokenErc20.address, CREATOR_CUT, CREATOR.address);
+
     let balance = await paymentTokenErc20.balanceOf(CREATOR.address);
     expect(balance.toString()).to.be.equal(CREATOR_CUT.toString());
 
