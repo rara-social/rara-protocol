@@ -10,6 +10,7 @@ const NOT_CURATOR_VAULT = "Not CuratorVault";
 const NOT_REACTION_VAULT = "Not ReactionVault";
 const NO_BALANCE = "ERC20: transfer amount exceeds balance";
 const NO_TOKENS_TO_BURN = "ERC1155: burn amount exceeds balance";
+const REACTION_TRANSER_RESTRICTED = "Reaction transfer restricted"
 const TRANSFER_NOT_ALLOWED = "ERC20: transfer amount exceeds allowance";
 const UNKNOWN_NFT = "Unknown NFT";
 
@@ -26,6 +27,7 @@ export {
   NOT_REACTION_VAULT,
   NO_BALANCE,
   NO_TOKENS_TO_BURN,
+  REACTION_TRANSER_RESTRICTED,
   TRANSFER_NOT_ALLOWED,
   UNKNOWN_NFT,
 };

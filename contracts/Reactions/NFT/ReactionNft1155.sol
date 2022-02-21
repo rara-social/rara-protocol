@@ -41,5 +41,22 @@ contract ReactionNft1155 is Standard1155 {
         _burn(from, id, amount);
     }
 
-    // TODO: Block transfer from and transfer to
+    /// @dev Reaction NFTs are non-transferrable to other accounts.
+    /// They are only allowed to be bought or spent.
+    function _beforeTokenTransfer(
+        address operator,
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data
+    ) internal virtual override(ERC1155Upgradeable) {
+        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+
+        // Only allow minting or burning.  Mints have "from address" of 0x0 and burns have "to address" of 0x0.
+        require(
+            from == address(0x0) || to == address(0x0),
+            "Reaction transfer restricted"
+        );
+    }
 }
