@@ -32,7 +32,8 @@ describe("ReactionVault Sell", function () {
         "0",
         "1",
         ZERO_ADDRESS,
-        ZERO_ADDRESS
+        ZERO_ADDRESS,
+        "0"
       )
     ).to.be.revertedWith(NO_TOKENS_TO_BURN);
   });
@@ -49,7 +50,8 @@ describe("ReactionVault Sell", function () {
         "0",
         "0",
         ZERO_ADDRESS,
-        ZERO_ADDRESS
+        ZERO_ADDRESS,
+        "0"
       )
     ).to.be.revertedWith(INVALID_ZERO_PARAM);
   });
@@ -126,6 +128,8 @@ describe("ReactionVault Sell", function () {
       BigNumber.from(0)
     );
 
+    const metadataHash = BigNumber.from(111);
+
     // Now spend it
     const transaction = await reactionVault.spendReaction(
       testingStandard1155.address,
@@ -133,7 +137,8 @@ describe("ReactionVault Sell", function () {
       REACTION_NFT_META_ID,
       REACTION_AMOUNT,
       ZERO_ADDRESS,
-      ZERO_ADDRESS
+      ZERO_ADDRESS,
+      metadataHash
     );
     const receipt = await transaction.wait();
 
@@ -183,6 +188,7 @@ describe("ReactionVault Sell", function () {
     expect(foundEvent!.args!.reactionMetaId).to.be.equal(REACTION_NFT_META_ID);
     expect(foundEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
     expect(foundEvent!.args!.referrer).to.be.equal(ZERO_ADDRESS);
+    expect(foundEvent!.args!.metaDataHash).to.be.equal(metadataHash);
 
     // Verify the spender (OWNER) got curator shares
     expect(
@@ -278,7 +284,8 @@ describe("ReactionVault Sell", function () {
       REACTION_NFT_META_ID,
       REACTION_AMOUNT,
       REFERRER.address, // Referrer
-      ZERO_ADDRESS
+      ZERO_ADDRESS,
+      "0"
     );
     const receipt = await transaction.wait();
 
@@ -380,7 +387,8 @@ describe("ReactionVault Sell", function () {
         REACTION_NFT_META_ID,
         REACTION_AMOUNT,
         ZERO_ADDRESS,
-        ALICE.address // Invalid address
+        ALICE.address, // Invalid address
+        "0"
       )
     ).to.be.revertedWith(INVALID_CURATOR_VAULT);
   });
@@ -492,7 +500,8 @@ describe("ReactionVault Sell", function () {
       REACTION_NFT_META_ID,
       REACTION_AMOUNT,
       ZERO_ADDRESS,
-      curatorVault.address // Custom curator vault
+      curatorVault.address, // Custom curator vault
+      "0"
     );
     const receipt = await transaction.wait();
 

@@ -35,32 +35,38 @@ contract ReactionVault is
         uint256 reactionMetaId
     );
 
+    /// @dev Event emitted when reaction is spent
     event ReactionsSpent(
         address takerNftAddress,
         uint256 takerNftId,
         uint256 reactionMetaId,
         uint256 quantity,
-        address referrer
+        address referrer,
+        uint256 metaDataHash
     );
 
+    /// @dev Event emitted when rewards are granted to a creator
     event CreatorRewardsGranted(
         address creator,
         IERC20Upgradeable paymentToken,
         uint256 amount
     );
 
+    /// @dev Event emitted when rewards are granted to a referrer
     event ReferrerRewardsGranted(
         address referrer,
         IERC20Upgradeable paymentToken,
         uint256 amount
     );
 
+    /// @dev Event emitted when rewards are granted to a maker
     event MakerRewardsGranted(
         address maker,
         IERC20Upgradeable paymentToken,
         uint256 amount
     );
 
+    /// @dev Event emitted when curator vault rewards are granted to a taker
     event TakerRewardsGranted(
         address takerNftAddress,
         uint256 takerNftId,
@@ -69,6 +75,7 @@ contract ReactionVault is
         uint256 curatorShareAmount
     );
 
+    /// @dev Event emitted when curator vault rewards are granted to a reaction Spender
     event SpenderRewardsGranted(
         address takerNftAddress,
         uint256 takerNftId,
@@ -84,6 +91,7 @@ contract ReactionVault is
         addressManager = _addressManager;
     }
 
+    /// @dev Struct to hold local vars in buyReaction()
     struct ReactionInfo {
         IMakerRegistrar makerRegistrar;
         IParameterManager parameterManager;
@@ -101,6 +109,13 @@ contract ReactionVault is
         uint256 reactionMetaId;
     }
 
+    /// @dev Allows a user to buy reaction NFTs based on a registered Maker NFT
+    /// @param makerNftMetaId Meta ID for the Maker NFT that reaction is based on
+    /// @param quantity How many reactions to buy
+    /// @param destinationWallet Where the reactions should end up
+    /// (allows bulk buying from other contracts since reactions are non-transferrable)
+    /// @param referrer Optional param to specify an address where referrer rewards are allocated
+    /// @param optionBits Optional params to specify options how the user wants transform reaction
     function buyReaction(
         uint256 makerNftMetaId,
         uint256 quantity,
@@ -240,6 +255,7 @@ contract ReactionVault is
         );
     }
 
+    /// @dev Struct to hold local vars in spendReaction()
     struct SpendInfo {
         IStandard1155 reactionNftContract;
         ReactionPriceDetails reactionDetails;
@@ -252,14 +268,22 @@ contract ReactionVault is
         uint256 spenderCuratorShares;
     }
 
-    /// @dev Spend a reaction targeted at a specified taker NFT
+    /// @dev Allows a reaction NFT owner to spend (burn) their tokens at a specific target Taker NFT.
+    /// @param takerNftAddress Target contract where the reaction is targeting
+    /// @param takerNftId Target NFT ID in the contract
+    /// @param reactionMetaId Reaction to spend
+    /// @param reactionQuantity How many reactions to spend
+    /// @param referrer Optional address where referrer rewards are allocated
+    /// @param curatorVaultOverride Optional address of non-default curator vault
+    /// @param metaDataHash Optional hash of any metadata being associated with spend action
     function spendReaction(
         address takerNftAddress,
         uint256 takerNftId,
         uint256 reactionMetaId,
         uint256 reactionQuantity,
         address referrer,
-        address curatorVaultOverride
+        address curatorVaultOverride,
+        uint256 metaDataHash
     ) external nonReentrant {
         // Verify quantity
         require(reactionQuantity > 0, "Invalid 0 input");
@@ -388,7 +412,8 @@ contract ReactionVault is
             takerNftId,
             reactionMetaId,
             reactionQuantity,
-            referrer
+            referrer,
+            metaDataHash
         );
     }
 }
