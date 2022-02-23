@@ -45,3 +45,27 @@ npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
 ## Performance optimizations
 
 For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
+
+## GraphAPI
+
+### Deploy rara-protocol contracts
+
+1. Start a new local ethereum chain. Open a new terminal and run: `npx run chain`
+
+1. Deploy rara-protocol contracts. Open a new terminal and run: `npx run deploy`
+
+### Start local graph node (postgres, IPFS, graphAPI)
+
+1. Have [Docker Desktop](https://www.docker.com/products/docker-desktop) running on your local machine.
+
+2. Start Docker compose. Open a new terminal and run: `run-graph-docker`
+
+If everything is running correctly you should see the docker containers running and `graph-node-1` will begin processing blocks:
+
+    graph-node_1  | Feb 22 16:38:38.515 INFO Starting JSON-RPC admin server at: http://localhost:8020, component: JsonRpcServer
+    graph-node_1  | Feb 22 16:38:38.520 INFO Started all subgraphs, component: SubgraphRegistrar
+    graph-node_1  | Feb 22 16:38:38.530 INFO Starting GraphQL HTTP server at: http://localhost:8000, component: GraphQLServer
+    graph-node_1  | Feb 22 16:38:38.533 INFO Starting index node server at: http://localhost:8030, component: IndexNodeServer
+    graph-node_1  | Feb 22 16:38:38.536 INFO Starting metrics server at: http://localhost:8040, component: MetricsServer
+    graph-node_1  | Feb 22 16:38:38.538 INFO Starting GraphQL WebSocket server at: ws://localhost:8001, component: SubscriptionServer
+    graph-node_1  | Feb 22 16:38:38.558 INFO Downloading latest blocks from Ethereum. This may take a few minutes...

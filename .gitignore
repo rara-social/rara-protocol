@@ -13,3 +13,11 @@ artifacts
 .openzeppelin/dev-*.json
 .openzeppelin/.session
 .openzeppelin/unknown-*.json
+
+
+#subgraph
+services/graph-node/data
+subgraph/subgraph.yaml
+subgraph/generated
+subgraph/abis/*
+build
