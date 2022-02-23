@@ -1,4 +1,4 @@
-import {BigInt, Address} from "@graphprotocol/graph-ts";
+import {BigInt, Address, log} from "@graphprotocol/graph-ts";
 
 import {
   User,
@@ -14,9 +14,9 @@ import {
 } from "../../generated/PermanentCuratorVault/PermanentCuratorVault";
 
 export function handleCuratorSharesBought(event: CuratorSharesBought): void {
-  // let sender = event.params.sender.toHex();
+  log.log(3, "CuratorSharesBought");
 }
 
 export function handleCuratorSharesSold(event: CuratorSharesSold): void {
-  // let sender = event.params.sender.toHex();
+  log.log(3, "CuratorSharesSold");
 }

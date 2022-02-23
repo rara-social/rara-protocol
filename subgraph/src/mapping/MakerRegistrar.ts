@@ -1,4 +1,4 @@
-import {BigInt, Address} from "@graphprotocol/graph-ts";
+import {BigInt, Address, log} from "@graphprotocol/graph-ts";
 
 import {
   User,
@@ -15,10 +15,11 @@ import {
 
 export function handleRegistered(event: Registered): void {
   // let sender = event.params.sender.toHex();
+  log.log(3, "Registered");
 }
 
 export function handleDeregistered(event: Deregistered): void {
-  // let sender = event.params.sender.toHex();
+  log.log(3, "Deregistered");
 }
 
 // export function handleBurned(event: Burned): void {
