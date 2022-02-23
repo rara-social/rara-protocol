@@ -4,7 +4,7 @@ import { ZERO_ADDRESS } from "../Scripts/constants";
 import { deploySystem } from "../Scripts/deploy";
 import { NOT_BRIDGE } from "../Scripts/errors";
 
-describe("AddressManager", function () {
+describe("Bridge Registrar", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
     const { addressManager, childRegistrar } = await deploySystem(OWNER);
