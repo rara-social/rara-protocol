@@ -1,0 +1,9 @@
+{
+  "network": "localhost",
+  "MakerRegistrar": "",
+  "MakerRegistrarStartBlock": 0,
+  "PermanentCuratorVaultAddress": "",
+  "PermanentCuratorVaultStartBlock": 0,
+  "ReactionVaultAddress": "",
+  "ReactionVaultStartBlock": 0
+}
