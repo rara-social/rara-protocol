@@ -6,7 +6,7 @@ dataSources:
     name: MakerRegistrar
     network: "localhost"
     source:
-      address: ""
+      address: "0x5fc8d32690cc91d4c39d9d3abcbd16989f875707"
       abi: MakerRegistrar
       startBlock: 0
     mapping:
@@ -21,15 +21,15 @@ dataSources:
           file: ../artifacts/contracts/maker/MakerRegistrar.sol/MakerRegistrar.json
       eventHandlers:
         - event: Registered(indexed address,indexed uint256,indexed address,address,uint256,uint256,uint256)
-          handler: TODO
+          handler: handleRegistered
         - event: Deregistered(indexed address,indexed uint256,indexed address,uint256)
-          handler: TODO
-      file: ./src/mapping.ts
+          handler: handleDeregistered
+      file: ./src/mapping/MakerRegistrar.ts
   - kind: ethereum/contract
     name: PermanentCuratorVault
     network: "localhost"
     source:
-      address: ""
+      address: "0x3aa5ebb10dc797cac828524e59a333d0a371443c"
       abi: PermanentCuratorVault
       startBlock: 0
     mapping:
@@ -46,15 +46,15 @@ dataSources:
           file: ../artifacts/contracts/PermanentCuratorVault/PermanentCuratorVault.sol/PermanentCuratorVault.json
       eventHandlers:
         - event: CuratorSharesBought(indexed uint256,uint256,uint256)
-          handler: TODO
+          handler: handleCuratorSharesBought
         - event: CuratorSharesSold(indexed uint256,uint256,uint256)
-          handler: TODO
-      file: ./src/mapping.ts
+          handler: handleCuratorSharesSold
+      file: ./src/mapping/PermanentCuratorVault.ts
   - kind: ethereum/contract
     name: ReactionVault
     network: "localhost"
     source:
-      address: ""
+      address: "0xa513e6e4b8f2a923d98304ec87f64353c4d5c853"
       abi: ReactionVault
       startBlock: 0
     mapping:
@@ -72,19 +72,19 @@ dataSources:
           file: ../artifacts/contracts/Reactions/ReactionVault.sol/ReactionVault.json
       eventHandlers:
         - event: ReactionsPurchased(uint256,uint256,address,address,uint256)
-          handler: TODO
+          handler: handleReactionsPurchased
         - event: ReactionsSpent(address,uint256,uint256,uint256,address,uint256)
-          handler: TODO
+          handler: handleReactionsSpent
         - event: CreatorRewardsGranted(address,address,uint256)
-          handler: TODO
+          handler: handleCreatorRewardsGranted
         - event: ReferrerRewardsGranted(address,address,uint256)
-          handler: TODO
+          handler: handleReferrerRewardsGranted
         - event: MakerRewardsGranted(address,address,uint256)
-          handler: TODO
+          handler: handleMakerRewardsGranted
         - event: TakerRewardsGranted(address,uint256,address,uint256,uint256)
-          handler: TODO
+          handler: handleTakerRewardsGranted
         - event: SpenderRewardsGranted(address,uint256,address,uint256,uint256)
-          handler: TODO
+          handler: handleSpenderRewardsGranted
         - event: ERC20RewardsClaimed(address,uint256,address)
-          handler: TODO
-      file: ./src/mapping.ts
+          handler: handleERC20RewardsClaimed
+      file: ./src/mapping/ReactionVault.ts
