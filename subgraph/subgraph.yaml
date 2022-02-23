@@ -1,0 +1,90 @@
+specVersion: 0.0.2
+schema:
+  file: ./src/schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: MakerRegistrar
+    network: "localhost"
+    source:
+      address: ""
+      abi: MakerRegistrar
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Reaction
+      abis:
+        - name: MakerRegistrar
+          file: ../artifacts/contracts/maker/MakerRegistrar.sol/MakerRegistrar.json
+      eventHandlers:
+        - event: Registered(indexed address,indexed uint256,indexed address,address,uint256,uint256,uint256)
+          handler: TODO
+        - event: Deregistered(indexed address,indexed uint256,indexed address,uint256)
+          handler: TODO
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: PermanentCuratorVault
+    network: "localhost"
+    source:
+      address: ""
+      abi: PermanentCuratorVault
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Reaction
+        - TakerNFT
+        - CuratorPosition
+      abis:
+        - name: PermanentCuratorVault
+          file: ../artifacts/contracts/PermanentCuratorVault/PermanentCuratorVault.sol/PermanentCuratorVault.json
+      eventHandlers:
+        - event: CuratorSharesBought(indexed uint256,uint256,uint256)
+          handler: TODO
+        - event: CuratorSharesSold(indexed uint256,uint256,uint256)
+          handler: TODO
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: ReactionVault
+    network: "localhost"
+    source:
+      address: ""
+      abi: ReactionVault
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Reaction
+        - TakerNFT
+        - CuratorPosition
+        - CuratorReaction
+      abis:
+        - name: ReactionVault
+          file: ../artifacts/contracts/Reactions/ReactionVault.sol/ReactionVault.json
+      eventHandlers:
+        - event: ReactionsPurchased(uint256,uint256,address,address,uint256)
+          handler: TODO
+        - event: ReactionsSpent(address,uint256,uint256,uint256,address,uint256)
+          handler: TODO
+        - event: CreatorRewardsGranted(address,address,uint256)
+          handler: TODO
+        - event: ReferrerRewardsGranted(address,address,uint256)
+          handler: TODO
+        - event: MakerRewardsGranted(address,address,uint256)
+          handler: TODO
+        - event: TakerRewardsGranted(address,uint256,address,uint256,uint256)
+          handler: TODO
+        - event: SpenderRewardsGranted(address,uint256,address,uint256,uint256)
+          handler: TODO
+        - event: ERC20RewardsClaimed(address,uint256,address)
+          handler: TODO
+      file: ./src/mapping.ts
