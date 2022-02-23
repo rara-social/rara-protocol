@@ -46,4 +46,10 @@ interface IAddressManager {
     /// @dev Setter for the default Curator Vault contract address
     function setDefaultCuratorVault(ICuratorVault _defaultCuratorVault)
         external;
+
+    /// @dev Getter for the L2 bridge registrar
+    function childRegistrar() external returns (address);
+
+    /// @dev Setter for the L2 bridge registrar
+    function setChildRegistrar(address _childRegistrar) external;
 }

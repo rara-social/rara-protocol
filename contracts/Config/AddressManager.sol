@@ -76,4 +76,10 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
         require(address(_defaultCuratorVault) != address(0x0), ZERO_INPUT);
         defaultCuratorVault = _defaultCuratorVault;
     }
+
+    /// @dev Setter for the L2 bridge registrar
+    function setChildRegistrar(address _childRegistrar) external onlyAdmin {
+        require(address(_childRegistrar) != address(0x0), ZERO_INPUT);
+        childRegistrar = _childRegistrar;
+    }
 }

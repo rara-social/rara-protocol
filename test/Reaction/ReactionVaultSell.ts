@@ -79,7 +79,7 @@ describe("ReactionVault Sell", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNFT(
+      .registerNft(
         testingStandard1155.address,
         MAKER_NFT_ID,
         CREATOR.address,
@@ -228,7 +228,7 @@ describe("ReactionVault Sell", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNFT(
+      .registerNft(
         testingStandard1155.address,
         MAKER_NFT_ID,
         CREATOR.address,
@@ -330,7 +330,7 @@ describe("ReactionVault Sell", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNFT(
+      .registerNft(
         testingStandard1155.address,
         MAKER_NFT_ID,
         CREATOR.address,
@@ -444,7 +444,7 @@ describe("ReactionVault Sell", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNFT(
+      .registerNft(
         testingStandard1155.address,
         MAKER_NFT_ID,
         CREATOR.address,

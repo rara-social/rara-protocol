@@ -6,6 +6,7 @@ const NFT_NOT_FOUND = "NFT not found";
 const NFT_NOT_OWNED = "NFT not owned";
 const NFT_NOT_REGISTERED = "NFT not registered";
 const NOT_ADMIN = "Not Admin";
+const NOT_BRIDGE = "Not Bridge";
 const NOT_CURATOR_VAULT = "Not CuratorVault";
 const NOT_REACTION_VAULT = "Not ReactionVault";
 const NO_BALANCE = "ERC20: transfer amount exceeds balance";
@@ -23,6 +24,7 @@ export {
   NFT_NOT_OWNED,
   NFT_NOT_REGISTERED,
   NOT_ADMIN,
+  NOT_BRIDGE,
   NOT_CURATOR_VAULT,
   NOT_REACTION_VAULT,
   NO_BALANCE,

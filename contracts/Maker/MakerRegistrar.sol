@@ -1,12 +1,12 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.9;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
 import "../Permissions/IRoleManager.sol";
 import "./IMakerRegistrar.sol";
 import "./MakerRegistrarStorage.sol";
+import "./NftOwnership.sol";
 
 /// @title MakerRegistrar
 /// @dev This contract tracks registered NFTs.  Owners of an NFT can register
@@ -45,18 +45,17 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         uint256 nftId,
         address potentialOwner
     ) public view returns (bool) {
-        // TODO: support ERC721 + other custom contracts
-        uint256 balance = IERC1155Upgradeable(nftContractAddress).balanceOf(
-            potentialOwner,
-            nftId
-        );
-
-        return balance > 0;
+        return
+            NftOwnership._verifyOwnership(
+                nftContractAddress,
+                nftId,
+                potentialOwner
+            );
     }
 
     /// @dev Allows a NFT owner to register the NFT in the protocol so that reactions can be sold.
     /// Owner registering must own the NFT in the wallet calling function.
-    function registerNFT(
+    function registerNft(
         address nftContractAddress,
         uint256 nftId,
         address creatorAddress,
@@ -68,6 +67,41 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             "NFT not owned"
         );
 
+        _registerForOwner(
+            msg.sender,
+            nftContractAddress,
+            nftId,
+            creatorAddress,
+            optionBits
+        );
+    }
+
+    function registerNftFromBridge(
+        address owner,
+        address nftContractAddress,
+        uint256 nftId,
+        address creatorAddress,
+        uint256 optionBits
+    ) external {
+        // Verify caller is Child Registrar from the bridge
+        require(msg.sender == addressManager.childRegistrar(), "Not Bridge");
+
+        _registerForOwner(
+            owner,
+            nftContractAddress,
+            nftId,
+            creatorAddress,
+            optionBits
+        );
+    }
+
+    function _registerForOwner(
+        address owner,
+        address nftContractAddress,
+        uint256 nftId,
+        address creatorAddress,
+        uint256 optionBits
+    ) internal {
         // TODO: Block registration of a RaRa reaction NFT once Reaction Vault is built out
 
         // Look up the source ID
@@ -97,7 +131,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         metaToSourceLookup[metaId] = currentSourceId;
         sourceToDetailsLookup[currentSourceId] = NftDetails(
             true,
-            msg.sender,
+            owner,
             creatorAddress
         );
 
@@ -105,7 +139,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         emit Registered(
             nftContractAddress,
             nftId,
-            msg.sender,
+            owner,
             creatorAddress,
             optionBits,
             currentSourceId,
@@ -115,13 +149,32 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
 
     /// @dev Allow an NFT owner to deregister and remove capability for reactions to be sold.
     /// Caller must currently own the NFT being deregistered
-    function deregisterNFT(address nftContractAddress, uint256 nftId) external {
+    function deregisterNft(address nftContractAddress, uint256 nftId) external {
         // Verify ownership
         require(
             verifyOwnership(nftContractAddress, nftId, msg.sender),
             "NFT not owned"
         );
 
+        _deregisterNftForOwner(msg.sender, nftContractAddress, nftId);
+    }
+
+    function deRegisterNftFromBridge(
+        address owner,
+        address nftContractAddress,
+        uint256 nftId
+    ) external {
+        // Verify caller is Child Registrar from the bridge
+        require(msg.sender == addressManager.childRegistrar(), "Not Bridge");
+
+        _deregisterNftForOwner(owner, nftContractAddress, nftId);
+    }
+
+    function _deregisterNftForOwner(
+        address owner,
+        address nftContractAddress,
+        uint256 nftId
+    ) internal {
         // Look up source ID and verify it is valid
         uint256 sourceId = nftToSourceLookup[nftContractAddress][nftId];
         require(sourceId > 0, "NFT not found");
@@ -133,6 +186,6 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         // Update the param
         details.registered = false;
 
-        emit Deregistered(nftContractAddress, nftId, msg.sender, sourceId);
+        emit Deregistered(nftContractAddress, nftId, owner, sourceId);
     }
 }

@@ -117,6 +117,17 @@ const deploySystem = async (owner: SignerWithAddress) => {
   ]);
   const curatorVault = CuratorVaultFactory.attach(deployedCuratorVault.address);
 
+  // Deploy the Child Registrar on the current chain.
+  // Note that this is not a proxy contract.
+  const ChildRegistrarFactory = await ethers.getContractFactory(
+    "ChildRegistrar"
+  );
+  // FX Child address is from Mumbai - see https://github.com/fx-portal/contracts
+  const childRegistrar = await ChildRegistrarFactory.deploy(
+    "0xCf73231F28B7331BBe3124B907840A94851f9f11",
+    addressManager.address
+  );
+
   // Update address manager
   await addressManager.setRoleManager(roleManager.address);
   await addressManager.setParameterManager(parameterManager.address);
@@ -124,6 +135,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   await addressManager.setReactionNftContract(reactionNFT1155.address);
   await addressManager.setReactionVault(reactionVault.address);
   await addressManager.setDefaultCuratorVault(curatorVault.address);
+  await addressManager.setChildRegistrar(childRegistrar.address);
 
   // Update permissions in the Role Manager
   // Reaction Vault should be allowed to mint reactions
@@ -146,6 +158,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   // Return objects for tests to use
   return {
     addressManager,
+    childRegistrar,
     curatorShares,
     curatorVault,
     makerRegistrar,
