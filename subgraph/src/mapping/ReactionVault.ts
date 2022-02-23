@@ -1,4 +1,4 @@
-import {BigInt, Address} from "@graphprotocol/graph-ts";
+import {BigInt, Address, log} from "@graphprotocol/graph-ts";
 
 import {
   User,
@@ -20,39 +20,39 @@ import {
 } from "../../generated/ReactionVault/ReactionVault";
 
 export function handleReactionsPurchased(event: ReactionsPurchased): void {
-  // let sender = event.params.sender.toHex();
+  log.log(3, "ReactionsPurchased");
 }
 
 export function handleReactionsSpent(event: ReactionsSpent): void {
-  // let sender = event.params.sender.toHex();
+  log.log(3, "ReactionsSpent");
 }
 
 export function handleCreatorRewardsGranted(
   event: CreatorRewardsGranted
 ): void {
-  // let sender = event.params.sender.toHex();
+  log.log(3, "CreatorRewardsGranted");
 }
 
 export function handleReferrerRewardsGranted(
   event: ReferrerRewardsGranted
 ): void {
-  // let sender = event.params.sender.toHex();
+  log.log(3, "ReferrerRewardsGranted");
 }
 
 export function handleTakerRewardsGranted(event: TakerRewardsGranted): void {
-  // let sender = event.params.sender.toHex();
+  log.log(3, "TakerRewardsGranted");
 }
 
 export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
-  // let sender = event.params.sender.toHex();
+  log.log(3, "MakerRewardsGranted");
 }
 
 export function handleSpenderRewardsGranted(
   event: SpenderRewardsGranted
 ): void {
-  // let sender = event.params.sender.toHex();
+  log.log(3, "SpenderRewardsGranted");
 }
 
 export function handleERC20RewardsClaimed(event: ERC20RewardsClaimed): void {
-  // let sender = event.params.sender.toHex();
+  log.log(3, "ERC20RewardsClaimed");
 }
