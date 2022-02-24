@@ -13,12 +13,43 @@ library NftOwnership {
         uint256 nftId,
         address potentialOwner
     ) internal view returns (bool) {
-        // TODO: support ERC721 + other custom contracts
-        uint256 balance = IERC1155Upgradeable(nftContractAddress).balanceOf(
-            potentialOwner,
-            nftId
+        // Try ERC1155
+        (bool success, bytes memory result) = nftContractAddress.staticcall(
+            abi.encodeWithSignature(
+                "balanceOf(address,uint256)",
+                potentialOwner,
+                nftId
+            )
         );
 
-        return balance > 0;
+        // If success, check the balance
+        if (success) {
+            uint256 balance = abi.decode(result, (uint256));
+            return balance > 0;
+        }
+
+        // Try ERC721
+        (success, result) = nftContractAddress.staticcall(
+            abi.encodeWithSignature("ownerOf(uint256)", nftId)
+        );
+
+        // If success, check the owner returned
+        if (success) {
+            address foundOwner = abi.decode(result, (address));
+            return foundOwner == potentialOwner;
+        }
+
+        // Try CryptoPunk
+        (success, result) = nftContractAddress.staticcall(
+            abi.encodeWithSignature("punkIndexToAddress(uint256)", nftId)
+        );
+
+        // If success, check the owner returned
+        if (success) {
+            address foundOwner = abi.decode(result, (address));
+            return foundOwner == potentialOwner;
+        }
+
+        return false;
     }
 }

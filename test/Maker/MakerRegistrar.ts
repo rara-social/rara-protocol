@@ -61,6 +61,36 @@ describe("MakerRegistrar", function () {
     ).to.revertedWith(ALREADY_REGISTERED);
   });
 
+  it("Should allow 721 NFT registration ", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const { makerRegistrar, testingStandard721 } = await deploySystem(OWNER);
+
+    // Mint an NFT to Alice
+    const NFT_ID = "1";
+
+    // Should fail when it doesn't exist
+    await expect(
+      makerRegistrar
+        .connect(ALICE)
+        .registerNft(testingStandard721.address, NFT_ID, BOB.address, "0")
+    ).to.revertedWith(NFT_NOT_OWNED);
+
+    // Mint the NFT
+    testingStandard721.mint(ALICE.address, NFT_ID);
+
+    // Register the NFT from Alice's account and put Bob as the creator
+    await makerRegistrar
+      .connect(ALICE)
+      .registerNft(testingStandard721.address, NFT_ID, BOB.address, "0");
+
+    // Verify it can't be registered again now that it is registered
+    await expect(
+      makerRegistrar
+        .connect(ALICE)
+        .registerNft(testingStandard721.address, NFT_ID, BOB.address, "0")
+    ).to.revertedWith(ALREADY_REGISTERED);
+  });
+
   it("Should emit registration event and verify mappings", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
     const { makerRegistrar, roleManager, testingStandard1155 } =

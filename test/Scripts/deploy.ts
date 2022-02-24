@@ -62,6 +62,14 @@ const deploySystem = async (owner: SignerWithAddress) => {
   ]);
   const testingStandard1155 = Test1155Factory.attach(deployedTest1155.address);
 
+  // Deploy a 721 for Testing
+  const TestErc721Factory = await ethers.getContractFactory("TestErc721");
+  const deployedTest721 = await upgrades.deployProxy(TestErc721Factory, [
+    TEST_NFT_URI,
+    addressManager.address,
+  ]);
+  const testingStandard721 = TestErc721Factory.attach(deployedTest721.address);
+
   // Deploy 1155 for NFT Reactions
   const ReactionNft1155Factory = await ethers.getContractFactory(
     "ReactionNft1155"
@@ -168,6 +176,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
     reactionVault,
     roleManager,
     testingStandard1155,
+    testingStandard721,
   };
 };
 
