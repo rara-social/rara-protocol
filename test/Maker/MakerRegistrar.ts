@@ -11,7 +11,7 @@ import {
   NFT_NOT_REGISTERED,
 } from "../Scripts/errors";
 
-describe.only("MakerRegistrar", function () {
+describe("MakerRegistrar", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
     const { makerRegistrar, addressManager } = await deploySystem(OWNER);
