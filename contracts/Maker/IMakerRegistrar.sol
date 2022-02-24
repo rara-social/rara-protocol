@@ -19,4 +19,24 @@ interface IMakerRegistrar {
             address,
             address
         );
+
+    function verifyOwnership(
+        address nftContractAddress,
+        uint256 nftId,
+        address potentialOwner
+    ) external returns (bool);
+
+    function registerNftFromBridge(
+        address owner,
+        address nftContractAddress,
+        uint256 nftId,
+        address creatorAddress,
+        uint256 optionBits
+    ) external;
+
+    function deRegisterNftFromBridge(
+        address owner,
+        address nftContractAddress,
+        uint256 nftId
+    ) external;
 }

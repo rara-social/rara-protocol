@@ -27,7 +27,7 @@ describe("MakerRegistrar", function () {
 
     // Since this is trying to register a non-existing NFT it should show the caller doesn't own it
     await expect(
-      makerRegistrar.registerNFT(
+      makerRegistrar.registerNft(
         testingStandard1155.address,
         "1",
         ZERO_ADDRESS,
@@ -51,13 +51,13 @@ describe("MakerRegistrar", function () {
     // Verify event as well
     await makerRegistrar
       .connect(ALICE)
-      .registerNFT(testingStandard1155.address, NFT_ID, BOB.address, "0");
+      .registerNft(testingStandard1155.address, NFT_ID, BOB.address, "0");
 
     // Verify it can't be registered again now that it is registered
     await expect(
       makerRegistrar
         .connect(ALICE)
-        .registerNFT(testingStandard1155.address, NFT_ID, BOB.address, "0")
+        .registerNft(testingStandard1155.address, NFT_ID, BOB.address, "0")
     ).to.revertedWith(ALREADY_REGISTERED);
   });
 
@@ -87,7 +87,7 @@ describe("MakerRegistrar", function () {
     await expect(
       makerRegistrar
         .connect(ALICE)
-        .registerNFT(
+        .registerNft(
           testingStandard1155.address,
           NFT_ID,
           BOB.address,
@@ -135,7 +135,7 @@ describe("MakerRegistrar", function () {
 
     // Since this is trying to deregister a non-existing NFT it should show the caller doesn't own it
     await expect(
-      makerRegistrar.deregisterNFT(testingStandard1155.address, "1")
+      makerRegistrar.deregisterNft(testingStandard1155.address, "1")
     ).to.revertedWith(NFT_NOT_OWNED);
   });
 
@@ -154,13 +154,13 @@ describe("MakerRegistrar", function () {
     await expect(
       makerRegistrar
         .connect(ALICE)
-        .deregisterNFT(testingStandard1155.address, NFT_ID)
+        .deregisterNft(testingStandard1155.address, NFT_ID)
     ).to.revertedWith(NFT_NOT_FOUND);
 
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNFT(testingStandard1155.address, NFT_ID, BOB.address, "0");
+      .registerNft(testingStandard1155.address, NFT_ID, BOB.address, "0");
 
     // First NFT in the system should have source ID of 1
     const EXPECTED_SOURCE_ID = "1";
@@ -169,7 +169,7 @@ describe("MakerRegistrar", function () {
     await expect(
       makerRegistrar
         .connect(ALICE)
-        .deregisterNFT(testingStandard1155.address, NFT_ID)
+        .deregisterNft(testingStandard1155.address, NFT_ID)
     )
       .to.emit(makerRegistrar, "Deregistered")
       .withArgs(
@@ -183,7 +183,7 @@ describe("MakerRegistrar", function () {
     await expect(
       makerRegistrar
         .connect(ALICE)
-        .deregisterNFT(testingStandard1155.address, NFT_ID)
+        .deregisterNft(testingStandard1155.address, NFT_ID)
     ).to.revertedWith(NFT_NOT_REGISTERED);
 
     // Verify the flag was set to false

@@ -32,7 +32,7 @@ describe("ReactionVault Withdraw ERC20", function () {
     // Register it
     await makerRegistrar
       .connect(MAKER)
-      .registerNFT(testingStandard1155.address, NFT_ID, CREATOR.address, "0");
+      .registerNft(testingStandard1155.address, NFT_ID, CREATOR.address, "0");
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(

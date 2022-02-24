@@ -33,6 +33,9 @@ abstract contract AddressManagerStorageV1 is IAddressManager {
 
     /// @dev Local reference to the default curator vault
     ICuratorVault public defaultCuratorVault;
+
+    /// @dev Local reference to the L2 bridge registrar
+    address public childRegistrar;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

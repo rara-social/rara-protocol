@@ -57,7 +57,7 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNFT(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0");
+      .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0");
 
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
       testingStandard1155.address,
@@ -73,7 +73,7 @@ describe("ReactionVault Buy", function () {
     // Unregister it
     await makerRegistrar
       .connect(ALICE)
-      .deregisterNFT(testingStandard1155.address, NFT_ID);
+      .deregisterNft(testingStandard1155.address, NFT_ID);
 
     // Now verify reactions can't be purchased
     await expect(
@@ -107,7 +107,7 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNFT(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0");
+      .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0");
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
@@ -168,7 +168,7 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNFT(testingStandard1155.address, NFT_ID, CREATOR.address, "0");
+      .registerNft(testingStandard1155.address, NFT_ID, CREATOR.address, "0");
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
@@ -315,7 +315,7 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNFT(testingStandard1155.address, NFT_ID, CREATOR.address, "0");
+      .registerNft(testingStandard1155.address, NFT_ID, CREATOR.address, "0");
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
