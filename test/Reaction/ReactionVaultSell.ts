@@ -12,6 +12,7 @@ import {
   deriveMakerNftMetaId,
   deriveReactionNftMetaId,
   deriveReactionParameterVersion,
+  deriveTakerRewardsKey,
 } from "../Scripts/derivedParams";
 import {
   INVALID_CURATOR_VAULT,
@@ -23,10 +24,12 @@ describe("ReactionVault Sell", function () {
   it("Should verify spender has reaction NFT", async function () {
     const [OWNER] = await ethers.getSigners();
     const { reactionVault } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // If the user tries to spend reactions they don't have it should fail
     await expect(
       reactionVault.spendReaction(
+        chainId,
         ZERO_ADDRESS,
         "0",
         "0",
@@ -41,10 +44,12 @@ describe("ReactionVault Sell", function () {
   it("Should verify reaction quantity > 0", async function () {
     const [OWNER] = await ethers.getSigners();
     const { reactionVault } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // If the user tries to spend reactions they don't have it should fail
     await expect(
       reactionVault.spendReaction(
+        chainId,
         ZERO_ADDRESS,
         "0",
         "0",
@@ -67,6 +72,7 @@ describe("ReactionVault Sell", function () {
       curatorVault,
       curatorShares,
     } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Now register an NFT and get the Meta ID
     // Mint an NFT to Alice
@@ -88,6 +94,7 @@ describe("ReactionVault Sell", function () {
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+      chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
     );
@@ -132,6 +139,7 @@ describe("ReactionVault Sell", function () {
 
     // Now spend it
     const transaction = await reactionVault.spendReaction(
+      chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
       REACTION_NFT_META_ID,
@@ -195,16 +203,19 @@ describe("ReactionVault Sell", function () {
       await curatorShares.balanceOf(OWNER.address, curatorSharesId)
     ).to.be.equal(expectedSpenderCuratorShares);
 
+    // Get the rewards key for this taker
+    const rewardsKey = deriveTakerRewardsKey(
+      chainId,
+      testingStandard1155.address,
+      BigNumber.from(TAKER_NFT_ID),
+      await curatorVault.curatorShares(),
+      curatorSharesId
+    );
+
     // Verify the taker NFT got allocated curator shares
-    // NftAddress -> NftId -> RewardToken -> RewardTokenId -> balance
-    expect(
-      await reactionVault.nftOwnerRewards(
-        testingStandard1155.address,
-        TAKER_NFT_ID,
-        await curatorVault.curatorShares(),
-        curatorSharesId
-      )
-    ).to.be.equal(expectedTakerCuratorShares);
+    expect(await reactionVault.nftOwnerRewards(rewardsKey)).to.be.equal(
+      expectedTakerCuratorShares
+    );
   });
 
   it("Should verify referrer cut", async function () {
@@ -216,6 +227,7 @@ describe("ReactionVault Sell", function () {
       roleManager,
       paymentTokenErc20,
     } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Now register an NFT and get the Meta ID
     // Mint an NFT to Alice
@@ -237,6 +249,7 @@ describe("ReactionVault Sell", function () {
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+      chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
     );
@@ -279,6 +292,7 @@ describe("ReactionVault Sell", function () {
 
     // Now spend it
     const transaction = await reactionVault.spendReaction(
+      chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
       REACTION_NFT_META_ID,
@@ -318,6 +332,7 @@ describe("ReactionVault Sell", function () {
       roleManager,
       paymentTokenErc20,
     } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Now register an NFT and get the Meta ID
     // Mint an NFT to Alice
@@ -339,6 +354,7 @@ describe("ReactionVault Sell", function () {
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+      chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
     );
@@ -382,6 +398,7 @@ describe("ReactionVault Sell", function () {
     // Now spend it
     await expect(
       reactionVault.spendReaction(
+        chainId,
         testingStandard1155.address,
         TAKER_NFT_ID,
         REACTION_NFT_META_ID,
@@ -404,6 +421,7 @@ describe("ReactionVault Sell", function () {
       addressManager,
       parameterManager,
     } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Deploy a custom curator vault
     // Deploy the curator Shares Token Contract
@@ -453,6 +471,7 @@ describe("ReactionVault Sell", function () {
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+      chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
     );
@@ -495,6 +514,7 @@ describe("ReactionVault Sell", function () {
 
     // Now spend it
     const transaction = await reactionVault.spendReaction(
+      chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
       REACTION_NFT_META_ID,
@@ -557,15 +577,19 @@ describe("ReactionVault Sell", function () {
       await curatorShares.balanceOf(OWNER.address, curatorSharesId)
     ).to.be.equal(expectedSpenderCuratorShares);
 
+    // Get the rewards key for this taker
+    const rewardsKey = deriveTakerRewardsKey(
+      chainId,
+      testingStandard1155.address,
+      BigNumber.from(TAKER_NFT_ID),
+      await curatorVault.curatorShares(),
+      curatorSharesId
+    );
+
     // Verify the taker NFT got allocated curator shares
     // NftAddress -> NftId -> RewardToken -> RewardTokenId -> balance
-    expect(
-      await reactionVault.nftOwnerRewards(
-        testingStandard1155.address,
-        TAKER_NFT_ID,
-        await curatorVault.curatorShares(),
-        curatorSharesId
-      )
-    ).to.be.equal(expectedTakerCuratorShares);
+    expect(await reactionVault.nftOwnerRewards(rewardsKey)).to.be.equal(
+      expectedTakerCuratorShares
+    );
   });
 });

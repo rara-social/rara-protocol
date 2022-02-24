@@ -38,10 +38,17 @@ contract RootRegistrar is FxBaseRootTunnel {
             "NFT not owned"
         );
 
-        // REGISTER, encode(nftContractAddress, nftId, creatorAddress, optionBits)
+        // REGISTER, encode(owner, chainId, nftContractAddress, nftId, creatorAddress, optionBits)
         bytes memory message = abi.encode(
             REGISTER,
-            abi.encode(nftContractAddress, nftId, creatorAddress, optionBits)
+            abi.encode(
+                msg.sender,
+                block.chainid,
+                nftContractAddress,
+                nftId,
+                creatorAddress,
+                optionBits
+            )
         );
         _sendMessageToChild(message);
     }
@@ -60,10 +67,10 @@ contract RootRegistrar is FxBaseRootTunnel {
             "NFT not owned"
         );
 
-        // REGISTER, encode(address owner, address nftContractAddress, uint256 nftId)
+        // DERegister, encode(address owner, uint256 chainId, address nftContractAddress, uint256 nftId)
         bytes memory message = abi.encode(
             DE_REGISTER,
-            abi.encode(msg.sender, nftContractAddress, nftId)
+            abi.encode(msg.sender, block.chainid, nftContractAddress, nftId)
         );
         _sendMessageToChild(message);
     }

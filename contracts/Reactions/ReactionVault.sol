@@ -68,6 +68,7 @@ contract ReactionVault is
 
     /// @dev Event emitted when curator vault rewards are granted to a taker
     event TakerRewardsGranted(
+        uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId,
         address curatorVault,
@@ -272,6 +273,7 @@ contract ReactionVault is
     }
 
     /// @dev Allows a reaction NFT owner to spend (burn) their tokens at a specific target Taker NFT.
+    /// @param takerNftChainId Chain ID where the NFT lives
     /// @param takerNftAddress Target contract where the reaction is targeting
     /// @param takerNftId Target NFT ID in the contract
     /// @param reactionMetaId Reaction to spend
@@ -280,6 +282,7 @@ contract ReactionVault is
     /// @param curatorVaultOverride Optional address of non-default curator vault
     /// @param metaDataHash Optional hash of any metadata being associated with spend action
     function spendReaction(
+        uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId,
         uint256 reactionMetaId,
@@ -378,13 +381,25 @@ contract ReactionVault is
             address(this)
         );
 
+        // Build a hash of the rewards params
+        uint256 rewardsIndex = uint256(
+            keccak256(
+                abi.encode(
+                    takerNftChainId,
+                    takerNftAddress,
+                    takerNftId,
+                    address(info.curatorVault.curatorShares()),
+                    curatorTokenId
+                )
+            )
+        );
+
         // Allocate rewards for the future NFT Owner
-        nftOwnerRewards[takerNftAddress][takerNftId][
-            address(info.curatorVault.curatorShares())
-        ][curatorTokenId] += info.takerCuratorShares;
+        nftOwnerRewards[rewardsIndex] += info.takerCuratorShares;
 
         // Emit event
         emit TakerRewardsGranted(
+            takerNftChainId,
             takerNftAddress,
             takerNftId,
             address(info.curatorVault),

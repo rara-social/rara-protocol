@@ -17,10 +17,12 @@ describe("Bridge Registrar", function () {
   it("Should prevent non child registrar from registering or de-registering", async function () {
     const [OWNER] = await ethers.getSigners();
     const { makerRegistrar, testingStandard1155 } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     await expect(
       makerRegistrar.registerNftFromBridge(
         OWNER.address,
+        chainId,
         testingStandard1155.address,
         "1",
         ZERO_ADDRESS,
@@ -31,6 +33,7 @@ describe("Bridge Registrar", function () {
     await expect(
       makerRegistrar.deRegisterNftFromBridge(
         OWNER.address,
+        chainId,
         testingStandard1155.address,
         "1"
       )
@@ -41,6 +44,7 @@ describe("Bridge Registrar", function () {
     const [OWNER, ALICE, BOB, CHILD] = await ethers.getSigners();
     const { makerRegistrar, roleManager, testingStandard1155, addressManager } =
       await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Mint an NFT to Alice
     const NFT_ID = "1";
@@ -57,6 +61,7 @@ describe("Bridge Registrar", function () {
       .connect(CHILD)
       .registerNftFromBridge(
         ALICE.address,
+        chainId,
         testingStandard1155.address,
         NFT_ID,
         BOB.address,
@@ -68,6 +73,7 @@ describe("Bridge Registrar", function () {
       .connect(CHILD)
       .deRegisterNftFromBridge(
         ALICE.address,
+        chainId,
         testingStandard1155.address,
         NFT_ID
       );

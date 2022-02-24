@@ -21,6 +21,7 @@ describe("ReactionVault Withdraw ERC20", function () {
       roleManager,
       paymentTokenErc20,
     } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Now register an NFT and get the Meta ID
     // Mint an NFT to Alice
@@ -36,6 +37,7 @@ describe("ReactionVault Withdraw ERC20", function () {
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+      chainId,
       testingStandard1155.address,
       NFT_ID
     );

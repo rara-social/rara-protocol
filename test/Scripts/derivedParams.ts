@@ -37,3 +37,23 @@ export const deriveReactionNftMetaId = (
   );
   return ethers.utils.keccak256(encodedParams);
 };
+
+export const deriveTakerRewardsKey = (
+  takerNftChainId: number,
+  takerNftAddress: string,
+  takerNftId: BigNumber,
+  curatorSharesAddress: string,
+  curatorSharesId: BigNumber
+) => {
+  const encodedParams = ethers.utils.defaultAbiCoder.encode(
+    ["uint256", "address", "uint256", "address", "uint256"],
+    [
+      takerNftChainId,
+      takerNftAddress,
+      takerNftId,
+      curatorSharesAddress,
+      curatorSharesId,
+    ]
+  );
+  return ethers.utils.keccak256(encodedParams);
+};
