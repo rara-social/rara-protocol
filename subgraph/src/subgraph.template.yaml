@@ -83,8 +83,8 @@ dataSources:
           handler: handleMakerRewardsGranted
         - event: TakerRewardsGranted(address,uint256,address,uint256,uint256)
           handler: handleTakerRewardsGranted
-        - event: SpenderRewardsGranted(address,uint256,address,uint256,uint256)
-          handler: handleSpenderRewardsGranted
+        # - event: SpenderRewardsGranted(address,uint256,address,uint256,uint256)
+        #   handler: handleSpenderRewardsGranted
         - event: ERC20RewardsClaimed(address,uint256,address)
           handler: handleERC20RewardsClaimed
       file: ./src/mapping/ReactionVault.ts
