@@ -20,9 +20,9 @@ dataSources:
         - name: MakerRegistrar
           file: ../artifacts/contracts/maker/MakerRegistrar.sol/MakerRegistrar.json
       eventHandlers:
-        - event: Registered(indexed address,indexed uint256,indexed address,address,uint256,uint256,uint256)
+        - event: Registered(uint256,indexed address,indexed uint256,indexed address,address,uint256,uint256,uint256)
           handler: handleRegistered
-        - event: Deregistered(indexed address,indexed uint256,indexed address,uint256)
+        - event: Deregistered(uint256,indexed address,indexed uint256,indexed address,uint256)
           handler: handleDeregistered
       file: ./src/mapping/MakerRegistrar.ts
   - kind: ethereum/contract
@@ -81,10 +81,10 @@ dataSources:
           handler: handleReferrerRewardsGranted
         - event: MakerRewardsGranted(address,address,uint256)
           handler: handleMakerRewardsGranted
-        - event: TakerRewardsGranted(address,uint256,address,uint256,uint256)
+        - event: TakerRewardsGranted(uint256,address,uint256,address,uint256,uint256)
           handler: handleTakerRewardsGranted
-        - event: SpenderRewardsGranted(address,uint256,address,uint256,uint256)
-          handler: handleSpenderRewardsGranted
+        # - event: SpenderRewardsGranted(address,uint256,address,uint256,uint256)
+        #   handler: handleSpenderRewardsGranted
         - event: ERC20RewardsClaimed(address,uint256,address)
           handler: handleERC20RewardsClaimed
       file: ./src/mapping/ReactionVault.ts

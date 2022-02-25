@@ -9,6 +9,7 @@ type Reaction @entity {
   id: ID!
   metaId: String!
   makerUser: User!
+  nftChainId: Int!
   nftContractAddress: Bytes!
   nftId: Int!
   nftOwnerAddress: Bytes!
@@ -23,16 +24,18 @@ type Reaction @entity {
 
 type TakerNFT @entity {
   id: ID! #curatorShareTokenId
-  sourceNFTAddress: String!
-  sourceNFTId: Int!
+  nftChainId: Int!
+  nftContractAddress: Bytes!
+  nftId: Int!
+  nftOwnerAddress: Bytes!
+  takerShareCount: Int
   curatorShareCount: Int! #number of shares
   curatorShareBalance: BigDecimal! #payment token balance
   referrerFeesBalance: BigDecimal!
-  takerShareCount: Int
 }
 
 type CuratorReaction @entity {
-  id: ID!
+  id: ID! #event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   reaction: Reaction!
   takerNFT: TakerNFT!
   quantity: Int!
@@ -41,7 +44,7 @@ type CuratorReaction @entity {
 }
 
 type CuratorPosition @entity {
-  id: ID!
+  id: ID! #<msg.sender + takerNft.id>
   takerNFT: TakerNFT!
   shareCount: Int!
   curator: User!

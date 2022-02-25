@@ -25,11 +25,17 @@ export function handleCuratorSharesBought(event: CuratorSharesBought): void {
   user.save();
 
   //
-  // takerNft
+  // TakerNft
   //
   let takerNft = TakerNFT.load(event.params.curatorShareTokenId.toHexString());
   if (takerNft == null) {
     takerNft = new TakerNFT(event.params.curatorShareTokenId.toHexString());
+
+    // TODO: init
+    // nftChainId: Int!
+    // nftContractAddress: Bytes!
+    // nftId: Int!
+    // nftOwnerAddress: Bytes!
   }
 
   // increment share count
@@ -42,13 +48,11 @@ export function handleCuratorSharesBought(event: CuratorSharesBought): void {
     .toBigDecimal()
     .plus(takerNft.curatorShareBalance);
 
-  // increment referrer fees balance // TODO: add to event
+  // increment referrer fees balance // TODO: add to event (?)
   // takerNft.referrerFeesBalance = event.params.paymentTokenPaid
   //   .toBigDecimal()
   //   .plus(takerNft.referrerFeesBalance);
 
-  // sourceNFTAddress: String! // TODO: add to event
-  // sourceNFTId: Int! // TODO: add to event
   takerNft.save();
 
   //
@@ -88,7 +92,7 @@ export function handleCuratorSharesSold(event: CuratorSharesSold): void {
   log.log(3, "CuratorSharesSold");
 
   //
-  // takerNft
+  // TakerNft
   //
   let takerNft = TakerNFT.load(event.params.curatorShareTokenId.toHexString());
 

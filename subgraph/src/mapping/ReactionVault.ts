@@ -27,10 +27,6 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   //
   let reaction = Reaction.load(event.params.reactionMetaId.toHexString()); // TODO: same as source id from registrar?
   reaction.totalSold = reaction.totalSold.plus(event.params.quantity);
-
-  // increse maker fees
-  // increase creatorfees
-  // increase referrerfees
 }
 
 export function handleReactionsSpent(event: ReactionsSpent): void {

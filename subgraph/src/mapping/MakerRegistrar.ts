@@ -10,7 +10,9 @@ import {
 export function handleRegistered(event: Registered): void {
   log.log(3, "handleRegistered");
 
-  // create maker user
+  //
+  // User
+  //
   let sender = event.params.ownerAddress.toHexString(); //TODO: make sure this is same user from L1 and L2
   let user = User.load(sender);
   if (user == null) {
@@ -18,10 +20,13 @@ export function handleRegistered(event: Registered): void {
   }
   user.save();
 
+  //
   // Reaction(metaId)
+  //
   let reaction = new Reaction(event.params.sourceId.toHexString());
   reaction.metaId = event.params.metaId.toHexString();
   reaction.makerUser = user.id;
+  reaction.nftChainId = event.params.chainId;
   reaction.nftContractAddress = event.params.nftContractAddress;
   reaction.nftId = event.params.nftId;
   reaction.nftOwnerAddress = event.params.ownerAddress; // TODO: align names
@@ -35,7 +40,9 @@ export function handleRegistered(event: Registered): void {
 export function handleDeregistered(event: Deregistered): void {
   log.log(3, "Deregistered");
 
-  // mark 'registered' as false
+  //
+  // Reaction: mark 'registered' as false
+  //
   let reaction = Reaction.load(event.params.sourceId.toHexString());
   reaction.registered = false;
   reaction.save();
