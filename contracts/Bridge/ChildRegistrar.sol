@@ -52,15 +52,20 @@ contract ChildRegistrar is FxBaseChildTunnel {
         // Decode the params from the data
         (
             address owner,
+            uint256 chainId,
             address nftContractAddress,
             uint256 nftId,
             address creatorAddress,
             uint256 optionBits
-        ) = abi.decode(syncData, (address, address, uint256, address, uint256));
+        ) = abi.decode(
+                syncData,
+                (address, uint256, address, uint256, address, uint256)
+            );
 
         // Call the registrar and register the NFT
         addressManager.makerRegistrar().registerNftFromBridge(
             owner,
+            chainId,
             nftContractAddress,
             nftId,
             creatorAddress,
@@ -71,13 +76,16 @@ contract ChildRegistrar is FxBaseChildTunnel {
     /// @dev Handler for messages coming from the L1 when an owner wants to de-register
     function _deRegisterNft(bytes memory syncData) internal {
         // Decode the params from the data
-        (address owner, address nftContractAddress, uint256 nftId) = abi.decode(
-            syncData,
-            (address, address, uint256)
-        );
+        (
+            address owner,
+            uint256 chainId,
+            address nftContractAddress,
+            uint256 nftId
+        ) = abi.decode(syncData, (address, uint256, address, uint256));
 
         addressManager.makerRegistrar().deRegisterNftFromBridge(
             owner,
+            chainId,
             nftContractAddress,
             nftId
         );

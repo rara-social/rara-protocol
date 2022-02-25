@@ -35,6 +35,7 @@ describe("ReactionVault Buy", function () {
     const [OWNER, ALICE] = await ethers.getSigners();
     const { reactionVault, testingStandard1155, makerRegistrar, roleManager } =
       await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Trying to buy a reaction for a unknown NFT should fail
     await expect(
@@ -60,6 +61,7 @@ describe("ReactionVault Buy", function () {
       .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0");
 
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+      chainId,
       testingStandard1155.address,
       NFT_ID
     );
@@ -96,6 +98,7 @@ describe("ReactionVault Buy", function () {
       roleManager,
       paymentTokenErc20,
     } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Now register an NFT and get the Meta ID
     // Mint an NFT to Alice
@@ -111,6 +114,7 @@ describe("ReactionVault Buy", function () {
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+      chainId,
       testingStandard1155.address,
       NFT_ID
     );
@@ -157,6 +161,7 @@ describe("ReactionVault Buy", function () {
       paymentTokenErc20,
       reactionNFT1155,
     } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Now register an NFT and get the Meta ID
     // Mint an NFT to Alice
@@ -172,6 +177,7 @@ describe("ReactionVault Buy", function () {
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+      chainId,
       testingStandard1155.address,
       NFT_ID
     );
@@ -301,6 +307,7 @@ describe("ReactionVault Buy", function () {
       paymentTokenErc20,
       reactionNFT1155,
     } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Buying 15 reactions in this test
     const REACTION_AMOUNT = BigNumber.from(15);
@@ -319,6 +326,7 @@ describe("ReactionVault Buy", function () {
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+      chainId,
       testingStandard1155.address,
       NFT_ID
     );

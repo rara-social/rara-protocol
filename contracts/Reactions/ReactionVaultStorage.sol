@@ -28,9 +28,8 @@ contract ReactionVaultStorageV1 is IReactionVault {
         public reactionPriceDetailsMapping;
 
     /// @dev tracks the rewards owed to an NFT owner in an 1155 token
-    /// NftAddress -> NftId -> RewardToken -> RewardTokenId -> balance
-    mapping(address => mapping(uint256 => mapping(address => mapping(uint256 => uint256))))
-        public nftOwnerRewards;
+    /// Hash(NftChainId, NftAddress, NftId, RewardTokenAddress, RewardTokenId) -> balance
+    mapping(uint256 => uint256) public nftOwnerRewards;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

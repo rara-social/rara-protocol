@@ -20,8 +20,9 @@ abstract contract MakerRegistrarStorageV1 is IMakerRegistrar {
     /// De-registering and re-registering should use the existing source ID
     uint256 public sourceCount;
 
-    /// @dev Mapping to look up source ID from NFT address and ID
-    mapping(address => mapping(uint256 => uint256)) public nftToSourceLookup;
+    /// @dev Mapping to look up source ID from chain ID, NFT address, and ID
+    mapping(uint256 => mapping(address => mapping(uint256 => uint256)))
+        public nftToSourceLookup;
 
     /// @dev Mapping to look up source ID from meta ID key
     mapping(uint256 => uint256) public override metaToSourceLookup;

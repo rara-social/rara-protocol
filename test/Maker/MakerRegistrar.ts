@@ -95,6 +95,7 @@ describe("MakerRegistrar", function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
     const { makerRegistrar, roleManager, testingStandard1155 } =
       await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Mint an NFT to Alice
     const NFT_ID = "1";
@@ -126,6 +127,7 @@ describe("MakerRegistrar", function () {
     )
       .to.emit(makerRegistrar, "Registered")
       .withArgs(
+        chainId,
         testingStandard1155.address,
         BigNumber.from(NFT_ID),
         ALICE.address,
@@ -139,6 +141,7 @@ describe("MakerRegistrar", function () {
     // Verify source id from nft param
     expect(
       await makerRegistrar.nftToSourceLookup(
+        chainId,
         testingStandard1155.address,
         NFT_ID
       )
@@ -173,6 +176,7 @@ describe("MakerRegistrar", function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
     const { makerRegistrar, testingStandard1155, roleManager } =
       await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Mint an NFT to Alice
     const NFT_ID = "1";
@@ -203,6 +207,7 @@ describe("MakerRegistrar", function () {
     )
       .to.emit(makerRegistrar, "Deregistered")
       .withArgs(
+        chainId,
         testingStandard1155.address,
         BigNumber.from(NFT_ID),
         ALICE.address,

@@ -28,6 +28,7 @@ interface IMakerRegistrar {
 
     function registerNftFromBridge(
         address owner,
+        uint256 chainId,
         address nftContractAddress,
         uint256 nftId,
         address creatorAddress,
@@ -36,6 +37,7 @@ interface IMakerRegistrar {
 
     function deRegisterNftFromBridge(
         address owner,
+        uint256 chainId,
         address nftContractAddress,
         uint256 nftId
     ) external;

@@ -17,6 +17,7 @@ import "./NftOwnership.sol";
 contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
     /// @dev Event triggered when an NFT is registered in the system
     event Registered(
+        uint256 chainId,
         address indexed nftContractAddress,
         uint256 indexed nftId,
         address indexed ownerAddress,
@@ -28,6 +29,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
 
     /// @dev Event triggered when an NFT is deregistered from the system
     event Deregistered(
+        uint256 chainId,
         address indexed nftContractAddress,
         uint256 indexed nftId,
         address indexed ownerAddress,
@@ -69,6 +71,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
 
         _registerForOwner(
             msg.sender,
+            block.chainid, // Use current chain ID
             nftContractAddress,
             nftId,
             creatorAddress,
@@ -78,6 +81,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
 
     function registerNftFromBridge(
         address owner,
+        uint256 chainId,
         address nftContractAddress,
         uint256 nftId,
         address creatorAddress,
@@ -88,6 +92,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
 
         _registerForOwner(
             owner,
+            chainId,
             nftContractAddress,
             nftId,
             creatorAddress,
@@ -97,6 +102,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
 
     function _registerForOwner(
         address owner,
+        uint256 chainId,
         address nftContractAddress,
         uint256 nftId,
         address creatorAddress,
@@ -105,7 +111,9 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         // TODO: Block registration of a RaRa reaction NFT once Reaction Vault is built out
 
         // Look up the source ID
-        uint256 currentSourceId = nftToSourceLookup[nftContractAddress][nftId];
+        uint256 currentSourceId = nftToSourceLookup[chainId][
+            nftContractAddress
+        ][nftId];
 
         // Check to see if the source ID is already set for this NFT
         if (currentSourceId > 0) {
@@ -127,7 +135,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         );
 
         // Register in mappings
-        nftToSourceLookup[nftContractAddress][nftId] = currentSourceId;
+        nftToSourceLookup[chainId][nftContractAddress][nftId] = currentSourceId;
         metaToSourceLookup[metaId] = currentSourceId;
         sourceToDetailsLookup[currentSourceId] = NftDetails(
             true,
@@ -137,6 +145,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
 
         // Emit event
         emit Registered(
+            chainId,
             nftContractAddress,
             nftId,
             owner,
@@ -156,27 +165,36 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             "NFT not owned"
         );
 
-        _deregisterNftForOwner(msg.sender, nftContractAddress, nftId);
+        _deregisterNftForOwner(
+            msg.sender,
+            block.chainid,
+            nftContractAddress,
+            nftId
+        );
     }
 
     function deRegisterNftFromBridge(
         address owner,
+        uint256 chainId,
         address nftContractAddress,
         uint256 nftId
     ) external {
         // Verify caller is Child Registrar from the bridge
         require(msg.sender == addressManager.childRegistrar(), "Not Bridge");
 
-        _deregisterNftForOwner(owner, nftContractAddress, nftId);
+        _deregisterNftForOwner(owner, chainId, nftContractAddress, nftId);
     }
 
     function _deregisterNftForOwner(
         address owner,
+        uint256 chainId,
         address nftContractAddress,
         uint256 nftId
     ) internal {
         // Look up source ID and verify it is valid
-        uint256 sourceId = nftToSourceLookup[nftContractAddress][nftId];
+        uint256 sourceId = nftToSourceLookup[chainId][nftContractAddress][
+            nftId
+        ];
         require(sourceId > 0, "NFT not found");
 
         // Verify it is registered
@@ -186,6 +204,6 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         // Update the param
         details.registered = false;
 
-        emit Deregistered(nftContractAddress, nftId, owner, sourceId);
+        emit Deregistered(chainId, nftContractAddress, nftId, owner, sourceId);
     }
 }
