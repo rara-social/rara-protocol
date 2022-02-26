@@ -1,12 +1,6 @@
 import {BigInt, Address, log, BigDecimal} from "@graphprotocol/graph-ts";
 
-import {
-  User,
-  Reaction,
-  TakerNFT,
-  CuratorPosition,
-  CuratorReaction,
-} from "../../generated/schema";
+import {User, Reaction} from "../../generated/schema";
 
 import {
   ReactionsPurchased,
@@ -29,11 +23,11 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   reaction.totalSold = reaction.totalSold.plus(event.params.quantity);
 }
 
-export function handleReactionsSpent(event: ReactionsSpent): void {
-  log.log(3, "ReactionsSpent");
+// export function handleReactionsSpent(event: ReactionsSpent): void {
+//   log.log(3, "ReactionsSpent");
 
-  // TODO
-}
+//   // TODO
+// }
 
 export function handleCreatorRewardsGranted(
   event: CreatorRewardsGranted
@@ -136,6 +130,13 @@ export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
 //   event: SpenderRewardsGranted
 // ): void {
 //   log.log(3, "SpenderRewardsGranted");
+// }
+
+// TODO: not needed
+// export function handleTakerRewardsGranted(
+//   event: TakerRewardsGranted
+// ): void {
+//   log.log(3, "TakerRewardsGranted");
 // }
 
 export function handleERC20RewardsClaimed(event: ERC20RewardsClaimed): void {

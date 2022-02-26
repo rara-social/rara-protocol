@@ -46,6 +46,7 @@ type CuratorReaction @entity {
 type CuratorPosition @entity {
   id: ID! #<msg.sender + takerNft.id>
   takerNFT: TakerNFT!
+  isTakerUser: Boolean
   shareCount: Int!
   curator: User!
 }

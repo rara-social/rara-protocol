@@ -73,16 +73,16 @@ dataSources:
       eventHandlers:
         - event: ReactionsPurchased(uint256,uint256,address,address,uint256)
           handler: handleReactionsPurchased
-        - event: ReactionsSpent(address,uint256,uint256,uint256,address,uint256)
-          handler: handleReactionsSpent
+        # - event: ReactionsSpent(address,uint256,uint256,uint256,address,uint256)
+        #   handler: handleReactionsSpent
         - event: CreatorRewardsGranted(address,address,uint256)
           handler: handleCreatorRewardsGranted
         - event: ReferrerRewardsGranted(address,address,uint256)
           handler: handleReferrerRewardsGranted
         - event: MakerRewardsGranted(address,address,uint256)
           handler: handleMakerRewardsGranted
-        - event: TakerRewardsGranted(uint256,address,uint256,address,uint256,uint256)
-          handler: handleTakerRewardsGranted
+        # - event: TakerRewardsGranted(uint256,address,uint256,address,uint256,uint256)
+        #   handler: handleTakerRewardsGranted
         # - event: SpenderRewardsGranted(address,uint256,address,uint256,uint256)
         #   handler: handleSpenderRewardsGranted
         - event: ERC20RewardsClaimed(address,uint256,address)
