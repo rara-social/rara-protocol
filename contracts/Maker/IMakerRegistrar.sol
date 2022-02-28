@@ -12,6 +12,12 @@ interface IMakerRegistrar {
 
     function metaToSourceLookup(uint256 metaId) external returns (uint256);
 
+    function nftToSourceLookup(
+        uint256 nftChainId,
+        address nftAddress,
+        uint256 nftId
+    ) external returns (uint256);
+
     function sourceToDetailsLookup(uint256)
         external
         returns (
