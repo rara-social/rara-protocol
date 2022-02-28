@@ -6,7 +6,7 @@ type User @entity {
 }
 
 type Reaction @entity {
-  id: ID!
+  id: ID! #event.params.metaId.toHexString()
   metaId: String!
   makerUser: User!
   nftChainId: Int!
@@ -41,10 +41,11 @@ type CuratorReaction @entity {
   quantity: Int!
   sharesRecieved: BigDecimal!
   curator: User!
+  metadataHash: String
 }
 
 type CuratorPosition @entity {
-  id: ID! #<msg.sender + takerNft.id>
+  id: ID! #msg.sender + takerNft.id
   takerNFT: TakerNFT!
   isTakerUser: Boolean
   shareCount: Int!

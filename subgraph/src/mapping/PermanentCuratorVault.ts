@@ -56,20 +56,6 @@ export function handleCuratorSharesBought(event: CuratorSharesBought): void {
   takerNft.save();
 
   //
-  // CuratorReaction
-  //
-  let curatorReactionId =
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString(); // generate unique id from transaction
-  let curatorReaction = new CuratorReaction(curatorReactionId);
-  curatorReaction.takerNFT = takerNft.id;
-  curatorReaction.sharesRecieved =
-    event.params.curatorSharesBought.toBigDecimal();
-  curatorReaction.curator = user.id;
-  // curatorReaction.reaction = ""; // TODO: add to event
-  // curatorReaction.quantity = event.params.curatorSharesBought; // TODO: add to event
-  curatorReaction.save();
-
-  //
   // CuratorPosition
   //
   let curatorPositionId = event.transaction.from + "-" + takerNft.id; // calc id from msg.sender + takerNft.id

@@ -23,7 +23,7 @@ export function handleRegistered(event: Registered): void {
   //
   // Reaction(metaId)
   //
-  let reaction = new Reaction(event.params.sourceId.toHexString());
+  let reaction = new Reaction(event.params.metaId.toHexString());
   reaction.metaId = event.params.metaId.toHexString();
   reaction.makerUser = user.id;
   reaction.nftChainId = event.params.chainId;

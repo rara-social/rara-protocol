@@ -1,6 +1,6 @@
 import {BigInt, Address, log, BigDecimal} from "@graphprotocol/graph-ts";
 
-import {User, Reaction} from "../../generated/schema";
+import {User, Reaction, CuratorReaction} from "../../generated/schema";
 
 import {
   ReactionsPurchased,
@@ -23,11 +23,44 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   reaction.totalSold = reaction.totalSold.plus(event.params.quantity);
 }
 
-// export function handleReactionsSpent(event: ReactionsSpent): void {
-//   log.log(3, "ReactionsSpent");
+export function handleReactionsSpent(event: ReactionsSpent): void {
+  log.log(3, "ReactionsSpent");
 
-//   // TODO
-// }
+  //
+  // User
+  //
+  let sender = event.transaction.from.toHexString();
+  let user = User.load(sender);
+  if (user == null) {
+    user = new User(sender);
+  }
+  user.save();
+
+  // takerNftAddress,
+  // takerNftId,
+  // reactionMetaId, *
+  // reactionQuantity,
+  // referrer, *
+  // metaDataHash
+
+  //
+  // CuratorReaction
+  //
+  let curatorReactionId =
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString(); // generate unique id from transaction
+  let curatorReaction = new CuratorReaction(curatorReactionId);
+
+  // reaction bought
+  // curatorReaction.takerNFT = takerNft.id; // curatorShareTokenId
+  // curatorReaction.sharesRecieved =
+  //   event.params.curatorSharesBought.toBigDecimal();
+
+  //
+  curatorReaction.curator = user.id;
+  curatorReaction.reaction = event.params.reactionMetaId.toHexString(); // need id // let reaction = new Reaction(event.params.sourceId.toHexString());
+  curatorReaction.quantity = event.params.quantity; // TODO: add to event
+  curatorReaction.save();
+}
 
 export function handleCreatorRewardsGranted(
   event: CreatorRewardsGranted
