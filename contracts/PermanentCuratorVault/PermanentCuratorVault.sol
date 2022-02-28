@@ -1,6 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.9;
 
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "./ICuratorVault.sol";
 import "./PermanentCuratorVaultStorage.sol";
 import "./Curve/BancorFormula.sol";
@@ -14,6 +15,7 @@ import "./Curve/BancorFormula.sol";
 /// bonding curve.
 contract PermanentCuratorVault is
     BancorFormula,
+    ReentrancyGuardUpgradeable,
     PermanentCuratorVaultStorageV1
 {
     /// @dev Use the safe methods when interacting with transfers with outside ERC20s
@@ -145,7 +147,7 @@ contract PermanentCuratorVault is
         IERC20Upgradeable paymentToken,
         uint256 sharesToBurn,
         address refundToAddress
-    ) external returns (uint256) {
+    ) external nonReentrant returns (uint256) {
         // Get the curator share token ID
         uint256 curatorShareTokenId = _getTokenId(
             nftChainId,
