@@ -20,11 +20,19 @@ describe("CuratorVault", function () {
 
   it("Should not allow address other than reaction vault purchase", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { curatorVault } = await deploySystem(OWNER);
+    const { curatorVault, paymentTokenErc20 } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Should fail
     await expect(
-      curatorVault.buyCuratorShares(ZERO_ADDRESS, "1", "1", OWNER.address)
+      curatorVault.buyCuratorShares(
+        chainId,
+        ZERO_ADDRESS,
+        "1",
+        paymentTokenErc20.address,
+        "1",
+        OWNER.address
+      )
     ).to.be.revertedWith(NOT_REACTION_VAULT);
   });
 
@@ -32,13 +40,21 @@ describe("CuratorVault", function () {
     const [OWNER] = await ethers.getSigners();
     const { curatorVault, addressManager, paymentTokenErc20 } =
       await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Set the owner as the address manager to allow purchase to be tried
     await addressManager.setReactionVault(OWNER.address);
 
     // Should fail
     await expect(
-      curatorVault.buyCuratorShares(ZERO_ADDRESS, "1", "1", OWNER.address)
+      curatorVault.buyCuratorShares(
+        chainId,
+        ZERO_ADDRESS,
+        "1",
+        paymentTokenErc20.address,
+        "1",
+        OWNER.address
+      )
     ).to.be.revertedWith(NO_BALANCE);
 
     // Give the account a balance
@@ -46,7 +62,14 @@ describe("CuratorVault", function () {
 
     // Should fail
     await expect(
-      curatorVault.buyCuratorShares(ZERO_ADDRESS, "1", "1", OWNER.address)
+      curatorVault.buyCuratorShares(
+        chainId,
+        ZERO_ADDRESS,
+        "1",
+        paymentTokenErc20.address,
+        "1",
+        OWNER.address
+      )
     ).to.be.revertedWith(TRANSFER_NOT_ALLOWED);
   });
 
@@ -54,6 +77,7 @@ describe("CuratorVault", function () {
     const [OWNER] = await ethers.getSigners();
     const { curatorVault, addressManager, paymentTokenErc20, curatorShares } =
       await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Set the owner as the address manager to allow purchase
     await addressManager.setReactionVault(OWNER.address);
@@ -67,7 +91,12 @@ describe("CuratorVault", function () {
     await paymentTokenErc20.approve(curatorVault.address, paymentAmount);
 
     // Get the curator share ID
-    const curatorShareId = await curatorVault.getTokenId(ZERO_ADDRESS, "1");
+    const curatorShareId = await curatorVault.getTokenId(
+      chainId,
+      ZERO_ADDRESS,
+      "1",
+      paymentTokenErc20.address
+    );
 
     // Expected amount for first purchase
     const expectedAmount = "38860";
@@ -75,8 +104,10 @@ describe("CuratorVault", function () {
     // Buy curator shares for the owner
     await expect(
       curatorVault.buyCuratorShares(
+        chainId,
         ZERO_ADDRESS,
         "1",
+        paymentTokenErc20.address,
         paymentAmount,
         OWNER.address
       )
@@ -91,7 +122,14 @@ describe("CuratorVault", function () {
 
     // Now sell it back and get back full amount of funds
     await expect(
-      curatorVault.sellCuratorShares(ZERO_ADDRESS, "1", expectedAmount)
+      curatorVault.sellCuratorShares(
+        chainId,
+        ZERO_ADDRESS,
+        "1",
+        paymentTokenErc20.address,
+        expectedAmount,
+        OWNER.address
+      )
     )
       .to.emit(curatorVault, "CuratorSharesSold")
       .withArgs(curatorShareId, "9999", expectedAmount); // 9999 due to precision loss
@@ -101,6 +139,7 @@ describe("CuratorVault", function () {
     const [OWNER, ALICE] = await ethers.getSigners();
     const { curatorVault, addressManager, paymentTokenErc20, curatorShares } =
       await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Set the owner as the address manager to allow purchase
     await addressManager.setReactionVault(OWNER.address);
@@ -119,8 +158,10 @@ describe("CuratorVault", function () {
 
     // Buy for the owner
     await curatorVault.buyCuratorShares(
+      chainId,
       ZERO_ADDRESS,
       "1",
+      paymentTokenErc20.address,
       paymentAmount,
       OWNER.address
     );
@@ -130,10 +171,22 @@ describe("CuratorVault", function () {
 
     await curatorVault
       .connect(ALICE)
-      .buyCuratorShares(ZERO_ADDRESS, "1", paymentAmount, ALICE.address);
+      .buyCuratorShares(
+        chainId,
+        ZERO_ADDRESS,
+        "1",
+        paymentTokenErc20.address,
+        paymentAmount,
+        ALICE.address
+      );
 
     // Get the curator share ID
-    const curatorShareId = await curatorVault.getTokenId(ZERO_ADDRESS, "1");
+    const curatorShareId = await curatorVault.getTokenId(
+      chainId,
+      ZERO_ADDRESS,
+      "1",
+      paymentTokenErc20.address
+    );
 
     const ownerBalance = await curatorShares.balanceOf(
       OWNER.address,

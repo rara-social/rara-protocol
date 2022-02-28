@@ -154,8 +154,10 @@ describe("ReactionVault Sell", function () {
     const expectedTakerCuratorShares = BigNumber.from("91027210151");
     const expectedSpenderCuratorShares = BigNumber.from("29084233246");
     const curatorSharesId = await curatorVault.getTokenId(
+      chainId,
       testingStandard1155.address,
-      TAKER_NFT_ID
+      TAKER_NFT_ID,
+      paymentTokenErc20.address
     );
 
     // Verify the events
@@ -208,7 +210,7 @@ describe("ReactionVault Sell", function () {
       chainId,
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
-      await curatorVault.curatorShares(),
+      curatorVault.address,
       curatorSharesId
     );
 
@@ -529,8 +531,10 @@ describe("ReactionVault Sell", function () {
     const expectedTakerCuratorShares = BigNumber.from("91027210151");
     const expectedSpenderCuratorShares = BigNumber.from("29084233246");
     const curatorSharesId = await curatorVault.getTokenId(
+      chainId,
       testingStandard1155.address,
-      TAKER_NFT_ID
+      TAKER_NFT_ID,
+      paymentTokenErc20.address
     );
 
     // Verify the events
@@ -582,7 +586,7 @@ describe("ReactionVault Sell", function () {
       chainId,
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
-      await curatorVault.curatorShares(),
+      curatorVault.address,
       curatorSharesId
     );
 

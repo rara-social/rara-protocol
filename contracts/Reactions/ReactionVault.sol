@@ -37,6 +37,7 @@ contract ReactionVault is
 
     /// @dev Event emitted when reaction is spent
     event ReactionsSpent(
+        uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId,
         uint256 reactionMetaId,
@@ -78,11 +79,24 @@ contract ReactionVault is
 
     /// @dev Event emitted when curator vault rewards are granted to a reaction Spender
     event SpenderRewardsGranted(
+        uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId,
         address curatorVault,
         uint256 curatorTokenId,
         uint256 curatorShareAmount
+    );
+
+    /// @dev Event emitted when a taker redeems curator shares
+    event TakerRewardsSold(
+        address takerAddress,
+        uint256 takerNftChainId,
+        address takerNftAddress,
+        uint256 takerNftId,
+        address curatorVault,
+        uint256 curatorTokenId,
+        uint256 curatorShareAmount,
+        uint256 paymentTokensReceived
     );
 
     /// @dev Event emitted when an account withdraws ERC20 rewards
@@ -363,8 +377,10 @@ contract ReactionVault is
 
         // Get the token ID for this taker
         uint256 curatorTokenId = info.curatorVault.getTokenId(
+            takerNftChainId,
             takerNftAddress,
-            takerNftId
+            takerNftId,
+            info.reactionDetails.paymentToken
         );
 
         // Approve the full amount
@@ -375,8 +391,10 @@ contract ReactionVault is
 
         // Buy shares for the taker and store them in this contract
         info.takerCuratorShares = info.curatorVault.buyCuratorShares(
+            takerNftChainId,
             takerNftAddress,
             takerNftId,
+            info.reactionDetails.paymentToken,
             info.takerAmount,
             address(this)
         );
@@ -388,7 +406,7 @@ contract ReactionVault is
                     takerNftChainId,
                     takerNftAddress,
                     takerNftId,
-                    address(info.curatorVault.curatorShares()),
+                    address(info.curatorVault),
                     curatorTokenId
                 )
             )
@@ -409,14 +427,17 @@ contract ReactionVault is
 
         // Buy shares for the spender.  Shares get sent directly to their address.
         info.spenderCuratorShares = info.curatorVault.buyCuratorShares(
+            takerNftChainId,
             takerNftAddress,
             takerNftId,
+            info.reactionDetails.paymentToken,
             info.spenderAmount,
             msg.sender
         );
 
         // Emit event for spender rewards
         emit SpenderRewardsGranted(
+            takerNftChainId,
             takerNftAddress,
             takerNftId,
             address(info.curatorVault),
@@ -426,6 +447,7 @@ contract ReactionVault is
 
         // Emit the event for the overall reaction spend
         emit ReactionsSpent(
+            takerNftChainId,
             takerNftAddress,
             takerNftId,
             reactionMetaId,
@@ -435,7 +457,7 @@ contract ReactionVault is
         );
     }
 
-    /// @dev Allows an account that has been allocated rewards to withdraw
+    /// @dev Allows an account that has been allocated rewards to withdraw (Maker, creator, referrer)
     /// @param token ERC20 token that rewards are valued in
     function withdrawErc20Rewards(IERC20Upgradeable token)
         external
@@ -457,5 +479,80 @@ contract ReactionVault is
 
         // Return amount sent
         return rewardAmount;
+    }
+
+    /// @dev Allows an NFT taker to withdraw rewards for reactions that were spent against
+    /// an NFT that they own.
+    /// The owner of the NFT must register the NFT into the system before they can claim the rewards.
+    function withdrawTakerRewards(
+        uint256 takerNftChainId,
+        address takerNftAddress,
+        uint256 takerNftId,
+        IERC20Upgradeable paymentToken,
+        address curatorVault,
+        uint256 curatorTokenId
+    ) external nonReentrant returns (uint256) {
+        // Build a hash of the rewards params
+        uint256 rewardsIndex = uint256(
+            keccak256(
+                abi.encode(
+                    takerNftChainId,
+                    takerNftAddress,
+                    takerNftId,
+                    curatorVault,
+                    curatorTokenId
+                )
+            )
+        );
+
+        // Verify the balance
+        uint256 takerCuratorSharesBalance = nftOwnerRewards[rewardsIndex];
+        require(takerCuratorSharesBalance > 0, "No rewards");
+
+        // Look up the targeted NFT source ID
+        uint256 sourceId = addressManager.makerRegistrar().nftToSourceLookup(
+            takerNftChainId,
+            takerNftAddress,
+            takerNftId
+        );
+        require(sourceId > 0, "NFT not found");
+
+        // Get the details about the NFT
+        (bool registered, address owner, ) = (addressManager.makerRegistrar())
+            .sourceToDetailsLookup(sourceId);
+
+        // Verify it is registered and the caller is the one who registered it
+        // Since NFTs may be on a different chain (L1 vs L2) we cannot directly check this
+        require(registered, "NFT not registered");
+
+        // This NFT could have been registered on another chain, but this assumes the
+        // Taker is withdrawing rewards on the L2 with the same account/address
+        require(owner == msg.sender, "NFT not owned");
+
+        // Sell the curator shares - payment tokens will be sent to msg.sender
+        uint256 paymentTokensReceived = ICuratorVault(curatorVault)
+            .sellCuratorShares(
+                takerNftChainId,
+                takerNftAddress,
+                takerNftId,
+                paymentToken,
+                takerCuratorSharesBalance,
+                msg.sender
+            );
+
+        // Emit the event
+        emit TakerRewardsSold(
+            msg.sender,
+            takerNftChainId,
+            takerNftAddress,
+            takerNftId,
+            curatorVault,
+            curatorTokenId,
+            takerCuratorSharesBalance,
+            paymentTokensReceived
+        );
+
+        // Return the amount of payment tokens received
+        return paymentTokensReceived;
     }
 }
