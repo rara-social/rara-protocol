@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.9;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "./ICuratorVault.sol";
 import "./PermanentCuratorVaultStorage.sol";
 import "./Curve/BancorFormula.sol";
@@ -15,6 +15,7 @@ import "./Curve/BancorFormula.sol";
 /// bonding curve.
 contract PermanentCuratorVault is
     BancorFormula,
+    ReentrancyGuardUpgradeable,
     PermanentCuratorVaultStorageV1
 {
     /// @dev Use the safe methods when interacting with transfers with outside ERC20s
@@ -62,38 +63,48 @@ contract PermanentCuratorVault is
     }
 
     /// @dev get a unique token ID for a given nft address and nft ID
-    function getTokenId(address nftAddress, uint256 nftId)
-        external
-        pure
-        returns (uint256)
-    {
-        return _getTokenId(nftAddress, nftId);
+    function getTokenId(
+        uint256 nftChainId,
+        address nftAddress,
+        uint256 nftId,
+        IERC20Upgradeable paymentToken
+    ) external pure returns (uint256) {
+        return _getTokenId(nftChainId, nftAddress, nftId, paymentToken);
     }
 
-    function _getTokenId(address nftAddress, uint256 nftId)
-        internal
-        pure
-        returns (uint256)
-    {
-        return uint256(keccak256(abi.encode(nftAddress, nftId)));
+    function _getTokenId(
+        uint256 nftChainId,
+        address nftAddress,
+        uint256 nftId,
+        IERC20Upgradeable paymentToken
+    ) internal pure returns (uint256) {
+        return
+            uint256(
+                keccak256(
+                    abi.encode(nftChainId, nftAddress, nftId, paymentToken)
+                )
+            );
     }
 
     /// @dev Buy curator shares when reactions are spent.
     /// The reaction vault is the only account allowed to call this.
     /// @return Returns the amount of curator shares purchased.
     function buyCuratorShares(
+        uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
+        IERC20Upgradeable paymentToken,
         uint256 paymentAmount,
         address mintToAddress
     ) external onlyReactionVault returns (uint256) {
         // Get the curator share token ID
-        uint256 curatorShareTokenId = _getTokenId(nftAddress, nftId);
+        uint256 curatorShareTokenId = _getTokenId(
+            nftChainId,
+            nftAddress,
+            nftId,
+            paymentToken
+        );
 
-        // Move payment tokens in
-        IParameterManager parameterManager = addressManager.parameterManager();
-        IERC20Upgradeable paymentToken = parameterManager.paymentToken();
-        // TODO: use _msgSender() for GSN compatability
         paymentToken.safeTransferFrom(msg.sender, address(this), paymentAmount);
 
         // Calculate how many tokens should be minted
@@ -130,12 +141,20 @@ contract PermanentCuratorVault is
     /// Any holder who owns shares can sell them back
     /// @return Returns the amount of payment tokens received for the curator shares.
     function sellCuratorShares(
+        uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
-        uint256 sharesToBurn
-    ) external returns (uint256) {
+        IERC20Upgradeable paymentToken,
+        uint256 sharesToBurn,
+        address refundToAddress
+    ) external nonReentrant returns (uint256) {
         // Get the curator share token ID
-        uint256 curatorShareTokenId = _getTokenId(nftAddress, nftId);
+        uint256 curatorShareTokenId = _getTokenId(
+            nftChainId,
+            nftAddress,
+            nftId,
+            paymentToken
+        );
 
         // Burn the curator shares
         curatorShares.burn(msg.sender, curatorShareTokenId, sharesToBurn);
@@ -148,10 +167,8 @@ contract PermanentCuratorVault is
             sharesToBurn
         );
 
-        // Send the tokens
-        IParameterManager parameterManager = addressManager.parameterManager();
-        IERC20Upgradeable paymentToken = parameterManager.paymentToken();
-        paymentToken.safeTransfer(address(this), refundAmount);
+        // Send payment token back
+        paymentToken.safeTransfer(refundToAddress, refundAmount);
 
         // Update the amounts
         reserves[curatorShareTokenId] -= refundAmount;

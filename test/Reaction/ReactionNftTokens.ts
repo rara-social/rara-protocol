@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { deploySystem } from "../Scripts/deploy";
 import { TEST_NFT_URI } from "../Scripts/constants";
-import { REACTION_TRANSER_RESTRICTED } from "../Scripts/errors";
+import { REACTION_TRANSFER_RESTRICTED } from "../Scripts/errors";
 
 describe("Reaction1155 Token", function () {
   it("Should get initialized with address manager", async function () {
@@ -42,7 +42,7 @@ describe("Reaction1155 Token", function () {
       reactionNFT1155
         .connect(ALICE)
         .safeTransferFrom(ALICE.address, BOB.address, "1", "250", [0])
-    ).to.be.revertedWith(REACTION_TRANSER_RESTRICTED);
+    ).to.be.revertedWith(REACTION_TRANSFER_RESTRICTED);
 
     // Verify Bob balance
     balance = await reactionNFT1155.balanceOf(BOB.address, "1");
