@@ -8,6 +8,7 @@ interface IMakerRegistrar {
         bool registered;
         address owner;
         address creator;
+        uint256 reactionMetaId;
     }
 
     function metaToSourceLookup(uint256 metaId) external returns (uint256);
@@ -23,7 +24,8 @@ interface IMakerRegistrar {
         returns (
             bool,
             address,
-            address
+            address,
+            uint256
         );
 
     function verifyOwnership(

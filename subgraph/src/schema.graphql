@@ -27,7 +27,6 @@ type TakerNFT @entity {
   nftChainId: Int!
   nftContractAddress: Bytes!
   nftId: Int!
-  nftOwnerAddress: Bytes!
   takerShareCount: Int
   curatorShareCount: Int! #number of shares
   curatorShareBalance: BigDecimal! #payment token balance
@@ -39,15 +38,14 @@ type CuratorReaction @entity {
   reaction: Reaction!
   takerNFT: TakerNFT!
   quantity: Int!
-  sharesRecieved: BigDecimal!
   curator: User!
-  metadataHash: String
+  metadataHash: Int
 }
 
 type CuratorPosition @entity {
   id: ID! #msg.sender + takerNft.id
   takerNFT: TakerNFT!
-  isTakerUser: Boolean
   shareCount: Int!
   curator: User!
+  isTakerShares: Boolean
 }

@@ -8,9 +8,8 @@ import {
   CreatorRewardsGranted,
   ReferrerRewardsGranted,
   MakerRewardsGranted,
-  TakerRewardsGranted,
-  SpenderRewardsGranted,
   ERC20RewardsClaimed,
+  TakerRewardsSold,
 } from "../../generated/ReactionVault/ReactionVault";
 
 export function handleReactionsPurchased(event: ReactionsPurchased): void {
@@ -19,7 +18,7 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   //
   // Reaction
   //
-  let reaction = Reaction.load(event.params.reactionMetaId.toHexString()); // TODO: same as source id from registrar?
+  let reaction = Reaction.load(event.params.reactionMetaId.toHexString());
   reaction.totalSold = reaction.totalSold.plus(event.params.quantity);
 }
 
@@ -36,29 +35,17 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   }
   user.save();
 
-  // takerNftAddress,
-  // takerNftId,
-  // reactionMetaId, *
-  // reactionQuantity,
-  // referrer, *
-  // metaDataHash
-
   //
   // CuratorReaction
   //
   let curatorReactionId =
     event.transaction.hash.toHex() + "-" + event.logIndex.toString(); // generate unique id from transaction
   let curatorReaction = new CuratorReaction(curatorReactionId);
-
-  // reaction bought
-  // curatorReaction.takerNFT = takerNft.id; // curatorShareTokenId
-  // curatorReaction.sharesRecieved =
-  //   event.params.curatorSharesBought.toBigDecimal();
-
-  //
+  curatorReaction.reaction = event.params.reactionMetaId.toHexString();
+  curatorReaction.quantity = event.params.quantity;
   curatorReaction.curator = user.id;
-  curatorReaction.reaction = event.params.reactionMetaId.toHexString(); // need id // let reaction = new Reaction(event.params.sourceId.toHexString());
-  curatorReaction.quantity = event.params.quantity; // TODO: add to event
+  curatorReaction.metadataHash = event.params.metaDataHash;
+
   curatorReaction.save();
 }
 
@@ -85,7 +72,7 @@ export function handleCreatorRewardsGranted(
   //
   // Reaction
   //
-  let reaction = Reaction.load("TODO"); // TODO: get reation id
+  let reaction = Reaction.load(event.params.reactionMetaId.toHexString());
 
   // increase creator fees
   reaction.creatorFeesTotal = reaction.creatorFeesTotal.minus(
@@ -118,7 +105,7 @@ export function handleReferrerRewardsGranted(
   //
   // Reaction
   //
-  let reaction = Reaction.load("TODO"); // TODO: get reation id
+  let reaction = Reaction.load(event.params.reactionMetaId.toHexString());
 
   // increase referrer fees
   reaction.referrerFeesTotal = reaction.referrerFeesTotal.minus(
@@ -149,7 +136,7 @@ export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
   //
   // Reaction
   //
-  let reaction = Reaction.load("TODO"); // TODO: get reation id
+  let reaction = Reaction.load(event.params.reactionMetaId.toHexString());
 
   // increase referrer fees
   reaction.makerFeesTotal = reaction.makerFeesTotal.minus(
@@ -157,20 +144,6 @@ export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
   );
   reaction.save();
 }
-
-// TODO: not needed
-// export function handleSpenderRewardsGranted(
-//   event: SpenderRewardsGranted
-// ): void {
-//   log.log(3, "SpenderRewardsGranted");
-// }
-
-// TODO: not needed
-// export function handleTakerRewardsGranted(
-//   event: TakerRewardsGranted
-// ): void {
-//   log.log(3, "TakerRewardsGranted");
-// }
 
 export function handleERC20RewardsClaimed(event: ERC20RewardsClaimed): void {
   log.log(3, "ERC20RewardsClaimed");
@@ -183,4 +156,18 @@ export function handleERC20RewardsClaimed(event: ERC20RewardsClaimed): void {
   user.referrerRewardsBalance = BigDecimal.zero();
 
   user.save();
+}
+
+export function handleTakerRewardsSold(event: TakerRewardsSold): void {
+  log.log(3, "TakerRewardsSold");
+  // address takerAddress,
+  // uint256 takerNftChainId,
+  // address takerNftAddress,
+  // uint256 takerNftId,
+  // address curatorVault,
+  // uint256 curatorTokenId,
+  // uint256 curatorShareAmount,
+  // uint256 paymentTokensReceived
+
+  // TODO - needed(?)
 }

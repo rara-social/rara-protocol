@@ -32,9 +32,14 @@ contract PermanentCuratorVault is
 
     /// @dev Event triggered when curator shares are purchased
     event CuratorSharesBought(
+        uint256 nftChainId,
+        address nftContractAddress,
+        uint256 nftId,
         uint256 indexed curatorShareTokenId,
         uint256 paymentTokenPaid,
-        uint256 curatorSharesBought
+        uint256 curatorSharesBought,
+        uint256 indexed reactionMetaId,
+        bool isTakerShares
     );
 
     /// @dev Event triggered when curator shares are sold
@@ -93,9 +98,11 @@ contract PermanentCuratorVault is
         uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
+        uint256 reactionMetaId,
         IERC20Upgradeable paymentToken,
         uint256 paymentAmount,
-        address mintToAddress
+        address mintToAddress,
+        bool isTakerShares
     ) external onlyReactionVault returns (uint256) {
         // Get the curator share token ID
         uint256 curatorShareTokenId = _getTokenId(
@@ -129,9 +136,14 @@ contract PermanentCuratorVault is
 
         // Emit the event
         emit CuratorSharesBought(
+            nftChainId,
+            nftAddress,
+            nftId,
             curatorShareTokenId,
             paymentAmount,
-            curatorShareAmount
+            curatorShareAmount,
+            reactionMetaId,
+            isTakerShares
         );
 
         return curatorShareAmount;

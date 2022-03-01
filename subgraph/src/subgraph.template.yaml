@@ -45,7 +45,7 @@ dataSources:
         - name: PermanentCuratorVault
           file: ../artifacts/contracts/PermanentCuratorVault/PermanentCuratorVault.sol/PermanentCuratorVault.json
       eventHandlers:
-        - event: CuratorSharesBought(indexed uint256,uint256,uint256)
+        - event: CuratorSharesBought(uint256,address,uint256,indexed uint256,uint256,uint256,indexed uint256,bool)
           handler: handleCuratorSharesBought
         - event: CuratorSharesSold(indexed uint256,uint256,uint256)
           handler: handleCuratorSharesSold
@@ -73,18 +73,16 @@ dataSources:
       eventHandlers:
         - event: ReactionsPurchased(uint256,uint256,address,address,uint256)
           handler: handleReactionsPurchased
-        - event: ReactionsSpent(address,uint256,uint256,uint256,address,uint256)
+        - event: ReactionsSpent(uint256,address,uint256,uint256,uint256,address,uint256)
           handler: handleReactionsSpent
-        - event: CreatorRewardsGranted(address,address,uint256)
+        - event: CreatorRewardsGranted(address,address,uint256,uint256)
           handler: handleCreatorRewardsGranted
-        - event: ReferrerRewardsGranted(address,address,uint256)
+        - event: ReferrerRewardsGranted(address,address,uint256,uint256)
           handler: handleReferrerRewardsGranted
-        - event: MakerRewardsGranted(address,address,uint256)
+        - event: MakerRewardsGranted(address,address,uint256,uint256)
           handler: handleMakerRewardsGranted
-        # - event: TakerRewardsGranted(uint256,address,uint256,address,uint256,uint256)
-        #   handler: handleTakerRewardsGranted
-        # - event: SpenderRewardsGranted(address,uint256,address,uint256,uint256)
-        #   handler: handleSpenderRewardsGranted
         - event: ERC20RewardsClaimed(address,uint256,address)
           handler: handleERC20RewardsClaimed
+        - event: TakerRewardsSold(address,uint256,address,uint256,address,uint256,uint256,uint256)
+          handler: handleTakerRewardsSold
       file: ./src/mapping/ReactionVault.ts

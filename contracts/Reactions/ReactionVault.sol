@@ -50,41 +50,24 @@ contract ReactionVault is
     event CreatorRewardsGranted(
         address creator,
         IERC20Upgradeable paymentToken,
-        uint256 amount
+        uint256 amount,
+        uint256 reactionMetaId
     );
 
     /// @dev Event emitted when rewards are granted to a referrer
     event ReferrerRewardsGranted(
         address referrer,
         IERC20Upgradeable paymentToken,
-        uint256 amount
+        uint256 amount,
+        uint256 reactionMetaId
     );
 
     /// @dev Event emitted when rewards are granted to a maker
     event MakerRewardsGranted(
         address maker,
         IERC20Upgradeable paymentToken,
-        uint256 amount
-    );
-
-    /// @dev Event emitted when curator vault rewards are granted to a taker
-    event TakerRewardsGranted(
-        uint256 takerNftChainId,
-        address takerNftAddress,
-        uint256 takerNftId,
-        address curatorVault,
-        uint256 curatorTokenId,
-        uint256 curatorShareAmount
-    );
-
-    /// @dev Event emitted when curator vault rewards are granted to a reaction Spender
-    event SpenderRewardsGranted(
-        uint256 takerNftChainId,
-        address takerNftAddress,
-        uint256 takerNftId,
-        address curatorVault,
-        uint256 curatorTokenId,
-        uint256 curatorShareAmount
+        uint256 amount,
+        uint256 reactionMetaId
     );
 
     /// @dev Event emitted when a taker redeems curator shares
@@ -150,7 +133,7 @@ contract ReactionVault is
         require(info.sourceId != 0, "Unknown NFT");
 
         // Verify it is registered
-        (info.registered, info.owner, info.creator) = info
+        (info.registered, info.owner, info.creator, info.reactionMetaId) = info
             .makerRegistrar
             .sourceToDetailsLookup(info.sourceId);
         require(info.registered, "NFT not registered");
@@ -182,7 +165,8 @@ contract ReactionVault is
             emit CreatorRewardsGranted(
                 info.creator,
                 paymentToken,
-                info.creatorCut
+                info.creatorCut,
+                makerNftMetaId
             );
         }
 
@@ -200,7 +184,8 @@ contract ReactionVault is
             emit ReferrerRewardsGranted(
                 referrer,
                 paymentToken,
-                info.referrerCut
+                info.referrerCut,
+                makerNftMetaId
             );
         }
 
@@ -221,7 +206,12 @@ contract ReactionVault is
 
         // Assign awards to maker
         ownerToRewardsMapping[paymentToken][info.owner] += info.makerCut;
-        emit MakerRewardsGranted(info.owner, paymentToken, info.makerCut);
+        emit MakerRewardsGranted(
+            info.owner,
+            paymentToken,
+            info.makerCut,
+            makerNftMetaId
+        );
 
         // Build the parameter version from the price details
         info.parameterVersion = uint256(
@@ -345,7 +335,8 @@ contract ReactionVault is
             emit ReferrerRewardsGranted(
                 referrer,
                 info.reactionDetails.paymentToken,
-                info.referrerCut
+                info.referrerCut,
+                reactionMetaId
             );
 
             // Subtract the referrer cut from the total being used going forward
@@ -394,9 +385,11 @@ contract ReactionVault is
             takerNftChainId,
             takerNftAddress,
             takerNftId,
+            reactionMetaId,
             info.reactionDetails.paymentToken,
             info.takerAmount,
-            address(this)
+            address(this),
+            true
         );
 
         // Build a hash of the rewards params
@@ -415,34 +408,16 @@ contract ReactionVault is
         // Allocate rewards for the future NFT Owner
         nftOwnerRewards[rewardsIndex] += info.takerCuratorShares;
 
-        // Emit event
-        emit TakerRewardsGranted(
-            takerNftChainId,
-            takerNftAddress,
-            takerNftId,
-            address(info.curatorVault),
-            curatorTokenId,
-            info.takerCuratorShares
-        );
-
         // Buy shares for the spender.  Shares get sent directly to their address.
         info.spenderCuratorShares = info.curatorVault.buyCuratorShares(
             takerNftChainId,
             takerNftAddress,
             takerNftId,
+            reactionMetaId,
             info.reactionDetails.paymentToken,
             info.spenderAmount,
-            msg.sender
-        );
-
-        // Emit event for spender rewards // TODO: not needed, covered by buyCuratorShares
-        emit SpenderRewardsGranted(
-            takerNftChainId,
-            takerNftAddress,
-            takerNftId,
-            address(info.curatorVault),
-            curatorTokenId,
-            info.spenderCuratorShares
+            msg.sender,
+            false
         );
 
         // Emit the event for the overall reaction spend
@@ -518,7 +493,7 @@ contract ReactionVault is
         require(sourceId > 0, "NFT not found");
 
         // Get the details about the NFT
-        (bool registered, address owner, ) = (addressManager.makerRegistrar())
+        (bool registered, address owner, , ) = (addressManager.makerRegistrar())
             .sourceToDetailsLookup(sourceId);
 
         // Verify it is registered and the caller is the one who registered it

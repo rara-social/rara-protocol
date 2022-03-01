@@ -1,12 +1,6 @@
 import {BigInt, Address, log} from "@graphprotocol/graph-ts";
 
-import {
-  User,
-  Reaction,
-  TakerNFT,
-  CuratorPosition,
-  CuratorReaction,
-} from "../../generated/schema";
+import {User, TakerNFT, CuratorPosition} from "../../generated/schema";
 
 import {
   CuratorSharesBought,
@@ -30,12 +24,9 @@ export function handleCuratorSharesBought(event: CuratorSharesBought): void {
   let takerNft = TakerNFT.load(event.params.curatorShareTokenId.toHexString());
   if (takerNft == null) {
     takerNft = new TakerNFT(event.params.curatorShareTokenId.toHexString());
-
-    // TODO: init
-    // nftChainId: Int!
-    // nftContractAddress: Bytes!
-    // nftId: Int!
-    // nftOwnerAddress: Bytes!
+    takerNft.nftChainId = event.params.nftChainId;
+    takerNft.nftContractAddress = event.params.nftContractAddress;
+    takerNft.nftId = event.params.nftId;
   }
 
   // increment share count
@@ -48,11 +39,6 @@ export function handleCuratorSharesBought(event: CuratorSharesBought): void {
     .toBigDecimal()
     .plus(takerNft.curatorShareBalance);
 
-  // increment referrer fees balance // TODO: add to event (?)
-  // takerNft.referrerFeesBalance = event.params.paymentTokenPaid
-  //   .toBigDecimal()
-  //   .plus(takerNft.referrerFeesBalance);
-
   takerNft.save();
 
   //
@@ -63,8 +49,9 @@ export function handleCuratorSharesBought(event: CuratorSharesBought): void {
   if (curatorPosition == null) {
     // init new position
     curatorPosition = new CuratorPosition(curatorPositionId);
-    curatorPosition.shareCount = event.params.curatorSharesBought;
     curatorPosition.curator = user.id;
+    curatorPosition.isTakerShares = event.params.isTakerShares;
+    curatorPosition.shareCount = event.params.curatorSharesBought;
   } else {
     // increase share count
     curatorPosition.shareCount = event.params.curatorSharesBought
