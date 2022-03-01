@@ -42,15 +42,6 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     }
 
     /// @dev Setter for the reaction price
-    function setSaleCreatorBasisPoints(uint256 _saleCreatorBasisPoints)
-        external
-        onlyAdmin
-    {
-        require(_saleCreatorBasisPoints != 0, ZERO_INPUT);
-        saleCreatorBasisPoints = _saleCreatorBasisPoints;
-    }
-
-    /// @dev Setter for the reaction price
     function setSaleReferrerBasisPoints(uint256 _saleReferrerBasisPoints)
         external
         onlyAdmin

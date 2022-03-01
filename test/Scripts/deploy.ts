@@ -158,7 +158,6 @@ const deploySystem = async (owner: SignerWithAddress) => {
   await parameterManager.setSaleCuratorLiabilityBasisPoints(
     TEST_SALE_CURATOR_LIABILITY_BP
   );
-  await parameterManager.setSaleCreatorBasisPoints(TEST_SALE_CREATOR_BP);
   await parameterManager.setSaleReferrerBasisPoints(TEST_SALE_REFERRER_BP);
   await parameterManager.setSpendTakerBasisPoints(TEST_SPEND_TAKER_BP);
   await parameterManager.setSpendReferrerBasisPoints(TEST_SPEND_REFERRER_BP);

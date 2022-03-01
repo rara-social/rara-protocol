@@ -26,6 +26,7 @@ contract RootRegistrar is FxBaseRootTunnel {
         address nftContractAddress,
         uint256 nftId,
         address creatorAddress,
+        uint256 creatorSaleBasisPoints,
         uint256 optionBits
     ) external {
         // Verify ownership
@@ -47,6 +48,7 @@ contract RootRegistrar is FxBaseRootTunnel {
                 nftContractAddress,
                 nftId,
                 creatorAddress,
+                creatorSaleBasisPoints,
                 optionBits
             )
         );
