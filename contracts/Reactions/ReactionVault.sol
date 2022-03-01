@@ -435,7 +435,7 @@ contract ReactionVault is
             msg.sender
         );
 
-        // Emit event for spender rewards
+        // Emit event for spender rewards // TODO: not needed, covered by buyCuratorShares
         emit SpenderRewardsGranted(
             takerNftChainId,
             takerNftAddress,

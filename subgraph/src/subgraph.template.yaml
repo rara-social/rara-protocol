@@ -1,0 +1,90 @@
+specVersion: 0.0.2
+schema:
+  file: ./src/schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: MakerRegistrar
+    network: "{{network}}"
+    source:
+      address: "{{MakerRegistrarAddress}}"
+      abi: MakerRegistrar
+      startBlock: {{MakerRegistrarStartBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Reaction
+      abis:
+        - name: MakerRegistrar
+          file: ../artifacts/contracts/maker/MakerRegistrar.sol/MakerRegistrar.json
+      eventHandlers:
+        - event: Registered(uint256,indexed address,indexed uint256,indexed address,address,uint256,uint256,uint256)
+          handler: handleRegistered
+        - event: Deregistered(uint256,indexed address,indexed uint256,indexed address,uint256)
+          handler: handleDeregistered
+      file: ./src/mapping/MakerRegistrar.ts
+  - kind: ethereum/contract
+    name: PermanentCuratorVault
+    network: "{{network}}"
+    source:
+      address: "{{PermanentCuratorVaultAddress}}"
+      abi: PermanentCuratorVault
+      startBlock: {{PermanentCuratorVaultStartBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Reaction
+        - TakerNFT
+        - CuratorPosition
+      abis:
+        - name: PermanentCuratorVault
+          file: ../artifacts/contracts/PermanentCuratorVault/PermanentCuratorVault.sol/PermanentCuratorVault.json
+      eventHandlers:
+        - event: CuratorSharesBought(indexed uint256,uint256,uint256)
+          handler: handleCuratorSharesBought
+        - event: CuratorSharesSold(indexed uint256,uint256,uint256)
+          handler: handleCuratorSharesSold
+      file: ./src/mapping/PermanentCuratorVault.ts
+  - kind: ethereum/contract
+    name: ReactionVault
+    network: "{{network}}"
+    source:
+      address: "{{ReactionVaultAddress}}"
+      abi: ReactionVault
+      startBlock: {{ReactionVaultStartBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Reaction
+        - TakerNFT
+        - CuratorPosition
+        - CuratorReaction
+      abis:
+        - name: ReactionVault
+          file: ../artifacts/contracts/Reactions/ReactionVault.sol/ReactionVault.json
+      eventHandlers:
+        - event: ReactionsPurchased(uint256,uint256,address,address,uint256)
+          handler: handleReactionsPurchased
+        - event: ReactionsSpent(address,uint256,uint256,uint256,address,uint256)
+          handler: handleReactionsSpent
+        - event: CreatorRewardsGranted(address,address,uint256)
+          handler: handleCreatorRewardsGranted
+        - event: ReferrerRewardsGranted(address,address,uint256)
+          handler: handleReferrerRewardsGranted
+        - event: MakerRewardsGranted(address,address,uint256)
+          handler: handleMakerRewardsGranted
+        # - event: TakerRewardsGranted(uint256,address,uint256,address,uint256,uint256)
+        #   handler: handleTakerRewardsGranted
+        # - event: SpenderRewardsGranted(address,uint256,address,uint256,uint256)
+        #   handler: handleSpenderRewardsGranted
+        - event: ERC20RewardsClaimed(address,uint256,address)
+          handler: handleERC20RewardsClaimed
+      file: ./src/mapping/ReactionVault.ts

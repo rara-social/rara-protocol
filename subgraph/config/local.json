@@ -1,0 +1,9 @@
+{
+  "network": "localhost",
+  "MakerRegistrarAddress": "0x5fc8d32690cc91d4c39d9d3abcbd16989f875707",
+  "MakerRegistrarStartBlock": 0,
+  "PermanentCuratorVaultAddress": "0x3aa5ebb10dc797cac828524e59a333d0a371443c",
+  "PermanentCuratorVaultStartBlock": 0,
+  "ReactionVaultAddress": "0xa513e6e4b8f2a923d98304ec87f64353c4d5c853",
+  "ReactionVaultStartBlock": 0
+}

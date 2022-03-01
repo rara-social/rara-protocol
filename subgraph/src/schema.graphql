@@ -1,0 +1,53 @@
+type User @entity {
+  id: ID! #publicAddress
+  makerRewardsBalance: BigDecimal!
+  creatorRewardsBalance: BigDecimal!
+  referrerRewardsBalance: BigDecimal!
+}
+
+type Reaction @entity {
+  id: ID! #event.params.metaId.toHexString()
+  metaId: String!
+  makerUser: User!
+  nftChainId: Int!
+  nftContractAddress: Bytes!
+  nftId: Int!
+  nftOwnerAddress: Bytes!
+  nftCreatorAddress: Bytes!
+  reactionPrice: BigDecimal!
+  registered: Boolean!
+  totalSold: Int
+  makerFeesTotal: BigDecimal
+  creatorFeesTotal: BigDecimal
+  referrerFeesTotal: BigDecimal
+}
+
+type TakerNFT @entity {
+  id: ID! #curatorShareTokenId
+  nftChainId: Int!
+  nftContractAddress: Bytes!
+  nftId: Int!
+  nftOwnerAddress: Bytes!
+  takerShareCount: Int
+  curatorShareCount: Int! #number of shares
+  curatorShareBalance: BigDecimal! #payment token balance
+  referrerFeesBalance: BigDecimal!
+}
+
+type CuratorReaction @entity {
+  id: ID! #event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  reaction: Reaction!
+  takerNFT: TakerNFT!
+  quantity: Int!
+  sharesRecieved: BigDecimal!
+  curator: User!
+  metadataHash: String
+}
+
+type CuratorPosition @entity {
+  id: ID! #msg.sender + takerNft.id
+  takerNFT: TakerNFT!
+  isTakerUser: Boolean
+  shareCount: Int!
+  curator: User!
+}
