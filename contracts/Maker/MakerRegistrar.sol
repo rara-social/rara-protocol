@@ -152,7 +152,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         );
 
         // Verify that creatorSaleBasisPoints is within bounds (can't allow more than 100%)
-        require(creatorSaleBasisPoints < 10_000, "Invalid creator bp");
+        require(creatorSaleBasisPoints <= 10_000, "Invalid creator bp");
 
         // Register in mappings
         nftToSourceLookup[chainId][nftContractAddress][nftId] = currentSourceId;

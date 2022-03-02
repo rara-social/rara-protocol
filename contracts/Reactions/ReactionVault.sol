@@ -486,6 +486,15 @@ contract ReactionVault is
         return rewardAmount;
     }
 
+    /// @dev Struct to hold local vars in withdrawTakerRewards()
+    struct TakerWithdrawInfo {
+        uint256 rewardsIndex;
+        uint256 takerCuratorSharesBalance;
+        uint256 sourceId;
+        uint256 paymentTokensForMaker;
+        uint256 creatorCut;
+    }
+
     /// @dev Allows an NFT taker to withdraw rewards for reactions that were spent against
     /// an NFT that they own.
     /// The owner of the NFT must register the NFT into the system before they can claim the rewards.
@@ -497,8 +506,11 @@ contract ReactionVault is
         address curatorVault,
         uint256 curatorTokenId
     ) external nonReentrant returns (uint256) {
+        // Create a struct to hold local vars (and prevent "stack too deep")
+        TakerWithdrawInfo memory info;
+
         // Build a hash of the rewards params
-        uint256 rewardsIndex = uint256(
+        info.rewardsIndex = uint256(
             keccak256(
                 abi.encode(
                     takerNftChainId,
@@ -511,20 +523,26 @@ contract ReactionVault is
         );
 
         // Verify the balance
-        uint256 takerCuratorSharesBalance = nftOwnerRewards[rewardsIndex];
-        require(takerCuratorSharesBalance > 0, "No rewards");
+        info.takerCuratorSharesBalance = nftOwnerRewards[info.rewardsIndex];
+        require(info.takerCuratorSharesBalance > 0, "No rewards");
 
         // Look up the targeted NFT source ID
-        uint256 sourceId = addressManager.makerRegistrar().nftToSourceLookup(
+        info.sourceId = addressManager.makerRegistrar().nftToSourceLookup(
             takerNftChainId,
             takerNftAddress,
             takerNftId
         );
-        require(sourceId > 0, "NFT not found");
+        require(info.sourceId > 0, "NFT not found");
 
         // Get the details about the NFT
-        (bool registered, address owner, , ) = (addressManager.makerRegistrar())
-            .sourceToDetailsLookup(sourceId);
+        (
+            bool registered,
+            address owner,
+            address creator,
+            uint256 creatorSaleBasisPoints
+        ) = (addressManager.makerRegistrar()).sourceToDetailsLookup(
+                info.sourceId
+            );
 
         // Verify it is registered and the caller is the one who registered it
         // Since NFTs may be on a different chain (L1 vs L2) we cannot directly check this
@@ -534,16 +552,32 @@ contract ReactionVault is
         // Taker is withdrawing rewards on the L2 with the same account/address
         require(owner == msg.sender, "NFT not owned");
 
-        // Sell the curator shares - payment tokens will be sent to msg.sender
-        uint256 paymentTokensReceived = ICuratorVault(curatorVault)
+        // Sell the curator shares - payment tokens will be sent this address
+        info.paymentTokensForMaker = ICuratorVault(curatorVault)
             .sellCuratorShares(
                 takerNftChainId,
                 takerNftAddress,
                 takerNftId,
                 paymentToken,
-                takerCuratorSharesBalance,
-                msg.sender
+                info.takerCuratorSharesBalance,
+                address(this)
             );
+
+        // If the registration included a creator cut calculate and set aside amount
+        if (creator != address(0x0) && creatorSaleBasisPoints > 0) {
+            info.creatorCut =
+                (info.paymentTokensForMaker * creatorSaleBasisPoints) /
+                10_000;
+
+            // Allocate for the creator
+            ownerToRewardsMapping[paymentToken][creator] += info.creatorCut;
+            emit CreatorRewardsGranted(creator, paymentToken, info.creatorCut);
+
+            info.paymentTokensForMaker -= info.creatorCut;
+        }
+
+        // Transfer the remaining amount to the caller (Maker)
+        paymentToken.safeTransfer(msg.sender, info.paymentTokensForMaker);
 
         // Emit the event
         emit TakerRewardsSold(
@@ -553,11 +587,11 @@ contract ReactionVault is
             takerNftId,
             curatorVault,
             curatorTokenId,
-            takerCuratorSharesBalance,
-            paymentTokensReceived
+            info.takerCuratorSharesBalance,
+            info.paymentTokensForMaker
         );
 
         // Return the amount of payment tokens received
-        return paymentTokensReceived;
+        return info.paymentTokensForMaker;
     }
 }
