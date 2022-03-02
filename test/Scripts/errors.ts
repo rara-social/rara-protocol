@@ -1,5 +1,6 @@
 const ALREADY_REGISTERED = "Already registered";
 const INVALID_CURATOR_VAULT = "Err CuratorVault";
+const INVALID_MAKER_BP = "Invalid creator bp";
 const INVALID_ROLE_MANAGER = "RM invalid";
 const INVALID_ZERO_PARAM = "Invalid 0 input";
 const NFT_NOT_FOUND = "NFT not found";
@@ -20,6 +21,7 @@ const UNKNOWN_NFT = "Unknown NFT";
 export {
   ALREADY_REGISTERED,
   INVALID_CURATOR_VAULT,
+  INVALID_MAKER_BP,
   INVALID_ROLE_MANAGER,
   INVALID_ZERO_PARAM,
   NFT_NOT_FOUND,

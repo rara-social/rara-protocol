@@ -6,6 +6,7 @@ import { deploySystem, TEST_SALE_CREATOR_BP } from "../Scripts/deploy";
 import { deriveMakerNftMetaId } from "../Scripts/derivedParams";
 import {
   ALREADY_REGISTERED,
+  INVALID_MAKER_BP,
   NFT_NOT_FOUND,
   NFT_NOT_OWNED,
   NFT_NOT_REGISTERED,
@@ -60,6 +61,55 @@ describe("MakerRegistrar", function () {
         .connect(ALICE)
         .registerNft(testingStandard1155.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0")
     ).to.revertedWith(ALREADY_REGISTERED);
+  });
+
+  it("Should allow 721 NFT registration ", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const { makerRegistrar, testingStandard721 } = await deploySystem(OWNER);
+
+    // Mint an NFT to Alice
+    const NFT_ID = "1";
+
+    // Should fail when it doesn't exist
+    await expect(
+      makerRegistrar
+        .connect(ALICE)
+        .registerNft(testingStandard721.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0")
+    ).to.revertedWith(NFT_NOT_OWNED);
+
+    // Mint the NFT
+    testingStandard721.mint(ALICE.address, NFT_ID);
+
+    // Register the NFT from Alice's account and put Bob as the creator
+    await makerRegistrar
+      .connect(ALICE)
+      .registerNft(testingStandard721.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0");
+
+    // Verify it can't be registered again now that it is registered
+    await expect(
+      makerRegistrar
+        .connect(ALICE)
+        .registerNft(testingStandard721.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0")
+    ).to.revertedWith(ALREADY_REGISTERED);
+  });
+
+  it("Should check creator BP out of bounds", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const { makerRegistrar, roleManager, testingStandard1155 } =
+      await deploySystem(OWNER);
+
+    // Mint an NFT to Alice
+    const NFT_ID = "1";
+    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
+    roleManager.grantRole(reactionMinterRole, OWNER.address);
+    testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
+
+    // Verify anything over 100% is rejected (10_000 bp is 100%)
+    await expect(
+      makerRegistrar
+        .connect(ALICE)
+        .registerNft(testingStandard1155.address, NFT_ID, BOB.address, "10001", "0")
+    ).to.revertedWith(INVALID_MAKER_BP);
   });
 
   it("Should allow 721 NFT registration ", async function () {
