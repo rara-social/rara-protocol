@@ -1,6 +1,11 @@
 import {BigInt, Address, log, BigDecimal} from "@graphprotocol/graph-ts";
 
-import {User, Reaction, CuratorReaction} from "../../generated/schema";
+import {
+  User,
+  Reaction,
+  CuratorReaction,
+  UserReaction,
+} from "../../generated/schema";
 
 import {
   ReactionsPurchased,
@@ -19,7 +24,41 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   // Reaction
   //
   let reaction = Reaction.load(event.params.reactionMetaId.toHexString());
+  if (reaction == null) {
+    reaction = new Reaction(event.params.reactionMetaId.toHexString());
+  }
   reaction.totalSold = reaction.totalSold.plus(event.params.quantity);
+  reaction.save();
+
+  //
+  // User
+  //
+  let sender = event.transaction.from.toHexString();
+  let user = User.load(sender);
+  if (user == null) {
+    user = new User(sender);
+  }
+  user.save();
+
+  //
+  // User Reaction
+  //
+  let userReactionId =
+    event.transaction.from.toHexString() +
+    "-" +
+    event.params.reactionMetaId.toHexString(); // calc id from msg.sender + reactionMetaId.id
+
+  let userReaction = UserReaction.load(sender);
+  if (userReaction == null) {
+    userReaction = new UserReaction(userReactionId);
+    userReaction.user = user.id;
+    userReaction.reaction = reaction.id;
+    userReaction.quantity = event.params.quantity;
+  } else {
+    userReaction.quantity = userReaction.quantity.plus(event.params.quantity);
+  }
+
+  userReaction.save();
 }
 
 export function handleReactionsSpent(event: ReactionsSpent): void {
@@ -34,6 +73,20 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
     user = new User(sender);
   }
   user.save();
+
+  //
+  // User Reaction
+  //
+  let userReactionId =
+    event.transaction.from.toHexString() +
+    "-" +
+    event.params.reactionMetaId.toHexString(); // calc id from msg.sender + reactionMetaId
+  let userReaction = new UserReaction(userReactionId);
+
+  // decrease quantity
+  userReaction.quantity = userReaction.quantity.minus(event.params.quantity);
+
+  userReaction.save();
 
   //
   // CuratorReaction
@@ -73,8 +126,9 @@ export function handleCreatorRewardsGranted(
   // Reaction
   //
   let reaction = Reaction.load(event.params.reactionMetaId.toHexString());
-
-  // increase creator fees
+  if (reaction == null) {
+    reaction = new Reaction(event.params.reactionMetaId.toHexString());
+  }
   reaction.creatorFeesTotal = reaction.creatorFeesTotal.minus(
     event.params.amount.toBigDecimal()
   );
@@ -106,6 +160,9 @@ export function handleReferrerRewardsGranted(
   // Reaction
   //
   let reaction = Reaction.load(event.params.reactionMetaId.toHexString());
+  if (reaction == null) {
+    reaction = new Reaction(event.params.reactionMetaId.toHexString());
+  }
 
   // increase referrer fees
   reaction.referrerFeesTotal = reaction.referrerFeesTotal.minus(
@@ -137,6 +194,9 @@ export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
   // Reaction
   //
   let reaction = Reaction.load(event.params.reactionMetaId.toHexString());
+  if (reaction == null) {
+    reaction = new Reaction(event.params.reactionMetaId.toHexString());
+  }
 
   // increase referrer fees
   reaction.makerFeesTotal = reaction.makerFeesTotal.minus(
@@ -149,6 +209,9 @@ export function handleERC20RewardsClaimed(event: ERC20RewardsClaimed): void {
   log.log(3, "ERC20RewardsClaimed");
 
   let user = User.load(event.params.recipient.toHexString());
+  if (user == null) {
+    user = new User(event.params.recipient.toHexString());
+  }
 
   // zero-out all balances
   user.creatorRewardsBalance = BigDecimal.zero();

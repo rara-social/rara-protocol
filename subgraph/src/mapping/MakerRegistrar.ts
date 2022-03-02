@@ -1,4 +1,4 @@
-import {BigInt, Address, log} from "@graphprotocol/graph-ts";
+import {BigInt, BigDecimal, log} from "@graphprotocol/graph-ts";
 
 import {User, Reaction} from "../../generated/schema";
 
@@ -31,6 +31,10 @@ export function handleRegistered(event: Registered): void {
   reaction.nftId = event.params.nftId;
   reaction.nftOwnerAddress = event.params.nftOwnerAddress;
   reaction.nftCreatorAddress = event.params.nftCreatorAddress;
+  reaction.totalSold = BigInt.zero();
+  reaction.makerFeesTotal = BigDecimal.zero();
+  reaction.creatorFeesTotal = BigDecimal.zero();
+  reaction.referrerFeesTotal = BigDecimal.zero();
   reaction.registered = true;
 
   reaction.save();
@@ -42,7 +46,7 @@ export function handleDeregistered(event: Deregistered): void {
   //
   // Reaction: mark 'registered' as false
   //
-  let reaction = Reaction.load(event.params.reactionMetaId.toHexString());
+  let reaction = new Reaction(event.params.reactionMetaId.toHexString());
   reaction.registered = false;
   reaction.save();
 }
