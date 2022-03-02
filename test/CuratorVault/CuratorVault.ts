@@ -1,7 +1,7 @@
-import { expect } from "chai";
-import { ethers } from "hardhat";
-import { ZERO_ADDRESS } from "../Scripts/constants";
-import { deploySystem } from "../Scripts/deploy";
+import {expect} from "chai";
+import {ethers} from "hardhat";
+import {ZERO_ADDRESS} from "../Scripts/constants";
+import {deploySystem} from "../Scripts/deploy";
 import {
   NOT_REACTION_VAULT,
   NO_BALANCE,
@@ -11,7 +11,7 @@ import {
 describe("CuratorVault", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { curatorVault, addressManager } = await deploySystem(OWNER);
+    const {curatorVault, addressManager} = await deploySystem(OWNER);
 
     // Verify the address manager was set
     const currentAddressManager = await curatorVault.addressManager();
@@ -20,7 +20,7 @@ describe("CuratorVault", function () {
 
   it("Should not allow address other than reaction vault purchase", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { curatorVault, paymentTokenErc20 } = await deploySystem(OWNER);
+    const {curatorVault, paymentTokenErc20} = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Should fail
@@ -29,16 +29,18 @@ describe("CuratorVault", function () {
         chainId,
         ZERO_ADDRESS,
         "1",
+        "0",
         paymentTokenErc20.address,
         "1",
-        OWNER.address
+        OWNER.address,
+        false
       )
     ).to.be.revertedWith(NOT_REACTION_VAULT);
   });
 
   it("Should verify payment token", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { curatorVault, addressManager, paymentTokenErc20 } =
+    const {curatorVault, addressManager, paymentTokenErc20} =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -51,9 +53,11 @@ describe("CuratorVault", function () {
         chainId,
         ZERO_ADDRESS,
         "1",
+        "0",
         paymentTokenErc20.address,
         "1",
-        OWNER.address
+        OWNER.address,
+        false
       )
     ).to.be.revertedWith(NO_BALANCE);
 
@@ -66,16 +70,18 @@ describe("CuratorVault", function () {
         chainId,
         ZERO_ADDRESS,
         "1",
+        "0",
         paymentTokenErc20.address,
         "1",
-        OWNER.address
+        OWNER.address,
+        false
       )
     ).to.be.revertedWith(TRANSFER_NOT_ALLOWED);
   });
 
   it("Should allow purchase and sale", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { curatorVault, addressManager, paymentTokenErc20, curatorShares } =
+    const {curatorVault, addressManager, paymentTokenErc20, curatorShares} =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -107,9 +113,11 @@ describe("CuratorVault", function () {
         chainId,
         ZERO_ADDRESS,
         "1",
+        "0",
         paymentTokenErc20.address,
         paymentAmount,
-        OWNER.address
+        OWNER.address,
+        false
       )
     )
       .to.emit(curatorVault, "CuratorSharesBought")
@@ -137,7 +145,7 @@ describe("CuratorVault", function () {
 
   it("Should allow purchase and sale with increasing price", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const { curatorVault, addressManager, paymentTokenErc20, curatorShares } =
+    const {curatorVault, addressManager, paymentTokenErc20, curatorShares} =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -161,9 +169,11 @@ describe("CuratorVault", function () {
       chainId,
       ZERO_ADDRESS,
       "1",
+      "0",
       paymentTokenErc20.address,
       paymentAmount,
-      OWNER.address
+      OWNER.address,
+      false
     );
 
     // Set the address to allow alice to buy
@@ -175,9 +185,11 @@ describe("CuratorVault", function () {
         chainId,
         ZERO_ADDRESS,
         "1",
+        "0",
         paymentTokenErc20.address,
         paymentAmount,
-        ALICE.address
+        ALICE.address,
+        false
       );
 
     // Get the curator share ID
