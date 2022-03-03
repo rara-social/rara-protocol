@@ -4,7 +4,7 @@ import { HardhatUserConfig, task } from 'hardhat/config';
 import '@nomiclabs/hardhat-etherscan';
 import '@nomiclabs/hardhat-waffle';
 import '@typechain/hardhat';
-// import 'hardhat-gas-reporter';
+import 'hardhat-gas-reporter';
 import 'solidity-coverage';
 import '@openzeppelin/hardhat-upgrades';
 import 'hardhat-contract-sizer';
@@ -35,11 +35,11 @@ const defaultNetwork = 'localhost';
 const config: HardhatUserConfig = {
   solidity: '0.8.9',
   defaultNetwork,
-  // gasReporter: {
-  //   currency: 'USD',
-  //   coinmarketcap:
-  //     process.env.COINMARKETCAP || 'e27b406d-691c-49cd-9e63-c40befea0f69'
-  // },
+  gasReporter: {
+    currency: 'USD',
+    coinmarketcap:
+      process.env.COINMARKETCAP || 'e27b406d-691c-49cd-9e63-c40befea0f69'
+  },
   networks: {
     ropsten: {
       url: process.env.ROPSTEN_URL || '',
