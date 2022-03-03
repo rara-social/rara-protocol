@@ -46,6 +46,17 @@ npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
 
 For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
 
+## Contract Storage => Graph Entities
+
+- "Maker": the owner of a NFT that registers an NFT with the protocol
+- "registering": action performed by Maker to create a Reaction
+- "Reaction": transformed NFT that is available for sale
+- "Curator": owner of Reaction(s) that is exchanging fan art for curator shares
+- "reacting": exchanging fan art + comment for curator shares
+- "curator shares": a Curators claim on the CurationVault
+- "CuratorReaction": record that is created by reacting
+- "CuratorPosition": record of the total curator shares a reactor owns
+
 ## GraphAPI
 
 ### Deploy rara-protocol contracts
