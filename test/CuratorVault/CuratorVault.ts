@@ -37,7 +37,7 @@ describe("CuratorVault", function () {
   });
 
   it("Should verify payment token", async function () {
-    const [OWNER] = await ethers.getSigners();
+    const [OWNER, ALICE] = await ethers.getSigners();
     const { curatorVault, addressManager, paymentTokenErc20 } =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
@@ -55,12 +55,12 @@ describe("CuratorVault", function () {
         "1",
         OWNER.address
       )
-    ).to.be.revertedWith(NO_BALANCE);
+    ).to.be.revertedWith(TRANSFER_NOT_ALLOWED);
 
     // Give the account a balance
     await paymentTokenErc20.mint(OWNER.address, "1000000000");
 
-    // Should fail
+    // Should fail since there is no allowance
     await expect(
       curatorVault.buyCuratorShares(
         chainId,
@@ -71,6 +71,22 @@ describe("CuratorVault", function () {
         OWNER.address
       )
     ).to.be.revertedWith(TRANSFER_NOT_ALLOWED);
+
+    // Set the Alice as the address manager to allow purchase to be tried
+    await addressManager.setReactionVault(ALICE.address);
+
+    // Even if Alice has an allowance but no tokens it should still fail
+    await paymentTokenErc20.connect(ALICE).approve(curatorVault.address, "1000000000");
+    await expect(
+      curatorVault.connect(ALICE).buyCuratorShares(
+        chainId,
+        ZERO_ADDRESS,
+        "1",
+        paymentTokenErc20.address,
+        "1",
+        OWNER.address
+      )
+    ).to.be.revertedWith(NO_BALANCE);
   });
 
   it("Should allow purchase and sale", async function () {

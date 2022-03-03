@@ -58,7 +58,7 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0");
+      .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0", "0");
 
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
       chainId,
@@ -90,7 +90,7 @@ describe("ReactionVault Buy", function () {
   });
 
   it("Should validate payment succeeds", async function () {
-    const [OWNER, ALICE] = await ethers.getSigners();
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
     const {
       reactionVault,
       testingStandard1155,
@@ -110,7 +110,7 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0");
+      .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0", "0");
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
@@ -134,7 +134,7 @@ describe("ReactionVault Buy", function () {
         ZERO_ADDRESS,
         BigNumber.from(0)
       )
-    ).to.revertedWith(NO_BALANCE);
+    ).to.revertedWith(TRANSFER_NOT_ALLOWED);
 
     // Mint some tokens to the owner
     paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
@@ -149,6 +149,18 @@ describe("ReactionVault Buy", function () {
         BigNumber.from(0)
       )
     ).to.revertedWith(TRANSFER_NOT_ALLOWED);
+
+    // Even if Alice has an allowance but no tokens it should still fail
+    await paymentTokenErc20.connect(BOB).approve(reactionVault.address, "10000000000000000000");
+    await expect(
+      reactionVault.connect(BOB).buyReaction(
+        MAKER_NFT_META_ID,
+        "1",
+        OWNER.address,
+        ZERO_ADDRESS,
+        BigNumber.from(0)
+      )
+    ).to.revertedWith(NO_BALANCE);
   });
 
   it("Should buy a single reaction", async function () {
@@ -173,7 +185,7 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard1155.address, NFT_ID, CREATOR.address, "0");
+      .registerNft(testingStandard1155.address, NFT_ID, CREATOR.address, TEST_SALE_CREATOR_BP, "0");
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
@@ -196,17 +208,19 @@ describe("ReactionVault Buy", function () {
 
     // Calculate how the payment will be split
     const REACTION_AMOUNT = BigNumber.from(1);
-    const CREATOR_CUT =
-      TEST_REACTION_PRICE.mul(TEST_SALE_CREATOR_BP).div(10_000);
     const REFERRER_CUT = TEST_REACTION_PRICE.mul(TEST_SALE_REFERRER_BP).div(
       10_000
     );
     const CURATOR_LIABILITY = TEST_REACTION_PRICE.mul(
       TEST_SALE_CURATOR_LIABILITY_BP
     ).div(10_000);
-    const MAKER_CUT = TEST_REACTION_PRICE.sub(CREATOR_CUT)
+    const TOTAL_MAKER_CUT = TEST_REACTION_PRICE
       .sub(REFERRER_CUT)
       .sub(CURATOR_LIABILITY);
+    const CREATOR_CUT = TOTAL_MAKER_CUT
+      .mul(TEST_SALE_CREATOR_BP)
+      .div(10_000);
+    const MAKER_CUT = TOTAL_MAKER_CUT.sub(CREATOR_CUT);
 
     // Verify allocations are correct
     expect(TEST_REACTION_PRICE).to.be.equal(
@@ -322,7 +336,7 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard1155.address, NFT_ID, CREATOR.address, "0");
+      .registerNft(testingStandard1155.address, NFT_ID, CREATOR.address, TEST_SALE_CREATOR_BP, "0");
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
@@ -344,20 +358,20 @@ describe("ReactionVault Buy", function () {
     // Approve the transfer of payment tokens
     paymentTokenErc20.approve(reactionVault.address, totalPaymentAmount);
 
-    // Calculate how the payment will be split
-    const CREATOR_CUT = totalPaymentAmount
-      .mul(TEST_SALE_CREATOR_BP)
-      .div(10_000);
+    // Calculate how the payment will be split    
     const REFERRER_CUT = totalPaymentAmount
       .mul(TEST_SALE_REFERRER_BP)
       .div(10_000);
     const CURATOR_LIABILITY = totalPaymentAmount
       .mul(TEST_SALE_CURATOR_LIABILITY_BP)
       .div(10_000);
-    const MAKER_CUT = totalPaymentAmount
-      .sub(CREATOR_CUT)
+    const TOTAL_MAKER_CUT = totalPaymentAmount
       .sub(REFERRER_CUT)
       .sub(CURATOR_LIABILITY);
+    const CREATOR_CUT = TOTAL_MAKER_CUT
+      .mul(TEST_SALE_CREATOR_BP)
+      .div(10_000);
+    const MAKER_CUT = TOTAL_MAKER_CUT.sub(CREATOR_CUT);
 
     // Verify allocations are correct
     expect(totalPaymentAmount).to.be.equal(

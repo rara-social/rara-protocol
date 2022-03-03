@@ -25,13 +25,6 @@ interface IParameterManager {
         uint256 _saleCuratorLiabilityBasisPoints
     ) external;
 
-    /// @dev Getter for the cut of purchase price going to the creator
-    function saleCreatorBasisPoints() external returns (uint256);
-
-    /// @dev Setter for the cut of purchase price going to the creator
-    function setSaleCreatorBasisPoints(uint256 _saleCreatorBasisPoints)
-        external;
-
     /// @dev Getter for the cut of purchase price going to the referrer
     function saleReferrerBasisPoints() external returns (uint256);
 

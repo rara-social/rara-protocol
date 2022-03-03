@@ -22,6 +22,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         uint256 indexed nftId,
         address indexed ownerAddress,
         address creatorAddress,
+        uint256 creatorSaleBasisPoints,
         uint256 optionBits,
         uint256 sourceId,
         uint256 metaId
@@ -61,6 +62,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address nftContractAddress,
         uint256 nftId,
         address creatorAddress,
+        uint256 creatorSaleBasisPoints,
         uint256 optionBits
     ) external {
         // Verify ownership
@@ -75,6 +77,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             nftContractAddress,
             nftId,
             creatorAddress,
+            creatorSaleBasisPoints,
             optionBits
         );
     }
@@ -85,6 +88,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address nftContractAddress,
         uint256 nftId,
         address creatorAddress,
+        uint256 creatorSaleBasisPoints,
         uint256 optionBits
     ) external {
         // Verify caller is Child Registrar from the bridge
@@ -96,19 +100,32 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             nftContractAddress,
             nftId,
             creatorAddress,
+            creatorSaleBasisPoints,
             optionBits
         );
     }
 
+    /// @dev Register an NFT from an owner
+    /// @param owner - The current owner of the NFT - should be verified before calling
+    /// @param chainId - Chain where NFT lives
+    /// @param nftContractAddress - Address of NFT to be registered
+    /// @param nftId - ID of NFT to be registered
+    /// @param creatorAddress - (optional) Address of the creator to give creatorSaleBasisPoints cut of Maker rewards
+    /// @param creatorSaleBasisPoints (optional) Basis points for the creator during a reaction sale
+    ///        This is the percentage of the Maker rewards to give to the Creator
+    ///        Basis points are percentage divided by 100 (e.g. 100 Basis Points is 1%)
+    /// @param optionBits - (optional) Params to allow owner to specify options or transformations
+    ///        performed during registration
     function _registerForOwner(
         address owner,
         uint256 chainId,
         address nftContractAddress,
         uint256 nftId,
         address creatorAddress,
+        uint256 creatorSaleBasisPoints,
         uint256 optionBits
     ) internal {
-        // TODO: Block registration of a RaRa reaction NFT once Reaction Vault is built out
+        // TODO: ? Block registration of a RaRa reaction NFT once Reaction Vault is built out
 
         // Look up the source ID
         uint256 currentSourceId = nftToSourceLookup[chainId][
@@ -134,13 +151,17 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             )
         );
 
+        // Verify that creatorSaleBasisPoints is within bounds (can't allow more than 100%)
+        require(creatorSaleBasisPoints < 10_000, "Invalid creator bp");
+
         // Register in mappings
         nftToSourceLookup[chainId][nftContractAddress][nftId] = currentSourceId;
         metaToSourceLookup[metaId] = currentSourceId;
         sourceToDetailsLookup[currentSourceId] = NftDetails(
             true,
             owner,
-            creatorAddress
+            creatorAddress,
+            creatorSaleBasisPoints
         );
 
         // Emit event
@@ -150,6 +171,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             nftId,
             owner,
             creatorAddress,
+            creatorSaleBasisPoints,
             optionBits,
             currentSourceId,
             metaId

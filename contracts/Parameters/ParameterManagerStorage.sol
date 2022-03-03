@@ -27,10 +27,6 @@ abstract contract ParameterManagerStorageV1 is IParameterManager {
     /// Basis points are percentage divided by 100 (e.g. 100 Basis Points is 1%)
     uint256 public saleCuratorLiabilityBasisPoints;
 
-    /// @dev Basis points for the creator during a reaction sale
-    /// Basis points are percentage divided by 100 (e.g. 100 Basis Points is 1%)
-    uint256 public saleCreatorBasisPoints;
-
     /// @dev Basis points for the referrer during a reaction sale
     /// Basis points are percentage divided by 100 (e.g. 100 Basis Points is 1%)
     uint256 public saleReferrerBasisPoints;

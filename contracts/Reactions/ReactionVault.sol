@@ -117,6 +117,7 @@ contract ReactionVault is
         bool registered;
         address owner;
         address creator;
+        uint256 creatorSaleBasisPoints;
         uint256 reactionPrice;
         uint256 totalPurchasePrice;
         uint256 creatorCut;
@@ -150,9 +151,12 @@ contract ReactionVault is
         require(info.sourceId != 0, "Unknown NFT");
 
         // Verify it is registered
-        (info.registered, info.owner, info.creator) = info
-            .makerRegistrar
-            .sourceToDetailsLookup(info.sourceId);
+        (
+            info.registered,
+            info.owner,
+            info.creator,
+            info.creatorSaleBasisPoints
+        ) = info.makerRegistrar.sourceToDetailsLookup(info.sourceId);
         require(info.registered, "NFT not registered");
 
         // Move the funds into the this contract from the buyer
@@ -167,26 +171,7 @@ contract ReactionVault is
         );
 
         // Assign funds to different stakeholders
-        // First, allocate to creator, if set
-        info.creatorCut = 0;
-        if (info.creator != address(0x0)) {
-            // Calc the amount
-            info.creatorCut =
-                (info.parameterManager.saleCreatorBasisPoints() *
-                    info.totalPurchasePrice) /
-                10_000;
-
-            // Assign awards to creator
-            ownerToRewardsMapping[paymentToken][info.creator] += info
-                .creatorCut;
-            emit CreatorRewardsGranted(
-                info.creator,
-                paymentToken,
-                info.creatorCut
-            );
-        }
-
-        // Next, allocate to referrer, if set
+        // First, allocate to referrer, if set
         info.referrerCut = 0;
         if (referrer != address(0x0)) {
             // Calc the amount
@@ -215,9 +200,29 @@ contract ReactionVault is
         // Next, to the maker by subtracting the other amounts from the total
         info.makerCut =
             info.totalPurchasePrice -
-            info.creatorCut -
             info.referrerCut -
             info.curatorLiabilityCut;
+
+        // Next, subtract the Creator cut from the Maker cut if it is set
+        info.creatorCut = 0;
+        if (info.creator != address(0x0) && info.creatorSaleBasisPoints > 0) {
+            // Calc the amount
+            info.creatorCut =
+                (info.creatorSaleBasisPoints * info.makerCut) /
+                10_000;
+
+            // Assign awards to creator
+            ownerToRewardsMapping[paymentToken][info.creator] += info
+                .creatorCut;
+            emit CreatorRewardsGranted(
+                info.creator,
+                paymentToken,
+                info.creatorCut
+            );
+
+            // Subtract the creator cut from the maker cut
+            info.makerCut -= info.creatorCut;
+        }
 
         // Assign awards to maker
         ownerToRewardsMapping[paymentToken][info.owner] += info.makerCut;
@@ -518,7 +523,7 @@ contract ReactionVault is
         require(sourceId > 0, "NFT not found");
 
         // Get the details about the NFT
-        (bool registered, address owner, ) = (addressManager.makerRegistrar())
+        (bool registered, address owner, , ) = (addressManager.makerRegistrar())
             .sourceToDetailsLookup(sourceId);
 
         // Verify it is registered and the caller is the one who registered it

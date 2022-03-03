@@ -33,7 +33,7 @@ describe("ReactionVault Withdraw ERC20", function () {
     // Register it
     await makerRegistrar
       .connect(MAKER)
-      .registerNft(testingStandard1155.address, NFT_ID, CREATOR.address, "0");
+      .registerNft(testingStandard1155.address, NFT_ID, CREATOR.address, TEST_SALE_CREATOR_BP, "0");
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
@@ -56,17 +56,24 @@ describe("ReactionVault Withdraw ERC20", function () {
 
     // Calculate how the payment will be split
     const REACTION_AMOUNT = BigNumber.from(1);
-    const CREATOR_CUT =
-      TEST_REACTION_PRICE.mul(TEST_SALE_CREATOR_BP).div(10_000);
     const REFERRER_CUT = TEST_REACTION_PRICE.mul(TEST_SALE_REFERRER_BP).div(
       10_000
     );
     const CURATOR_LIABILITY = TEST_REACTION_PRICE.mul(
       TEST_SALE_CURATOR_LIABILITY_BP
     ).div(10_000);
-    const MAKER_CUT = TEST_REACTION_PRICE.sub(CREATOR_CUT)
+
+    // Calc the total maker cut
+    const TOTAL_MAKER_CUT = TEST_REACTION_PRICE
       .sub(REFERRER_CUT)
       .sub(CURATOR_LIABILITY);
+
+    // Get the creator cut as a percent from the maker cut
+    const CREATOR_CUT =
+      TOTAL_MAKER_CUT.mul(TEST_SALE_CREATOR_BP).div(10_000);
+
+    // Sub out the creator cut from the total maker cut
+    const MAKER_CUT = TOTAL_MAKER_CUT.sub(CREATOR_CUT);
 
     // Build the tx
     await reactionVault.buyReaction(
