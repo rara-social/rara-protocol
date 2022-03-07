@@ -8,10 +8,10 @@ import "../../Token/Standard1155.sol";
 /// Only the Curator Vault can mint or burn shares
 contract CuratorShares1155 is Standard1155 {
     /// @dev verifies that the calling account is the curator vault
-    modifier onlyCuratorVault() {
+    modifier onlyCuratorShareAdmin() {
         require(
-            address(addressManager.defaultCuratorVault()) == msg.sender,
-            "Not CuratorVault"
+            addressManager.roleManager().isCuratorSharesAdmin(msg.sender),
+            "Not Admin"
         );
         _;
     }
@@ -22,7 +22,7 @@ contract CuratorShares1155 is Standard1155 {
         uint256 id,
         uint256 amount,
         bytes memory data
-    ) external onlyCuratorVault {
+    ) external onlyCuratorShareAdmin {
         _mint(to, id, amount, data);
     }
 
@@ -31,7 +31,7 @@ contract CuratorShares1155 is Standard1155 {
         address from,
         uint256 id,
         uint256 amount
-    ) external onlyCuratorVault {
+    ) external onlyCuratorShareAdmin {
         _burn(from, id, amount);
     }
 }

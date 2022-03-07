@@ -44,8 +44,6 @@ describe("MakerRegistrar", function () {
 
     // Mint an NFT to Alice
     const NFT_ID = "1";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
 
     // Register the NFT from Alice's account and put Bob as the creator
@@ -99,8 +97,6 @@ describe("MakerRegistrar", function () {
 
     // Mint an NFT to Alice
     const NFT_ID = "1";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
 
     // Verify anything over 100% is rejected (10_000 bp is 100%)
@@ -150,8 +146,6 @@ describe("MakerRegistrar", function () {
     // Mint an NFT to Alice
     const NFT_ID = "1";
     const OPTION_BITS = "0";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
 
     // Get the source ID from the lookup
@@ -232,8 +226,6 @@ describe("MakerRegistrar", function () {
 
     // Mint an NFT to Alice
     const NFT_ID = "1";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
 
     // Verify NFT unknown in the system can't be deregsitered

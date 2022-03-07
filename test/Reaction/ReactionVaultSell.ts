@@ -79,8 +79,6 @@ describe("ReactionVault Sell", function () {
     // Mint an NFT to Alice
     const MAKER_NFT_ID = "1";
     const TAKER_NFT_ID = "2";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, MAKER_NFT_ID, "1", [0]);
 
     // Register it
@@ -237,8 +235,6 @@ describe("ReactionVault Sell", function () {
     // Mint an NFT to Alice
     const MAKER_NFT_ID = "1";
     const TAKER_NFT_ID = "2";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, MAKER_NFT_ID, "1", [0]);
 
     // Register it
@@ -343,8 +339,6 @@ describe("ReactionVault Sell", function () {
     // Mint an NFT to Alice
     const MAKER_NFT_ID = "1";
     const TAKER_NFT_ID = "2";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, MAKER_NFT_ID, "1", [0]);
 
     // Register it
@@ -461,8 +455,6 @@ describe("ReactionVault Sell", function () {
     // Mint an NFT to Alice
     const MAKER_NFT_ID = "1";
     const TAKER_NFT_ID = "2";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, MAKER_NFT_ID, "1", [0]);
 
     // Register it

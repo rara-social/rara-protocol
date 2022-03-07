@@ -9,16 +9,9 @@ import "../../Token/Standard1155.sol";
 /// Only the NFT Burner role can burn tokens
 contract ReactionNft1155 is Standard1155 {
     /// @dev verifies that the calling account has a role to enable minting tokens
-    modifier onlyMinter() {
+    modifier onlyNftAdmin() {
         IRoleManager roleManager = IRoleManager(addressManager.roleManager());
-        require(roleManager.isReactionMinter(msg.sender), "Not Minter");
-        _;
-    }
-
-    /// @dev verifies that the calling account has a role to enable burning tokens
-    modifier onlyBurner() {
-        IRoleManager roleManager = IRoleManager(addressManager.roleManager());
-        require(roleManager.isReactionBurner(msg.sender), "Not Burner");
+        require(roleManager.isReactionNftAdmin(msg.sender), "Not NFT Admin");
         _;
     }
 
@@ -28,7 +21,7 @@ contract ReactionNft1155 is Standard1155 {
         uint256 id,
         uint256 amount,
         bytes memory data
-    ) external onlyMinter {
+    ) external onlyNftAdmin {
         _mint(to, id, amount, data);
     }
 
@@ -37,7 +30,7 @@ contract ReactionNft1155 is Standard1155 {
         address from,
         uint256 id,
         uint256 amount
-    ) external onlyBurner {
+    ) external onlyNftAdmin {
         _burn(from, id, amount);
     }
 

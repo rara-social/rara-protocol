@@ -7,13 +7,25 @@ pragma solidity 0.8.9;
 /// StorageManager to inherit from the later version.  This ensures there are no storage layout
 /// corruptions when upgrading.
 contract RoleManagerStorageV1 {
-    /// @dev role for granting capability to mint reactions
-    bytes32 public constant REACTION_MINTER_ROLE =
-        keccak256("REACTION_MINTER_ROLE");
+    /// @dev role for granting capability to udpate addresses in the protocol
+    bytes32 public constant ADDRESS_MANAGER_ADMIN =
+        keccak256("ADDRESS_MANAGER_ADMIN");
 
-    /// @dev role for granting capability to burn reactions
-    bytes32 public constant REACTION_BURNER_ROLE =
-        keccak256("REACTION_BURNER_ROLE");
+    /// @dev role for granting capability to update parameters in the protocol
+    bytes32 public constant PARAMETER_MANAGER_ADMIN =
+        keccak256("PARAMETER_MANAGER_ADMIN");
+
+    /// @dev role for granting capability to mint and burn reaction NFTs
+    bytes32 public constant REACTION_NFT_ADMIN =
+        keccak256("REACTION_NFT_ADMIN");
+
+    /// @dev role for granting capability to purchase curator vaults shares
+    bytes32 public constant CURATOR_VAULT_PURCHASER =
+        keccak256("CURATOR_VAULT_PURCHASER");
+
+    /// @dev role for granting capability to mint and burn curator shares
+    bytes32 public constant CURATOR_SHARES_ADMIN =
+        keccak256("CURATOR_SHARES_ADMIN");
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

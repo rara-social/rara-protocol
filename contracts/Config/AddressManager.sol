@@ -8,7 +8,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 contract AddressManager is Initializable, AddressManagerStorageV1 {
     /// @dev Verifies with the role manager that the calling address has ADMIN role
     modifier onlyAdmin() {
-        require(roleManager.isAdmin(msg.sender), "Not Admin");
+        require(roleManager.isAddressManagerAdmin(msg.sender), "Not Admin");
         _;
     }
 
@@ -57,15 +57,6 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
     {
         require(address(_reactionNftContract) != address(0x0), ZERO_INPUT);
         reactionNftContract = _reactionNftContract;
-    }
-
-    /// @dev Setter for the maker registrar address
-    function setReactionVault(IReactionVault _reactionVault)
-        external
-        onlyAdmin
-    {
-        require(address(_reactionVault) != address(0x0), ZERO_INPUT);
-        reactionVault = _reactionVault;
     }
 
     /// @dev Setter for the default curator vault address

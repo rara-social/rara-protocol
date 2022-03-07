@@ -38,8 +38,6 @@ describe("ReactionVault Buy", function () {
     // Now register an NFT and get the Meta ID
     // Mint an NFT to Alice
     const NFT_ID = "1";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
 
     // Register it
@@ -128,8 +126,6 @@ describe("ReactionVault Buy", function () {
     // Buying 10 reactions
     const REACTION_AMOUNT = BigNumber.from(10);
 
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
 
     // Register it

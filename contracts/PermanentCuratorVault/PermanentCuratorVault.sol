@@ -22,10 +22,10 @@ contract PermanentCuratorVault is
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
     /// @dev verifies that the calling address is the reaction vault
-    modifier onlyReactionVault() {
+    modifier onlyCuratorVaultPurchaser() {
         require(
-            address(addressManager.reactionVault()) == msg.sender,
-            "Not ReactionVault"
+            addressManager.roleManager().isCuratorVaultPurchaser(msg.sender),
+            "Not Admin"
         );
         _;
     }
@@ -96,7 +96,7 @@ contract PermanentCuratorVault is
         IERC20Upgradeable paymentToken,
         uint256 paymentAmount,
         address mintToAddress
-    ) external onlyReactionVault returns (uint256) {
+    ) external onlyCuratorVaultPurchaser returns (uint256) {
         // Get the curator share token ID
         uint256 curatorShareTokenId = _getTokenId(
             nftChainId,
