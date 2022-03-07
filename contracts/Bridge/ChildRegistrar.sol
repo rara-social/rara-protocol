@@ -56,10 +56,11 @@ contract ChildRegistrar is FxBaseChildTunnel {
             address nftContractAddress,
             uint256 nftId,
             address creatorAddress,
+            uint256 creatorSaleBasisPoints,
             uint256 optionBits
         ) = abi.decode(
                 syncData,
-                (address, uint256, address, uint256, address, uint256)
+                (address, uint256, address, uint256, address, uint256, uint256)
             );
 
         // Call the registrar and register the NFT
@@ -69,6 +70,7 @@ contract ChildRegistrar is FxBaseChildTunnel {
             nftContractAddress,
             nftId,
             creatorAddress,
+            creatorSaleBasisPoints,
             optionBits
         );
     }

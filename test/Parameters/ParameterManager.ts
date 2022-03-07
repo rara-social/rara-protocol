@@ -84,30 +84,6 @@ describe("ParameterManager", function () {
     ).to.be.revertedWith(NOT_ADMIN);
   });
 
-  it("Should allow owner to set creator bp", async function () {
-    const [OWNER, ALICE] = await ethers.getSigners();
-    const { parameterManager } = await deploySystem(OWNER);
-
-    const val = 300;
-
-    // Verify the setter checks invalid input
-    await expect(parameterManager.setSaleCreatorBasisPoints(0)).to.revertedWith(
-      INVALID_ZERO_PARAM
-    );
-
-    // Set it to Alice's address
-    await parameterManager.setSaleCreatorBasisPoints(val);
-
-    // Verify it got set
-    const currentVal = await parameterManager.saleCreatorBasisPoints();
-    expect(currentVal).to.equal(val);
-
-    // Verify non owner can't update address
-    await expect(
-      parameterManager.connect(ALICE).setSaleCreatorBasisPoints(val)
-    ).to.be.revertedWith(NOT_ADMIN);
-  });
-
   it("Should allow owner to set sale referrer bp", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
     const { parameterManager } = await deploySystem(OWNER);

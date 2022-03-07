@@ -5,6 +5,7 @@ import { TEST_NFT_URI, ZERO_ADDRESS } from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
+  TEST_SALE_CREATOR_BP,
   TEST_SALE_CURATOR_LIABILITY_BP,
   TEST_SPEND_REFERRER_BP,
 } from "../Scripts/deploy";
@@ -89,6 +90,7 @@ describe("ReactionVault Sell", function () {
         testingStandard1155.address,
         MAKER_NFT_ID,
         CREATOR.address,
+        TEST_SALE_CREATOR_BP,
         "0"
       );
 
@@ -246,6 +248,7 @@ describe("ReactionVault Sell", function () {
         testingStandard1155.address,
         MAKER_NFT_ID,
         CREATOR.address,
+        TEST_SALE_CREATOR_BP,
         "0"
       );
 
@@ -351,6 +354,7 @@ describe("ReactionVault Sell", function () {
         testingStandard1155.address,
         MAKER_NFT_ID,
         CREATOR.address,
+        TEST_SALE_CREATOR_BP,
         "0"
       );
 
@@ -468,6 +472,7 @@ describe("ReactionVault Sell", function () {
         testingStandard1155.address,
         MAKER_NFT_ID,
         CREATOR.address,
+        TEST_SALE_CREATOR_BP,
         "0"
       );
 

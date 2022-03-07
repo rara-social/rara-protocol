@@ -26,6 +26,7 @@ describe("Bridge Registrar", function () {
         testingStandard1155.address,
         "1",
         ZERO_ADDRESS,
+        "0",
         "0"
       )
     ).to.revertedWith(NOT_BRIDGE);
@@ -56,7 +57,6 @@ describe("Bridge Registrar", function () {
     await addressManager.setChildRegistrar(CHILD.address);
 
     // Register the NFT from Alice's account and put Bob as the creator
-    // Verify event as well
     await makerRegistrar
       .connect(CHILD)
       .registerNftFromBridge(
@@ -65,6 +65,7 @@ describe("Bridge Registrar", function () {
         testingStandard1155.address,
         NFT_ID,
         BOB.address,
+        "100",
         "0"
       );
 

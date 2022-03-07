@@ -8,7 +8,8 @@ interface IMakerRegistrar {
         bool registered;
         address owner;
         address creator;
-        uint256 reactionMetaId;
+        uint256 creatorSaleBasisPoints;
+        uint256 registrationMetaId;
     }
 
     function metaToSourceLookup(uint256 metaId) external returns (uint256);
@@ -19,6 +20,7 @@ interface IMakerRegistrar {
         uint256 nftId
     ) external returns (uint256);
 
+    /// @dev lookup for NftDetails from source ID
     function sourceToDetailsLookup(uint256)
         external
         returns (
@@ -40,6 +42,7 @@ interface IMakerRegistrar {
         address nftContractAddress,
         uint256 nftId,
         address creatorAddress,
+        uint256 creatorSaleBasisPoints,
         uint256 optionBits
     ) external;
 

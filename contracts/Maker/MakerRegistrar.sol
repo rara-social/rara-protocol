@@ -22,9 +22,10 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         uint256 indexed nftId,
         address indexed nftOwnerAddress,
         address nftCreatorAddress,
-        uint256 reactionSourceId,
-        uint256 reactionMetaId,
-        uint256 reactionOptionBits
+        uint256 nftCreatorSaleBasisPoints,
+        uint256 registrationSourceId,
+        uint256 registrationMetaId,
+        uint256 registrationOptionBits
     );
 
     /// @dev Event triggered when an NFT is deregistered from the system
@@ -33,7 +34,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address indexed nftContractAddress,
         uint256 indexed nftId,
         address indexed nftOwnerAddress,
-        uint256 reactionMetaId
+        uint256 registrationMetaId
     );
 
     /// @dev initializer to call after deployment, can only be called once
@@ -61,6 +62,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address nftContractAddress,
         uint256 nftId,
         address creatorAddress,
+        uint256 creatorSaleBasisPoints,
         uint256 optionBits
     ) external {
         // Verify ownership
@@ -75,6 +77,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             nftId,
             msg.sender,
             creatorAddress,
+            creatorSaleBasisPoints,
             optionBits
         );
     }
@@ -85,6 +88,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address nftContractAddress,
         uint256 nftId,
         address creatorAddress,
+        uint256 creatorSaleBasisPoints,
         uint256 optionBits
     ) external {
         // Verify caller is Child Registrar from the bridge
@@ -96,19 +100,32 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             nftId,
             owner,
             creatorAddress,
+            creatorSaleBasisPoints,
             optionBits
         );
     }
 
+    /// @dev Register an NFT from an owner
+    /// @param owner - The current owner of the NFT - should be verified before calling
+    /// @param chainId - Chain where NFT lives
+    /// @param nftContractAddress - Address of NFT to be registered
+    /// @param nftId - ID of NFT to be registered
+    /// @param creatorAddress - (optional) Address of the creator to give creatorSaleBasisPoints cut of Maker rewards
+    /// @param creatorSaleBasisPoints (optional) Basis points for the creator during a reaction sale
+    ///        This is the percentage of the Maker rewards to give to the Creator
+    ///        Basis points are percentage divided by 100 (e.g. 100 Basis Points is 1%)
+    /// @param optionBits - (optional) Params to allow owner to specify options or transformations
+    ///        performed during registration
     function _registerForOwner(
         uint256 nftChainId,
         address nftContractAddress,
         uint256 nftId,
         address nftOwnerAddress,
         address nftCreatorAddress,
+        uint256 creatorSaleBasisPoints,
         uint256 optionBits
     ) internal {
-        // TODO: Block registration of a RaRa reaction NFT once Reaction Vault is built out
+        // TODO: ? Block registration of a RaRa reaction NFT once Reaction Vault is built out
 
         // Look up the source ID
         uint256 currentSourceId = nftToSourceLookup[nftChainId][
@@ -134,6 +151,9 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             )
         );
 
+        // Verify that creatorSaleBasisPoints is within bounds (can't allow more than 100%)
+        require(creatorSaleBasisPoints <= 10_000, "Invalid creator bp");
+
         // Register in mappings
         nftToSourceLookup[nftChainId][nftContractAddress][
             nftId
@@ -143,7 +163,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             true,
             nftOwnerAddress,
             nftCreatorAddress,
-            metaId
+            metaId,
+            creatorSaleBasisPoints
         );
 
         // Emit event
@@ -153,6 +174,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             nftId,
             nftOwnerAddress,
             nftCreatorAddress,
+            creatorSaleBasisPoints,
             currentSourceId,
             metaId,
             optionBits
