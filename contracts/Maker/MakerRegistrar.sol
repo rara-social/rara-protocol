@@ -60,6 +60,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
     }
 
     /// @dev For the specified NFT, verify it is owned by the potential owner
+    /// @param nftContractAddress - Address of NFT to be registered
+    /// @param nftId - ID of NFT to be registered
     function verifyOwnership(
         address nftContractAddress,
         uint256 nftId,
@@ -75,10 +77,18 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
 
     /// @dev Allows a NFT owner to register the NFT in the protocol so that reactions can be sold.
     /// Owner registering must own the NFT in the wallet calling function.
+    /// @param nftContractAddress - Address of NFT to be registered
+    /// @param nftId - ID of NFT to be registered
+    /// @param nftCreatorAddress - (optional) Address of the creator to give creatorSaleBasisPoints cut of Maker rewards
+    /// @param creatorSaleBasisPoints (optional) Basis points for the creator during a reaction sale
+    ///        This is the percentage of the Maker rewards to give to the Creator
+    ///        Basis points are percentage divided by 100 (e.g. 100 Basis Points is 1%)
+    /// @param optionBits - (optional) Params to allow owner to specify options or transformations
+    ///        performed during registration
     function registerNft(
         address nftContractAddress,
         uint256 nftId,
-        address creatorAddress,
+        address nftCreatorAddress,
         uint256 creatorSaleBasisPoints,
         uint256 optionBits
     ) external {
@@ -93,7 +103,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             nftContractAddress,
             nftId,
             msg.sender,
-            creatorAddress,
+            nftCreatorAddress,
             creatorSaleBasisPoints,
             optionBits
         );
@@ -193,6 +203,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
 
     /// @dev Allow an NFT owner to deregister and remove capability for reactions to be sold.
     /// Caller must currently own the NFT being deregistered
+    /// @param nftContractAddress - Address of NFT to be registered
+    /// @param nftId - ID of NFT to be registered
     function deregisterNft(address nftContractAddress, uint256 nftId) external {
         // Verify ownership
         require(
