@@ -20,7 +20,7 @@ dataSources:
         - name: MakerRegistrar
           file: ../artifacts/contracts/maker/MakerRegistrar.sol/MakerRegistrar.json
       eventHandlers:
-        - event: Registered(uint256,indexed address,indexed uint256,indexed address,address,uint256,uint256,uint256)
+        - event: Registered(uint256,indexed address,indexed uint256,indexed address,address,uint256,uint256,uint256,uint256)
           handler: handleRegistered
         - event: Deregistered(uint256,indexed address,indexed uint256,indexed address,uint256)
           handler: handleDeregistered
