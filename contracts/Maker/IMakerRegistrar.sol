@@ -27,6 +27,7 @@ interface IMakerRegistrar {
             bool,
             address,
             address,
+            uint256,
             uint256
         );
 

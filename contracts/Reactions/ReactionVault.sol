@@ -253,7 +253,8 @@ contract ReactionVault is
             emit CreatorRewardsGranted(
                 info.creator,
                 paymentToken,
-                info.creatorCut
+                info.creatorCut,
+                makerNftMetaId
             );
 
             // Subtract the creator cut from the maker cut
@@ -648,7 +649,12 @@ contract ReactionVault is
 
             // Allocate for the creator
             ownerToRewardsMapping[paymentToken][creator] += info.creatorCut;
-            emit CreatorRewardsGranted(creator, paymentToken, info.creatorCut);
+            emit CreatorRewardsGranted(
+                creator,
+                paymentToken,
+                info.creatorCut,
+                registrationMetaId
+            );
 
             info.paymentTokensForMaker -= info.creatorCut;
         }
