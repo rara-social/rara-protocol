@@ -34,7 +34,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 
 const config: HardhatUserConfig = {
   solidity: '0.8.9',
-  defaultNetwork,
+  // defaultNetwork,
   // gasReporter: {
   //   currency: 'USD',
   //   coinmarketcap:

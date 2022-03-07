@@ -3,7 +3,6 @@ const INVALID_CURATOR_VAULT = "Err CuratorVault";
 const INVALID_MAKER_BP = "Invalid creator bp";
 const INVALID_ROLE_MANAGER = "RM invalid";
 const INVALID_ZERO_PARAM = "Invalid 0 input";
-const NFT_NOT_FOUND = "NFT not found";
 const NFT_NOT_OWNED = "NFT not owned";
 const NFT_NOT_REGISTERED = "NFT not registered";
 const NOT_ADMIN = "Not Admin";
@@ -24,7 +23,6 @@ export {
   INVALID_MAKER_BP,
   INVALID_ROLE_MANAGER,
   INVALID_ZERO_PARAM,
-  NFT_NOT_FOUND,
   NFT_NOT_OWNED,
   NFT_NOT_REGISTERED,
   NOT_ADMIN,

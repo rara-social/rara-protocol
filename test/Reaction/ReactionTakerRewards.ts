@@ -15,7 +15,6 @@ import {
   deriveTakerRewardsKey,
 } from "../Scripts/derivedParams";
 import {
-  NFT_NOT_FOUND,
   NFT_NOT_OWNED,
   NFT_NOT_REGISTERED,
   NO_REWARDS,
@@ -163,7 +162,7 @@ describe("ReactionVault Taker Rewards", function () {
           curatorVault.address,
           curatorShareId
         )
-    ).to.be.revertedWith(NFT_NOT_FOUND);
+    ).to.be.revertedWith(NFT_NOT_REGISTERED);
 
     // Mint the NFT to the taker
     testingStandard1155.mint(TAKER.address, TAKER_NFT_ID, "1", [0]);

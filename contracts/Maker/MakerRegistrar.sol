@@ -42,6 +42,23 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         addressManager = _addressManager;
     }
 
+    function nftToSourceLookup(
+        uint256 chainId,
+        address nftContractAddress,
+        uint256 nftId
+    ) external pure returns (uint256) {
+        return _nftToSourceLookup(chainId, nftContractAddress, nftId);
+    }
+
+    function _nftToSourceLookup(
+        uint256 chainId,
+        address nftContractAddress,
+        uint256 nftId
+    ) internal pure returns (uint256) {
+        return
+            uint256(keccak256(abi.encode(chainId, nftContractAddress, nftId)));
+    }
+
     /// @dev For the specified NFT, verify it is owned by the potential owner
     function verifyOwnership(
         address nftContractAddress,
@@ -106,11 +123,11 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
     }
 
     /// @dev Register an NFT from an owner
-    /// @param owner - The current owner of the NFT - should be verified before calling
-    /// @param chainId - Chain where NFT lives
+    /// @param nftChainId - Chain where NFT lives
     /// @param nftContractAddress - Address of NFT to be registered
     /// @param nftId - ID of NFT to be registered
-    /// @param creatorAddress - (optional) Address of the creator to give creatorSaleBasisPoints cut of Maker rewards
+    /// @param nftOwnerAddress - The current owner of the NFT - should be verified before calling
+    /// @param nftCreatorAddress - (optional) Address of the creator to give creatorSaleBasisPoints cut of Maker rewards
     /// @param creatorSaleBasisPoints (optional) Basis points for the creator during a reaction sale
     ///        This is the percentage of the Maker rewards to give to the Creator
     ///        Basis points are percentage divided by 100 (e.g. 100 Basis Points is 1%)
@@ -128,21 +145,17 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         // TODO: ? Block registration of a RaRa reaction NFT once Reaction Vault is built out
 
         // Look up the source ID
-        uint256 currentSourceId = nftToSourceLookup[nftChainId][
-            nftContractAddress
-        ][nftId];
+        uint256 currentSourceId = _nftToSourceLookup(
+            nftChainId,
+            nftContractAddress,
+            nftId
+        );
 
-        // Check to see if the source ID is already set for this NFT
-        if (currentSourceId > 0) {
-            // If it is already in the system, verify it is not currently registered
-            NftDetails memory currentDetails = sourceToDetailsLookup[
-                currentSourceId
-            ];
-            require(!currentDetails.registered, "Already registered");
-        } else {
-            // If not already in the system, increment the source ID to use
-            currentSourceId = ++sourceCount;
-        }
+        // If it is already in the system, verify it is not currently registered
+        NftDetails memory currentDetails = sourceToDetailsLookup[
+            currentSourceId
+        ];
+        require(!currentDetails.registered, "Already registered");
 
         // Generate Meta ID
         uint256 metaId = uint256(
@@ -155,9 +168,6 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         require(creatorSaleBasisPoints <= 10_000, "Invalid creator bp");
 
         // Register in mappings
-        nftToSourceLookup[nftChainId][nftContractAddress][
-            nftId
-        ] = currentSourceId;
         metaToSourceLookup[metaId] = currentSourceId;
         sourceToDetailsLookup[currentSourceId] = NftDetails(
             true,
@@ -217,10 +227,11 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address nftOwnerAddress
     ) internal {
         // Look up source ID and verify it is valid
-        uint256 sourceId = nftToSourceLookup[nftChainId][nftContractAddress][
+        uint256 sourceId = _nftToSourceLookup(
+            nftChainId,
+            nftContractAddress,
             nftId
-        ];
-        require(sourceId > 0, "NFT not found");
+        );
 
         // Verify it is registered
         NftDetails storage details = sourceToDetailsLookup[sourceId];
@@ -234,7 +245,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             nftContractAddress,
             nftId,
             nftOwnerAddress,
-            details.reactionMetaId
+            sourceId
         );
     }
 }

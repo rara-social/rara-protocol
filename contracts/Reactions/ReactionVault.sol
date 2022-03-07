@@ -609,7 +609,6 @@ contract ReactionVault is
             takerNftAddress,
             takerNftId
         );
-        require(info.sourceId > 0, "NFT not found");
 
         // Get the details about the NFT
         (
