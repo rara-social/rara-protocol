@@ -42,6 +42,23 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         addressManager = _addressManager;
     }
 
+    function nftToSourceLookup(
+        uint256 chainId,
+        address nftContractAddress,
+        uint256 nftId
+    ) external pure returns (uint256) {
+        return _nftToSourceLookup(chainId, nftContractAddress, nftId);
+    }
+
+    function _nftToSourceLookup(
+        uint256 chainId,
+        address nftContractAddress,
+        uint256 nftId
+    ) internal pure returns (uint256) {
+        return
+            uint256(keccak256(abi.encode(chainId, nftContractAddress, nftId)));
+    }
+
     /// @dev For the specified NFT, verify it is owned by the potential owner
     function verifyOwnership(
         address nftContractAddress,
@@ -128,21 +145,17 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         // TODO: ? Block registration of a RaRa reaction NFT once Reaction Vault is built out
 
         // Look up the source ID
-        uint256 currentSourceId = nftToSourceLookup[chainId][
-            nftContractAddress
-        ][nftId];
+        uint256 currentSourceId = _nftToSourceLookup(
+            chainId,
+            nftContractAddress,
+            nftId
+        );
 
-        // Check to see if the source ID is already set for this NFT
-        if (currentSourceId > 0) {
-            // If it is already in the system, verify it is not currently registered
-            NftDetails memory currentDetails = sourceToDetailsLookup[
-                currentSourceId
-            ];
-            require(!currentDetails.registered, "Already registered");
-        } else {
-            // If not already in the system, increment the source ID to use
-            currentSourceId = ++sourceCount;
-        }
+        // If it is already in the system, verify it is not currently registered
+        NftDetails memory currentDetails = sourceToDetailsLookup[
+            currentSourceId
+        ];
+        require(!currentDetails.registered, "Already registered");
 
         // Generate Meta ID
         uint256 metaId = uint256(
@@ -155,7 +168,6 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         require(creatorSaleBasisPoints <= 10_000, "Invalid creator bp");
 
         // Register in mappings
-        nftToSourceLookup[chainId][nftContractAddress][nftId] = currentSourceId;
         metaToSourceLookup[metaId] = currentSourceId;
         sourceToDetailsLookup[currentSourceId] = NftDetails(
             true,
@@ -214,10 +226,11 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         uint256 nftId
     ) internal {
         // Look up source ID and verify it is valid
-        uint256 sourceId = nftToSourceLookup[chainId][nftContractAddress][
+        uint256 sourceId = _nftToSourceLookup(
+            chainId,
+            nftContractAddress,
             nftId
-        ];
-        require(sourceId > 0, "NFT not found");
+        );
 
         // Verify it is registered
         NftDetails storage details = sourceToDetailsLookup[sourceId];

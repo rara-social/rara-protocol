@@ -7,7 +7,6 @@ import { deriveMakerNftMetaId } from "../Scripts/derivedParams";
 import {
   ALREADY_REGISTERED,
   INVALID_MAKER_BP,
-  NFT_NOT_FOUND,
   NFT_NOT_OWNED,
   NFT_NOT_REGISTERED,
 } from "../Scripts/errors";
@@ -155,14 +154,14 @@ describe("MakerRegistrar", function () {
     roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
 
+    // Get the source ID from the lookup
+    const EXPECTED_SOURCE_ID = await makerRegistrar.nftToSourceLookup(chainId, testingStandard1155.address, NFT_ID);
+
     // Encode the params and hash it to get the meta URI
     const derivedMetaId = deriveMakerNftMetaId(
-      BigNumber.from(1),
+      EXPECTED_SOURCE_ID,
       BigNumber.from(0)
     );
-
-    // First one registered should have source ID 1
-    const EXPECTED_SOURCE_ID = "1";
 
     // Register the NFT from Alice's account and put Bob as the creator
     // Verify event as well
@@ -242,15 +241,15 @@ describe("MakerRegistrar", function () {
       makerRegistrar
         .connect(ALICE)
         .deregisterNft(testingStandard1155.address, NFT_ID)
-    ).to.revertedWith(NFT_NOT_FOUND);
+    ).to.revertedWith(NFT_NOT_REGISTERED);
 
     // Register it
     await makerRegistrar
       .connect(ALICE)
       .registerNft(testingStandard1155.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0");
 
-    // First NFT in the system should have source ID of 1
-    const EXPECTED_SOURCE_ID = "1";
+    // Get the source ID from the lookup
+    const EXPECTED_SOURCE_ID = await makerRegistrar.nftToSourceLookup(chainId, testingStandard1155.address, NFT_ID);
 
     // Deregister it and check event params
     await expect(
