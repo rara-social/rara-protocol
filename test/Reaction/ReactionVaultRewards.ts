@@ -7,7 +7,7 @@ import {
   TEST_SALE_CREATOR_BP,
   TEST_SALE_CURATOR_LIABILITY_BP,
   TEST_SALE_REFERRER_BP,
-} from "../Scripts/deploy";
+} from "../Scripts/setup";
 import { deriveMakerNftMetaId } from "../Scripts/derivedParams";
 import { INVALID_ZERO_PARAM } from "../Scripts/errors";
 

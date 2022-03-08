@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { BigNumber } from "ethers";
 import { ethers } from "hardhat";
 import { ZERO_ADDRESS } from "../Scripts/constants";
-import { deploySystem, TEST_SALE_CREATOR_BP } from "../Scripts/deploy";
+import { deploySystem, TEST_SALE_CREATOR_BP } from "../Scripts/setup";
 import { deriveMakerNftMetaId } from "../Scripts/derivedParams";
 import {
   ALREADY_REGISTERED,
