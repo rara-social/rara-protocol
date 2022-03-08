@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { ZERO_ADDRESS } from "../Scripts/constants";
 import { deploySystem } from "../Scripts/deploy";
 import {
-  NOT_REACTION_VAULT,
+  NOT_ADMIN,
   NO_BALANCE,
   TRANSFER_NOT_ALLOWED,
 } from "../Scripts/errors";
@@ -33,17 +33,17 @@ describe("CuratorVault", function () {
         "1",
         OWNER.address
       )
-    ).to.be.revertedWith(NOT_REACTION_VAULT);
+    ).to.be.revertedWith(NOT_ADMIN);
   });
 
   it("Should verify payment token", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const { curatorVault, addressManager, paymentTokenErc20 } =
+    const { curatorVault, paymentTokenErc20, roleManager } =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Set the owner as the address manager to allow purchase to be tried
-    await addressManager.setReactionVault(OWNER.address);
+    await roleManager.grantRole(await roleManager.CURATOR_VAULT_PURCHASER(), OWNER.address);
 
     // Should fail
     await expect(
@@ -72,8 +72,8 @@ describe("CuratorVault", function () {
       )
     ).to.be.revertedWith(TRANSFER_NOT_ALLOWED);
 
-    // Set the Alice as the address manager to allow purchase to be tried
-    await addressManager.setReactionVault(ALICE.address);
+    // Set the Alice as the purchaser role to allow purchase to be tried
+    await roleManager.grantRole(await roleManager.CURATOR_VAULT_PURCHASER(), ALICE.address);
 
     // Even if Alice has an allowance but no tokens it should still fail
     await paymentTokenErc20.connect(ALICE).approve(curatorVault.address, "1000000000");
@@ -91,12 +91,12 @@ describe("CuratorVault", function () {
 
   it("Should allow purchase and sale", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { curatorVault, addressManager, paymentTokenErc20, curatorShares } =
+    const { curatorVault, paymentTokenErc20, curatorShares, roleManager } =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
-    // Set the owner as the address manager to allow purchase
-    await addressManager.setReactionVault(OWNER.address);
+    // Set the owner as the purchaser role to allow purchase
+    await roleManager.grantRole(await roleManager.CURATOR_VAULT_PURCHASER(), OWNER.address);
 
     const paymentAmount = "10000";
 
@@ -153,12 +153,12 @@ describe("CuratorVault", function () {
 
   it("Should allow purchase and sale with increasing price", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const { curatorVault, addressManager, paymentTokenErc20, curatorShares } =
+    const { curatorVault, roleManager, paymentTokenErc20, curatorShares } =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
-    // Set the owner as the address manager to allow purchase
-    await addressManager.setReactionVault(OWNER.address);
+    // Set the owner as the purchaser role to allow purchase
+    await roleManager.grantRole(await roleManager.CURATOR_VAULT_PURCHASER(), OWNER.address);
 
     const paymentAmount = "10000";
 
@@ -182,8 +182,8 @@ describe("CuratorVault", function () {
       OWNER.address
     );
 
-    // Set the address to allow alice to buy
-    await addressManager.setReactionVault(ALICE.address);
+    // Set alice as the purchaser role to allow purchase
+    await roleManager.grantRole(await roleManager.CURATOR_VAULT_PURCHASER(), ALICE.address);
 
     await curatorVault
       .connect(ALICE)

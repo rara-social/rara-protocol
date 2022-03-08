@@ -129,7 +129,6 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   await addressManager.setParameterManager(parameterManager.address);
   await addressManager.setMakerRegistrar(makerRegistrar.address);
   await addressManager.setReactionNftContract(reactionNFT1155.address);
-  await addressManager.setReactionVault(reactionVault.address);
   await addressManager.setDefaultCuratorVault(curatorVault.address);
 
   // Update permissions in the Role Manager

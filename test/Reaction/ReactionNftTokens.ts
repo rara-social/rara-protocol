@@ -27,7 +27,7 @@ describe("Reaction1155 Token", function () {
     ).to.be.reverted;
 
     // Grant authorization to Bob
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
+    const reactionMinterRole = await roleManager.REACTION_NFT_ADMIN();
     roleManager.grantRole(reactionMinterRole, BOB.address);
 
     // Mint again

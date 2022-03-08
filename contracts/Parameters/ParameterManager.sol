@@ -9,7 +9,10 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     /// @dev Verifies with the role manager that the calling address has ADMIN role
     modifier onlyAdmin() {
-        require(addressManager.roleManager().isAdmin(msg.sender), "Not Admin");
+        require(
+            addressManager.roleManager().isParameterManagerAdmin(msg.sender),
+            "Not Admin"
+        );
         _;
     }
 

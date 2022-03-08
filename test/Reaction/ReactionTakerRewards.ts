@@ -35,8 +35,6 @@ describe("ReactionVault Taker Rewards", function () {
     // Now register an NFT and get the Meta ID
     // Mint an NFT to Alice
     const NFT_ID = "1";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(MAKER.address, NFT_ID, "1", [0]);
 
     // Verify withdrawing rewards for unknown Taker NFT fails
@@ -70,8 +68,6 @@ describe("ReactionVault Taker Rewards", function () {
     // Mint an NFT to Alice
     const MAKER_NFT_ID = "1";
     const TAKER_NFT_ID = "2";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, MAKER_NFT_ID, "1", [0]);
 
     // Register it
@@ -279,8 +275,6 @@ describe("ReactionVault Taker Rewards", function () {
     // Mint an NFT to Alice
     const MAKER_NFT_ID = "1";
     const TAKER_NFT_ID = "2";
-    const reactionMinterRole = await roleManager.REACTION_MINTER_ROLE();
-    roleManager.grantRole(reactionMinterRole, OWNER.address);
     testingStandard1155.mint(ALICE.address, MAKER_NFT_ID, "1", [0]);
 
     // Register it

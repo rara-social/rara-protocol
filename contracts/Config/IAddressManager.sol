@@ -34,12 +34,6 @@ interface IAddressManager {
     function setReactionNftContract(IStandard1155 _reactionNftContract)
         external;
 
-    /// @dev Getter for the reaction Vault contract address
-    function reactionVault() external returns (IReactionVault);
-
-    /// @dev Setter for the reaction Vault contract address
-    function setReactionVault(IReactionVault _reactionVault) external;
-
     /// @dev Getter for the default Curator Vault contract address
     function defaultCuratorVault() external returns (ICuratorVault);
 

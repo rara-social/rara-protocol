@@ -136,21 +136,26 @@ const deploySystem = async (owner: SignerWithAddress) => {
     addressManager.address
   );
 
+  // Update permissions in the Role Manager
+  // Owner can update addresses
+  await roleManager.grantRole(await roleManager.ADDRESS_MANAGER_ADMIN(), owner.address);
+  // Owner can update parameters
+  await roleManager.grantRole(await roleManager.PARAMETER_MANAGER_ADMIN(), owner.address);
+  // Reaction Vault can mint/burn reactions
+  await roleManager.grantRole(await roleManager.REACTION_NFT_ADMIN(), reactionVault.address);
+  // Reaction Vault can purchase curator shares
+  await roleManager.grantRole(await roleManager.CURATOR_VAULT_PURCHASER(), reactionVault.address);
+  // Curator Vault can mint/burn curator shares
+  await roleManager.grantRole(await roleManager.CURATOR_SHARES_ADMIN(), curatorVault.address);
+
   // Update address manager
   await addressManager.setRoleManager(roleManager.address);
   await addressManager.setParameterManager(parameterManager.address);
   await addressManager.setMakerRegistrar(makerRegistrar.address);
   await addressManager.setReactionNftContract(reactionNFT1155.address);
-  await addressManager.setReactionVault(reactionVault.address);
+
   await addressManager.setDefaultCuratorVault(curatorVault.address);
   await addressManager.setChildRegistrar(childRegistrar.address);
-
-  // Update permissions in the Role Manager
-  // Reaction Vault should be allowed to mint reactions
-  const minterRole = await roleManager.REACTION_MINTER_ROLE();
-  await roleManager.grantRole(minterRole, reactionVault.address);
-  const burnerRole = await roleManager.REACTION_BURNER_ROLE();
-  await roleManager.grantRole(burnerRole, reactionVault.address);
 
   // Update the Parameters in the protocol
   await parameterManager.setPaymentToken(paymentTokenErc20.address);
