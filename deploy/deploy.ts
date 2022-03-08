@@ -1,33 +1,33 @@
-import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { DeployFunction } from 'hardhat-deploy/types';
-import { BigNumber } from 'ethers';
-import { ethers, upgrades } from 'hardhat';
-import { TEST_NFT_URI } from '../test/Scripts/constants';
+import {HardhatRuntimeEnvironment} from "hardhat/types";
+import {DeployFunction} from "hardhat-deploy/types";
+import {BigNumber} from "ethers";
+import {ethers, upgrades} from "hardhat";
+import {TEST_NFT_URI} from "../test/Scripts/constants";
 
 export const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
 export const TEST_SALE_CURATOR_LIABILITY_BP = 5_000; // 50% goes to curator liability
 export const TEST_SALE_CREATOR_BP = 200; // 2% goes to the creator
 export const TEST_SALE_REFERRER_BP = 100; // 1% goes to the referrer
-
+export const TEST_SPEND_REFERRER_BP = 100; // 1% of curator liability goes to the referrer
+export const TEST_SPEND_TAKER_BP = 5_000; // 50% of curator liability goes to the taker
 // getNamedAccounts,
 
 // deploy
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
-  const { deployments, getNamedAccounts } = hre;
-  const { deployer, pauser, updater } = await getNamedAccounts();
-  const { deploy } = deployments;
-  console.log({ deployer });
+  const {deployments, getNamedAccounts} = hre;
+  const {deployer, nftCreator, reactionCreator} = await getNamedAccounts();
+  const {deploy} = deployments;
+  console.log({deployer});
 
-  // Deploy the Role Manager first
-  const RoleManagerFactory = await ethers.getContractFactory('RoleManager');
+  const RoleManagerFactory = await ethers.getContractFactory("RoleManager");
   const deployedRoleManager = await upgrades.deployProxy(RoleManagerFactory, [
-    deployer
+    deployer,
   ]);
   const roleManager = RoleManagerFactory.attach(deployedRoleManager.address);
 
   // Deploy Address Manager
   const AddressManagerFactory = await ethers.getContractFactory(
-    'AddressManager'
+    "AddressManager"
   );
   const deployedAddressManager = await upgrades.deployProxy(
     AddressManagerFactory,
@@ -39,7 +39,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 
   // Deploy Maker Registrar
   const MakerRegistrarFactory = await ethers.getContractFactory(
-    'MakerRegistrar'
+    "MakerRegistrar"
   );
   const deployedMakerRegistrar = await upgrades.deployProxy(
     MakerRegistrarFactory,
@@ -50,7 +50,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   );
 
   // Deploy Reaction Vault
-  const ReactionVaultFactory = await ethers.getContractFactory('ReactionVault');
+  const ReactionVaultFactory = await ethers.getContractFactory("ReactionVault");
   const deployedReactionVault = await upgrades.deployProxy(
     ReactionVaultFactory,
     [addressManager.address]
@@ -62,16 +62,24 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   // Deploy Testing NFT Token 1155
   // NOTE: We are not granting any default permissions for minting in the role manager to the owner
   // because the tests of the protocol should not assume any roles are granted for external accounts.
-  const Test1155Factory = await ethers.getContractFactory('TestErc1155');
+  const Test1155Factory = await ethers.getContractFactory("TestErc1155");
   const deployedTest1155 = await upgrades.deployProxy(Test1155Factory, [
     TEST_NFT_URI,
-    addressManager.address
+    addressManager.address,
   ]);
   const testingStandard1155 = Test1155Factory.attach(deployedTest1155.address);
 
+  // Deploy a 721 for Testing
+  const TestErc721Factory = await ethers.getContractFactory("TestErc721");
+  const deployedTest721 = await upgrades.deployProxy(TestErc721Factory, [
+    TEST_NFT_URI,
+    addressManager.address,
+  ]);
+  const testingStandard721 = TestErc721Factory.attach(deployedTest721.address);
+
   // Deploy 1155 for NFT Reactions
   const ReactionNft1155Factory = await ethers.getContractFactory(
-    'ReactionNft1155'
+    "ReactionNft1155"
   );
   const deployedReactionNFT1155 = await upgrades.deployProxy(
     ReactionNft1155Factory,
@@ -83,7 +91,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 
   // Deploy the Parameter Manager
   const ParameterManagerFactory = await ethers.getContractFactory(
-    'ParameterManager'
+    "ParameterManager"
   );
   const deployedParameterManager = await upgrades.deployProxy(
     ParameterManagerFactory,
@@ -94,16 +102,16 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   );
 
   // Deploy an ERC20 Token for testing payments
-  const TestErc20Factory = await ethers.getContractFactory('TestErc20');
+  const TestErc20Factory = await ethers.getContractFactory("TestErc20");
   const deployedTestErc20 = await upgrades.deployProxy(TestErc20Factory, [
-    'TEST',
-    'TST'
+    "TEST",
+    "TST",
   ]);
   const paymentTokenErc20 = TestErc20Factory.attach(deployedTestErc20.address);
 
   // Deploy the curator Shares Token Contract
   const CuratorShares1155Factory = await ethers.getContractFactory(
-    'CuratorShares1155'
+    "CuratorShares1155"
   );
   const deployedCuratorShares = await upgrades.deployProxy(
     CuratorShares1155Factory,
@@ -115,14 +123,25 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 
   // Deploy the Default Curator Vault
   const CuratorVaultFactory = await ethers.getContractFactory(
-    'PermanentCuratorVault'
+    "PermanentCuratorVault"
   );
   const deployedCuratorVault = await upgrades.deployProxy(CuratorVaultFactory, [
     addressManager.address,
     400000,
-    curatorShares.address
+    curatorShares.address,
   ]);
   const curatorVault = CuratorVaultFactory.attach(deployedCuratorVault.address);
+
+  // Deploy the Child Registrar on the current chain.
+  // Note that this is not a proxy contract.
+  const ChildRegistrarFactory = await ethers.getContractFactory(
+    "ChildRegistrar"
+  );
+  // FX Child address is from Mumbai - see https://github.com/fx-portal/contracts
+  const childRegistrar = await ChildRegistrarFactory.deploy(
+    "0xCf73231F28B7331BBe3124B907840A94851f9f11",
+    addressManager.address
+  );
 
   // Update address manager
   await addressManager.setRoleManager(roleManager.address);
@@ -131,20 +150,42 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   await addressManager.setReactionNftContract(reactionNFT1155.address);
   await addressManager.setReactionVault(reactionVault.address);
   await addressManager.setDefaultCuratorVault(curatorVault.address);
+  await addressManager.setChildRegistrar(childRegistrar.address);
 
   // Update permissions in the Role Manager
   // Reaction Vault should be allowed to mint reactions
   const minterRole = await roleManager.REACTION_MINTER_ROLE();
-  roleManager.grantRole(minterRole, reactionVault.address);
+  await roleManager.grantRole(minterRole, reactionVault.address);
+  const burnerRole = await roleManager.REACTION_BURNER_ROLE();
+  await roleManager.grantRole(burnerRole, reactionVault.address);
 
   // Update the Parameters in the protocol
-  parameterManager.setPaymentToken(paymentTokenErc20.address);
-  parameterManager.setReactionPrice(TEST_REACTION_PRICE);
-  parameterManager.setSaleCuratorLiabilityBasisPoints(
+  await parameterManager.setPaymentToken(paymentTokenErc20.address);
+  await parameterManager.setReactionPrice(TEST_REACTION_PRICE);
+  await parameterManager.setSaleCuratorLiabilityBasisPoints(
     TEST_SALE_CURATOR_LIABILITY_BP
   );
-  parameterManager.setSaleCreatorBasisPoints(TEST_SALE_CREATOR_BP);
-  parameterManager.setSaleReferrerBasisPoints(TEST_SALE_REFERRER_BP);
+  await parameterManager.setSaleReferrerBasisPoints(TEST_SALE_REFERRER_BP);
+  await parameterManager.setSpendTakerBasisPoints(TEST_SPEND_TAKER_BP);
+  await parameterManager.setSpendReferrerBasisPoints(TEST_SPEND_REFERRER_BP);
+
+  //
+  // TESTDATA
+  //
+
+  // mint an nft
+  testingStandard721.mint(nftCreator, "1");
+
+  // Register the NFT from Alice's account and put Bob as the creator
+  // await makerRegistrar
+  //   .connect(reactionCreator)
+  //   .registerNft(
+  //     testingStandard721.address,
+  //     "1",
+  //     reactionCreator,
+  //     TEST_SALE_CREATOR_BP,
+  //     "0"
+  //   );
 
   // return {
   //   addressManager,
@@ -160,5 +201,5 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   // };
 };
 
-module.exports.tags = ['RA'];
+module.exports.tags = ["RA"];
 export default func;

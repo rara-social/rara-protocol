@@ -32,7 +32,8 @@ describe("CuratorVault", function () {
         "0",
         paymentTokenErc20.address,
         "1",
-        OWNER.address
+        OWNER.address,
+        false
       )
     ).to.be.revertedWith(NOT_REACTION_VAULT);
   });
@@ -91,9 +92,11 @@ describe("CuratorVault", function () {
           chainId,
           ZERO_ADDRESS,
           "1",
+          "0",
           paymentTokenErc20.address,
           "1",
-          OWNER.address
+          OWNER.address,
+          false
         )
     ).to.be.revertedWith(NO_BALANCE);
   });
