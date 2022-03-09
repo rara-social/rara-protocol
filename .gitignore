@@ -21,3 +21,9 @@ subgraph/subgraph.yaml
 subgraph/generated
 subgraph/abis/*
 build
+
+# local only deployments
+deployments/ganache
+deployments/local
+deployments/localhost
+deployments/hardhat

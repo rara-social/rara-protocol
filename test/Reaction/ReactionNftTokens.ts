@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { deploySystem } from "../Scripts/deploy";
+import { deploySystem } from "../Scripts/setup";
 import { TEST_NFT_URI } from "../Scripts/constants";
 import { REACTION_TRANSFER_RESTRICTED } from "../Scripts/errors";
 

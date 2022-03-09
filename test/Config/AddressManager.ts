@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers, upgrades } from "hardhat";
 import { ZERO_ADDRESS } from "../Scripts/constants";
-import { deploySystem } from "../Scripts/deploy";
+import { deploySystem } from "../Scripts/setup";
 import {
   INVALID_ROLE_MANAGER,
   INVALID_ZERO_PARAM,

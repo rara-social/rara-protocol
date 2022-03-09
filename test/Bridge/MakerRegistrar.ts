@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZERO_ADDRESS } from "../Scripts/constants";
-import { deploySystem } from "../Scripts/deploy";
+import { deploySystem } from "../Scripts/setup";
 import { NOT_BRIDGE } from "../Scripts/errors";
 
 describe("Bridge Registrar", function () {

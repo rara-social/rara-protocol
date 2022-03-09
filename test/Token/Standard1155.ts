@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { deploySystem } from "../Scripts/deploy";
+import { deploySystem } from "../Scripts/setup";
 import { TEST_NFT_URI } from "../Scripts/constants";
 
 describe("Standard1155 Token", function () {

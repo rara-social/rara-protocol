@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { deploySystem } from "../Scripts/deploy";
+import { deploySystem } from "../Scripts/setup";
 import { NOT_ADMIN } from "../Scripts/errors";
 
 describe("CuratorShares", function () {

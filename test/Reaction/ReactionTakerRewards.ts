@@ -7,7 +7,7 @@ import {
   TEST_REACTION_PRICE,
   TEST_SALE_CREATOR_BP,
   TEST_SALE_CURATOR_LIABILITY_BP,
-} from "../Scripts/deploy";
+} from "../Scripts/setup";
 import {
   deriveMakerNftMetaId,
   deriveReactionNftMetaId,
