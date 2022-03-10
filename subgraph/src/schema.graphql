@@ -6,16 +6,16 @@ type User @entity {
 }
 
 type UserReaction @entity {
-  id: ID! #msg.sender + event.params.metaId.toHexString()
+  id: ID! #msg.sender + event.params.reactionMetaId.toHexString()
   user: User!
   reaction: Reaction!
   quantity: BigInt!
 }
 
 type Reaction @entity {
-  id: ID! #event.params.metaId.toHexString()
-  registrationMetaId: String!
-  registrationSourceId: BigInt!
+  id: ID! #event.params.reactionId.toHexString()
+  reactionId: BigInt!
+  sourceId: BigInt!
   makerUser: User!
   nftChainId: BigInt!
   nftContractAddress: Bytes!

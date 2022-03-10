@@ -23,9 +23,9 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   //
   // Reaction
   //
-  let reaction = Reaction.load(event.params.reactionMetaId.toHexString());
+  let reaction = Reaction.load(event.params.reactionId.toHexString()); // yes
   if (reaction == null) {
-    reaction = new Reaction(event.params.reactionMetaId.toHexString());
+    reaction = new Reaction(event.params.reactionId.toHexString());
   }
   reaction.totalSold = reaction.totalSold.plus(event.params.quantity);
   reaction.save();
@@ -85,7 +85,6 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
 
   // decrease quantity
   userReaction.quantity = userReaction.quantity.minus(event.params.quantity);
-
   userReaction.save();
 
   //
@@ -125,9 +124,9 @@ export function handleCreatorRewardsGranted(
   //
   // Reaction
   //
-  let reaction = Reaction.load(event.params.registrationSourceId.toHexString());
+  let reaction = Reaction.load(event.params.reactionId.toHexString());
   if (reaction == null) {
-    reaction = new Reaction(event.params.registrationSourceId.toHexString());
+    reaction = new Reaction(event.params.reactionId.toHexString());
   }
   reaction.creatorFeesTotal = reaction.creatorFeesTotal.minus(
     event.params.amount.toBigDecimal()
@@ -159,9 +158,9 @@ export function handleReferrerRewardsGranted(
   //
   // Reaction
   //
-  let reaction = Reaction.load(event.params.registrationSourceId.toHexString());
+  let reaction = Reaction.load(event.params.reactionId.toHexString());
   if (reaction == null) {
-    reaction = new Reaction(event.params.registrationSourceId.toHexString());
+    reaction = new Reaction(event.params.reactionId.toHexString());
   }
 
   // increase referrer fees
@@ -193,9 +192,9 @@ export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
   //
   // Reaction
   //
-  let reaction = Reaction.load(event.params.registrationSourceId.toHexString());
+  let reaction = Reaction.load(event.params.reactionId.toHexString());
   if (reaction == null) {
-    reaction = new Reaction(event.params.registrationSourceId.toHexString());
+    reaction = new Reaction(event.params.reactionId.toHexString());
   }
 
   // increase referrer fees

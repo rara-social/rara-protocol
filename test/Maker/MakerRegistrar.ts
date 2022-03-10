@@ -1,9 +1,9 @@
-import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { ethers } from "hardhat";
-import { ZERO_ADDRESS } from "../Scripts/constants";
-import { deploySystem, TEST_SALE_CREATOR_BP } from "../Scripts/setup";
-import { deriveMakerNftMetaId } from "../Scripts/derivedParams";
+import {expect} from "chai";
+import {BigNumber} from "ethers";
+import {ethers} from "hardhat";
+import {ZERO_ADDRESS} from "../Scripts/constants";
+import {deploySystem, TEST_SALE_CREATOR_BP} from "../Scripts/setup";
+import {deriveMakerNftMetaId} from "../Scripts/derivedParams";
 import {
   ALREADY_REGISTERED,
   INVALID_MAKER_BP,
@@ -14,7 +14,7 @@ import {
 describe("MakerRegistrar", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { makerRegistrar, addressManager } = await deploySystem(OWNER);
+    const {makerRegistrar, addressManager} = await deploySystem(OWNER);
 
     // Verify the address manager was set
     const currentAddressManager = await makerRegistrar.addressManager();
@@ -23,7 +23,7 @@ describe("MakerRegistrar", function () {
 
   it("Should verify NFT ownership on register", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { makerRegistrar, testingStandard1155 } = await deploySystem(OWNER);
+    const {makerRegistrar, testingStandard1155} = await deploySystem(OWNER);
 
     // Since this is trying to register a non-existing NFT it should show the caller doesn't own it
     await expect(
@@ -39,7 +39,7 @@ describe("MakerRegistrar", function () {
 
   it("Should allow NFT registration only once", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { makerRegistrar, roleManager, testingStandard1155 } =
+    const {makerRegistrar, roleManager, testingStandard1155} =
       await deploySystem(OWNER);
 
     // Mint an NFT to Alice
@@ -50,19 +50,31 @@ describe("MakerRegistrar", function () {
     // Verify event as well
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard1155.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0");
+      .registerNft(
+        testingStandard1155.address,
+        NFT_ID,
+        BOB.address,
+        TEST_SALE_CREATOR_BP,
+        "0"
+      );
 
     // Verify it can't be registered again now that it is registered
     await expect(
       makerRegistrar
         .connect(ALICE)
-        .registerNft(testingStandard1155.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0")
+        .registerNft(
+          testingStandard1155.address,
+          NFT_ID,
+          BOB.address,
+          TEST_SALE_CREATOR_BP,
+          "0"
+        )
     ).to.revertedWith(ALREADY_REGISTERED);
   });
 
   it("Should allow 721 NFT registration ", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { makerRegistrar, testingStandard721 } = await deploySystem(OWNER);
+    const {makerRegistrar, testingStandard721} = await deploySystem(OWNER);
 
     // Mint an NFT to Alice
     const NFT_ID = "1";
@@ -71,7 +83,13 @@ describe("MakerRegistrar", function () {
     await expect(
       makerRegistrar
         .connect(ALICE)
-        .registerNft(testingStandard721.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0")
+        .registerNft(
+          testingStandard721.address,
+          NFT_ID,
+          BOB.address,
+          TEST_SALE_CREATOR_BP,
+          "0"
+        )
     ).to.revertedWith(NFT_NOT_OWNED);
 
     // Mint the NFT
@@ -80,19 +98,31 @@ describe("MakerRegistrar", function () {
     // Register the NFT from Alice's account and put Bob as the creator
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard721.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0");
+      .registerNft(
+        testingStandard721.address,
+        NFT_ID,
+        BOB.address,
+        TEST_SALE_CREATOR_BP,
+        "0"
+      );
 
     // Verify it can't be registered again now that it is registered
     await expect(
       makerRegistrar
         .connect(ALICE)
-        .registerNft(testingStandard721.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0")
+        .registerNft(
+          testingStandard721.address,
+          NFT_ID,
+          BOB.address,
+          TEST_SALE_CREATOR_BP,
+          "0"
+        )
     ).to.revertedWith(ALREADY_REGISTERED);
   });
 
   it("Should check creator BP out of bounds", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { makerRegistrar, roleManager, testingStandard1155 } =
+    const {makerRegistrar, roleManager, testingStandard1155} =
       await deploySystem(OWNER);
 
     // Mint an NFT to Alice
@@ -103,13 +133,19 @@ describe("MakerRegistrar", function () {
     await expect(
       makerRegistrar
         .connect(ALICE)
-        .registerNft(testingStandard1155.address, NFT_ID, BOB.address, "10001", "0")
+        .registerNft(
+          testingStandard1155.address,
+          NFT_ID,
+          BOB.address,
+          "10001",
+          "0"
+        )
     ).to.revertedWith(INVALID_MAKER_BP);
   });
 
   it("Should allow 721 NFT registration ", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { makerRegistrar, testingStandard721 } = await deploySystem(OWNER);
+    const {makerRegistrar, testingStandard721} = await deploySystem(OWNER);
 
     // Mint an NFT to Alice
     const NFT_ID = "1";
@@ -118,7 +154,13 @@ describe("MakerRegistrar", function () {
     await expect(
       makerRegistrar
         .connect(ALICE)
-        .registerNft(testingStandard721.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0")
+        .registerNft(
+          testingStandard721.address,
+          NFT_ID,
+          BOB.address,
+          TEST_SALE_CREATOR_BP,
+          "0"
+        )
     ).to.revertedWith(NFT_NOT_OWNED);
 
     // Mint the NFT
@@ -127,19 +169,31 @@ describe("MakerRegistrar", function () {
     // Register the NFT from Alice's account and put Bob as the creator
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard721.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0");
+      .registerNft(
+        testingStandard721.address,
+        NFT_ID,
+        BOB.address,
+        TEST_SALE_CREATOR_BP,
+        "0"
+      );
 
     // Verify it can't be registered again now that it is registered
     await expect(
       makerRegistrar
         .connect(ALICE)
-        .registerNft(testingStandard721.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0")
+        .registerNft(
+          testingStandard721.address,
+          NFT_ID,
+          BOB.address,
+          TEST_SALE_CREATOR_BP,
+          "0"
+        )
     ).to.revertedWith(ALREADY_REGISTERED);
   });
 
   it("Should emit registration event and verify mappings", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { makerRegistrar, roleManager, testingStandard1155 } =
+    const {makerRegistrar, roleManager, testingStandard1155} =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -149,7 +203,11 @@ describe("MakerRegistrar", function () {
     testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
 
     // Get the source ID from the lookup
-    const EXPECTED_SOURCE_ID = await makerRegistrar.nftToSourceLookup(chainId, testingStandard1155.address, NFT_ID);
+    const EXPECTED_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+      chainId,
+      testingStandard1155.address,
+      NFT_ID
+    );
 
     // Encode the params and hash it to get the meta URI
     const derivedMetaId = deriveMakerNftMetaId(
@@ -194,7 +252,7 @@ describe("MakerRegistrar", function () {
     ).to.equal(EXPECTED_SOURCE_ID);
 
     // Verify source from meta id
-    expect(await makerRegistrar.metaToSourceLookup(derivedMetaId)).to.equal(
+    expect(await makerRegistrar.reactionToSourceLookup(derivedMetaId)).to.equal(
       EXPECTED_SOURCE_ID
     );
 
@@ -210,7 +268,7 @@ describe("MakerRegistrar", function () {
 
   it("Should verify NFT ownership on deregister", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { makerRegistrar, testingStandard1155 } = await deploySystem(OWNER);
+    const {makerRegistrar, testingStandard1155} = await deploySystem(OWNER);
 
     // Since this is trying to deregister a non-existing NFT it should show the caller doesn't own it
     await expect(
@@ -220,7 +278,7 @@ describe("MakerRegistrar", function () {
 
   it("Should register and deregister and check event", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { makerRegistrar, testingStandard1155, roleManager } =
+    const {makerRegistrar, testingStandard1155, roleManager} =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -238,10 +296,20 @@ describe("MakerRegistrar", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard1155.address, NFT_ID, BOB.address, TEST_SALE_CREATOR_BP, "0");
+      .registerNft(
+        testingStandard1155.address,
+        NFT_ID,
+        BOB.address,
+        TEST_SALE_CREATOR_BP,
+        "0"
+      );
 
     // Get the source ID from the lookup
-    const EXPECTED_SOURCE_ID = await makerRegistrar.nftToSourceLookup(chainId, testingStandard1155.address, NFT_ID);
+    const EXPECTED_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+      chainId,
+      testingStandard1155.address,
+      NFT_ID
+    );
 
     // Deregister it and check event params
     await expect(

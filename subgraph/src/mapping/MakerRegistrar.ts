@@ -23,9 +23,9 @@ export function handleRegistered(event: Registered): void {
   //
   // Reaction(metaId)
   //
-  let reaction = new Reaction(event.params.registrationSourceId.toHexString());
-  reaction.registrationMetaId = event.params.registrationSourceId.toHexString();
-  reaction.registrationSourceId = event.params.registrationSourceId;
+  let reaction = new Reaction(event.params.reactionId.toHexString());
+  reaction.reactionId = event.params.reactionId;
+  reaction.sourceId = event.params.sourceId;
   reaction.makerUser = user.id;
   reaction.nftChainId = event.params.nftChainId;
   reaction.nftContractAddress = event.params.nftContractAddress;
@@ -47,7 +47,7 @@ export function handleDeregistered(event: Deregistered): void {
   //
   // Reaction: mark 'registered' as false
   //
-  let reaction = new Reaction(event.params.registrationSourceId.toHexString());
+  let reaction = new Reaction(event.params.sourceId.toHexString()); // TODO - not gonna work
   reaction.registered = false;
   reaction.save();
 }

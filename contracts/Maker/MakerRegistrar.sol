@@ -24,8 +24,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address nftCreatorAddress,
         uint256 creatorSaleBasisPoints,
         uint256 optionBits,
-        uint256 registrationSourceId,
-        uint256 registrationMetaId
+        uint256 sourceId,
+        uint256 reactionId
     );
 
     /// @dev Event triggered when an NFT is deregistered from the system
@@ -34,7 +34,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address indexed nftContractAddress,
         uint256 indexed nftId,
         address indexed nftOwnerAddress,
-        uint256 registrationSourceId
+        uint256 sourceId
     );
 
     /// @dev initializer to call after deployment, can only be called once
@@ -144,37 +144,61 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
     ) internal {
         // TODO: ? Block registration of a RaRa reaction NFT once Reaction Vault is built out
 
+        // Verify that creatorSaleBasisPoints is within bounds (can't allow more than 100%)
+        require(creatorSaleBasisPoints <= 10_000, "Invalid creator bp");
+
+        //
+        // "Source" - sourceId is derived from [chainId, nftContractAddress, nftId]
+        // Use: This is used in
+        // - ReactionVault.buyReaction():
+        //    - prevent reactions that have been deregistered or never registered from being sold
+        //    - calc creator rewards from makerNFTs
+        // - ReactionVault.withdrawTakerRewards():
+        //    - check that msg.sender is registered as owner
+        //    - calc creator rewards for takerNFTs
+        //
         // Look up the source ID
-        uint256 currentSourceId = _nftToSourceLookup(
+        uint256 sourceId = _nftToSourceLookup(
             chainId,
             nftContractAddress,
             nftId
         );
 
         // If it is already in the system, verify it is not currently registered
-        NftDetails memory currentDetails = sourceToDetailsLookup[
-            currentSourceId
-        ];
-        require(!currentDetails.registered, "Already registered");
-
-        // Generate Meta ID
-        uint256 metaId = uint256(
-            keccak256(
-                abi.encode(MAKER_META_PREFIX, currentSourceId, optionBits)
-            )
-        );
-
-        // Verify that creatorSaleBasisPoints is within bounds (can't allow more than 100%)
-        require(creatorSaleBasisPoints <= 10_000, "Invalid creator bp");
+        // NftDetails memory details = sourceToDetailsLookup[registrationSourceId];
+        // require(!details.registered, "Already registered");
 
         // Register in mappings
-        metaToSourceLookup[metaId] = currentSourceId;
-        sourceToDetailsLookup[currentSourceId] = NftDetails(
+        sourceToDetailsLookup[sourceId] = NftDetails(
             true,
             owner,
             creatorAddress,
             creatorSaleBasisPoints
         );
+
+        //
+        // "Reaction": source NFTs that have been "transformed" into fan art via optionBits param
+        // ID: derived from [MAKER_META_PREFIX, registrationSourceId, optionBits]
+        // Use: How reactions are listed for sale
+        // ReactionVault._buyReaction()
+        //  - look up source to make sure its registered
+        //  - used to derive reactionMetaId
+        //  - saved in ReactionPriceDetails
+        //  - emitted in events: ReferrerRewardsGranted, CreatorRewardsGranted, MakerRewardsGranted, ReactionsPurchased
+        // ReactionVault._spendReaction()
+        //  - retrieved from ReactionPriceDetails via reactionMetaId
+        //  - emitted in events: ReferrerRewardsGranted, ReactionsSpent
+        //
+
+        // Generate reaction ID
+        uint256 reactionId = uint256(
+            keccak256(abi.encode(MAKER_META_PREFIX, sourceId, optionBits))
+        );
+        reactionToSourceLookup[reactionId] = sourceId;
+
+        //
+        // End Meta
+        //
 
         // Emit event
         emit Registered(
@@ -185,8 +209,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             creatorAddress,
             creatorSaleBasisPoints,
             optionBits,
-            currentSourceId,
-            metaId
+            sourceId,
+            reactionId
         );
     }
 

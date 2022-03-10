@@ -1,7 +1,7 @@
-import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { ethers } from "hardhat";
-import { ZERO_ADDRESS } from "../Scripts/constants";
+import {expect} from "chai";
+import {BigNumber} from "ethers";
+import {ethers} from "hardhat";
+import {ZERO_ADDRESS} from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -24,7 +24,7 @@ import {
 describe("ReactionVault Buy", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { reactionVault, addressManager } = await deploySystem(OWNER);
+    const {reactionVault, addressManager} = await deploySystem(OWNER);
 
     // Verify the address manager was set
     const currentAddressManager = await reactionVault.addressManager();
@@ -33,7 +33,7 @@ describe("ReactionVault Buy", function () {
 
   it("Should verify NFT is registered", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const { reactionVault, testingStandard1155, makerRegistrar, roleManager } =
+    const {reactionVault, testingStandard1155, makerRegistrar, roleManager} =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -147,15 +147,19 @@ describe("ReactionVault Buy", function () {
     ).to.revertedWith(TRANSFER_NOT_ALLOWED);
 
     // Even if Alice has an allowance but no tokens it should still fail
-    await paymentTokenErc20.connect(BOB).approve(reactionVault.address, "10000000000000000000");
+    await paymentTokenErc20
+      .connect(BOB)
+      .approve(reactionVault.address, "10000000000000000000");
     await expect(
-      reactionVault.connect(BOB).buyReaction(
-        MAKER_NFT_META_ID,
-        "1",
-        OWNER.address,
-        ZERO_ADDRESS,
-        BigNumber.from(0)
-      )
+      reactionVault
+        .connect(BOB)
+        .buyReaction(
+          MAKER_NFT_META_ID,
+          "1",
+          OWNER.address,
+          ZERO_ADDRESS,
+          BigNumber.from(0)
+        )
     ).to.revertedWith(NO_BALANCE);
   });
 
@@ -179,7 +183,13 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard1155.address, NFT_ID, CREATOR.address, TEST_SALE_CREATOR_BP, "0");
+      .registerNft(
+        testingStandard1155.address,
+        NFT_ID,
+        CREATOR.address,
+        TEST_SALE_CREATOR_BP,
+        "0"
+      );
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
@@ -208,12 +218,9 @@ describe("ReactionVault Buy", function () {
     const CURATOR_LIABILITY = TEST_REACTION_PRICE.mul(
       TEST_SALE_CURATOR_LIABILITY_BP
     ).div(10_000);
-    const TOTAL_MAKER_CUT = TEST_REACTION_PRICE
-      .sub(REFERRER_CUT)
-      .sub(CURATOR_LIABILITY);
-    const CREATOR_CUT = TOTAL_MAKER_CUT
-      .mul(TEST_SALE_CREATOR_BP)
-      .div(10_000);
+    const TOTAL_MAKER_CUT =
+      TEST_REACTION_PRICE.sub(REFERRER_CUT).sub(CURATOR_LIABILITY);
+    const CREATOR_CUT = TOTAL_MAKER_CUT.mul(TEST_SALE_CREATOR_BP).div(10_000);
     const MAKER_CUT = TOTAL_MAKER_CUT.sub(CREATOR_CUT);
 
     // Verify allocations are correct
@@ -292,7 +299,7 @@ describe("ReactionVault Buy", function () {
     const reactionPurchaseEvent = receipt.events?.find(
       (x) => x.event === "ReactionsPurchased"
     );
-    expect(reactionPurchaseEvent!.args!.makerNftMetaId).to.be.equal(
+    expect(reactionPurchaseEvent!.args!.reactionId).to.be.equal(
       MAKER_NFT_META_ID
     );
     expect(reactionPurchaseEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
@@ -328,7 +335,13 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard1155.address, NFT_ID, CREATOR.address, TEST_SALE_CREATOR_BP, "0");
+      .registerNft(
+        testingStandard1155.address,
+        NFT_ID,
+        CREATOR.address,
+        TEST_SALE_CREATOR_BP,
+        "0"
+      );
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
@@ -350,7 +363,7 @@ describe("ReactionVault Buy", function () {
     // Approve the transfer of payment tokens
     paymentTokenErc20.approve(reactionVault.address, totalPaymentAmount);
 
-    // Calculate how the payment will be split    
+    // Calculate how the payment will be split
     const REFERRER_CUT = totalPaymentAmount
       .mul(TEST_SALE_REFERRER_BP)
       .div(10_000);
@@ -360,9 +373,7 @@ describe("ReactionVault Buy", function () {
     const TOTAL_MAKER_CUT = totalPaymentAmount
       .sub(REFERRER_CUT)
       .sub(CURATOR_LIABILITY);
-    const CREATOR_CUT = TOTAL_MAKER_CUT
-      .mul(TEST_SALE_CREATOR_BP)
-      .div(10_000);
+    const CREATOR_CUT = TOTAL_MAKER_CUT.mul(TEST_SALE_CREATOR_BP).div(10_000);
     const MAKER_CUT = TOTAL_MAKER_CUT.sub(CREATOR_CUT);
 
     // Verify allocations are correct
@@ -441,7 +452,7 @@ describe("ReactionVault Buy", function () {
     const reactionPurchaseEvent = receipt.events?.find(
       (x) => x.event === "ReactionsPurchased"
     );
-    expect(reactionPurchaseEvent!.args!.makerNftMetaId).to.be.equal(
+    expect(reactionPurchaseEvent!.args!.reactionId).to.be.equal(
       MAKER_NFT_META_ID
     );
     expect(reactionPurchaseEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
