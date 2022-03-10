@@ -17,24 +17,24 @@ import "./NftOwnership.sol";
 contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
     /// @dev Event triggered when an NFT is registered in the system
     event Registered(
-        uint256 chainId,
+        uint256 nftChainId,
         address indexed nftContractAddress,
         uint256 indexed nftId,
-        address indexed ownerAddress,
-        address creatorAddress,
+        address indexed nftOwnerAddress,
+        address nftCreatorAddress,
         uint256 creatorSaleBasisPoints,
         uint256 optionBits,
-        uint256 sourceId,
-        uint256 metaId
+        uint256 registrationSourceId,
+        uint256 registrationMetaId
     );
 
     /// @dev Event triggered when an NFT is deregistered from the system
     event Deregistered(
-        uint256 chainId,
+        uint256 nftChainId,
         address indexed nftContractAddress,
         uint256 indexed nftId,
-        address indexed ownerAddress,
-        uint256 sourceId
+        address indexed nftOwnerAddress,
+        uint256 registrationSourceId
     );
 
     /// @dev initializer to call after deployment, can only be called once

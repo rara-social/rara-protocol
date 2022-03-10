@@ -1,71 +1,92 @@
-# RARA Protocol Loudpaper
+# RARA Protocol
 
-{% hint style="info" %}
-**Good to know:** providing a brief overview of your product and its core use cases is a great place to start with product docs. Your product might seem obvious to you – you made it! However, to others, even folks who are trying your product after reading your site or getting a sales demo, it can still be unclear. This is your chance to clarify your product and set the right expectations!
-{% endhint %}
+This project is the protocol powering RARA!
 
-Here are a couple of examples of succinct overviews from products with really great docs:
+## Hardhat commands
 
-> Loom is a video messaging tool that helps you get your message across through instantly shareable videos.
->
-> With Loom, you can record your camera, microphone, and desktop simultaneously. Your video is then instantly available to share through Loom's patented technology.
->
-> — From the [Loom Docs](https://support.loom.com/hc/en-us/articles/360002158057-What-is-Loom-)
+Try running some of the following tasks:
 
-> The Mailchimp Marketing API provides programmatic access to Mailchimp data and functionality, allowing developers to build custom features to do things like sync email activity and campaign analytics with their database, manage audiences and campaigns, and more.
->
-> — From the [Mailchimp Marketing API docs](https://mailchimp.com/developer/marketing/docs/fundamentals/)
+```shell
+npx hardhat accounts
+npx hardhat compile
+npx hardhat clean
+npx hardhat test
+npx hardhat node
+npx hardhat help
+REPORT_GAS=true npx hardhat test
+npx hardhat coverage
+npx hardhat run scripts/deploy.ts
+TS_NODE_FILES=true npx ts-node scripts/deploy.ts
+npx eslint '**/*.{js,ts}'
+npx eslint '**/*.{js,ts}' --fix
+npx prettier '**/*.{json,sol,md}' --check
+npx prettier '**/*.{json,sol,md}' --write
+npx solhint 'contracts/**/*.sol'
+npx solhint 'contracts/**/*.sol' --fix
+npx hardhat size-contracts
+yarn run coverage
+```
 
-## Getting Started
+## Etherscan verification
 
-**Got 2 minutes?** Check out a video overview of our product:
+To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
 
-{% embed url="https://www.loom.com/share/3bfa83acc9fd41b7b98b803ba9197d90" %}
+In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
 
-{% hint style="info" %}
-**Good to know:** A succinct video overview is a great way to introduce folks to your product. Embed a Loom, Vimeo or YouTube video and you're good to go! We love this video from the fine folks at [Loom](https://loom.com) as a perfect example of a succinct feature overview.
-{% endhint %}
+```shell
+hardhat run --network ropsten scripts/sample-script.ts
+```
 
-### Guides: Jump right in
+Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
 
-Follow our handy guides to get started on the basics as quickly as possible:
+```shell
+npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
+```
 
-{% content-ref url="guides/creating-your-first-project.md" %}
-[creating-your-first-project.md](guides/creating-your-first-project.md)
-{% endcontent-ref %}
+## Performance optimizations
 
-{% content-ref url="guides/creating-your-first-task.md" %}
-[creating-your-first-task.md](guides/creating-your-first-task.md)
-{% endcontent-ref %}
+For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
 
-{% content-ref url="guides/advanced-permissions.md" %}
-[advanced-permissions.md](guides/advanced-permissions.md)
-{% endcontent-ref %}
+## Local Development
 
-{% hint style="info" %}
-**Good to know:** your product docs aren't just a reference of all your features! use them to encourage folks to perform certain actions and discover the value in your product.
-{% endhint %}
+### Start a local chain
 
-### Fundamentals: Dive a little deeper
+1. Open a new terminal and run: `npx run chain`
 
-Learn the fundamentals of MyProduct to get a deeper understanding of our main features:
+### Setup Metamask for local development
 
-{% content-ref url="fundamentals/creating-reactions.md" %}
-[creating-reactions.md](fundamentals/creating-reactions.md)
-{% endcontent-ref %}
+1. In Metamask, select localhost network from dropdown: "Localhost 8545"
+2. Copy one of the private keys from the `yarn chain` output:
 
-{% content-ref url="fundamentals/buying-and-spending-reactions.md" %}
-[buying-and-spending-reactions.md](fundamentals/buying-and-spending-reactions.md)
-{% endcontent-ref %}
+   ```
+   Account #0: 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 (10000 ETH)
+   Private Key: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+   ```
 
-{% content-ref url="fundamentals/managing-investments.md" %}
-[managing-investments.md](fundamentals/managing-investments.md)
-{% endcontent-ref %}
+3. In Metamask, go to "Import Account" and paste in private key
 
-{% content-ref url="fundamentals/tasks.md" %}
-[tasks.md](fundamentals/tasks.md)
-{% endcontent-ref %}
+### Deploy rara-protocol contracts
 
-{% hint style="info" %}
-**Good to know:** Splitting your product into fundamental concepts, objects, or areas can be a great way to let readers deep dive into the concepts that matter most to them. Combine guides with this approach to 'fundamentals' and you're well on your way to great documentation!
-{% endhint %}
+1. Open a new terminal and run: `npx run deploy`
+
+### Start local graph node (postgres, IPFS, graphAPI)
+
+1. Have [Docker Desktop](https://www.docker.com/products/docker-desktop) running on your local machine.
+
+2. Start Docker compose. Open a new terminal and run: `run-graph-docker`
+
+If everything is running correctly you should see the docker containers running and `graph-node-1` will begin processing blocks:
+
+    graph-node_1  | Feb 22 16:38:38.515 INFO Starting JSON-RPC admin server at: http://localhost:8020, component: JsonRpcServer
+    graph-node_1  | Feb 22 16:38:38.520 INFO Started all subgraphs, component: SubgraphRegistrar
+    graph-node_1  | Feb 22 16:38:38.530 INFO Starting GraphQL HTTP server at: http://localhost:8000, component: GraphQLServer
+    graph-node_1  | Feb 22 16:38:38.533 INFO Starting index node server at: http://localhost:8030, component: IndexNodeServer
+    graph-node_1  | Feb 22 16:38:38.536 INFO Starting metrics server at: http://localhost:8040, component: MetricsServer
+    graph-node_1  | Feb 22 16:38:38.538 INFO Starting GraphQL WebSocket server at: ws://localhost:8001, component: SubscriptionServer
+    graph-node_1  | Feb 22 16:38:38.558 INFO Downloading latest blocks from Ethereum. This may take a few minutes...
+
+### Deploy GraphAPI
+
+1. Generate types, schemas, etc: `yarn graph-codegen`
+2. Build into WASM: `yarn graph-build`
+3. Deploy:

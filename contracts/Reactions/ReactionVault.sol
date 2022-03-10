@@ -50,21 +50,24 @@ contract ReactionVault is
     event CreatorRewardsGranted(
         address creator,
         IERC20Upgradeable paymentToken,
-        uint256 amount
+        uint256 amount,
+        uint256 registrationSourceId
     );
 
     /// @dev Event emitted when rewards are granted to a referrer
     event ReferrerRewardsGranted(
         address referrer,
         IERC20Upgradeable paymentToken,
-        uint256 amount
+        uint256 amount,
+        uint256 registrationSourceId
     );
 
     /// @dev Event emitted when rewards are granted to a maker
     event MakerRewardsGranted(
         address maker,
         IERC20Upgradeable paymentToken,
-        uint256 amount
+        uint256 amount,
+        uint256 registrationSourceId
     );
 
     /// @dev Event emitted when curator vault rewards are granted to a taker
@@ -236,7 +239,8 @@ contract ReactionVault is
             emit ReferrerRewardsGranted(
                 referrer,
                 paymentToken,
-                info.referrerCut
+                info.referrerCut,
+                info.sourceId
             );
         }
 
@@ -265,10 +269,13 @@ contract ReactionVault is
             // Assign awards to creator
             ownerToRewardsMapping[paymentToken][info.creator] += info
                 .creatorCut;
+
+            // emit event
             emit CreatorRewardsGranted(
                 info.creator,
                 paymentToken,
-                info.creatorCut
+                info.creatorCut,
+                info.sourceId
             );
 
             // Subtract the creator cut from the maker cut
@@ -277,7 +284,12 @@ contract ReactionVault is
 
         // Assign awards to maker
         ownerToRewardsMapping[paymentToken][info.owner] += info.makerCut;
-        emit MakerRewardsGranted(info.owner, paymentToken, info.makerCut);
+        emit MakerRewardsGranted(
+            info.owner,
+            paymentToken,
+            info.makerCut,
+            info.sourceId
+        );
 
         // Build reaction meta ID
         info.reactionMetaId = deriveReactionMetaId(
@@ -290,7 +302,8 @@ contract ReactionVault is
         reactionPriceDetailsMapping[info.reactionMetaId] = ReactionPriceDetails(
             paymentToken,
             info.reactionPrice,
-            saleCuratorLiabilityBasisPoints
+            saleCuratorLiabilityBasisPoints,
+            info.sourceId
         );
 
         // Mint NFTs to destination wallet
@@ -410,7 +423,8 @@ contract ReactionVault is
             emit ReferrerRewardsGranted(
                 referrer,
                 info.reactionDetails.paymentToken,
-                info.referrerCut
+                info.referrerCut,
+                info.reactionDetails.registrationSourceId
             );
 
             // Subtract the referrer cut from the total being used going forward
@@ -672,7 +686,12 @@ contract ReactionVault is
 
             // Allocate for the creator
             ownerToRewardsMapping[paymentToken][creator] += info.creatorCut;
-            emit CreatorRewardsGranted(creator, paymentToken, info.creatorCut);
+            emit CreatorRewardsGranted(
+                creator,
+                paymentToken,
+                info.creatorCut,
+                info.sourceId
+            );
 
             info.paymentTokensForMaker -= info.creatorCut;
         }

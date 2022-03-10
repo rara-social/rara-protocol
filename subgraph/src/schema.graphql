@@ -5,31 +5,38 @@ type User @entity {
   referrerRewardsBalance: BigDecimal!
 }
 
+type UserReaction @entity {
+  id: ID! #msg.sender + event.params.metaId.toHexString()
+  user: User!
+  reaction: Reaction!
+  quantity: BigInt!
+}
+
 type Reaction @entity {
   id: ID! #event.params.metaId.toHexString()
-  metaId: String!
+  registrationMetaId: String!
+  registrationSourceId: BigInt!
   makerUser: User!
-  nftChainId: Int!
+  nftChainId: BigInt!
   nftContractAddress: Bytes!
-  nftId: Int!
+  nftId: BigInt!
   nftOwnerAddress: Bytes!
   nftCreatorAddress: Bytes!
   reactionPrice: BigDecimal!
   registered: Boolean!
-  totalSold: Int
-  makerFeesTotal: BigDecimal
-  creatorFeesTotal: BigDecimal
-  referrerFeesTotal: BigDecimal
+  totalSold: BigInt!
+  makerFeesTotal: BigDecimal!
+  creatorFeesTotal: BigDecimal!
+  referrerFeesTotal: BigDecimal!
 }
 
 type TakerNFT @entity {
   id: ID! #curatorShareTokenId
-  nftChainId: Int!
+  nftChainId: BigInt!
   nftContractAddress: Bytes!
-  nftId: Int!
-  nftOwnerAddress: Bytes!
-  takerShareCount: Int
-  curatorShareCount: Int! #number of shares
+  nftId: BigInt!
+  takerShareCount: BigInt
+  curatorShareCount: BigInt! #number of shares
   curatorShareBalance: BigDecimal! #payment token balance
   referrerFeesBalance: BigDecimal!
 }
@@ -38,16 +45,15 @@ type CuratorReaction @entity {
   id: ID! #event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   reaction: Reaction!
   takerNFT: TakerNFT!
-  quantity: Int!
-  sharesRecieved: BigDecimal!
+  quantity: BigInt!
   curator: User!
-  metadataHash: String
+  metadataHash: BigInt
 }
 
 type CuratorPosition @entity {
   id: ID! #msg.sender + takerNft.id
   takerNFT: TakerNFT!
-  isTakerUser: Boolean
-  shareCount: Int!
+  shareCount: BigInt!
   curator: User!
+  isTakerShares: Boolean
 }

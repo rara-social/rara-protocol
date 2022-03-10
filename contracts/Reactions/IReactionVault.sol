@@ -8,5 +8,6 @@ interface IReactionVault {
         IERC20Upgradeable paymentToken;
         uint256 reactionPrice;
         uint256 saleCuratorLiabilityBasisPoints;
+        uint256 registrationSourceId;
     }
 }
