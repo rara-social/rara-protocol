@@ -13,7 +13,8 @@
     "stop-graph-docker": "cd services/graph-node && docker-compose down",
     "clean-graph-docker": "rm -rf services/graph-node/data/",
     "graph-codegen": "cd subgraph && yarn codegen",
-    "graph-build": "cd subgraph && yarn build"
+    "graph-build": "cd subgraph && yarn build",
+    "graph-deploy-local": "cd subgraph && yarn deploy-local"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",

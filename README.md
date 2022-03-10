@@ -47,11 +47,11 @@ npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
 
 For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
 
-## Local Development
+# Local Development
 
 ### Start a local chain
 
-1. Open a new terminal and run: `npx run chain`
+1. Open a new terminal and run: `yarn chain`
 
 ### Setup Metamask for local development
 
@@ -67,7 +67,7 @@ For faster runs of your tests and scripts, consider skipping ts-node's type chec
 
 ### Deploy rara-protocol contracts
 
-1. Open a new terminal and run: `npx run deploy`
+1. Open a new terminal and run: `yarn deploy`
 
 ### Start local graph node (postgres, IPFS, graphAPI)
 
@@ -89,4 +89,4 @@ If everything is running correctly you should see the docker containers running 
 
 1. Generate types, schemas, etc: `yarn graph-codegen`
 2. Build into WASM: `yarn graph-build`
-3. Deploy:
+3. Deploy locally: `yarn graph-build`
