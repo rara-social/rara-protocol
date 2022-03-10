@@ -7,7 +7,7 @@
     "compile": "npx hardhat compile",
     "test": "npx hardhat test --network hardhat",
     "chain": "npx hardhat node --network hardhat --no-deploy",
-    "deploy": "npx hardhat deploy --export-all ./deploy_data/hardhat_contracts.json",
+    "deploy": "npx hardhat deploy --network localhost --export-all ./deploy_data/hardhat_contracts.json",
     "run-graph-docker": "cd services/graph-node && docker-compose up",
     "stop-graph-docker": "cd services/graph-node && docker-compose down",
     "clean-graph-docker": "rm -rf services/graph-node/data/",
