@@ -17,7 +17,7 @@ abstract contract MakerRegistrarStorageV1 is IMakerRegistrar {
     string public constant MAKER_META_PREFIX = "MAKER";
 
     /// @dev Mapping to look up source ID from meta ID key
-    mapping(uint256 => uint256) public override reactionToSourceLookup;
+    mapping(uint256 => uint256) public override transformToSourceLookup;
 
     /// @dev Mapping to look up nft details from source ID
     mapping(uint256 => IMakerRegistrar.NftDetails)

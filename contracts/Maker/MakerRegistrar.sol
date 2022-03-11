@@ -25,7 +25,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         uint256 creatorSaleBasisPoints,
         uint256 optionBits,
         uint256 sourceId,
-        uint256 reactionId
+        uint256 transformId
     );
 
     /// @dev Event triggered when an NFT is deregistered from the system
@@ -152,8 +152,9 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         // Use: This is used in
         // - ReactionVault.buyReaction():
         //    - prevent reactions that have been deregistered or never registered from being sold
-        //    - calc creator rewards from makerNFTs
+        //    - calc creator rewards for makerNFTs
         // - ReactionVault.withdrawTakerRewards():
+        //    - check that sourceId is registered
         //    - check that msg.sender is registered as owner
         //    - calc creator rewards for takerNFTs
         //
@@ -183,18 +184,18 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         // ReactionVault._buyReaction()
         //  - look up source to make sure its registered
         //  - used to derive reactionMetaId
-        //  - saved in ReactionPriceDetails
-        //  - emitted in events: ReferrerRewardsGranted, CreatorRewardsGranted, MakerRewardsGranted, ReactionsPurchased
+        //  - saved in ReactionPriceDetails TODO
+        //  - emitted in events: ReferrerRewardsGranted, CreatorRewardsGranted, MakerRewardsGranted, ReactionsPurchased TODO
         // ReactionVault._spendReaction()
-        //  - retrieved from ReactionPriceDetails via reactionMetaId
-        //  - emitted in events: ReferrerRewardsGranted, ReactionsSpent
+        //  - retrieved from ReactionPriceDetails via reactionMetaId TODO
+        //  - emitted in events: ReferrerRewardsGranted, ReactionsSpent TODO
         //
 
         // Generate reaction ID
-        uint256 reactionId = uint256(
+        uint256 transformId = uint256(
             keccak256(abi.encode(MAKER_META_PREFIX, sourceId, optionBits))
         );
-        reactionToSourceLookup[reactionId] = sourceId;
+        transformToSourceLookup[transformId] = sourceId;
 
         //
         // End Meta
@@ -210,7 +211,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             creatorSaleBasisPoints,
             optionBits,
             sourceId,
-            reactionId
+            transformId
         );
     }
 

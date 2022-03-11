@@ -299,7 +299,7 @@ describe("ReactionVault Buy", function () {
     const reactionPurchaseEvent = receipt.events?.find(
       (x) => x.event === "ReactionsPurchased"
     );
-    expect(reactionPurchaseEvent!.args!.reactionId).to.be.equal(
+    expect(reactionPurchaseEvent!.args!.transformId).to.be.equal(
       MAKER_NFT_META_ID
     );
     expect(reactionPurchaseEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
@@ -452,7 +452,7 @@ describe("ReactionVault Buy", function () {
     const reactionPurchaseEvent = receipt.events?.find(
       (x) => x.event === "ReactionsPurchased"
     );
-    expect(reactionPurchaseEvent!.args!.reactionId).to.be.equal(
+    expect(reactionPurchaseEvent!.args!.trasnformId).to.be.equal(
       MAKER_NFT_META_ID
     );
     expect(reactionPurchaseEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);

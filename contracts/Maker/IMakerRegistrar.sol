@@ -11,7 +11,7 @@ interface IMakerRegistrar {
         uint256 creatorSaleBasisPoints;
     }
 
-    function reactionToSourceLookup(uint256 metaId) external returns (uint256);
+    function transformToSourceLookup(uint256 metaId) external returns (uint256);
 
     function nftToSourceLookup(
         uint256 nftChainId,

@@ -252,9 +252,9 @@ describe("MakerRegistrar", function () {
     ).to.equal(EXPECTED_SOURCE_ID);
 
     // Verify source from meta id
-    expect(await makerRegistrar.reactionToSourceLookup(derivedMetaId)).to.equal(
-      EXPECTED_SOURCE_ID
-    );
+    expect(
+      await makerRegistrar.transformToSourceLookup(derivedMetaId)
+    ).to.equal(EXPECTED_SOURCE_ID);
 
     // Verify registration details from source id
     const [registered, owner, creator] =
