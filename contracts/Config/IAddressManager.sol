@@ -6,7 +6,7 @@ import "../Parameters/IParameterManager.sol";
 import "../Maker/IMakerRegistrar.sol";
 import "../Token/IStandard1155.sol";
 import "../Reactions/IReactionVault.sol";
-import "../PermanentCuratorVault/ICuratorVault.sol";
+import "../CuratorVault/ICuratorVault.sol";
 
 interface IAddressManager {
     /// @dev Getter for the role manager address

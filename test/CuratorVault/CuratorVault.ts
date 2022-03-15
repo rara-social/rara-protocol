@@ -98,7 +98,7 @@ describe("CuratorVault", function () {
     // Set the owner as the purchaser role to allow purchase
     await roleManager.grantRole(await roleManager.CURATOR_VAULT_PURCHASER(), OWNER.address);
 
-    const paymentAmount = "10000";
+    const paymentAmount = "100000000";
 
     // Give the account a balance
     await paymentTokenErc20.mint(OWNER.address, paymentAmount);
@@ -115,7 +115,7 @@ describe("CuratorVault", function () {
     );
 
     // Expected amount for first purchase
-    const expectedAmount = "38860";
+    const expectedAmount = "165012";
 
     // Buy curator shares for the owner
     await expect(
@@ -148,7 +148,7 @@ describe("CuratorVault", function () {
       )
     )
       .to.emit(curatorVault, "CuratorSharesSold")
-      .withArgs(curatorShareId, "9999", expectedAmount); // 9999 due to precision loss
+      .withArgs(curatorShareId, paymentAmount, expectedAmount);
   });
 
   it("Should allow purchase and sale with increasing price", async function () {
@@ -160,7 +160,7 @@ describe("CuratorVault", function () {
     // Set the owner as the purchaser role to allow purchase
     await roleManager.grantRole(await roleManager.CURATOR_VAULT_PURCHASER(), OWNER.address);
 
-    const paymentAmount = "10000";
+    const paymentAmount = "100000000"; // 6 decimal places for $1
 
     // Give the account a balance
     await paymentTokenErc20.mint(OWNER.address, paymentAmount);

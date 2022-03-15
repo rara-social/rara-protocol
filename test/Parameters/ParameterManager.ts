@@ -181,4 +181,38 @@ describe("ParameterManager", function () {
         .setApprovedCuratorVaults(ALICE.address, false)
     ).to.be.revertedWith(NOT_ADMIN);
   });
+
+  it("Should allow owner to set bonding curve params", async function () {
+    const [OWNER, ALICE] = await ethers.getSigners();
+    const { parameterManager } = await deploySystem(OWNER);
+
+    // Verify the setter checks invalid input
+    await expect(
+      parameterManager.setBondingCurveParams("0", "1", "1")
+    ).to.revertedWith(INVALID_ZERO_PARAM);
+
+    await expect(
+      parameterManager.setBondingCurveParams("1", "0", "1")
+    ).to.revertedWith(INVALID_ZERO_PARAM);
+
+    await expect(
+      parameterManager.setBondingCurveParams("1", "1", "0")
+    ).to.revertedWith(INVALID_ZERO_PARAM);
+
+    // Set it 
+    await parameterManager.setBondingCurveParams("1", "2", "3")
+
+    // Verify it got set
+    const values = await parameterManager.bondingCurveParams();
+    expect(values[0]).to.equal("1");
+    expect(values[1]).to.equal("2");
+    expect(values[2]).to.equal("3");
+
+    // Verify non owner can't update address
+    await expect(
+      parameterManager
+        .connect(ALICE)
+        .setBondingCurveParams("1", "2", "3")
+    ).to.be.revertedWith(NOT_ADMIN);
+  });
 });

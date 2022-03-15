@@ -2,21 +2,24 @@
 pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
-import "./ICuratorVault.sol";
-import "./PermanentCuratorVaultStorage.sol";
-import "./Curve/BancorFormula.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+import "../Token/IStandard1155.sol";
+import "../Config/IAddressManager.sol";
+import "./SigmoidCuratorVaultStorage.sol";
+import "./Curve/Sigmoid.sol";
 
-/// @title PermanentCuratorVault
-/// @dev This contract tracks shares in a bonding curve per Taker NFT.
+/// @title SigmoidCuratorVault
+/// @dev This contract tracks shares in a sigmoid bonding curve per Taker NFT.
 /// When users spend reactions against a Taker NFT, it will use the Curator Liability
 /// to buy curator shares against that Taker NFT and allocate to various parties.
-/// The curator shares will be priced via an increasing price curve.
+/// The curator shares will be priced via the sigmoid curve.  The params that control
+/// the shape of the sigmoid are set in the parameter manager.
 /// At any point in time the owners of the curator shares can sell them back to the
 /// bonding curve.
-contract PermanentCuratorVault is
-    BancorFormula,
+contract SigmoidCuratorVault is
     ReentrancyGuardUpgradeable,
-    PermanentCuratorVaultStorageV1
+    Sigmoid,
+    SigmoidCuratorVaultStorageV1
 {
     /// @dev Use the safe methods when interacting with transfers with outside ERC20s
     using SafeERC20Upgradeable for IERC20Upgradeable;
@@ -45,18 +48,12 @@ contract PermanentCuratorVault is
     );
 
     /// @dev initializer to call after deployment, can only be called once
-    function initialize(
-        address _addressManager,
-        uint32 _reserveRatio,
-        IStandard1155 _curatorShares
-    ) public initializer {
-        __Power_init();
-
+    function initialize(address _addressManager, IStandard1155 _curatorShares)
+        public
+        initializer
+    {
         // Save the address manager
         addressManager = IAddressManager(_addressManager);
-
-        // Save the reserve ratio
-        reserveRatio = _reserveRatio;
 
         // Save the curator share contract
         curatorShares = _curatorShares;
@@ -107,13 +104,24 @@ contract PermanentCuratorVault is
 
         paymentToken.safeTransferFrom(msg.sender, address(this), paymentAmount);
 
-        // Calculate how many tokens should be minted
-        uint256 curatorShareAmount = calculatePurchaseReturn(
-            SUPPLY_BUFFER + curatorShareSupply[curatorShareTokenId],
-            RESERVE_BUFFER + reserves[curatorShareTokenId],
-            reserveRatio,
-            paymentAmount
+        // Get curve params
+        (uint256 a, uint256 b, uint256 c) = addressManager
+            .parameterManager()
+            .bondingCurveParams();
+
+        // Calculate the amount of tokens that will be minted based on the price
+        uint256 curatorShareAmount = calculateSharesBoughtFromPayment(
+            int256(a),
+            int256(b),
+            int256(c),
+            int256(curatorShareSupply[curatorShareTokenId]),
+            int256(reserves[curatorShareTokenId]),
+            int256(paymentAmount)
         );
+
+        // Update the amounts
+        reserves[curatorShareTokenId] += paymentAmount;
+        curatorShareSupply[curatorShareTokenId] += curatorShareAmount;
 
         // Mint the tokens
         curatorShares.mint(
@@ -122,10 +130,6 @@ contract PermanentCuratorVault is
             curatorShareAmount,
             new bytes(0)
         );
-
-        // Update the amounts
-        reserves[curatorShareTokenId] += paymentAmount;
-        curatorShareSupply[curatorShareTokenId] += curatorShareAmount;
 
         // Emit the event
         emit CuratorSharesBought(
@@ -148,6 +152,8 @@ contract PermanentCuratorVault is
         uint256 sharesToBurn,
         address refundToAddress
     ) external nonReentrant returns (uint256) {
+        require(sharesToBurn > 0, "Invalid 0 input");
+
         // Get the curator share token ID
         uint256 curatorShareTokenId = _getTokenId(
             nftChainId,
@@ -159,20 +165,27 @@ contract PermanentCuratorVault is
         // Burn the curator shares
         curatorShares.burn(msg.sender, curatorShareTokenId, sharesToBurn);
 
-        // Calculate the amount of tokens to send back
-        uint256 refundAmount = calculateSaleReturn(
-            SUPPLY_BUFFER + curatorShareSupply[curatorShareTokenId],
-            RESERVE_BUFFER + reserves[curatorShareTokenId],
-            reserveRatio,
-            sharesToBurn
-        );
+        // Get curve params
+        (uint256 a, uint256 b, uint256 c) = addressManager
+            .parameterManager()
+            .bondingCurveParams();
 
-        // Send payment token back
-        paymentToken.safeTransfer(refundToAddress, refundAmount);
+        // Calculate the amount of tokens that will be minted based on the price
+        uint256 refundAmount = calculatePaymentReturnedFromShares(
+            int256(a),
+            int256(b),
+            int256(c),
+            int256(curatorShareSupply[curatorShareTokenId]),
+            int256(reserves[curatorShareTokenId]),
+            int256(sharesToBurn)
+        );
 
         // Update the amounts
         reserves[curatorShareTokenId] -= refundAmount;
         curatorShareSupply[curatorShareTokenId] -= sharesToBurn;
+
+        // Send payment token back
+        paymentToken.safeTransfer(refundToAddress, refundAmount);
 
         // Emit the event
         emit CuratorSharesSold(curatorShareTokenId, refundAmount, sharesToBurn);
