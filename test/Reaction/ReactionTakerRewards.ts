@@ -1,7 +1,7 @@
-import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { ethers } from "hardhat";
-import { ZERO_ADDRESS } from "../Scripts/constants";
+import {expect} from "chai";
+import {BigNumber} from "ethers";
+import {ethers} from "hardhat";
+import {ZERO_ADDRESS} from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -14,11 +14,7 @@ import {
   deriveReactionParameterVersion,
   deriveTakerRewardsKey,
 } from "../Scripts/derivedParams";
-import {
-  NFT_NOT_OWNED,
-  NFT_NOT_REGISTERED,
-  NO_REWARDS,
-} from "../Scripts/errors";
+import {NFT_NOT_OWNED, NFT_NOT_REGISTERED, NO_REWARDS} from "../Scripts/errors";
 
 describe("ReactionVault Taker Rewards", function () {
   it("Should fail without rewards allocated", async function () {
@@ -82,7 +78,7 @@ describe("ReactionVault Taker Rewards", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
@@ -289,7 +285,7 @@ describe("ReactionVault Taker Rewards", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
@@ -357,15 +353,13 @@ describe("ReactionVault Taker Rewards", function () {
     testingStandard1155.mint(TAKER.address, TAKER_NFT_ID, "1", [0]);
 
     // Register it
-    await makerRegistrar
-      .connect(TAKER)
-      .registerNft(
-        testingStandard1155.address,
-        TAKER_NFT_ID,
-        CREATOR.address,
-        "10000", // 100% should go to creator (10k basis points is 100%)
-        "0"
-      );
+    await makerRegistrar.connect(TAKER).registerNft(
+      testingStandard1155.address,
+      TAKER_NFT_ID,
+      CREATOR.address,
+      "10000", // 100% should go to creator (10k basis points is 100%)
+      "0"
+    );
 
     const rewardsIndex = deriveTakerRewardsKey(
       chainId,
@@ -403,8 +397,11 @@ describe("ReactionVault Taker Rewards", function () {
       );
 
     // Verify the payment was assigned
-    expect(await reactionVault.ownerToRewardsMapping(paymentTokenErc20.address, CREATOR.address)).to.be.equal(
-      expectedPaymentForCreator
-    );
+    expect(
+      await reactionVault.ownerToRewardsMapping(
+        paymentTokenErc20.address,
+        CREATOR.address
+      )
+    ).to.be.equal(expectedPaymentForCreator);
   });
 });

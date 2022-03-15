@@ -33,8 +33,13 @@ contract PermanentCuratorVault is
     /// @dev Event triggered when curator shares are purchased
     event CuratorSharesBought(
         uint256 indexed curatorShareTokenId,
+        uint256 nftChainId,
+        address nftAddress,
+        uint256 nftId,
+        IERC20Upgradeable paymentToken,
         uint256 paymentTokenPaid,
-        uint256 curatorSharesBought
+        uint256 curatorSharesBought,
+        bool isTakerPosition
     );
 
     /// @dev Event triggered when curator shares are sold
@@ -95,7 +100,8 @@ contract PermanentCuratorVault is
         uint256 nftId,
         IERC20Upgradeable paymentToken,
         uint256 paymentAmount,
-        address mintToAddress
+        address mintToAddress,
+        bool isTakerPosition
     ) external onlyCuratorVaultPurchaser returns (uint256) {
         // Get the curator share token ID
         uint256 curatorShareTokenId = _getTokenId(
@@ -105,8 +111,14 @@ contract PermanentCuratorVault is
             paymentToken
         );
 
+        //
+        // Pull value from ReactionVault
+        //
         paymentToken.safeTransferFrom(msg.sender, address(this), paymentAmount);
 
+        //
+        // Mint CuratorVaultTokens
+        //
         // Calculate how many tokens should be minted
         uint256 curatorShareAmount = calculatePurchaseReturn(
             SUPPLY_BUFFER + curatorShareSupply[curatorShareTokenId],
@@ -115,7 +127,7 @@ contract PermanentCuratorVault is
             paymentAmount
         );
 
-        // Mint the tokens
+        // Mint tokens
         curatorShares.mint(
             mintToAddress,
             curatorShareTokenId,
@@ -123,15 +135,22 @@ contract PermanentCuratorVault is
             new bytes(0)
         );
 
-        // Update the amounts
+        //
+        // Update bonding curve parameters
+        //
         reserves[curatorShareTokenId] += paymentAmount;
         curatorShareSupply[curatorShareTokenId] += curatorShareAmount;
 
         // Emit the event
         emit CuratorSharesBought(
             curatorShareTokenId,
+            nftChainId,
+            nftAddress,
+            nftId,
+            paymentToken,
             paymentAmount,
-            curatorShareAmount
+            curatorShareAmount,
+            isTakerPosition
         );
 
         return curatorShareAmount;
@@ -156,9 +175,6 @@ contract PermanentCuratorVault is
             paymentToken
         );
 
-        // Burn the curator shares
-        curatorShares.burn(msg.sender, curatorShareTokenId, sharesToBurn);
-
         // Calculate the amount of tokens to send back
         uint256 refundAmount = calculateSaleReturn(
             SUPPLY_BUFFER + curatorShareSupply[curatorShareTokenId],
@@ -167,10 +183,20 @@ contract PermanentCuratorVault is
             sharesToBurn
         );
 
-        // Send payment token back
+        //
+        // Burn curator shares
+        // TODO - add test to make sure this reverts if sharesToBurn is greater than user balance
+        //
+        curatorShares.burn(msg.sender, curatorShareTokenId, sharesToBurn);
+
+        //
+        // Return payment token
+        //
         paymentToken.safeTransfer(refundToAddress, refundAmount);
 
-        // Update the amounts
+        //
+        // Update bonding curve parameters
+        //
         reserves[curatorShareTokenId] -= refundAmount;
         curatorShareSupply[curatorShareTokenId] -= sharesToBurn;
 

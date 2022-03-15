@@ -32,7 +32,8 @@ contract ReactionVault is
         uint256 quantity,
         address destinationWallet,
         address referrer,
-        uint256 reactionMetaId
+        uint256 reactionId,
+        uint256 parameterVersion
     );
 
     /// @dev Event emitted when reaction is spent
@@ -40,10 +41,10 @@ contract ReactionVault is
         uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId,
-        uint256 reactionMetaId,
+        uint256 reactionId,
         uint256 quantity,
         address referrer,
-        uint256 metaDataHash
+        uint256 ipfsMetadataHash
     );
 
     /// @dev Event emitted when rewards are granted to a creator
@@ -51,7 +52,7 @@ contract ReactionVault is
         address creator,
         IERC20Upgradeable paymentToken,
         uint256 amount,
-        uint256 reactionMetaId
+        uint256 reactionId
     );
 
     /// @dev Event emitted when rewards are granted to a referrer
@@ -59,7 +60,7 @@ contract ReactionVault is
         address referrer,
         IERC20Upgradeable paymentToken,
         uint256 amount,
-        uint256 reactionMetaId
+        uint256 reactionId
     );
 
     /// @dev Event emitted when rewards are granted to a maker
@@ -67,7 +68,7 @@ contract ReactionVault is
         address maker,
         IERC20Upgradeable paymentToken,
         uint256 amount,
-        uint256 reactionMetaId
+        uint256 reactionId
     );
 
     /// @dev Event emitted when curator vault rewards are granted to a taker
@@ -127,16 +128,17 @@ contract ReactionVault is
         uint256 referrerCut;
         uint256 makerCut;
         uint256 curatorLiabilityCut;
-        uint256 reactionMetaId;
+        uint256 reactionId;
+        uint256 parameterVersion;
     }
 
     /// @dev External func to allow a user to buy reaction NFTs based on a registered Maker NFT
-    /// @param transformId Meta ID for the Maker NFT that reaction is based on
-    /// @param quantity How many reactions to buy
-    /// @param destinationWallet Where the reactions should end up
+    /// @param transformId transform to be purchased
+    /// @param quantity Number of reactions to buy
+    /// @param destinationWallet reactions will be minted into this wallet
     /// (allows bulk buying from other contracts since reactions are non-transferrable)
     /// @param referrer Optional param to specify an address where referrer rewards are allocated
-    /// @param optionBits Optional params to specify options how the user wants transform reaction
+    /// @param optionBits Optional param to specify options how the user wants transform reaction
     function buyReaction(
         uint256 transformId,
         uint256 quantity,
@@ -155,26 +157,34 @@ contract ReactionVault is
             );
     }
 
-    /// @dev Derive the reaction meta ID from the parameters
-    /// This unique ID will be used to track instances of reactions built from the same params
-    /// E.g. if the price of a reaction changes, the meta ID should be different
-    function deriveReactionMetaId(
-        IParameterManager parameterManager,
-        uint256 transformId,
-        uint256 optionBits
-    ) public returns (uint256) {
+    /// @dev Derive the pricing parameters version
+    /// E.g. if the price of a reaction changes, the paramaterVersion should be different
+    function deriveParameterVersion(IParameterManager parameterManager)
+        public
+        returns (uint256)
+    {
         // Build the parameter version from the price details
-        uint256 parameterVersion = uint256(
-            keccak256(
-                abi.encode(
-                    parameterManager.paymentToken(),
-                    parameterManager.reactionPrice(),
-                    parameterManager.saleCuratorLiabilityBasisPoints()
+        return
+            uint256(
+                keccak256(
+                    abi.encode(
+                        parameterManager.paymentToken(),
+                        parameterManager.reactionPrice(),
+                        parameterManager.saleCuratorLiabilityBasisPoints()
+                    )
                 )
-            )
-        );
+            );
+    }
 
-        // Build and return the reaction meta ID
+    /// @dev Derive the reaction ID from the parameters
+    /// This unique ID will be used to track instances of reactions built from the same params
+    /// E.g. if the price of a reaction changes, the reaction ID should be different
+    function deriveReactionId(
+        uint256 transformId,
+        uint256 optionBits,
+        uint256 parameterVersion
+    ) public pure returns (uint256) {
+        // Build and return the reaction ID
         return
             uint256(
                 keccak256(
@@ -226,11 +236,14 @@ contract ReactionVault is
             info.totalPurchasePrice
         );
 
-        // Build reaction meta ID
-        info.reactionMetaId = deriveReactionMetaId(
-            info.parameterManager,
+        // calc payment parameter version
+        info.parameterVersion = deriveParameterVersion(info.parameterManager);
+
+        // Build reaction ID
+        info.reactionId = deriveReactionId(
             transformId,
-            optionBits
+            optionBits,
+            info.parameterVersion
         );
 
         // Assign funds to different stakeholders
@@ -249,7 +262,7 @@ contract ReactionVault is
                 referrer,
                 paymentToken,
                 info.referrerCut,
-                info.reactionMetaId
+                info.reactionId
             );
         }
 
@@ -284,7 +297,7 @@ contract ReactionVault is
                 info.creator,
                 paymentToken,
                 info.creatorCut,
-                info.reactionMetaId
+                info.reactionId
             );
 
             // Subtract the creator cut from the maker cut
@@ -297,11 +310,11 @@ contract ReactionVault is
             info.owner,
             paymentToken,
             info.makerCut,
-            info.reactionMetaId
+            info.reactionId
         );
 
         // Save off the details of this reaction purchase info for usage later when they are spent
-        reactionPriceDetailsMapping[info.reactionMetaId] = ReactionPriceDetails(
+        reactionPriceDetailsMapping[info.reactionId] = ReactionPriceDetails(
             paymentToken,
             info.reactionPrice,
             saleCuratorLiabilityBasisPoints
@@ -312,7 +325,7 @@ contract ReactionVault is
             .reactionNftContract();
         reactionNftContract.mint(
             destinationWallet,
-            info.reactionMetaId,
+            info.reactionId,
             quantity,
             new bytes(0)
         );
@@ -323,7 +336,8 @@ contract ReactionVault is
             quantity,
             destinationWallet,
             referrer,
-            info.reactionMetaId
+            info.reactionId,
+            info.parameterVersion
         );
     }
 
@@ -344,20 +358,20 @@ contract ReactionVault is
     /// @param takerNftChainId Chain ID where the NFT lives
     /// @param takerNftAddress Target contract where the reaction is targeting
     /// @param takerNftId Target NFT ID in the contract
-    /// @param reactionMetaId Reaction to spend
+    /// @param reactionId Reaction to spend
     /// @param reactionQuantity How many reactions to spend
     /// @param referrer Optional address where referrer rewards are allocated
     /// @param curatorVaultOverride Optional address of non-default curator vault
-    /// @param metaDataHash Optional hash of any metadata being associated with spend action
+    /// @param ipfsMetadataHash Optional hash of any metadata being associated with spend action
     function spendReaction(
         uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId,
-        uint256 reactionMetaId,
+        uint256 reactionId,
         uint256 reactionQuantity,
         address referrer,
         address curatorVaultOverride,
-        uint256 metaDataHash
+        uint256 ipfsMetadataHash
     ) external nonReentrant {
         // Call internal function
         return
@@ -365,11 +379,11 @@ contract ReactionVault is
                 takerNftChainId,
                 takerNftAddress,
                 takerNftId,
-                reactionMetaId,
+                reactionId,
                 reactionQuantity,
                 referrer,
                 curatorVaultOverride,
-                metaDataHash
+                ipfsMetadataHash
             );
     }
 
@@ -378,11 +392,11 @@ contract ReactionVault is
         uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId,
-        uint256 reactionMetaId,
+        uint256 reactionId,
         uint256 reactionQuantity,
         address referrer,
         address curatorVaultOverride,
-        uint256 metaDataHash
+        uint256 ipfsMetadataHash
     ) internal {
         // Verify quantity
         require(reactionQuantity > 0, "Invalid 0 input");
@@ -390,16 +404,20 @@ contract ReactionVault is
         // Create a struct to hold local vars (and prevent "stack too deep")
         SpendInfo memory info;
 
+        //
+        // Burn Reactions
+        //
+
         // Burn reactions from sender
         info.reactionNftContract = addressManager.reactionNftContract();
-        info.reactionNftContract.burn(
-            msg.sender,
-            reactionMetaId,
-            reactionQuantity
-        );
+        info.reactionNftContract.burn(msg.sender, reactionId, reactionQuantity);
+
+        //
+        // Calc Splits
+        //
 
         // Look up curator vault liability details from when the reaction was purchased
-        info.reactionDetails = reactionPriceDetailsMapping[reactionMetaId];
+        info.reactionDetails = reactionPriceDetailsMapping[reactionId];
 
         // Calculate the total amount of curator liability will be used to spend
         // the reactions when buying curator shares
@@ -421,11 +439,12 @@ contract ReactionVault is
             ownerToRewardsMapping[info.reactionDetails.paymentToken][
                 referrer
             ] += info.referrerCut;
+
             emit ReferrerRewardsGranted(
                 referrer,
                 info.reactionDetails.paymentToken,
                 info.referrerCut,
-                reactionMetaId
+                reactionId
             );
 
             // Subtract the referrer cut from the total being used going forward
@@ -440,6 +459,10 @@ contract ReactionVault is
 
         // The remaining amount goes to the spender
         info.spenderAmount = info.totalCuratorLiability - info.takerAmount;
+
+        //
+        // Setup Curator Vault
+        //
 
         // Get the default curator vault
         info.curatorVault = addressManager.defaultCuratorVault();
@@ -463,6 +486,10 @@ contract ReactionVault is
             info.reactionDetails.paymentToken
         );
 
+        //
+        // Buy Curator Shares for Taker
+        //
+
         // Approve the full amount
         info.reactionDetails.paymentToken.approve(
             address(info.curatorVault),
@@ -476,7 +503,8 @@ contract ReactionVault is
             takerNftId,
             info.reactionDetails.paymentToken,
             info.takerAmount,
-            address(this)
+            address(this),
+            true
         );
 
         // Build a hash of the rewards params
@@ -505,6 +533,10 @@ contract ReactionVault is
             info.takerCuratorShares
         );
 
+        //
+        // Buy Curator Shares for Spender
+        //
+
         // Buy shares for the spender.  Shares get sent directly to their address.
         info.spenderCuratorShares = info.curatorVault.buyCuratorShares(
             takerNftChainId,
@@ -512,7 +544,8 @@ contract ReactionVault is
             takerNftId,
             info.reactionDetails.paymentToken,
             info.spenderAmount,
-            msg.sender
+            msg.sender,
+            false
         );
 
         // Emit event for spender rewards // TODO: not needed, covered by buyCuratorShares
@@ -530,10 +563,10 @@ contract ReactionVault is
             takerNftChainId,
             takerNftAddress,
             takerNftId,
-            reactionMetaId,
+            reactionId,
             reactionQuantity,
             referrer,
-            metaDataHash
+            ipfsMetadataHash
         );
     }
 
@@ -548,16 +581,21 @@ contract ReactionVault is
         address takerNftAddress,
         uint256 takerNftId,
         address curatorVaultOverride,
-        uint256 metaDataHash
+        uint256 ipfsMetadataHash
     ) external nonReentrant {
         // Buy the reactions
         _buyReaction(transformId, quantity, msg.sender, referrer, optionBits);
 
-        // Calculate the reaction meta ID for the reactions purchased
-        uint256 reactionMetaId = deriveReactionMetaId(
-            addressManager.parameterManager(),
+        // calc payment parameter version
+        uint256 parameterVersion = deriveParameterVersion(
+            addressManager.parameterManager()
+        );
+
+        // Build reaction ID
+        uint256 reactionId = deriveReactionId(
             transformId,
-            optionBits
+            optionBits,
+            parameterVersion
         );
 
         // Spend it from the msg senders wallet
@@ -565,11 +603,11 @@ contract ReactionVault is
             takerNftChainId,
             takerNftAddress,
             takerNftId,
-            reactionMetaId,
+            reactionId,
             quantity,
             referrer,
             curatorVaultOverride,
-            metaDataHash
+            ipfsMetadataHash
         );
     }
 
@@ -638,7 +676,7 @@ contract ReactionVault is
         require(info.takerCuratorSharesBalance > 0, "No rewards");
 
         // Look up the targeted NFT source ID
-        info.sourceId = addressManager.makerRegistrar().nftToSourceLookup(
+        info.sourceId = addressManager.makerRegistrar().deriveSourceId(
             takerNftChainId,
             takerNftAddress,
             takerNftId

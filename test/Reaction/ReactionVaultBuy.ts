@@ -58,7 +58,7 @@ describe("ReactionVault Buy", function () {
       .connect(ALICE)
       .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0", "0");
 
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       NFT_ID
@@ -109,7 +109,7 @@ describe("ReactionVault Buy", function () {
       .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0", "0");
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       NFT_ID
@@ -192,7 +192,7 @@ describe("ReactionVault Buy", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       NFT_ID
@@ -307,7 +307,7 @@ describe("ReactionVault Buy", function () {
       OWNER.address
     );
     expect(reactionPurchaseEvent!.args!.referrer).to.be.equal(REFERRER.address);
-    expect(reactionPurchaseEvent!.args!.reactionMetaId).to.be.equal(
+    expect(reactionPurchaseEvent!.args!.reactionId).to.be.equal(
       REACTION_NFT_META_ID
     );
   });
@@ -344,7 +344,7 @@ describe("ReactionVault Buy", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       NFT_ID
@@ -452,7 +452,7 @@ describe("ReactionVault Buy", function () {
     const reactionPurchaseEvent = receipt.events?.find(
       (x) => x.event === "ReactionsPurchased"
     );
-    expect(reactionPurchaseEvent!.args!.trasnformId).to.be.equal(
+    expect(reactionPurchaseEvent!.args!.transformId).to.be.equal(
       MAKER_NFT_META_ID
     );
     expect(reactionPurchaseEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
@@ -460,7 +460,7 @@ describe("ReactionVault Buy", function () {
       OWNER.address
     );
     expect(reactionPurchaseEvent!.args!.referrer).to.be.equal(REFERRER.address);
-    expect(reactionPurchaseEvent!.args!.reactionMetaId).to.be.equal(
+    expect(reactionPurchaseEvent!.args!.reactionId).to.be.equal(
       REACTION_NFT_META_ID
     );
   });

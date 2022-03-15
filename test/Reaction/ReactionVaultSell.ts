@@ -1,7 +1,7 @@
-import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { ethers, upgrades } from "hardhat";
-import { TEST_NFT_URI, ZERO_ADDRESS } from "../Scripts/constants";
+import {expect} from "chai";
+import {BigNumber} from "ethers";
+import {ethers, upgrades} from "hardhat";
+import {TEST_NFT_URI, ZERO_ADDRESS} from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -24,7 +24,7 @@ import {
 describe("ReactionVault Sell", function () {
   it("Should verify spender has reaction NFT", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { reactionVault } = await deploySystem(OWNER);
+    const {reactionVault} = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // If the user tries to spend reactions they don't have it should fail
@@ -44,7 +44,7 @@ describe("ReactionVault Sell", function () {
 
   it("Should verify reaction quantity > 0", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { reactionVault } = await deploySystem(OWNER);
+    const {reactionVault} = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // If the user tries to spend reactions they don't have it should fail
@@ -93,7 +93,7 @@ describe("ReactionVault Sell", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
@@ -135,7 +135,7 @@ describe("ReactionVault Sell", function () {
       BigNumber.from(0)
     );
 
-    const metadataHash = BigNumber.from(111);
+    const ipfsMetadataHash = BigNumber.from(111);
 
     // Now spend it
     const transaction = await reactionVault.spendReaction(
@@ -146,7 +146,7 @@ describe("ReactionVault Sell", function () {
       REACTION_AMOUNT,
       ZERO_ADDRESS,
       ZERO_ADDRESS,
-      metadataHash
+      ipfsMetadataHash
     );
     const receipt = await transaction.wait();
 
@@ -195,10 +195,10 @@ describe("ReactionVault Sell", function () {
       testingStandard1155.address
     );
     expect(foundEvent!.args!.takerNftId).to.be.equal(TAKER_NFT_ID);
-    expect(foundEvent!.args!.reactionMetaId).to.be.equal(REACTION_NFT_META_ID);
+    expect(foundEvent!.args!.reactionId).to.be.equal(REACTION_NFT_META_ID);
     expect(foundEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
     expect(foundEvent!.args!.referrer).to.be.equal(ZERO_ADDRESS);
-    expect(foundEvent!.args!.metaDataHash).to.be.equal(metadataHash);
+    expect(foundEvent!.args!.ipfsMetadataHash).to.be.equal(ipfsMetadataHash);
 
     // Verify the spender (OWNER) got curator shares
     expect(
@@ -249,7 +249,7 @@ describe("ReactionVault Sell", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
@@ -353,7 +353,7 @@ describe("ReactionVault Sell", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
@@ -469,7 +469,7 @@ describe("ReactionVault Sell", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
@@ -569,7 +569,7 @@ describe("ReactionVault Sell", function () {
       testingStandard1155.address
     );
     expect(foundEvent!.args!.takerNftId).to.be.equal(TAKER_NFT_ID);
-    expect(foundEvent!.args!.reactionMetaId).to.be.equal(REACTION_NFT_META_ID);
+    expect(foundEvent!.args!.reactionId).to.be.equal(REACTION_NFT_META_ID);
     expect(foundEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
     expect(foundEvent!.args!.referrer).to.be.equal(ZERO_ADDRESS);
 

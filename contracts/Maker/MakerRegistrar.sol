@@ -42,15 +42,15 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         addressManager = _addressManager;
     }
 
-    function nftToSourceLookup(
+    function deriveSourceId(
         uint256 chainId,
         address nftContractAddress,
         uint256 nftId
     ) external pure returns (uint256) {
-        return _nftToSourceLookup(chainId, nftContractAddress, nftId);
+        return _deriveSourceId(chainId, nftContractAddress, nftId);
     }
 
-    function _nftToSourceLookup(
+    function _deriveSourceId(
         uint256 chainId,
         address nftContractAddress,
         uint256 nftId
@@ -148,28 +148,20 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         require(creatorSaleBasisPoints <= 10_000, "Invalid creator bp");
 
         //
-        // "Source" - sourceId is derived from [chainId, nftContractAddress, nftId]
-        // Use: This is used in
+        // "Source" - external NFT's
+        // sourceId is derived from [chainId, nftContractAddress, nftId]`
+        // Uses:
         // - ReactionVault.buyReaction():
-        //    - prevent reactions that have been deregistered or never registered from being sold
+        //    - check that sourceId is registered == true
         //    - calc creator rewards for makerNFTs
         // - ReactionVault.withdrawTakerRewards():
-        //    - check that sourceId is registered
-        //    - check that msg.sender is registered as owner
+        //    - check that sourceId is registered == true
+        //    - check msg.sender is registered as owner
         //    - calc creator rewards for takerNFTs
         //
-        // Look up the source ID
-        uint256 sourceId = _nftToSourceLookup(
-            chainId,
-            nftContractAddress,
-            nftId
-        );
-
-        // If it is already in the system, verify it is not currently registered
-        // NftDetails memory details = sourceToDetailsLookup[registrationSourceId];
-        // require(!details.registered, "Already registered");
-
-        // Register in mappings
+        // Generate source ID
+        uint256 sourceId = _deriveSourceId(chainId, nftContractAddress, nftId);
+        // add to mapping
         sourceToDetailsLookup[sourceId] = NftDetails(
             true,
             owner,
@@ -178,28 +170,19 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         );
 
         //
-        // "Reaction": source NFTs that have been "transformed" into fan art via optionBits param
+        // "Transform": source NFTs that have been "transformed" into fan art via optionBits param
         // ID: derived from [MAKER_META_PREFIX, registrationSourceId, optionBits]
-        // Use: How reactions are listed for sale
+        // Uses:
         // ReactionVault._buyReaction()
         //  - look up source to make sure its registered
         //  - used to derive reactionMetaId
-        //  - saved in ReactionPriceDetails TODO
-        //  - emitted in events: ReferrerRewardsGranted, CreatorRewardsGranted, MakerRewardsGranted, ReactionsPurchased TODO
-        // ReactionVault._spendReaction()
-        //  - retrieved from ReactionPriceDetails via reactionMetaId TODO
-        //  - emitted in events: ReferrerRewardsGranted, ReactionsSpent TODO
-        //
 
         // Generate reaction ID
         uint256 transformId = uint256(
             keccak256(abi.encode(MAKER_META_PREFIX, sourceId, optionBits))
         );
+        // add to mapping
         transformToSourceLookup[transformId] = sourceId;
-
-        //
-        // End Meta
-        //
 
         // Emit event
         emit Registered(
@@ -250,12 +233,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address nftContractAddress,
         uint256 nftId
     ) internal {
-        // Look up source ID and verify it is valid
-        uint256 sourceId = _nftToSourceLookup(
-            chainId,
-            nftContractAddress,
-            nftId
-        );
+        // generate source ID
+        uint256 sourceId = _deriveSourceId(chainId, nftContractAddress, nftId);
 
         // Verify it is registered
         NftDetails storage details = sourceToDetailsLookup[sourceId];
