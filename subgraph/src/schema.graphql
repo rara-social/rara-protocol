@@ -3,7 +3,7 @@ type User @entity {
 }
 
 type UserEarnings @entity {
-  id: ID! #publicAddress
+  id: ID! #publicAddress + paymentToken
   paymentToken: Bytes!
   makerRewardsBalance: BigDecimal!
   creatorRewardsBalance: BigDecimal!
@@ -13,8 +13,7 @@ type UserEarnings @entity {
   creatorRewardsTotal: BigDecimal!
   referrerRewardsTotal: BigDecimal!
 
- withdrawTotal: BigDecimal
-
+  withdrawTotal: BigDecimal!
 }
 
 type Source @entity {
@@ -25,6 +24,7 @@ type Source @entity {
   nftId: BigInt!
   nftOwnerAddress: Bytes!
   nftCreatorAddress: Bytes!
+  creatorSaleBasisPoints: BigInt!
   registered: Boolean!
   user: User!
 }
@@ -32,6 +32,7 @@ type Source @entity {
 type Transform @entity {
   id: ID! #transformId
   transformId: BigInt!
+  optionBits: BigInt!
   source: Source!
   totalSold: BigInt!
 }
@@ -39,7 +40,7 @@ type Transform @entity {
 type Reaction @entity {
   id: ID! #reactionId
   transform: Transform!
-  parameterVersion!
+  parameterVersion: BigInt!
 
   totalSold: BigInt!
   referrerFeesTotal: BigDecimal!
@@ -74,22 +75,21 @@ type CuratorVaultToken @entity {
   nftId: BigInt!
   paymentToken: Bytes!
 
-  sharesOutstanding: BigInt
-  currentBalance: BigDecimal
-  
-  sharesTotal: BigInt
-  depositsTotal: BigDecimal
-}
+  sharesOutstanding: BigInt!
+  currentBalance: BigDecimal!
 
+  sharesTotal: BigInt!
+  depositsTotal: BigDecimal!
+}
 
 type UserPosition @entity {
   id: ID! #msg.sender + curatorTokenId
   user: User!
   isTakerPostion: Boolean!
   curatorVaultToken: CuratorVaultToken!
-  
+
   sharesAvailable: BigInt!
 
-  sharesTotal: BigInt
-  refundsTotal: BigDecimal
+  sharesTotal: BigInt!
+  refundsTotal: BigDecimal!
 }

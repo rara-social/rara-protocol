@@ -45,7 +45,7 @@ dataSources:
         - name: PermanentCuratorVault
           file: ../artifacts/contracts/PermanentCuratorVault/PermanentCuratorVault.sol/PermanentCuratorVault.json
       eventHandlers:
-        - event: CuratorSharesBought(indexed uint256,uint256,uint256)
+        - event: CuratorSharesBought(indexed uint256,uint256,address,uint256,address,uint256,uint256,bool)
           handler: handleCuratorSharesBought
         - event: CuratorSharesSold(indexed uint256,uint256,uint256)
           handler: handleCuratorSharesSold
@@ -71,9 +71,9 @@ dataSources:
         - name: ReactionVault
           file: ../artifacts/contracts/Reactions/ReactionVault.sol/ReactionVault.json
       eventHandlers:
-        - event: ReactionsPurchased(uint256,uint256,address,address,uint256)
+        - event: ReactionsPurchased(uint256,uint256,address,address,uint256,uint256)
           handler: handleReactionsPurchased
-        - event: ReactionsSpent(uint256,address,uint256,uint256,uint256,address,uint256)
+        - event: ReactionsSpent(uint256,address,uint256,uint256,uint256,address,uint256,uint256,uint256)
           handler: handleReactionsSpent
         - event: CreatorRewardsGranted(address,address,uint256,uint256)
           handler: handleCreatorRewardsGranted
@@ -81,10 +81,6 @@ dataSources:
           handler: handleReferrerRewardsGranted
         - event: MakerRewardsGranted(address,address,uint256,uint256)
           handler: handleMakerRewardsGranted
-        # - event: TakerRewardsGranted(uint256,address,uint256,address,uint256,uint256)
-        #   handler: handleTakerRewardsGranted
-        # - event: SpenderRewardsGranted(address,uint256,address,uint256,uint256)
-        #   handler: handleSpenderRewardsGranted
         - event: ERC20RewardsClaimed(address,uint256,address)
           handler: handleERC20RewardsClaimed
       file: ./src/mapping/ReactionVault.ts
