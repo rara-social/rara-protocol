@@ -3,7 +3,7 @@ import {BigNumber} from "ethers";
 import {ethers} from "hardhat";
 import {ZERO_ADDRESS} from "../Scripts/constants";
 import {deploySystem, TEST_SALE_CREATOR_BP} from "../Scripts/setup";
-import {deriveMakerNftMetaId} from "../Scripts/derivedParams";
+import {deriveTransformId} from "../Scripts/derivedParams";
 import {
   ALREADY_REGISTERED,
   INVALID_MAKER_BP,
@@ -162,7 +162,7 @@ describe("MakerRegistrar", function () {
     );
 
     // Encode the params and hash it to get the meta URI
-    const derivedMetaId = deriveMakerNftMetaId(
+    const derivedMetaId = deriveTransformId(
       EXPECTED_SOURCE_ID,
       BigNumber.from(0)
     );

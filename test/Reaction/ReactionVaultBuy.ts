@@ -10,8 +10,8 @@ import {
   TEST_SALE_REFERRER_BP,
 } from "../Scripts/setup";
 import {
-  deriveMakerNftMetaId,
-  deriveReactionNftMetaId,
+  deriveTransformId,
+  deriveReactionId,
   deriveReactionParameterVersion,
 } from "../Scripts/derivedParams";
 import {
@@ -65,10 +65,7 @@ describe("ReactionVault Buy", function () {
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Unregister it
     await makerRegistrar
@@ -78,7 +75,7 @@ describe("ReactionVault Buy", function () {
     // Now verify reactions can't be purchased
     await expect(
       reactionVault.buyReaction(
-        MAKER_NFT_META_ID,
+        REACTION_ID,
         "1",
         OWNER.address,
         ZERO_ADDRESS,
@@ -116,15 +113,12 @@ describe("ReactionVault Buy", function () {
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Should fail since Owner has no tokens
     await expect(
       reactionVault.buyReaction(
-        MAKER_NFT_META_ID,
+        REACTION_ID,
         "1",
         OWNER.address,
         ZERO_ADDRESS,
@@ -138,7 +132,7 @@ describe("ReactionVault Buy", function () {
     // Should fail since Owner has not approved transfer from
     await expect(
       reactionVault.buyReaction(
-        MAKER_NFT_META_ID,
+        REACTION_ID,
         "1",
         OWNER.address,
         ZERO_ADDRESS,
@@ -154,7 +148,7 @@ describe("ReactionVault Buy", function () {
       reactionVault
         .connect(BOB)
         .buyReaction(
-          MAKER_NFT_META_ID,
+          REACTION_ID,
           "1",
           OWNER.address,
           ZERO_ADDRESS,
@@ -199,10 +193,7 @@ describe("ReactionVault Buy", function () {
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Mint the purchase price amount of tokens to the owner
     paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
@@ -230,7 +221,7 @@ describe("ReactionVault Buy", function () {
 
     // Build the tx
     const transaction = await reactionVault.buyReaction(
-      MAKER_NFT_META_ID,
+      REACTION_ID,
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
@@ -275,9 +266,9 @@ describe("ReactionVault Buy", function () {
       BigNumber.from(TEST_SALE_CURATOR_LIABILITY_BP)
     );
 
-    const REACTION_NFT_META_ID = deriveReactionNftMetaId(
+    const REACTION_NFT_META_ID = deriveReactionId(
       BigNumber.from(REACTION_NFT_PARAMETER_VERSION),
-      BigNumber.from(MAKER_NFT_META_ID),
+      BigNumber.from(REACTION_ID),
       BigNumber.from(0)
     );
 
@@ -299,9 +290,7 @@ describe("ReactionVault Buy", function () {
     const reactionPurchaseEvent = receipt.events?.find(
       (x) => x.event === "ReactionsPurchased"
     );
-    expect(reactionPurchaseEvent!.args!.transformId).to.be.equal(
-      MAKER_NFT_META_ID
-    );
+    expect(reactionPurchaseEvent!.args!.transformId).to.be.equal(REACTION_ID);
     expect(reactionPurchaseEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
     expect(reactionPurchaseEvent!.args!.destinationWallet).to.be.equal(
       OWNER.address
@@ -351,10 +340,7 @@ describe("ReactionVault Buy", function () {
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Mint the purchase price amount of tokens to the owner
     const totalPaymentAmount = TEST_REACTION_PRICE.mul(REACTION_AMOUNT);
@@ -383,7 +369,7 @@ describe("ReactionVault Buy", function () {
 
     // Build the tx
     const transaction = await reactionVault.buyReaction(
-      MAKER_NFT_META_ID,
+      REACTION_ID,
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
@@ -428,9 +414,9 @@ describe("ReactionVault Buy", function () {
       BigNumber.from(TEST_SALE_CURATOR_LIABILITY_BP)
     );
 
-    const REACTION_NFT_META_ID = deriveReactionNftMetaId(
+    const REACTION_NFT_META_ID = deriveReactionId(
       BigNumber.from(REACTION_NFT_PARAMETER_VERSION),
-      BigNumber.from(MAKER_NFT_META_ID),
+      BigNumber.from(REACTION_ID),
       BigNumber.from(0)
     );
 
@@ -452,9 +438,7 @@ describe("ReactionVault Buy", function () {
     const reactionPurchaseEvent = receipt.events?.find(
       (x) => x.event === "ReactionsPurchased"
     );
-    expect(reactionPurchaseEvent!.args!.transformId).to.be.equal(
-      MAKER_NFT_META_ID
-    );
+    expect(reactionPurchaseEvent!.args!.transformId).to.be.equal(REACTION_ID);
     expect(reactionPurchaseEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
     expect(reactionPurchaseEvent!.args!.destinationWallet).to.be.equal(
       OWNER.address

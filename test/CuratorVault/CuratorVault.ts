@@ -4,7 +4,7 @@ import {ZERO_ADDRESS} from "../Scripts/constants";
 import {deploySystem} from "../Scripts/setup";
 import {NOT_ADMIN, NO_BALANCE, TRANSFER_NOT_ALLOWED} from "../Scripts/errors";
 
-describe.only("CuratorVault", function () {
+describe("CuratorVault", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
     const {curatorVault, addressManager} = await deploySystem(OWNER);

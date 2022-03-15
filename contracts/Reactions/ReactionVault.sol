@@ -44,7 +44,9 @@ contract ReactionVault is
         uint256 reactionId,
         uint256 quantity,
         address referrer,
-        uint256 ipfsMetadataHash
+        uint256 ipfsMetadataHash,
+        uint256 curatorTokenId,
+        uint256 curatorShareAmount
     );
 
     /// @dev Event emitted when rewards are granted to a creator
@@ -69,38 +71,6 @@ contract ReactionVault is
         IERC20Upgradeable paymentToken,
         uint256 amount,
         uint256 reactionId
-    );
-
-    /// @dev Event emitted when curator vault rewards are granted to a taker
-    event TakerRewardsGranted(
-        uint256 takerNftChainId,
-        address takerNftAddress,
-        uint256 takerNftId,
-        address curatorVault,
-        uint256 curatorTokenId,
-        uint256 curatorShareAmount
-    );
-
-    /// @dev Event emitted when curator vault rewards are granted to a reaction Spender
-    event SpenderRewardsGranted(
-        uint256 takerNftChainId,
-        address takerNftAddress,
-        uint256 takerNftId,
-        address curatorVault,
-        uint256 curatorTokenId,
-        uint256 curatorShareAmount
-    );
-
-    /// @dev Event emitted when a taker redeems curator shares
-    event TakerRewardsSold(
-        address takerAddress,
-        uint256 takerNftChainId,
-        address takerNftAddress,
-        uint256 takerNftId,
-        address curatorVault,
-        uint256 curatorTokenId,
-        uint256 curatorShareAmount,
-        uint256 paymentTokensReceived
     );
 
     /// @dev Event emitted when an account withdraws ERC20 rewards
@@ -487,7 +457,7 @@ contract ReactionVault is
         );
 
         //
-        // Buy Curator Shares for Taker
+        // Buy Curator Shares for target NFT's owner
         //
 
         // Approve the full amount
@@ -520,21 +490,11 @@ contract ReactionVault is
             )
         );
 
-        // Allocate rewards for the future NFT Owner
+        // Allocate rewards to be claimed by NFT Owner
         nftOwnerRewards[rewardsIndex] += info.takerCuratorShares;
 
-        // Emit event // TODO: not needed, covered by buyCuratorShares
-        emit TakerRewardsGranted(
-            takerNftChainId,
-            takerNftAddress,
-            takerNftId,
-            address(info.curatorVault),
-            curatorTokenId,
-            info.takerCuratorShares
-        );
-
         //
-        // Buy Curator Shares for Spender
+        // Buy Curator Shares for Reaction Spender
         //
 
         // Buy shares for the spender.  Shares get sent directly to their address.
@@ -548,16 +508,6 @@ contract ReactionVault is
             false
         );
 
-        // Emit event for spender rewards // TODO: not needed, covered by buyCuratorShares
-        emit SpenderRewardsGranted(
-            takerNftChainId,
-            takerNftAddress,
-            takerNftId,
-            address(info.curatorVault),
-            curatorTokenId,
-            info.spenderCuratorShares
-        );
-
         // Emit the event for the overall reaction spend
         emit ReactionsSpent(
             takerNftChainId,
@@ -566,7 +516,9 @@ contract ReactionVault is
             reactionId,
             reactionQuantity,
             referrer,
-            ipfsMetadataHash
+            ipfsMetadataHash,
+            curatorTokenId,
+            info.spenderCuratorShares
         );
     }
 
@@ -653,7 +605,9 @@ contract ReactionVault is
         uint256 takerNftId,
         IERC20Upgradeable paymentToken,
         address curatorVault,
-        uint256 curatorTokenId
+        uint256 curatorTokenId,
+        uint256 sharesToBurn,
+        address refundToAddress
     ) external nonReentrant returns (uint256) {
         // Create a struct to hold local vars (and prevent "stack too deep")
         TakerWithdrawInfo memory info;
@@ -674,6 +628,10 @@ contract ReactionVault is
         // Verify the balance
         info.takerCuratorSharesBalance = nftOwnerRewards[info.rewardsIndex];
         require(info.takerCuratorSharesBalance > 0, "No rewards");
+        require(
+            info.takerCuratorSharesBalance >= sharesToBurn,
+            "Rewards balance less than sharesToBurn input value"
+        );
 
         // Look up the targeted NFT source ID
         info.sourceId = addressManager.makerRegistrar().deriveSourceId(
@@ -730,19 +688,7 @@ contract ReactionVault is
         }
 
         // Transfer the remaining amount to the caller (Maker)
-        paymentToken.safeTransfer(msg.sender, info.paymentTokensForMaker);
-
-        // Emit the event
-        emit TakerRewardsSold(
-            msg.sender,
-            takerNftChainId,
-            takerNftAddress,
-            takerNftId,
-            curatorVault,
-            curatorTokenId,
-            info.takerCuratorSharesBalance,
-            info.paymentTokensForMaker
-        );
+        paymentToken.safeTransfer(refundToAddress, info.paymentTokensForMaker);
 
         // Return the amount of payment tokens received
         return info.paymentTokensForMaker;

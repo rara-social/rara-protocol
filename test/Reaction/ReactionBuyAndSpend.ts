@@ -9,11 +9,7 @@ import {
   TEST_SALE_CURATOR_LIABILITY_BP,
   TEST_SALE_REFERRER_BP,
 } from "../Scripts/setup";
-import {
-  deriveMakerNftMetaId,
-  deriveReactionNftMetaId,
-  deriveReactionParameterVersion,
-} from "../Scripts/derivedParams";
+import {deriveTransformId} from "../Scripts/derivedParams";
 import {
   NFT_NOT_REGISTERED,
   NO_BALANCE,
@@ -58,10 +54,7 @@ describe("ReactionVault Buy", function () {
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Mint the purchase price amount of tokens to the owner
     paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
@@ -76,7 +69,7 @@ describe("ReactionVault Buy", function () {
 
     // Buy and spend the reaction
     const transaction = await reactionVault.buyAndSpendReaction(
-      MAKER_NFT_META_ID,
+      REACTION_ID,
       REACTION_AMOUNT,
       REFERRER.address, // Referrer
       BigNumber.from(0), // Option Bits
@@ -100,19 +93,13 @@ describe("ReactionVault Buy", function () {
     );
     expect(spendEvent).to.not.be.null;
 
-    // Spender rewards from curator vault
-    const rewardsEvent = receipt.events?.find(
-      (x) => x.event === "SpenderRewardsGranted"
-    );
-    expect(rewardsEvent).to.not.be.null;
-
     // Verify curator shares are in the wallet
     expect(
       await curatorShares.balanceOf(
         OWNER.address,
-        rewardsEvent!.args!.curatorTokenId!
+        spendEvent!.args!.curatorTokenId!
       )
-    ).to.be.equal(rewardsEvent!.args!.curatorShareAmount);
+    ).to.be.equal(spendEvent!.args!.curatorShareAmount);
   });
 
   it("Should buy and spend multiple reactions", async function () {
@@ -155,10 +142,7 @@ describe("ReactionVault Buy", function () {
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Mint the purchase price amount of tokens to the owner
     paymentTokenErc20.mint(
@@ -176,7 +160,7 @@ describe("ReactionVault Buy", function () {
 
     // Buy and spend the reaction
     const transaction = await reactionVault.buyAndSpendReaction(
-      MAKER_NFT_META_ID,
+      REACTION_ID,
       REACTION_AMOUNT,
       REFERRER.address, // Referrer
       BigNumber.from(0), // Option Bits
@@ -200,18 +184,12 @@ describe("ReactionVault Buy", function () {
     );
     expect(spendEvent).to.not.be.null;
 
-    // Spender rewards from curator vault
-    const rewardsEvent = receipt.events?.find(
-      (x) => x.event === "SpenderRewardsGranted"
-    );
-    expect(rewardsEvent).to.not.be.null;
-
     // Verify curator shares are in the wallet
     expect(
       await curatorShares.balanceOf(
         OWNER.address,
-        rewardsEvent!.args!.curatorTokenId!
+        spendEvent!.args!.curatorTokenId!
       )
-    ).to.be.equal(rewardsEvent!.args!.curatorShareAmount);
+    ).to.be.equal(spendEvent!.args!.curatorShareAmount);
   });
 });

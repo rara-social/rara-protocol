@@ -1,6 +1,6 @@
-import { BigNumber, ethers } from "ethers";
+import {BigNumber, ethers} from "ethers";
 
-export const deriveMakerNftMetaId = (
+export const deriveTransformId = (
   nftSourceId: BigNumber,
   reactionOptionBits: BigNumber
 ) => {
@@ -17,7 +17,7 @@ export const deriveReactionParameterVersion = (
   reactionPrice: BigNumber,
   curatorLiabilityBp: BigNumber
 ) => {
-  // Encode the params and hash it 
+  // Encode the params and hash it
   const encodedParams = ethers.utils.defaultAbiCoder.encode(
     ["address", "uint256", "uint256"],
     [paymentTokenAddress, reactionPrice, curatorLiabilityBp]
@@ -25,7 +25,7 @@ export const deriveReactionParameterVersion = (
   return ethers.utils.keccak256(encodedParams);
 };
 
-export const deriveReactionNftMetaId = (
+export const deriveReactionId = (
   parameterVersion: BigNumber,
   makerNftMetaId: BigNumber,
   reactionOptionBits: BigNumber

@@ -8,7 +8,7 @@ import {
   TEST_SALE_CURATOR_LIABILITY_BP,
   TEST_SALE_REFERRER_BP,
 } from "../Scripts/setup";
-import {deriveMakerNftMetaId} from "../Scripts/derivedParams";
+import {deriveTransformId} from "../Scripts/derivedParams";
 import {INVALID_ZERO_PARAM} from "../Scripts/errors";
 
 describe("ReactionVault Withdraw ERC20", function () {
@@ -47,10 +47,7 @@ describe("ReactionVault Withdraw ERC20", function () {
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Mint the purchase price amount of tokens to the owner
     paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
@@ -79,7 +76,7 @@ describe("ReactionVault Withdraw ERC20", function () {
 
     // Build the tx
     await reactionVault.buyReaction(
-      MAKER_NFT_META_ID,
+      REACTION_ID,
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
