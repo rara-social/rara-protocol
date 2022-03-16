@@ -1,6 +1,6 @@
-import {BigInt, BigDecimal, log} from "@graphprotocol/graph-ts";
+import {BigInt, log} from "@graphprotocol/graph-ts";
 
-import {User, Reaction} from "../../generated/schema";
+import {User, Source, Transform} from "../../generated/schema";
 
 import {
   Registered,
@@ -9,6 +9,15 @@ import {
 
 export function handleRegistered(event: Registered): void {
   log.log(3, "handleRegistered");
+  // uint256 nftChainId,
+  // address indexed nftContractAddress,
+  // uint256 indexed nftId,
+  // address indexed nftOwnerAddress,
+  // address nftCreatorAddress,
+  // uint256 creatorSaleBasisPoints,
+  // uint256 optionBits,
+  // uint256 sourceId,
+  // uint256 transformId
 
   //
   // User
@@ -21,33 +30,53 @@ export function handleRegistered(event: Registered): void {
   user.save();
 
   //
-  // Reaction(metaId)
+  // Source
   //
-  let reaction = new Reaction(event.params.transformId.toHexString());
-  reaction.transformId = event.params.transformId;
-  reaction.sourceId = event.params.sourceId;
-  reaction.makerUser = user.id;
-  reaction.nftChainId = event.params.nftChainId;
-  reaction.nftContractAddress = event.params.nftContractAddress;
-  reaction.nftId = event.params.nftId;
-  reaction.nftOwnerAddress = event.params.nftOwnerAddress;
-  reaction.nftCreatorAddress = event.params.nftCreatorAddress;
-  reaction.totalSold = BigInt.zero();
-  reaction.makerFeesTotal = BigDecimal.zero();
-  reaction.creatorFeesTotal = BigDecimal.zero();
-  reaction.referrerFeesTotal = BigDecimal.zero();
-  reaction.registered = true;
+  let sourceKey = event.params.sourceId.toHexString();
+  let source = Source.load(sourceKey);
+  if (source == null) {
+    source = new Source(sourceKey);
+    source.sourceId = event.params.sourceId;
+    source.nftChainId = event.params.nftChainId;
+    source.nftContractAddress = event.params.nftContractAddress;
+    source.nftId = event.params.nftId;
+    source.nftOwnerAddress = event.params.nftOwnerAddress;
+    source.registered = true;
+    source.user = user.id;
+  }
 
-  reaction.save();
+  // these are be updated each time "registered()"" is called
+  source.nftCreatorAddress = event.params.nftCreatorAddress;
+  source.creatorSaleBasisPoints = event.params.creatorSaleBasisPoints;
+
+  source.save();
+
+  //
+  // Transform
+  //
+  let transformKey = event.params.transformId.toHexString();
+  let transform = Transform.load(transformKey);
+  if (transform == null) {
+    transform = new Transform(transformKey);
+    transform.transformId = event.params.transformId;
+    transform.optionBits = event.params.optionBits;
+    transform.source = source.id;
+    transform.totalSold = BigInt.zero();
+  }
+  transform.save();
 }
 
 export function handleDeregistered(event: Deregistered): void {
   log.log(3, "Deregistered");
 
   //
-  // Reaction: mark 'registered' as false
+  // Source
   //
-  let reaction = new Reaction(event.params.sourceId.toHexString()); // TODO - not gonna work
-  reaction.registered = false;
-  reaction.save();
+  let sourceKey = event.params.sourceId.toHexString();
+  let source = Source.load(sourceKey);
+  if (source == null) {
+    source = new Source(sourceKey);
+  }
+  source.registered = false;
+  source.save();
 }

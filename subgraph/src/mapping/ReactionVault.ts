@@ -2,9 +2,11 @@ import {BigInt, Address, log, BigDecimal} from "@graphprotocol/graph-ts";
 
 import {
   User,
+  UserEarnings,
+  Transform,
   Reaction,
-  CuratorReaction,
   UserReaction,
+  UserSpend,
 } from "../../generated/schema";
 
 import {
@@ -14,18 +16,34 @@ import {
   ReferrerRewardsGranted,
   MakerRewardsGranted,
   ERC20RewardsClaimed,
-  TakerRewardsSold,
 } from "../../generated/ReactionVault/ReactionVault";
 
 export function handleReactionsPurchased(event: ReactionsPurchased): void {
   log.log(3, "ReactionsPurchased");
+  // uint256 transformId,
+  // uint256 quantity,
+  // address destinationWallet,
+  // address referrer,
+  // uint256 reactionId,
+  // uint256 parameterVersion
 
   //
   // Reaction
   //
-  let reaction = Reaction.load(event.params.reactionId.toHexString()); // yes
+  let reaction = Reaction.load(event.params.reactionId.toHexString());
   if (reaction == null) {
+    // type Reaction @entity {
+    //   id: ID! #reactionId
+    //   transform: Transform!
+    //   parameterVersion: BigInt!
+    //   totalSold: BigInt!
+    //   referrerFeesTotal: BigDecimal!
+    //   creatorFeesTotal: BigDecimal!
+    //   makerFeesTotal: BigDecimal!
+    // }
     reaction = new Reaction(event.params.reactionId.toHexString());
+    reaction.transform = event.params.transformId.toHexString();
+    reaction.parameterVersion = event.params.parameterVersion;
   }
   reaction.totalSold = reaction.totalSold.plus(event.params.quantity);
   reaction.save();
@@ -43,83 +61,119 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   //
   // User Reaction
   //
-  let userReactionId =
-    event.transaction.from.toHexString() +
-    "-" +
-    event.params.reactionMetaId.toHexString(); // calc id from msg.sender + reactionMetaId.id
 
-  let userReaction = UserReaction.load(sender);
+  let userReactionKey =
+    event.params.reactionId.toHexString() +
+    "-" +
+    event.transaction.from.toHexString();
+  let userReaction = UserReaction.load(userReactionKey);
   if (userReaction == null) {
-    userReaction = new UserReaction(userReactionId);
-    userReaction.user = user.id;
+    // id: ID! #reactionId + msg.sender
+    // user: User!
+    // reaction: Reaction!
+    // quantityPurchased: BigInt!
+    // quantityAvailable: BigInt!
+    userReaction = new UserReaction(userReactionKey);
+    userReaction.user = event.transaction.from.toHexString();
     userReaction.reaction = reaction.id;
-    userReaction.quantity = event.params.quantity;
-  } else {
-    userReaction.quantity = userReaction.quantity.plus(event.params.quantity);
   }
+
+  userReaction.quantityPurchased = userReaction.quantityPurchased.plus(
+    event.params.quantity
+  );
+  userReaction.quantityAvailable = userReaction.quantityAvailable.plus(
+    event.params.quantity
+  );
 
   userReaction.save();
 }
 
 export function handleReactionsSpent(event: ReactionsSpent): void {
   log.log(3, "ReactionsSpent");
-
-  //
-  // User
-  //
-  let sender = event.transaction.from.toHexString();
-  let user = User.load(sender);
-  if (user == null) {
-    user = new User(sender);
-  }
-  user.save();
+  //  uint256 takerNftChainId,
+  // address takerNftAddress,
+  // uint256 takerNftId,
+  // uint256 reactionId,
+  // uint256 quantity,
+  // address referrer,
+  // uint256 ipfsMetadataHash,
+  // uint256 curatorTokenId,
+  // uint256 curatorShareAmount
 
   //
   // User Reaction
   //
-  let userReactionId =
-    event.transaction.from.toHexString() +
-    "-" +
-    event.params.reactionMetaId.toHexString(); // calc id from msg.sender + reactionMetaId
-  let userReaction = new UserReaction(userReactionId);
 
-  // decrease quantity
-  userReaction.quantity = userReaction.quantity.minus(event.params.quantity);
+  let userReactionKey =
+    event.params.reactionId.toHexString() +
+    "-" +
+    event.transaction.from.toHexString();
+  let userReaction = UserReaction.load(userReactionKey);
+  if (userReaction == null) {
+    userReaction = new UserReaction(userReactionKey);
+  }
+  userReaction.quantityAvailable = userReaction.quantityAvailable.plus(
+    event.params.quantity
+  );
+
   userReaction.save();
 
   //
-  // CuratorReaction
+  // UserSpend
   //
-  let curatorReactionId =
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString(); // generate unique id from transaction
-  let curatorReaction = new CuratorReaction(curatorReactionId);
-  curatorReaction.reaction = event.params.reactionMetaId.toHexString();
-  curatorReaction.quantity = event.params.quantity;
-  curatorReaction.curator = user.id;
-  curatorReaction.metadataHash = event.params.metaDataHash;
-
-  curatorReaction.save();
+  let userSpendKey =
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString();
+  let userSpend = new UserSpend(userSpendKey);
+  userSpend.user = event.transaction.from.toHexString();
+  userSpend.reaction = event.params.reactionId.toHexString();
+  userSpend.quantity = event.params.quantity;
+  userSpend.ipfsMetadataHash = event.params.ipfsMetadataHash;
+  userSpend.curatorVault = event.params.curatorTokenId.toHexString();
+  userSpend.sharesPurchased = event.params.curatorShareAmount;
+  userSpend.save();
 }
 
 export function handleCreatorRewardsGranted(
   event: CreatorRewardsGranted
 ): void {
   log.log(3, "CreatorRewardsGranted");
+  // address referrer,
+  // IERC20Upgradeable paymentToken,
+  // uint256 amount,
+  // uint256 reactionId
 
   //
-  // User
+  // User Earnings
   //
-  let creator = event.params.creator.toHexString();
-  let user = User.load(creator);
-  if (user == null) {
-    user = new User(creator);
+  let userEarningKey =
+    event.params.creator.toHexString() +
+    event.params.paymentToken.toHexString();
+  let userEarning = UserEarnings.load(userEarningKey);
+  if (userEarning == null) {
+    // type UserEarnings @entity {
+    //   id: ID! #publicAddress
+    //   paymentToken: Bytes!
+    //   makerRewardsBalance: BigDecimal!
+    //   creatorRewardsBalance: BigDecimal!
+    //   referrerRewardsBalance: BigDecimal!
+    //   makerRewardsTotal: BigDecimal!
+    //   creatorRewardsTotal: BigDecimal!
+    //   referrerRewardsTotal: BigDecimal!
+    //   withdrawTotal: BigDecimal
+    // }
+    userEarning = new UserEarnings(userEarningKey);
+    userEarning.paymentToken = event.params.paymentToken;
   }
 
   // increase creator rewards
-  user.creatorRewardsBalance = user.creatorRewardsBalance.plus(
+  userEarning.creatorRewardsBalance = userEarning.creatorRewardsBalance.plus(
     event.params.amount.toBigDecimal()
   );
-  user.save();
+  userEarning.creatorRewardsTotal = userEarning.creatorRewardsTotal.plus(
+    event.params.amount.toBigDecimal()
+  );
+
+  userEarning.save();
 
   //
   // Reaction
@@ -128,7 +182,7 @@ export function handleCreatorRewardsGranted(
   if (reaction == null) {
     reaction = new Reaction(event.params.reactionId.toHexString());
   }
-  reaction.creatorFeesTotal = reaction.creatorFeesTotal.minus(
+  reaction.creatorFeesTotal = reaction.creatorFeesTotal.plus(
     event.params.amount.toBigDecimal()
   );
 
@@ -139,21 +193,43 @@ export function handleReferrerRewardsGranted(
   event: ReferrerRewardsGranted
 ): void {
   log.log(3, "ReferrerRewardsGranted");
+  // address referrer,
+  // IERC20Upgradeable paymentToken,
+  // uint256 amount,
+  // uint256 reactionId
 
   //
-  // User
+  // User Earnings
   //
-  let referrer = event.params.referrer.toHexString();
-  let user = User.load(referrer);
-  if (user == null) {
-    user = new User(referrer);
+  let userEarningKey =
+    event.params.referrer.toHexString() +
+    event.params.paymentToken.toHexString();
+  let userEarning = UserEarnings.load(userEarningKey);
+  if (userEarning == null) {
+    // type UserEarnings @entity {
+    //   id: ID! #publicAddress
+    //   paymentToken: Bytes!
+    //   makerRewardsBalance: BigDecimal!
+    //   creatorRewardsBalance: BigDecimal!
+    //   referrerRewardsBalance: BigDecimal!
+    //   makerRewardsTotal: BigDecimal!
+    //   creatorRewardsTotal: BigDecimal!
+    //   referrerRewardsTotal: BigDecimal!
+    //   withdrawTotal: BigDecimal
+    // }
+    userEarning = new UserEarnings(userEarningKey);
+    userEarning.paymentToken = event.params.paymentToken;
   }
 
-  // increase referrer rewards
-  user.referrerRewardsBalance = user.referrerRewardsBalance.plus(
+  // increase creator rewards
+  userEarning.referrerRewardsBalance = userEarning.referrerRewardsBalance.plus(
     event.params.amount.toBigDecimal()
   );
-  user.save();
+  userEarning.referrerRewardsTotal = userEarning.referrerRewardsTotal.plus(
+    event.params.amount.toBigDecimal()
+  );
+
+  userEarning.save();
 
   //
   // Reaction
@@ -162,9 +238,7 @@ export function handleReferrerRewardsGranted(
   if (reaction == null) {
     reaction = new Reaction(event.params.reactionId.toHexString());
   }
-
-  // increase referrer fees
-  reaction.referrerFeesTotal = reaction.referrerFeesTotal.minus(
+  reaction.referrerFeesTotal = reaction.referrerFeesTotal.plus(
     event.params.amount.toBigDecimal()
   );
 
@@ -173,21 +247,42 @@ export function handleReferrerRewardsGranted(
 
 export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
   log.log(3, "MakerRewardsGranted");
+  // address maker,
+  // IERC20Upgradeable paymentToken,
+  // uint256 amount,
+  // uint256 reactionId
 
   //
-  // User
+  // User Earnings
   //
-  let maker = event.params.maker.toHexString();
-  let user = User.load(maker);
-  if (user == null) {
-    user = new User(maker);
+  let userEarningKey =
+    event.params.maker.toHexString() + event.params.paymentToken.toHexString();
+  let userEarning = UserEarnings.load(userEarningKey);
+  if (userEarning == null) {
+    // type UserEarnings @entity {
+    //   id: ID! #publicAddress
+    //   paymentToken: Bytes!
+    //   makerRewardsBalance: BigDecimal!
+    //   creatorRewardsBalance: BigDecimal!
+    //   referrerRewardsBalance: BigDecimal!
+    //   makerRewardsTotal: BigDecimal!
+    //   creatorRewardsTotal: BigDecimal!
+    //   referrerRewardsTotal: BigDecimal!
+    //   withdrawTotal: BigDecimal
+    // }
+    userEarning = new UserEarnings(userEarningKey);
+    userEarning.paymentToken = event.params.paymentToken;
   }
 
-  // increase referrer rewards
-  user.makerRewardsBalance = user.makerRewardsBalance.plus(
+  // increase creator rewards
+  userEarning.makerRewardsBalance = userEarning.makerRewardsBalance.plus(
     event.params.amount.toBigDecimal()
   );
-  user.save();
+  userEarning.makerRewardsTotal = userEarning.makerRewardsTotal.plus(
+    event.params.amount.toBigDecimal()
+  );
+
+  userEarning.save();
 
   //
   // Reaction
@@ -196,28 +291,40 @@ export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
   if (reaction == null) {
     reaction = new Reaction(event.params.reactionId.toHexString());
   }
-
-  // increase referrer fees
-  reaction.makerFeesTotal = reaction.makerFeesTotal.minus(
+  reaction.makerFeesTotal = reaction.makerFeesTotal.plus(
     event.params.amount.toBigDecimal()
   );
+
   reaction.save();
 }
 
 export function handleERC20RewardsClaimed(event: ERC20RewardsClaimed): void {
   log.log(3, "ERC20RewardsClaimed");
+  // address token,
+  // uint256 amount,
+  // address recipient
 
-  let user = User.load(event.params.recipient.toHexString());
-  if (user == null) {
-    user = new User(event.params.recipient.toHexString());
+  //
+  // User Earnings
+  //
+  let userEarningKey =
+    event.params.recipient.toHexString() + event.params.token.toHexString();
+  let userEarning = UserEarnings.load(userEarningKey);
+  if (userEarning == null) {
+    userEarning = new UserEarnings(userEarningKey);
   }
 
-  // zero-out all balances
-  user.creatorRewardsBalance = BigDecimal.zero();
-  user.makerRewardsBalance = BigDecimal.zero();
-  user.referrerRewardsBalance = BigDecimal.zero();
+  // zero-out balances
+  userEarning.creatorRewardsBalance = BigDecimal.zero();
+  userEarning.makerRewardsBalance = BigDecimal.zero();
+  userEarning.referrerRewardsBalance = BigDecimal.zero();
 
-  user.save();
+  // increase total widthrawls
+  userEarning.withdrawTotal = userEarning.withdrawTotal.plus(
+    event.params.amount.toBigDecimal()
+  );
+
+  userEarning.save();
 }
 
 export function handleTakerRewardsSold(event: TakerRewardsSold): void {
