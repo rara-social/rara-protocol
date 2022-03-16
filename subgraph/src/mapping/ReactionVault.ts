@@ -49,19 +49,8 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   reaction.save();
 
   //
-  // User
-  //
-  let sender = event.transaction.from.toHexString();
-  let user = User.load(sender);
-  if (user == null) {
-    user = new User(sender);
-  }
-  user.save();
-
-  //
   // User Reaction
   //
-
   let userReactionKey =
     event.params.reactionId.toHexString() +
     "-" +
@@ -103,7 +92,6 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   //
   // User Reaction
   //
-
   let userReactionKey =
     event.params.reactionId.toHexString() +
     "-" +
@@ -112,7 +100,7 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   if (userReaction == null) {
     userReaction = new UserReaction(userReactionKey);
   }
-  userReaction.quantityAvailable = userReaction.quantityAvailable.plus(
+  userReaction.quantityAvailable = userReaction.quantityAvailable.minus(
     event.params.quantity
   );
 
