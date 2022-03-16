@@ -36,8 +36,13 @@ contract SigmoidCuratorVault is
     /// @dev Event triggered when curator shares are purchased
     event CuratorSharesBought(
         uint256 indexed curatorShareTokenId,
+        uint256 nftChainId,
+        address nftAddress,
+        uint256 nftId,
+        IERC20Upgradeable paymentToken,
         uint256 paymentTokenPaid,
-        uint256 curatorSharesBought
+        uint256 curatorSharesBought,
+        bool isTakerPosition
     );
 
     /// @dev Event triggered when curator shares are sold
@@ -92,7 +97,8 @@ contract SigmoidCuratorVault is
         uint256 nftId,
         IERC20Upgradeable paymentToken,
         uint256 paymentAmount,
-        address mintToAddress
+        address mintToAddress,
+        bool isTakerPosition
     ) external onlyCuratorVaultPurchaser returns (uint256) {
         // Get the curator share token ID
         uint256 curatorShareTokenId = _getTokenId(
@@ -102,6 +108,9 @@ contract SigmoidCuratorVault is
             paymentToken
         );
 
+        //
+        // Pull value from ReactionVault
+        //
         paymentToken.safeTransferFrom(msg.sender, address(this), paymentAmount);
 
         // Get curve params
@@ -134,8 +143,13 @@ contract SigmoidCuratorVault is
         // Emit the event
         emit CuratorSharesBought(
             curatorShareTokenId,
+            nftChainId,
+            nftAddress,
+            nftId,
+            paymentToken,
             paymentAmount,
-            curatorShareAmount
+            curatorShareAmount,
+            isTakerPosition
         );
 
         return curatorShareAmount;

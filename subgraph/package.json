@@ -6,10 +6,10 @@
     "prepare": "mustache ./config/${NETWORK:-local}.json src/subgraph.template.yaml > subgraph.yaml",
     "codegen": "npm run prepare && graph codegen",
     "build": "npm run prepare && graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ GITHUB_USERNAME/your-contract",
-    "create-local": "graph create --node http://localhost:8020/ scaffold-eth/your-contract",
-    "remove-local": "graph remove --node http://localhost:8020/ scaffold-eth/your-contract",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 scaffold-eth/your-contract"
+    "create-local": "graph create --node http://localhost:8020/ rara-social/rara-protocol",
+    "remove-local": "graph remove --node http://localhost:8020/ rara-social/rara-protocol",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 rara-social/rara-protocol",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ rara-social/rara-protocol"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.22.1",

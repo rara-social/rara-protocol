@@ -28,11 +28,12 @@ contract ReactionVault is
 
     /// @dev Event emitted when a reaction is purchased
     event ReactionsPurchased(
-        uint256 makerNftMetaId,
+        uint256 transformId,
         uint256 quantity,
         address destinationWallet,
         address referrer,
-        uint256 reactionMetaId
+        uint256 reactionId,
+        uint256 parameterVersion
     );
 
     /// @dev Event emitted when reaction is spent
@@ -40,63 +41,36 @@ contract ReactionVault is
         uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId,
-        uint256 reactionMetaId,
+        uint256 reactionId,
         uint256 quantity,
         address referrer,
-        uint256 metaDataHash
+        uint256 ipfsMetadataHash,
+        uint256 curatorTokenId,
+        uint256 curatorShareAmount
     );
 
     /// @dev Event emitted when rewards are granted to a creator
     event CreatorRewardsGranted(
         address creator,
         IERC20Upgradeable paymentToken,
-        uint256 amount
+        uint256 amount,
+        uint256 reactionId
     );
 
     /// @dev Event emitted when rewards are granted to a referrer
     event ReferrerRewardsGranted(
         address referrer,
         IERC20Upgradeable paymentToken,
-        uint256 amount
+        uint256 amount,
+        uint256 reactionId
     );
 
     /// @dev Event emitted when rewards are granted to a maker
     event MakerRewardsGranted(
         address maker,
         IERC20Upgradeable paymentToken,
-        uint256 amount
-    );
-
-    /// @dev Event emitted when curator vault rewards are granted to a taker
-    event TakerRewardsGranted(
-        uint256 takerNftChainId,
-        address takerNftAddress,
-        uint256 takerNftId,
-        address curatorVault,
-        uint256 curatorTokenId,
-        uint256 curatorShareAmount
-    );
-
-    /// @dev Event emitted when curator vault rewards are granted to a reaction Spender
-    event SpenderRewardsGranted(
-        uint256 takerNftChainId,
-        address takerNftAddress,
-        uint256 takerNftId,
-        address curatorVault,
-        uint256 curatorTokenId,
-        uint256 curatorShareAmount
-    );
-
-    /// @dev Event emitted when a taker redeems curator shares
-    event TakerRewardsSold(
-        address takerAddress,
-        uint256 takerNftChainId,
-        address takerNftAddress,
-        uint256 takerNftId,
-        address curatorVault,
-        uint256 curatorTokenId,
-        uint256 curatorShareAmount,
-        uint256 paymentTokensReceived
+        uint256 amount,
+        uint256 reactionId
     );
 
     /// @dev Event emitted when an account withdraws ERC20 rewards
@@ -124,18 +98,19 @@ contract ReactionVault is
         uint256 referrerCut;
         uint256 makerCut;
         uint256 curatorLiabilityCut;
-        uint256 reactionMetaId;
+        uint256 reactionId;
+        uint256 parameterVersion;
     }
 
     /// @dev External func to allow a user to buy reaction NFTs based on a registered Maker NFT
-    /// @param makerNftMetaId Meta ID for the Maker NFT that reaction is based on
-    /// @param quantity How many reactions to buy
-    /// @param destinationWallet Where the reactions should end up
+    /// @param transformId transform to be purchased
+    /// @param quantity Number of reactions to buy
+    /// @param destinationWallet reactions will be minted into this wallet
     /// (allows bulk buying from other contracts since reactions are non-transferrable)
     /// @param referrer Optional param to specify an address where referrer rewards are allocated
-    /// @param optionBits Optional params to specify options how the user wants transform reaction
+    /// @param optionBits Optional param to specify options how the user wants transform reaction
     function buyReaction(
-        uint256 makerNftMetaId,
+        uint256 transformId,
         uint256 quantity,
         address destinationWallet,
         address referrer,
@@ -144,7 +119,7 @@ contract ReactionVault is
         // Call internal function
         return
             _buyReaction(
-                makerNftMetaId,
+                transformId,
                 quantity,
                 destinationWallet,
                 referrer,
@@ -152,33 +127,41 @@ contract ReactionVault is
             );
     }
 
-    /// @dev Derive the reaction meta ID from the parameters
-    /// This unique ID will be used to track instances of reactions built from the same params
-    /// E.g. if the price of a reaction changes, the meta ID should be different
-    function deriveReactionMetaId(
-        IParameterManager parameterManager,
-        uint256 makerNftMetaId,
-        uint256 optionBits
-    ) public returns (uint256) {
+    /// @dev Derive the pricing parameters version
+    /// E.g. if the price of a reaction changes, the paramaterVersion should be different
+    function deriveParameterVersion(IParameterManager parameterManager)
+        public
+        returns (uint256)
+    {
         // Build the parameter version from the price details
-        uint256 parameterVersion = uint256(
-            keccak256(
-                abi.encode(
-                    parameterManager.paymentToken(),
-                    parameterManager.reactionPrice(),
-                    parameterManager.saleCuratorLiabilityBasisPoints()
+        return
+            uint256(
+                keccak256(
+                    abi.encode(
+                        parameterManager.paymentToken(),
+                        parameterManager.reactionPrice(),
+                        parameterManager.saleCuratorLiabilityBasisPoints()
+                    )
                 )
-            )
-        );
+            );
+    }
 
-        // Build and return the reaction meta ID
+    /// @dev Derive the reaction ID from the parameters
+    /// This unique ID will be used to track instances of reactions built from the same params
+    /// E.g. if the price of a reaction changes, the reaction ID should be different
+    function deriveReactionId(
+        uint256 transformId,
+        uint256 optionBits,
+        uint256 parameterVersion
+    ) public pure returns (uint256) {
+        // Build and return the reaction ID
         return
             uint256(
                 keccak256(
                     abi.encode(
                         REACTION_META_PREFIX,
                         parameterVersion,
-                        makerNftMetaId,
+                        transformId,
                         optionBits
                     )
                 )
@@ -187,7 +170,7 @@ contract ReactionVault is
 
     /// @dev Internal buy function
     function _buyReaction(
-        uint256 makerNftMetaId,
+        uint256 transformId,
         uint256 quantity,
         address destinationWallet,
         address referrer,
@@ -201,7 +184,9 @@ contract ReactionVault is
 
         // Get the NFT Source ID from the maker registrar
         info.makerRegistrar = addressManager.makerRegistrar();
-        info.sourceId = info.makerRegistrar.metaToSourceLookup(makerNftMetaId);
+        info.sourceId = info.makerRegistrar.transformToSourceLookup(
+            transformId
+        );
         require(info.sourceId != 0, "Unknown NFT");
 
         // Verify it is registered
@@ -224,6 +209,16 @@ contract ReactionVault is
             info.totalPurchasePrice
         );
 
+        // calc payment parameter version
+        info.parameterVersion = deriveParameterVersion(info.parameterManager);
+
+        // Build reaction ID
+        info.reactionId = deriveReactionId(
+            transformId,
+            optionBits,
+            info.parameterVersion
+        );
+
         // Assign funds to different stakeholders
         // First, allocate to referrer, if set
         info.referrerCut = 0;
@@ -239,7 +234,8 @@ contract ReactionVault is
             emit ReferrerRewardsGranted(
                 referrer,
                 paymentToken,
-                info.referrerCut
+                info.referrerCut,
+                info.reactionId
             );
         }
 
@@ -268,10 +264,13 @@ contract ReactionVault is
             // Assign awards to creator
             ownerToRewardsMapping[paymentToken][info.creator] += info
                 .creatorCut;
+
+            // emit event
             emit CreatorRewardsGranted(
                 info.creator,
                 paymentToken,
-                info.creatorCut
+                info.creatorCut,
+                info.reactionId
             );
 
             // Subtract the creator cut from the maker cut
@@ -280,17 +279,15 @@ contract ReactionVault is
 
         // Assign awards to maker
         ownerToRewardsMapping[paymentToken][info.owner] += info.makerCut;
-        emit MakerRewardsGranted(info.owner, paymentToken, info.makerCut);
-
-        // Build reaction meta ID
-        info.reactionMetaId = deriveReactionMetaId(
-            info.parameterManager,
-            makerNftMetaId,
-            optionBits
+        emit MakerRewardsGranted(
+            info.owner,
+            paymentToken,
+            info.makerCut,
+            info.reactionId
         );
 
         // Save off the details of this reaction purchase info for usage later when they are spent
-        reactionPriceDetailsMapping[info.reactionMetaId] = ReactionPriceDetails(
+        reactionPriceDetailsMapping[info.reactionId] = ReactionPriceDetails(
             paymentToken,
             info.reactionPrice,
             saleCuratorLiabilityBasisPoints
@@ -301,18 +298,19 @@ contract ReactionVault is
             .reactionNftContract();
         reactionNftContract.mint(
             destinationWallet,
-            info.reactionMetaId,
+            info.reactionId,
             quantity,
             new bytes(0)
         );
 
         // Emit event
         emit ReactionsPurchased(
-            makerNftMetaId,
+            transformId,
             quantity,
             destinationWallet,
             referrer,
-            info.reactionMetaId
+            info.reactionId,
+            info.parameterVersion
         );
     }
 
@@ -333,20 +331,20 @@ contract ReactionVault is
     /// @param takerNftChainId Chain ID where the NFT lives
     /// @param takerNftAddress Target contract where the reaction is targeting
     /// @param takerNftId Target NFT ID in the contract
-    /// @param reactionMetaId Reaction to spend
+    /// @param reactionId Reaction to spend
     /// @param reactionQuantity How many reactions to spend
     /// @param referrer Optional address where referrer rewards are allocated
     /// @param curatorVaultOverride Optional address of non-default curator vault
-    /// @param metaDataHash Optional hash of any metadata being associated with spend action
+    /// @param ipfsMetadataHash Optional hash of any metadata being associated with spend action
     function spendReaction(
         uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId,
-        uint256 reactionMetaId,
+        uint256 reactionId,
         uint256 reactionQuantity,
         address referrer,
         address curatorVaultOverride,
-        uint256 metaDataHash
+        uint256 ipfsMetadataHash
     ) external nonReentrant {
         // Call internal function
         return
@@ -354,11 +352,11 @@ contract ReactionVault is
                 takerNftChainId,
                 takerNftAddress,
                 takerNftId,
-                reactionMetaId,
+                reactionId,
                 reactionQuantity,
                 referrer,
                 curatorVaultOverride,
-                metaDataHash
+                ipfsMetadataHash
             );
     }
 
@@ -367,11 +365,11 @@ contract ReactionVault is
         uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId,
-        uint256 reactionMetaId,
+        uint256 reactionId,
         uint256 reactionQuantity,
         address referrer,
         address curatorVaultOverride,
-        uint256 metaDataHash
+        uint256 ipfsMetadataHash
     ) internal {
         // Verify quantity
         require(reactionQuantity > 0, "Invalid 0 input");
@@ -379,16 +377,20 @@ contract ReactionVault is
         // Create a struct to hold local vars (and prevent "stack too deep")
         SpendInfo memory info;
 
+        //
+        // Burn Reactions
+        //
+
         // Burn reactions from sender
         info.reactionNftContract = addressManager.reactionNftContract();
-        info.reactionNftContract.burn(
-            msg.sender,
-            reactionMetaId,
-            reactionQuantity
-        );
+        info.reactionNftContract.burn(msg.sender, reactionId, reactionQuantity);
+
+        //
+        // Calc Splits
+        //
 
         // Look up curator vault liability details from when the reaction was purchased
-        info.reactionDetails = reactionPriceDetailsMapping[reactionMetaId];
+        info.reactionDetails = reactionPriceDetailsMapping[reactionId];
 
         // Calculate the total amount of curator liability will be used to spend
         // the reactions when buying curator shares
@@ -410,10 +412,12 @@ contract ReactionVault is
             ownerToRewardsMapping[info.reactionDetails.paymentToken][
                 referrer
             ] += info.referrerCut;
+
             emit ReferrerRewardsGranted(
                 referrer,
                 info.reactionDetails.paymentToken,
-                info.referrerCut
+                info.referrerCut,
+                reactionId
             );
 
             // Subtract the referrer cut from the total being used going forward
@@ -428,6 +432,10 @@ contract ReactionVault is
 
         // The remaining amount goes to the spender
         info.spenderAmount = info.totalCuratorLiability - info.takerAmount;
+
+        //
+        // Setup Curator Vault
+        //
 
         // Get the default curator vault
         info.curatorVault = addressManager.defaultCuratorVault();
@@ -451,6 +459,10 @@ contract ReactionVault is
             info.reactionDetails.paymentToken
         );
 
+        //
+        // Buy Curator Shares for target NFT's owner
+        //
+
         // Approve the full amount
         info.reactionDetails.paymentToken.approve(
             address(info.curatorVault),
@@ -464,7 +476,8 @@ contract ReactionVault is
             takerNftId,
             info.reactionDetails.paymentToken,
             info.takerAmount,
-            address(this)
+            address(this),
+            true
         );
 
         // Build a hash of the rewards params
@@ -480,18 +493,12 @@ contract ReactionVault is
             )
         );
 
-        // Allocate rewards for the future NFT Owner
+        // Allocate rewards to be claimed by NFT Owner
         nftOwnerRewards[rewardsIndex] += info.takerCuratorShares;
 
-        // Emit event
-        emit TakerRewardsGranted(
-            takerNftChainId,
-            takerNftAddress,
-            takerNftId,
-            address(info.curatorVault),
-            curatorTokenId,
-            info.takerCuratorShares
-        );
+        //
+        // Buy Curator Shares for Reaction Spender
+        //
 
         // Buy shares for the spender.  Shares get sent directly to their address.
         info.spenderCuratorShares = info.curatorVault.buyCuratorShares(
@@ -500,17 +507,8 @@ contract ReactionVault is
             takerNftId,
             info.reactionDetails.paymentToken,
             info.spenderAmount,
-            msg.sender
-        );
-
-        // Emit event for spender rewards // TODO: not needed, covered by buyCuratorShares
-        emit SpenderRewardsGranted(
-            takerNftChainId,
-            takerNftAddress,
-            takerNftId,
-            address(info.curatorVault),
-            curatorTokenId,
-            info.spenderCuratorShares
+            msg.sender,
+            false
         );
 
         // Emit the event for the overall reaction spend
@@ -518,17 +516,19 @@ contract ReactionVault is
             takerNftChainId,
             takerNftAddress,
             takerNftId,
-            reactionMetaId,
+            reactionId,
             reactionQuantity,
             referrer,
-            metaDataHash
+            ipfsMetadataHash,
+            curatorTokenId,
+            info.spenderCuratorShares
         );
     }
 
     /// @dev Allows a user to buy and spend a reaction in 1 transaction instead of first buying and then spending
     /// in 2 separate transactions
     function buyAndSpendReaction(
-        uint256 makerNftMetaId,
+        uint256 transformId,
         uint256 quantity,
         address referrer,
         uint256 optionBits,
@@ -536,22 +536,21 @@ contract ReactionVault is
         address takerNftAddress,
         uint256 takerNftId,
         address curatorVaultOverride,
-        uint256 metaDataHash
+        uint256 ipfsMetadataHash
     ) external nonReentrant {
         // Buy the reactions
-        _buyReaction(
-            makerNftMetaId,
-            quantity,
-            msg.sender,
-            referrer,
-            optionBits
+        _buyReaction(transformId, quantity, msg.sender, referrer, optionBits);
+
+        // calc payment parameter version
+        uint256 parameterVersion = deriveParameterVersion(
+            addressManager.parameterManager()
         );
 
-        // Calculate the reaction meta ID for the reactions purchased
-        uint256 reactionMetaId = deriveReactionMetaId(
-            addressManager.parameterManager(),
-            makerNftMetaId,
-            optionBits
+        // Build reaction ID
+        uint256 reactionId = deriveReactionId(
+            transformId,
+            optionBits,
+            parameterVersion
         );
 
         // Spend it from the msg senders wallet
@@ -559,11 +558,11 @@ contract ReactionVault is
             takerNftChainId,
             takerNftAddress,
             takerNftId,
-            reactionMetaId,
+            reactionId,
             quantity,
             referrer,
             curatorVaultOverride,
-            metaDataHash
+            ipfsMetadataHash
         );
     }
 
@@ -609,7 +608,9 @@ contract ReactionVault is
         uint256 takerNftId,
         IERC20Upgradeable paymentToken,
         address curatorVault,
-        uint256 curatorTokenId
+        uint256 curatorTokenId,
+        uint256 sharesToBurn,
+        address refundToAddress
     ) external nonReentrant returns (uint256) {
         // Create a struct to hold local vars (and prevent "stack too deep")
         TakerWithdrawInfo memory info;
@@ -630,9 +631,13 @@ contract ReactionVault is
         // Verify the balance
         info.takerCuratorSharesBalance = nftOwnerRewards[info.rewardsIndex];
         require(info.takerCuratorSharesBalance > 0, "No rewards");
+        require(
+            info.takerCuratorSharesBalance >= sharesToBurn,
+            "Rewards balance less than sharesToBurn input value"
+        );
 
         // Look up the targeted NFT source ID
-        info.sourceId = addressManager.makerRegistrar().nftToSourceLookup(
+        info.sourceId = addressManager.makerRegistrar().deriveSourceId(
             takerNftChainId,
             takerNftAddress,
             takerNftId
@@ -675,25 +680,18 @@ contract ReactionVault is
 
             // Allocate for the creator
             ownerToRewardsMapping[paymentToken][creator] += info.creatorCut;
-            emit CreatorRewardsGranted(creator, paymentToken, info.creatorCut);
+            emit CreatorRewardsGranted(
+                creator,
+                paymentToken,
+                info.creatorCut,
+                info.sourceId
+            );
 
             info.paymentTokensForMaker -= info.creatorCut;
         }
 
         // Transfer the remaining amount to the caller (Maker)
-        paymentToken.safeTransfer(msg.sender, info.paymentTokensForMaker);
-
-        // Emit the event
-        emit TakerRewardsSold(
-            msg.sender,
-            takerNftChainId,
-            takerNftAddress,
-            takerNftId,
-            curatorVault,
-            curatorTokenId,
-            info.takerCuratorSharesBalance,
-            info.paymentTokensForMaker
-        );
+        paymentToken.safeTransfer(refundToAddress, info.paymentTokensForMaker);
 
         // Return the amount of payment tokens received
         return info.paymentTokensForMaker;

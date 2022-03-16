@@ -17,23 +17,23 @@ import "./NftOwnership.sol";
 contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
     /// @dev Event triggered when an NFT is registered in the system
     event Registered(
-        uint256 chainId,
+        uint256 nftChainId,
         address indexed nftContractAddress,
         uint256 indexed nftId,
-        address indexed ownerAddress,
-        address creatorAddress,
+        address indexed nftOwnerAddress,
+        address nftCreatorAddress,
         uint256 creatorSaleBasisPoints,
         uint256 optionBits,
         uint256 sourceId,
-        uint256 metaId
+        uint256 transformId
     );
 
     /// @dev Event triggered when an NFT is deregistered from the system
     event Deregistered(
-        uint256 chainId,
+        uint256 nftChainId,
         address indexed nftContractAddress,
         uint256 indexed nftId,
-        address indexed ownerAddress,
+        address indexed nftOwnerAddress,
         uint256 sourceId
     );
 
@@ -42,15 +42,15 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         addressManager = _addressManager;
     }
 
-    function nftToSourceLookup(
+    function deriveSourceId(
         uint256 chainId,
         address nftContractAddress,
         uint256 nftId
     ) external pure returns (uint256) {
-        return _nftToSourceLookup(chainId, nftContractAddress, nftId);
+        return _deriveSourceId(chainId, nftContractAddress, nftId);
     }
 
-    function _nftToSourceLookup(
+    function _deriveSourceId(
         uint256 chainId,
         address nftContractAddress,
         uint256 nftId
@@ -144,37 +144,45 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
     ) internal {
         // TODO: ? Block registration of a RaRa reaction NFT once Reaction Vault is built out
 
-        // Look up the source ID
-        uint256 currentSourceId = _nftToSourceLookup(
-            chainId,
-            nftContractAddress,
-            nftId
-        );
-
-        // If it is already in the system, verify it is not currently registered
-        NftDetails memory currentDetails = sourceToDetailsLookup[
-            currentSourceId
-        ];
-        require(!currentDetails.registered, "Already registered");
-
-        // Generate Meta ID
-        uint256 metaId = uint256(
-            keccak256(
-                abi.encode(MAKER_META_PREFIX, currentSourceId, optionBits)
-            )
-        );
-
         // Verify that creatorSaleBasisPoints is within bounds (can't allow more than 100%)
         require(creatorSaleBasisPoints <= 10_000, "Invalid creator bp");
 
-        // Register in mappings
-        metaToSourceLookup[metaId] = currentSourceId;
-        sourceToDetailsLookup[currentSourceId] = NftDetails(
+        //
+        // "Source" - external NFT's
+        // sourceId is derived from [chainId, nftContractAddress, nftId]`
+        // Uses:
+        // - ReactionVault.buyReaction():
+        //    - check that sourceId is registered == true
+        //    - calc creator rewards for makerNFTs
+        // - ReactionVault.withdrawTakerRewards():
+        //    - check that sourceId is registered == true
+        //    - check msg.sender is registered as owner
+        //    - calc creator rewards for takerNFTs
+        //
+        // Generate source ID
+        uint256 sourceId = _deriveSourceId(chainId, nftContractAddress, nftId);
+        // add to mapping
+        sourceToDetailsLookup[sourceId] = NftDetails(
             true,
             owner,
             creatorAddress,
             creatorSaleBasisPoints
         );
+
+        //
+        // "Transform": source NFTs that have been "transformed" into fan art via optionBits param
+        // ID: derived from [MAKER_META_PREFIX, registrationSourceId, optionBits]
+        // Uses:
+        // ReactionVault._buyReaction()
+        //  - look up source to make sure its registered
+        //  - used to derive reactionMetaId
+
+        // Generate reaction ID
+        uint256 transformId = uint256(
+            keccak256(abi.encode(MAKER_META_PREFIX, sourceId, optionBits))
+        );
+        // add to mapping
+        transformToSourceLookup[transformId] = sourceId;
 
         // Emit event
         emit Registered(
@@ -185,8 +193,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             creatorAddress,
             creatorSaleBasisPoints,
             optionBits,
-            currentSourceId,
-            metaId
+            sourceId,
+            transformId
         );
     }
 
@@ -225,12 +233,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address nftContractAddress,
         uint256 nftId
     ) internal {
-        // Look up source ID and verify it is valid
-        uint256 sourceId = _nftToSourceLookup(
-            chainId,
-            nftContractAddress,
-            nftId
-        );
+        // generate source ID
+        uint256 sourceId = _deriveSourceId(chainId, nftContractAddress, nftId);
 
         // Verify it is registered
         NftDetails storage details = sourceToDetailsLookup[sourceId];
