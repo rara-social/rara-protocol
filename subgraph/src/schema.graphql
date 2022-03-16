@@ -3,7 +3,11 @@ type User @entity {
 }
 
 type UserEarnings @entity {
+  id: ID! #publicAddress + paymentToken
+  paymentToken: Bytes!
+  makerRewardsBalance: BigDecimal!
   creatorRewardsBalance: BigDecimal!
+  referrerRewardsBalance: BigDecimal!
 
   makerRewardsTotal: BigDecimal!
   creatorRewardsTotal: BigDecimal!

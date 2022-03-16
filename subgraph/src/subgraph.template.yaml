@@ -29,9 +29,9 @@ dataSources:
     name: PermanentCuratorVault
     network: "{{network}}"
     source:
-      address: "{{PermanentCuratorVaultAddress}}"
-      abi: PermanentCuratorVault
-      startBlock: {{PermanentCuratorVaultStartBlock}}
+      address: "{{SigmoidCuratorVaultAddress}}"
+      abi: SigmoidCuratorVault
+      startBlock: {{SigmoidCuratorVaultStartBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -42,8 +42,8 @@ dataSources:
         - TakerNFT
         - CuratorPosition
       abis:
-        - name: PermanentCuratorVault
-          file: ../artifacts/contracts/PermanentCuratorVault/PermanentCuratorVault.sol/PermanentCuratorVault.json
+        - name: SigmoidCuratorVault
+          file: ../artifacts/contracts/SigmoidCuratorVault/SigmoidCuratorVault.sol/SigmoidCuratorVault.json
       eventHandlers:
         - event: CuratorSharesBought(indexed uint256,uint256,address,uint256,address,uint256,uint256,bool)
           handler: handleCuratorSharesBought

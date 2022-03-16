@@ -326,17 +326,3 @@ export function handleERC20RewardsClaimed(event: ERC20RewardsClaimed): void {
 
   userEarning.save();
 }
-
-export function handleTakerRewardsSold(event: TakerRewardsSold): void {
-  log.log(3, "TakerRewardsSold");
-  // address takerAddress,
-  // uint256 takerNftChainId,
-  // address takerNftAddress,
-  // uint256 takerNftId,
-  // address curatorVault,
-  // uint256 curatorTokenId,
-  // uint256 curatorShareAmount,
-  // uint256 paymentTokensReceived
-
-  // TODO - needed(?)
-}
