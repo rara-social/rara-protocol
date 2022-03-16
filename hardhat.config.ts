@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 
-import {HardhatUserConfig, task} from 'hardhat/config';
+import { HardhatUserConfig, task } from 'hardhat/config';
 import '@nomiclabs/hardhat-etherscan';
 import '@nomiclabs/hardhat-waffle';
 import '@typechain/hardhat';
@@ -50,6 +50,9 @@ const config: HardhatUserConfig = {
       // This account will deploy contracts and be set as protocol admin and also admin for all proxies
     },
   },
+  mocha: {
+    timeout: 400000
+  }
 };
 
 export default config;

@@ -176,6 +176,9 @@ contract ReactionVault is
         address referrer,
         uint256 optionBits
     ) internal {
+        // Ensure valid quantity
+        require(quantity > 0, "Invalid 0 input");
+        
         // Create a struct to hold local vars (and prevent "stack too deep")
         ReactionInfo memory info;
 

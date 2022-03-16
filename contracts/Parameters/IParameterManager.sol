@@ -5,6 +5,12 @@ import "../Permissions/IRoleManager.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 
 interface IParameterManager {
+    struct SigmoidCurveParameters {
+        uint256 a;
+        uint256 b;
+        uint256 c;
+    }
+
     /// @dev Getter for the payment token
     function paymentToken() external returns (IERC20Upgradeable);
 
@@ -52,4 +58,10 @@ interface IParameterManager {
 
     /// @dev Setter for the list of curator vaults allowed to be used
     function setApprovedCuratorVaults(address vault, bool approved) external;
+
+    // @dev Getter for curator vault bonding curve params
+    function bondingCurveParams() external returns(uint256, uint256, uint256);
+
+    // @dev Setter for curator vault bonding curve params
+    function setBondingCurveParams(uint256 a, uint256 b, uint256 c) external;
 }

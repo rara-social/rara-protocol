@@ -148,9 +148,8 @@ describe("ReactionVault Sell", function () {
     const receipt = await transaction.wait();
 
     // Calculate expected amounts
-    const expectedTakerCuratorShares = BigNumber.from("91027210151");
-    const expectedSpenderCuratorShares = BigNumber.from("29084233246");
-
+    const expectedTakerCuratorShares = BigNumber.from("25000010678907");
+    const expectedSpenderCuratorShares = BigNumber.from("25000000000000");
     const curatorSharesId = await curatorVault.getTokenId(
       chainId,
       testingStandard1155.address,
@@ -404,11 +403,11 @@ describe("ReactionVault Sell", function () {
 
     // Deploy the Default Curator Vault
     const CuratorVaultFactory = await ethers.getContractFactory(
-      "PermanentCuratorVault"
+      "SigmoidCuratorVault"
     );
     const deployedCuratorVault = await upgrades.deployProxy(
       CuratorVaultFactory,
-      [addressManager.address, 400000, curatorShares.address]
+      [addressManager.address, curatorShares.address]
     );
     const curatorVault = CuratorVaultFactory.attach(
       deployedCuratorVault.address
@@ -488,8 +487,8 @@ describe("ReactionVault Sell", function () {
     const receipt = await transaction.wait();
 
     // Calculate expected amounts
-    const expectedTakerCuratorShares = BigNumber.from("91027210151");
-    const expectedSpenderCuratorShares = BigNumber.from("29084233246");
+    const expectedTakerCuratorShares = BigNumber.from("25000010678907");
+    const expectedSpenderCuratorShares = BigNumber.from("25000000000000");
     const curatorSharesId = await curatorVault.getTokenId(
       chainId,
       testingStandard1155.address,

@@ -116,11 +116,10 @@ const deploySystem = async (owner: SignerWithAddress) => {
 
   // Deploy the Default Curator Vault
   const CuratorVaultFactory = await ethers.getContractFactory(
-    "PermanentCuratorVault"
+    "SigmoidCuratorVault"
   );
   const deployedCuratorVault = await upgrades.deployProxy(CuratorVaultFactory, [
     addressManager.address,
-    400000,
     curatorShares.address,
   ]);
   const curatorVault = CuratorVaultFactory.attach(deployedCuratorVault.address);
@@ -165,6 +164,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   await parameterManager.setSaleReferrerBasisPoints(TEST_SALE_REFERRER_BP);
   await parameterManager.setSpendTakerBasisPoints(TEST_SPEND_TAKER_BP);
   await parameterManager.setSpendReferrerBasisPoints(TEST_SPEND_REFERRER_BP);
+  await parameterManager.setBondingCurveParams("5000", "10000000", "29000000000000");
 
   // Return objects for tests to use
   return {

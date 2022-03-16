@@ -227,7 +227,7 @@ describe("ReactionVault Taker Rewards", function () {
       curatorShareId
     );
     const expectedShares = await reactionVault.nftOwnerRewards(rewardsIndex);
-    const expectedPayment = "485572822423524944";
+    const expectedPayment = "250000106789080000";
 
     // Now have the Taker claim - should be successful
     await expect(
@@ -362,7 +362,7 @@ describe("ReactionVault Taker Rewards", function () {
       curatorShareId
     );
     const expectedShares = await reactionVault.nftOwnerRewards(rewardsIndex);
-    const expectedPaymentForCreator = "485572822423524944";
+    const expectedPaymentForCreator = "250000106789080000";
 
     // Now have the Taker claim - should be successful
     await expect(
