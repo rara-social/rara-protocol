@@ -19,7 +19,8 @@ interface ICuratorVault {
         uint256 nftId,
         IERC20Upgradeable paymentToken,
         uint256 paymentAmount,
-        address mintToAddress
+        address mintToAddress,
+        bool isTakerPosition
     ) external returns (uint256);
 
     function sellCuratorShares(

@@ -1,7 +1,7 @@
-import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { ethers } from "hardhat";
-import { ZERO_ADDRESS } from "../Scripts/constants";
+import {expect} from "chai";
+import {BigNumber} from "ethers";
+import {ethers} from "hardhat";
+import {ZERO_ADDRESS} from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -9,16 +9,12 @@ import {
   TEST_SALE_CURATOR_LIABILITY_BP,
 } from "../Scripts/setup";
 import {
-  deriveMakerNftMetaId,
-  deriveReactionNftMetaId,
+  deriveTransformId,
+  deriveReactionId,
   deriveReactionParameterVersion,
   deriveTakerRewardsKey,
 } from "../Scripts/derivedParams";
-import {
-  NFT_NOT_OWNED,
-  NFT_NOT_REGISTERED,
-  NO_REWARDS,
-} from "../Scripts/errors";
+import {NFT_NOT_OWNED, NFT_NOT_REGISTERED, NO_REWARDS} from "../Scripts/errors";
 
 describe("ReactionVault Taker Rewards", function () {
   it("Should fail without rewards allocated", async function () {
@@ -47,7 +43,9 @@ describe("ReactionVault Taker Rewards", function () {
           NFT_ID,
           paymentTokenErc20.address,
           curatorVault.address,
-          NFT_ID
+          NFT_ID,
+          "20",
+          ALICE.address
         )
     ).to.be.revertedWith(NO_REWARDS);
   });
@@ -82,17 +80,14 @@ describe("ReactionVault Taker Rewards", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Mint the purchase price amount of tokens to the owner
     paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
@@ -104,7 +99,7 @@ describe("ReactionVault Taker Rewards", function () {
 
     // Buy the reaction
     await reactionVault.buyReaction(
-      MAKER_NFT_META_ID,
+      TRANSFORM_ID,
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
@@ -118,9 +113,9 @@ describe("ReactionVault Taker Rewards", function () {
       BigNumber.from(TEST_SALE_CURATOR_LIABILITY_BP)
     );
 
-    const REACTION_NFT_META_ID = deriveReactionNftMetaId(
+    const REACTION_NFT_META_ID = deriveReactionId(
       BigNumber.from(REACTION_NFT_PARAMETER_VERSION),
-      BigNumber.from(MAKER_NFT_META_ID),
+      BigNumber.from(TRANSFORM_ID),
       BigNumber.from(0)
     );
 
@@ -156,7 +151,9 @@ describe("ReactionVault Taker Rewards", function () {
           TAKER_NFT_ID,
           paymentTokenErc20.address,
           curatorVault.address,
-          curatorShareId
+          curatorShareId,
+          "0",
+          ALICE.address
         )
     ).to.be.revertedWith(NFT_NOT_REGISTERED);
 
@@ -189,7 +186,9 @@ describe("ReactionVault Taker Rewards", function () {
           TAKER_NFT_ID,
           paymentTokenErc20.address,
           curatorVault.address,
-          curatorShareId
+          curatorShareId,
+          "0",
+          ALICE.address
         )
     ).to.be.revertedWith(NFT_NOT_REGISTERED);
 
@@ -214,7 +213,9 @@ describe("ReactionVault Taker Rewards", function () {
           TAKER_NFT_ID,
           paymentTokenErc20.address,
           curatorVault.address,
-          curatorShareId
+          curatorShareId,
+          "20",
+          ALICE.address
         )
     ).to.be.revertedWith(NFT_NOT_OWNED);
 
@@ -238,20 +239,11 @@ describe("ReactionVault Taker Rewards", function () {
           TAKER_NFT_ID,
           paymentTokenErc20.address,
           curatorVault.address,
-          curatorShareId
+          curatorShareId,
+          expectedShares,
+          TAKER.address
         )
-    )
-      .to.emit(reactionVault, "TakerRewardsSold")
-      .withArgs(
-        TAKER.address,
-        chainId,
-        testingStandard1155.address,
-        TAKER_NFT_ID,
-        curatorVault.address,
-        curatorShareId,
-        expectedShares,
-        expectedPayment
-      );
+    );
 
     // Verify the payment got sent
     expect(await paymentTokenErc20.balanceOf(TAKER.address)).to.be.equal(
@@ -289,17 +281,14 @@ describe("ReactionVault Taker Rewards", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Mint the purchase price amount of tokens to the owner
     paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
@@ -311,7 +300,7 @@ describe("ReactionVault Taker Rewards", function () {
 
     // Buy the reaction
     await reactionVault.buyReaction(
-      MAKER_NFT_META_ID,
+      TRANSFORM_ID,
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
@@ -325,9 +314,9 @@ describe("ReactionVault Taker Rewards", function () {
       BigNumber.from(TEST_SALE_CURATOR_LIABILITY_BP)
     );
 
-    const REACTION_NFT_META_ID = deriveReactionNftMetaId(
+    const REACTION_NFT_META_ID = deriveReactionId(
       BigNumber.from(REACTION_NFT_PARAMETER_VERSION),
-      BigNumber.from(MAKER_NFT_META_ID),
+      BigNumber.from(TRANSFORM_ID),
       BigNumber.from(0)
     );
 
@@ -357,15 +346,13 @@ describe("ReactionVault Taker Rewards", function () {
     testingStandard1155.mint(TAKER.address, TAKER_NFT_ID, "1", [0]);
 
     // Register it
-    await makerRegistrar
-      .connect(TAKER)
-      .registerNft(
-        testingStandard1155.address,
-        TAKER_NFT_ID,
-        CREATOR.address,
-        "10000", // 100% should go to creator (10k basis points is 100%)
-        "0"
-      );
+    await makerRegistrar.connect(TAKER).registerNft(
+      testingStandard1155.address,
+      TAKER_NFT_ID,
+      CREATOR.address,
+      "10000", // 100% should go to creator (10k basis points is 100%)
+      "0"
+    );
 
     const rewardsIndex = deriveTakerRewardsKey(
       chainId,
@@ -387,24 +374,18 @@ describe("ReactionVault Taker Rewards", function () {
           TAKER_NFT_ID,
           paymentTokenErc20.address,
           curatorVault.address,
-          curatorShareId
+          curatorShareId,
+          expectedShares,
+          TAKER.address
         )
-    )
-      .to.emit(reactionVault, "TakerRewardsSold")
-      .withArgs(
-        TAKER.address,
-        chainId,
-        testingStandard1155.address,
-        TAKER_NFT_ID,
-        curatorVault.address,
-        curatorShareId,
-        expectedShares,
-        "0"
-      );
+    );
 
     // Verify the payment was assigned
-    expect(await reactionVault.ownerToRewardsMapping(paymentTokenErc20.address, CREATOR.address)).to.be.equal(
-      expectedPaymentForCreator
-    );
+    expect(
+      await reactionVault.ownerToRewardsMapping(
+        paymentTokenErc20.address,
+        CREATOR.address
+      )
+    ).to.be.equal(expectedPaymentForCreator);
   });
 });

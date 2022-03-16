@@ -1,7 +1,7 @@
-import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { ethers, upgrades } from "hardhat";
-import { TEST_NFT_URI, ZERO_ADDRESS } from "../Scripts/constants";
+import {expect} from "chai";
+import {BigNumber} from "ethers";
+import {ethers, upgrades} from "hardhat";
+import {TEST_NFT_URI, ZERO_ADDRESS} from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -10,8 +10,8 @@ import {
   TEST_SPEND_REFERRER_BP,
 } from "../Scripts/setup";
 import {
-  deriveMakerNftMetaId,
-  deriveReactionNftMetaId,
+  deriveTransformId,
+  deriveReactionId,
   deriveReactionParameterVersion,
   deriveTakerRewardsKey,
 } from "../Scripts/derivedParams";
@@ -24,7 +24,7 @@ import {
 describe("ReactionVault Sell", function () {
   it("Should verify spender has reaction NFT", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { reactionVault } = await deploySystem(OWNER);
+    const {reactionVault} = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // If the user tries to spend reactions they don't have it should fail
@@ -44,7 +44,7 @@ describe("ReactionVault Sell", function () {
 
   it("Should verify reaction quantity > 0", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { reactionVault } = await deploySystem(OWNER);
+    const {reactionVault} = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // If the user tries to spend reactions they don't have it should fail
@@ -93,17 +93,14 @@ describe("ReactionVault Sell", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Mint the purchase price amount of tokens to the owner
     paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
@@ -115,7 +112,7 @@ describe("ReactionVault Sell", function () {
 
     // Buy the reaction
     await reactionVault.buyReaction(
-      MAKER_NFT_META_ID,
+      TRANSFORM_ID,
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
@@ -129,30 +126,31 @@ describe("ReactionVault Sell", function () {
       BigNumber.from(TEST_SALE_CURATOR_LIABILITY_BP)
     );
 
-    const REACTION_NFT_META_ID = deriveReactionNftMetaId(
+    const REACTION_ID = deriveReactionId(
       BigNumber.from(REACTION_NFT_PARAMETER_VERSION),
-      BigNumber.from(MAKER_NFT_META_ID),
+      BigNumber.from(TRANSFORM_ID),
       BigNumber.from(0)
     );
 
-    const metadataHash = BigNumber.from(111);
+    const ipfsMetadataHash = BigNumber.from(111);
 
     // Now spend it
     const transaction = await reactionVault.spendReaction(
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
-      REACTION_NFT_META_ID,
+      REACTION_ID,
       REACTION_AMOUNT,
       ZERO_ADDRESS,
       ZERO_ADDRESS,
-      metadataHash
+      ipfsMetadataHash
     );
     const receipt = await transaction.wait();
 
     // Calculate expected amounts
     const expectedTakerCuratorShares = BigNumber.from("91027210151");
     const expectedSpenderCuratorShares = BigNumber.from("29084233246");
+
     const curatorSharesId = await curatorVault.getTokenId(
       chainId,
       testingStandard1155.address,
@@ -161,44 +159,18 @@ describe("ReactionVault Sell", function () {
     );
 
     // Verify the events
-    // Event TakerRewardsGranted
-    let foundEvent = receipt.events?.find(
-      (x) => x.event === "TakerRewardsGranted"
-    );
-    expect(foundEvent!.args!.takerNftAddress).to.be.equal(
-      testingStandard1155.address
-    );
-    expect(foundEvent!.args!.takerNftId).to.be.equal(TAKER_NFT_ID);
-    expect(foundEvent!.args!.curatorVault).to.be.equal(curatorVault.address);
-    expect(foundEvent!.args!.curatorTokenId).to.be.equal(curatorSharesId);
-    expect(foundEvent!.args!.curatorShareAmount).to.be.equal(
-      expectedTakerCuratorShares
-    );
-
-    // Event SpenderRewardsGranted
-    foundEvent = receipt.events?.find(
-      (x) => x.event === "SpenderRewardsGranted"
-    );
-    expect(foundEvent!.args!.takerNftAddress).to.be.equal(
-      testingStandard1155.address
-    );
-    expect(foundEvent!.args!.takerNftId).to.be.equal(TAKER_NFT_ID);
-    expect(foundEvent!.args!.curatorVault).to.be.equal(curatorVault.address);
-    expect(foundEvent!.args!.curatorTokenId).to.be.equal(curatorSharesId);
-    expect(foundEvent!.args!.curatorShareAmount).to.be.equal(
-      expectedSpenderCuratorShares
-    );
 
     // Event ReactionsSpent
-    foundEvent = receipt.events?.find((x) => x.event === "ReactionsSpent");
+    let foundEvent = receipt.events?.find((x) => x.event === "ReactionsSpent");
     expect(foundEvent!.args!.takerNftAddress).to.be.equal(
       testingStandard1155.address
     );
     expect(foundEvent!.args!.takerNftId).to.be.equal(TAKER_NFT_ID);
-    expect(foundEvent!.args!.reactionMetaId).to.be.equal(REACTION_NFT_META_ID);
+    expect(foundEvent!.args!.reactionId).to.be.equal(REACTION_ID);
     expect(foundEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
     expect(foundEvent!.args!.referrer).to.be.equal(ZERO_ADDRESS);
-    expect(foundEvent!.args!.metaDataHash).to.be.equal(metadataHash);
+    expect(foundEvent!.args!.ipfsMetadataHash).to.be.equal(ipfsMetadataHash);
+    expect(foundEvent!.args!.curatorTokenId).to.be.equal(curatorSharesId);
 
     // Verify the spender (OWNER) got curator shares
     expect(
@@ -249,17 +221,14 @@ describe("ReactionVault Sell", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Mint the purchase price amount of tokens to the owner
     paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
@@ -271,7 +240,7 @@ describe("ReactionVault Sell", function () {
 
     // Buy the reaction
     await reactionVault.buyReaction(
-      MAKER_NFT_META_ID,
+      TRANSFORM_ID,
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
@@ -285,9 +254,9 @@ describe("ReactionVault Sell", function () {
       BigNumber.from(TEST_SALE_CURATOR_LIABILITY_BP)
     );
 
-    const REACTION_NFT_META_ID = deriveReactionNftMetaId(
+    const REACTION_ID = deriveReactionId(
       BigNumber.from(REACTION_NFT_PARAMETER_VERSION),
-      BigNumber.from(MAKER_NFT_META_ID),
+      BigNumber.from(TRANSFORM_ID),
       BigNumber.from(0)
     );
 
@@ -296,7 +265,7 @@ describe("ReactionVault Sell", function () {
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
-      REACTION_NFT_META_ID,
+      REACTION_ID,
       REACTION_AMOUNT,
       REFERRER.address, // Referrer
       ZERO_ADDRESS,
@@ -353,17 +322,14 @@ describe("ReactionVault Sell", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Mint the purchase price amount of tokens to the owner
     paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
@@ -375,7 +341,7 @@ describe("ReactionVault Sell", function () {
 
     // Buy the reaction
     await reactionVault.buyReaction(
-      MAKER_NFT_META_ID,
+      TRANSFORM_ID,
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
@@ -389,9 +355,9 @@ describe("ReactionVault Sell", function () {
       BigNumber.from(TEST_SALE_CURATOR_LIABILITY_BP)
     );
 
-    const REACTION_NFT_META_ID = deriveReactionNftMetaId(
+    const REACTION_ID = deriveReactionId(
       BigNumber.from(REACTION_NFT_PARAMETER_VERSION),
-      BigNumber.from(MAKER_NFT_META_ID),
+      BigNumber.from(TRANSFORM_ID),
       BigNumber.from(0)
     );
 
@@ -401,7 +367,7 @@ describe("ReactionVault Sell", function () {
         chainId,
         testingStandard1155.address,
         TAKER_NFT_ID,
-        REACTION_NFT_META_ID,
+        REACTION_ID,
         REACTION_AMOUNT,
         ZERO_ADDRESS,
         ALICE.address, // Invalid address
@@ -469,17 +435,14 @@ describe("ReactionVault Sell", function () {
       );
 
     // Get the NFT source ID
-    const NFT_SOURCE_ID = await makerRegistrar.nftToSourceLookup(
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
       testingStandard1155.address,
       MAKER_NFT_ID
     );
 
     // Encode the params and hash it to get the meta URI
-    const MAKER_NFT_META_ID = deriveMakerNftMetaId(
-      NFT_SOURCE_ID,
-      BigNumber.from(0)
-    );
+    const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Mint the purchase price amount of tokens to the owner
     paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
@@ -491,7 +454,7 @@ describe("ReactionVault Sell", function () {
 
     // Buy the reaction
     await reactionVault.buyReaction(
-      MAKER_NFT_META_ID,
+      TRANSFORM_ID,
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
@@ -505,9 +468,9 @@ describe("ReactionVault Sell", function () {
       BigNumber.from(TEST_SALE_CURATOR_LIABILITY_BP)
     );
 
-    const REACTION_NFT_META_ID = deriveReactionNftMetaId(
+    const REACTION_ID = deriveReactionId(
       BigNumber.from(REACTION_NFT_PARAMETER_VERSION),
-      BigNumber.from(MAKER_NFT_META_ID),
+      BigNumber.from(TRANSFORM_ID),
       BigNumber.from(0)
     );
 
@@ -516,7 +479,7 @@ describe("ReactionVault Sell", function () {
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
-      REACTION_NFT_META_ID,
+      REACTION_ID,
       REACTION_AMOUNT,
       ZERO_ADDRESS,
       curatorVault.address, // Custom curator vault
@@ -535,41 +498,14 @@ describe("ReactionVault Sell", function () {
     );
 
     // Verify the events
-    // Event TakerRewardsGranted
-    let foundEvent = receipt.events?.find(
-      (x) => x.event === "TakerRewardsGranted"
-    );
-    expect(foundEvent!.args!.takerNftAddress).to.be.equal(
-      testingStandard1155.address
-    );
-    expect(foundEvent!.args!.takerNftId).to.be.equal(TAKER_NFT_ID);
-    expect(foundEvent!.args!.curatorVault).to.be.equal(curatorVault.address);
-    expect(foundEvent!.args!.curatorTokenId).to.be.equal(curatorSharesId);
-    expect(foundEvent!.args!.curatorShareAmount).to.be.equal(
-      expectedTakerCuratorShares
-    );
-
-    // Event SpenderRewardsGranted
-    foundEvent = receipt.events?.find(
-      (x) => x.event === "SpenderRewardsGranted"
-    );
-    expect(foundEvent!.args!.takerNftAddress).to.be.equal(
-      testingStandard1155.address
-    );
-    expect(foundEvent!.args!.takerNftId).to.be.equal(TAKER_NFT_ID);
-    expect(foundEvent!.args!.curatorVault).to.be.equal(curatorVault.address);
-    expect(foundEvent!.args!.curatorTokenId).to.be.equal(curatorSharesId);
-    expect(foundEvent!.args!.curatorShareAmount).to.be.equal(
-      expectedSpenderCuratorShares
-    );
 
     // Event ReactionsSpent
-    foundEvent = receipt.events?.find((x) => x.event === "ReactionsSpent");
+    let foundEvent = receipt.events?.find((x) => x.event === "ReactionsSpent");
     expect(foundEvent!.args!.takerNftAddress).to.be.equal(
       testingStandard1155.address
     );
     expect(foundEvent!.args!.takerNftId).to.be.equal(TAKER_NFT_ID);
-    expect(foundEvent!.args!.reactionMetaId).to.be.equal(REACTION_NFT_META_ID);
+    expect(foundEvent!.args!.reactionId).to.be.equal(REACTION_ID);
     expect(foundEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
     expect(foundEvent!.args!.referrer).to.be.equal(ZERO_ADDRESS);
 
