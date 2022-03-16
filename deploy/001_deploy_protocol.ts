@@ -80,7 +80,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const curatorShares1155Address = res.address;
   console.log({ curatorShares1155Address })
 
-  res = await deployProxyContract(hre, 'PermanentCuratorVault', [addressManagerAddress, config.bondingCurveReserve, curatorShares1155Address]);
+  res = await deployProxyContract(hre, 'SigmoidCuratorVault', [addressManagerAddress, curatorShares1155Address]);
   const curatorVaultAddress = res.address;
   console.log({ curatorVaultAddress })
 
@@ -142,6 +142,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   await parameterManager.setSaleReferrerBasisPoints(config.saleReferrerBasisPoints);
   await parameterManager.setSpendTakerBasisPoints(config.spendTakerBasisPoints);
   await parameterManager.setSpendReferrerBasisPoints(config.spendReferrerBasisPoints);
+  await parameterManager.setBondingCurveParams(config.bondingCurveA, config.bondingCurveB, config.bondingCurveC);
 
   // Remove the temporary permissions for the deploy account not that params are updated
   console.log('\n\nRevoking temp permissions for deployer')
