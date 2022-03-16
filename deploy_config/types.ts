@@ -1,15 +1,17 @@
 type DeployConfig = {
-  reactionNftUri: string,
-  fxChildBridgeAddress: string,
-  reactionPrice: string,
-  curatorLiabilityBasisPoints: string,
-  saleReferrerBasisPoints: string,
-  spendTakerBasisPoints: string,
-  spendReferrerBasisPoints: string,
-  paymentTokenAddress: string,
   bondingCurveA: string,
   bondingCurveB: string,
   bondingCurveC: string,
+  curatorLiabilityBasisPoints: string,
+  fxChildBridgeAddress: string,
+  fxRootBridgeAddress: string
+  fxRootCheckPointManager: string,
+  paymentTokenAddress: string,
+  reactionNftUri: string,
+  reactionPrice: string,
+  saleReferrerBasisPoints: string,
+  spendReferrerBasisPoints: string,
+  spendTakerBasisPoints: string,
 }
 
 export default DeployConfig;

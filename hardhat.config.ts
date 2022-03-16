@@ -9,6 +9,7 @@ import 'solidity-coverage';
 import '@openzeppelin/hardhat-upgrades';
 import 'hardhat-contract-sizer';
 import 'hardhat-deploy';
+import "@nomiclabs/hardhat-etherscan";
 
 dotenv.config();
 
@@ -39,6 +40,18 @@ const config: HardhatUserConfig = {
     localhost: {
       url: 'http://127.0.0.1:8545',
     },
+    mumbai: {
+      url: 'https://rpc-mumbai.maticvigil.com',
+      accounts: [
+        process.env.DEPLOY_PRIVATE_KEY! // Env should set private key used for deploy
+      ],
+    },
+    goerli: {
+      url: process.env.INFURA_RPC_GOERLI!, // Get infura endpoint from free acct
+      accounts: [
+        process.env.DEPLOY_PRIVATE_KEY! // Env should set private key used for deploy
+      ],
+    }
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
