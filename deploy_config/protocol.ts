@@ -1,15 +1,14 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { DeployFunction } from 'hardhat-deploy/types';
 import { DeployResult } from 'hardhat-deploy/dist/types';
+import DeployConfig from './types'
 
-import config from '../deploy_config/hardhat'
 import { ethers } from 'hardhat';
 
 const DEBUG_LOG = true;
 
 
 // Helper to deploy proxy with OZ implementation
-const deployProxyContract = async (hre: HardhatRuntimeEnvironment, name: string, initializeVars: any[]) => {
+export const deployProxyContract = async (hre: HardhatRuntimeEnvironment, name: string, initializeVars: any[]) => {
   const { deployments, getNamedAccounts } = hre;
   const { deployer } = await getNamedAccounts();
   const { deploy } = deployments;
@@ -32,7 +31,7 @@ const deployProxyContract = async (hre: HardhatRuntimeEnvironment, name: string,
 }
 
 // Helper to deploy non-proxy contracts
-const deployContract = async (hre: HardhatRuntimeEnvironment, name: string, initializeVars: any[]) => {
+export const deployContract = async (hre: HardhatRuntimeEnvironment, name: string, initializeVars: any[]) => {
   const { deployments, getNamedAccounts } = hre;
   const { deployer } = await getNamedAccounts();
   const { deploy } = deployments;
@@ -47,10 +46,9 @@ const deployContract = async (hre: HardhatRuntimeEnvironment, name: string, init
 
 
 // Deploy the protocol on the L2
-const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
+const deployProtocol = async (hre: HardhatRuntimeEnvironment, config: DeployConfig) => {
   const { getNamedAccounts } = hre;
   const { deployer } = await getNamedAccounts();
-  console.log("\n\nDeploying with account " + deployer);
 
   let res: DeployResult = await deployProxyContract(hre, 'RoleManager', [deployer]);
   const roleManagerAddress = res.address;
@@ -88,73 +86,58 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const childRegistrarAddress = res.address;
   console.log({ childRegistrarAddress })
 
-  // TODO: This needs to be refactored out so it doesn't run on anything but hardhat or local networks
-  //*************************************************** */
-  res = await deployProxyContract(hre, 'TestErc20', ["TEST", "TST",]);
-  const testPaymentTokenErc20 = res.address;
-  console.log({ testPaymentTokenErc20 })
-
-  res = await deployProxyContract(hre, 'TestErc1155', [config.reactionNftUri, addressManagerAddress]);
-  const test155NftAddress = res.address;
-  console.log({ test155NftAddress })
-
-  res = await deployProxyContract(hre, 'TestErc721', [config.reactionNftUri, addressManagerAddress]);
-  const test721NftAddress = res.address;
-  console.log({ test721NftAddress })
-  //*************************************************** */
-
 
   // Grant Roles for contracts in the protocol
   const roleManager = await ethers.getContractAt("RoleManager", roleManagerAddress)
 
   console.log('\n\nUpdating Roles')
-  await roleManager.grantRole(await roleManager.REACTION_NFT_ADMIN(), reactionVaultAddress);
+  await roleManager.grantRole(await roleManager.REACTION_NFT_ADMIN(), reactionVaultAddress, { gasLimit: "200000" });
   console.log('\n\nGranted REACTION_NFT_ADMIN to ' + reactionVaultAddress)
 
-  await roleManager.grantRole(await roleManager.CURATOR_VAULT_PURCHASER(), reactionVaultAddress);
+  await roleManager.grantRole(await roleManager.CURATOR_VAULT_PURCHASER(), reactionVaultAddress, { gasLimit: "200000" });
   console.log('Granted CURATOR_VAULT_PURCHASER to ' + reactionVaultAddress)
 
-  await roleManager.grantRole(await roleManager.CURATOR_SHARES_ADMIN(), curatorVaultAddress);
+  await roleManager.grantRole(await roleManager.CURATOR_SHARES_ADMIN(), curatorVaultAddress, { gasLimit: "200000" });
   console.log('Granted CURATOR_SHARES_ADMIN to ' + curatorVaultAddress)
 
   // Temporarily grant address manager and parameter manager roles to the deploying account
-  await roleManager.grantRole(await roleManager.ADDRESS_MANAGER_ADMIN(), deployer);
+  const roleRes = await roleManager.grantRole(await roleManager.ADDRESS_MANAGER_ADMIN(), deployer, { gasLimit: "200000" });
   console.log('Granted ADDRESS_MANAGER_ADMIN to ' + deployer)
 
-  await roleManager.grantRole(await roleManager.PARAMETER_MANAGER_ADMIN(), deployer);
+  await roleManager.grantRole(await roleManager.PARAMETER_MANAGER_ADMIN(), deployer, { gasLimit: "200000" });
   console.log('Granted PARAMETER_MANAGER_ADMIN to ' + deployer)
 
   // Set addresses in address manager for the protocol
-  console.log('\n\nUpdating addresses and parameters in the protocol')
+  console.log('\n\nUpdating addresses in the protocol')
   const addressManager = await ethers.getContractAt("AddressManager", addressManagerAddress)
-  await addressManager.setRoleManager(roleManagerAddress);
-  await addressManager.setParameterManager(parameterManagerAddress);
-  await addressManager.setMakerRegistrar(makerRegistrarAddress);
-  await addressManager.setReactionNftContract(reactionNft1155Address);
-  await addressManager.setDefaultCuratorVault(curatorVaultAddress);
-  await addressManager.setChildRegistrar(childRegistrarAddress);
+  await addressManager.setRoleManager(roleManagerAddress, { gasLimit: "200000" });
+  await addressManager.setParameterManager(parameterManagerAddress, { gasLimit: "200000" });
+  await addressManager.setMakerRegistrar(makerRegistrarAddress, { gasLimit: "200000" });
+  await addressManager.setReactionNftContract(reactionNft1155Address, { gasLimit: "200000" });
+  await addressManager.setDefaultCuratorVault(curatorVaultAddress, { gasLimit: "200000" });
+  await addressManager.setChildRegistrar(childRegistrarAddress, { gasLimit: "200000" });
 
   // Set parameters in the protocol
+  console.log('\n\nUpdating parameters in the protocol')
   const parameterManager = await ethers.getContractAt("ParameterManager", parameterManagerAddress)
-  await parameterManager.setPaymentToken(testPaymentTokenErc20);
-  await parameterManager.setReactionPrice(config.reactionPrice);
-  await parameterManager.setSaleCuratorLiabilityBasisPoints(config.curatorLiabilityBasisPoints);
-  await parameterManager.setSaleReferrerBasisPoints(config.saleReferrerBasisPoints);
-  await parameterManager.setSpendTakerBasisPoints(config.spendTakerBasisPoints);
-  await parameterManager.setSpendReferrerBasisPoints(config.spendReferrerBasisPoints);
-  await parameterManager.setBondingCurveParams(config.bondingCurveA, config.bondingCurveB, config.bondingCurveC);
+  await parameterManager.setPaymentToken(config.paymentTokenAddress, { gasLimit: "200000" });
+  await parameterManager.setReactionPrice(config.reactionPrice, { gasLimit: "200000" });
+  await parameterManager.setSaleCuratorLiabilityBasisPoints(config.curatorLiabilityBasisPoints, { gasLimit: "200000" });
+  await parameterManager.setSaleReferrerBasisPoints(config.saleReferrerBasisPoints, { gasLimit: "200000" });
+  await parameterManager.setSpendTakerBasisPoints(config.spendTakerBasisPoints, { gasLimit: "200000" });
+  await parameterManager.setSpendReferrerBasisPoints(config.spendReferrerBasisPoints, { gasLimit: "200000" });
+  await parameterManager.setBondingCurveParams(config.bondingCurveA, config.bondingCurveB, config.bondingCurveC, { gasLimit: "200000" });
 
   // Remove the temporary permissions for the deploy account not that params are updated
   console.log('\n\nRevoking temp permissions for deployer')
-  await roleManager.revokeRole(await roleManager.ADDRESS_MANAGER_ADMIN(), deployer);
+  await roleManager.revokeRole(await roleManager.ADDRESS_MANAGER_ADMIN(), deployer, { gasLimit: "200000" });
   console.log('Revoked ADDRESS_MANAGER_ADMIN to ' + deployer)
 
-  await roleManager.revokeRole(await roleManager.PARAMETER_MANAGER_ADMIN(), deployer);
+  await roleManager.revokeRole(await roleManager.PARAMETER_MANAGER_ADMIN(), deployer, { gasLimit: "200000" });
   console.log('Revoked PARAMETER_MANAGER_ADMIN to ' + deployer)
 
-  console.log('\n\nDeploy complete')
+  console.log('\n\nDeploy complete, run "hardhat --network XXXX etherscan-verify" to verify contracts')
 
 };
 
-module.exports.tags = ['RA'];
-export default func;
+export default deployProtocol;

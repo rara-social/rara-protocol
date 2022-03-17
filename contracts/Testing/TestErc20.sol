@@ -18,4 +18,9 @@ contract TestErc20 is ERC20Upgradeable {
     function mint(address to, uint256 amount) public virtual {
         _mint(to, amount);
     }
+
+    // 6 decimals to match USDC
+    function decimals() public view virtual override returns (uint8) {
+        return 6;
+    }
 }
