@@ -27,16 +27,16 @@ interface IRoleManager {
         view
         returns (bool);
 
-    /// @dev Determines if the specified address has permission to purchase curator vaults shares
+    /// @dev Determines if the specified address has permission to purchase curator vault tokens
     /// @param potentialAddress Address to check
     function isCuratorVaultPurchaser(address potentialAddress)
         external
         view
         returns (bool);
 
-    /// @dev Determines if the specified address has permission to mint and burn curator shares
+    /// @dev Determines if the specified address has permission to mint and burn curator tokens
     /// @param potentialAddress Address to check
-    function isCuratorSharesAdmin(address potentialAddress)
+    function isCuratorTokenAdmin(address potentialAddress)
         external
         view
         returns (bool);

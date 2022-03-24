@@ -26,7 +26,7 @@ describe("ReactionVault Buy", function () {
       makerRegistrar,
       roleManager,
       paymentTokenErc20,
-      curatorShares,
+      curatorToken,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -93,13 +93,13 @@ describe("ReactionVault Buy", function () {
     );
     expect(spendEvent).to.not.be.null;
 
-    // Verify curator shares are in the wallet
+    // Verify curator tokens are in the wallet
     expect(
-      await curatorShares.balanceOf(
+      await curatorToken.balanceOf(
         OWNER.address,
         spendEvent!.args!.curatorTokenId!
       )
-    ).to.be.equal(spendEvent!.args!.curatorShareAmount);
+    ).to.be.equal(spendEvent!.args!.curatorTokenAmount);
   });
 
   it("Should buy and spend multiple reactions", async function () {
@@ -110,7 +110,7 @@ describe("ReactionVault Buy", function () {
       makerRegistrar,
       roleManager,
       paymentTokenErc20,
-      curatorShares,
+      curatorToken,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -184,12 +184,12 @@ describe("ReactionVault Buy", function () {
     );
     expect(spendEvent).to.not.be.null;
 
-    // Verify curator shares are in the wallet
+    // Verify curator Tokens are in the wallet
     expect(
-      await curatorShares.balanceOf(
+      await curatorToken.balanceOf(
         OWNER.address,
         spendEvent!.args!.curatorTokenId!
       )
-    ).to.be.equal(spendEvent!.args!.curatorShareAmount);
+    ).to.be.equal(spendEvent!.args!.curatorTokenAmount);
   });
 });

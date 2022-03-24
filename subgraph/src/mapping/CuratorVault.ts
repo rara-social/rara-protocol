@@ -3,19 +3,19 @@ import {BigInt, Address, log} from "@graphprotocol/graph-ts";
 import {User, CuratorVaultToken, UserPosition} from "../../generated/schema";
 
 import {
-  CuratorSharesBought,
-  CuratorSharesSold,
-} from "../../generated/PermanentCuratorVault/PermanentCuratorVault";
+  CuratorTokensBought,
+  CuratorTokensSold,
+} from "../../generated/CuratorVault/SigmoidCuratorVault";
 
-export function handleCuratorSharesBought(event: CuratorSharesBought): void {
-  log.log(3, "CuratorSharesBought");
-  // uint256 indexed curatorShareTokenId,
+export function handleCuratorTokensBought(event: CuratorTokensBought): void {
+  log.log(3, "CuratorTokensBought");
+  // uint256 indexed curatorTokenId,
   // uint256 nftChainId,
   // address nftAddress,
   // uint256 nftId,
   // IERC20Upgradeable paymentToken,
   // uint256 paymentTokenPaid,
-  // uint256 curatorSharesBought,
+  // uint256 curatorTokensBought,
   // bool isTakerPosition
 
   //
@@ -23,7 +23,7 @@ export function handleCuratorSharesBought(event: CuratorSharesBought): void {
   //
 
   // load CuratorVaultToken
-  let curatorVaultTokenKey = event.params.curatorShareTokenId.toHexString();
+  let curatorVaultTokenKey = event.params.curatorTokenId.toHexString();
   let curatorVaultToken = CuratorVaultToken.load(curatorVaultTokenKey);
   if (curatorVaultToken == null) {
     // type CuratorVaultToken @entity {
@@ -34,26 +34,26 @@ export function handleCuratorSharesBought(event: CuratorSharesBought): void {
     //   nftContractAddress: Bytes!
     //   nftId: BigInt!
     //   paymentToken: Bytes!
-    //   sharesOutstanding: BigInt
+    //   tokensOutstanding: BigInt
     //   currentBalance: BigDecimal
-    //   sharesTotal: BigInt
+    //   tokensTotal: BigInt
     //   depositsTotal: BigDecimal
     // }
     curatorVaultToken = new CuratorVaultToken(curatorVaultTokenKey);
     // curatorVaultToken.curatorVaultAddress: Bytes! TODO
-    curatorVaultToken.curatorTokenId = event.params.curatorShareTokenId;
+    curatorVaultToken.curatorTokenId = event.params.curatorTokenId;
     curatorVaultToken.nftChainId = event.params.nftChainId;
     curatorVaultToken.nftContractAddress = event.params.nftAddress;
     curatorVaultToken.nftId = event.params.nftId;
     curatorVaultToken.paymentToken = event.params.paymentToken;
   }
 
-  // increase shares
-  curatorVaultToken.sharesOutstanding =
-    curatorVaultToken.sharesOutstanding.plus(event.params.curatorSharesBought);
+  // increase tokens
+  curatorVaultToken.tokensOutstanding =
+    curatorVaultToken.tokensOutstanding.plus(event.params.curatorTokensBought);
 
-  curatorVaultToken.sharesTotal = curatorVaultToken.sharesTotal.plus(
-    event.params.curatorSharesBought
+  curatorVaultToken.tokensTotal = curatorVaultToken.tokensTotal.plus(
+    event.params.curatorTokensBought
   );
 
   // increase balance
@@ -79,15 +79,15 @@ export function handleCuratorSharesBought(event: CuratorSharesBought): void {
   // load user
   let userPositionKey =
     event.transaction.from.toHexString() +
-    event.params.curatorShareTokenId.toHexString();
+    event.params.curatorTokenId.toHexString();
   let userPosition = UserPosition.load(userPositionKey);
   if (userPosition == null) {
     // id: ID! #msg.sender + curatorTokenId
     // user: User!
     // isTakerPostion: Boolean!
     // curatorVaultToken: CuratorVaultToken!
-    // sharesAvailable: BigInt!
-    // sharesTotal: BigInt
+    // tokensAvailable: BigInt!
+    // tokensTotal: BigInt
     // refundsTotal: BigDecimal
     userPosition = new UserPosition(userPositionKey);
     userPosition.user = user.id;
@@ -95,36 +95,36 @@ export function handleCuratorSharesBought(event: CuratorSharesBought): void {
     userPosition.curatorVaultToken = curatorVaultToken.id;
   }
 
-  userPosition.sharesAvailable = userPosition.sharesAvailable.plus(
-    event.params.curatorSharesBought
+  userPosition.tokensAvailable = userPosition.tokensAvailable.plus(
+    event.params.curatorTokensBought
   );
-  userPosition.sharesTotal = userPosition.sharesTotal.plus(
-    event.params.curatorSharesBought
+  userPosition.tokensTotal = userPosition.tokensTotal.plus(
+    event.params.curatorTokensBought
   );
 
   userPosition.save();
 }
 
-export function handleCuratorSharesSold(event: CuratorSharesSold): void {
-  log.log(3, "CuratorSharesSold");
-  // uint256 indexed curatorShareTokenId,
+export function handleCuratorTokensSold(event: CuratorTokensSold): void {
+  log.log(3, "CuratorTokensSold");
+  // uint256 indexed curatorTokenId,
   // uint256 paymentTokenRefunded,
-  // uint256 curatorSharesSold
+  // uint256 curatorTokensSold
 
   //
   // CuratorVaultToken
   //
 
   // load CuratorVaultToken
-  let curatorVaultTokenKey = event.params.curatorShareTokenId.toHexString();
+  let curatorVaultTokenKey = event.params.curatorTokenId.toHexString();
   let curatorVaultToken = CuratorVaultToken.load(curatorVaultTokenKey);
   if (curatorVaultToken == null) {
     curatorVaultToken = new CuratorVaultToken(curatorVaultTokenKey);
   }
 
-  // decrease shares
-  curatorVaultToken.sharesOutstanding =
-    curatorVaultToken.sharesOutstanding.minus(event.params.curatorSharesSold);
+  // decrease tokens
+  curatorVaultToken.tokensOutstanding =
+    curatorVaultToken.tokensOutstanding.minus(event.params.curatorTokensSold);
 
   // decrease balance
   curatorVaultToken.currentBalance = curatorVaultToken.currentBalance.minus(
@@ -140,14 +140,14 @@ export function handleCuratorSharesSold(event: CuratorSharesSold): void {
   // load user
   let userPositionKey =
     event.transaction.from.toHexString() +
-    event.params.curatorShareTokenId.toHexString();
+    event.params.curatorTokenId.toHexString();
   let userPosition = UserPosition.load(userPositionKey);
   if (userPosition == null) {
     userPosition = new UserPosition(userPositionKey);
   }
 
-  userPosition.sharesAvailable = userPosition.sharesAvailable.minus(
-    event.params.curatorSharesSold
+  userPosition.tokensAvailable = userPosition.tokensAvailable.minus(
+    event.params.curatorTokensSold
   );
 
   userPosition.save();

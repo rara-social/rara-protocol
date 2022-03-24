@@ -63,7 +63,7 @@ type UserSpend @entity {
   quantity: BigInt!
   ipfsMetadataHash: BigInt
   curatorVault: CuratorVaultToken!
-  sharesPurchased: BigInt!
+  tokensPurchased: BigInt!
 }
 
 type CuratorVaultToken @entity {
@@ -75,10 +75,10 @@ type CuratorVaultToken @entity {
   nftId: BigInt!
   paymentToken: Bytes!
 
-  sharesOutstanding: BigInt!
+  tokensOutstanding: BigInt!
   currentBalance: BigDecimal!
 
-  sharesTotal: BigInt!
+  tokensTotal: BigInt!
   depositsTotal: BigDecimal!
 }
 
@@ -88,8 +88,8 @@ type UserPosition @entity {
   isTakerPostion: Boolean!
   curatorVaultToken: CuratorVaultToken!
 
-  sharesAvailable: BigInt!
+  tokensAvailable: BigInt!
 
-  sharesTotal: BigInt!
+  tokensTotal: BigInt!
   refundsTotal: BigDecimal!
 }

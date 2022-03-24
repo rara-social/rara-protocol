@@ -43,7 +43,7 @@ export const deriveTakerRewardsKey = (
   takerNftAddress: string,
   takerNftId: BigNumber,
   curatorVaultAddress: string,
-  curatorSharesId: BigNumber
+  curatorTokenId: BigNumber
 ) => {
   const encodedParams = ethers.utils.defaultAbiCoder.encode(
     ["uint256", "address", "uint256", "address", "uint256"],
@@ -52,7 +52,7 @@ export const deriveTakerRewardsKey = (
       takerNftAddress,
       takerNftId,
       curatorVaultAddress,
-      curatorSharesId,
+      curatorTokenId,
     ]
   );
   return ethers.utils.keccak256(encodedParams);

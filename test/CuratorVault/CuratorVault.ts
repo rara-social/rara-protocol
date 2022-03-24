@@ -21,7 +21,7 @@ describe("CuratorVault", function () {
 
     // Should fail
     await expect(
-      curatorVault.buyCuratorShares(
+      curatorVault.buyCuratorTokens(
         chainId,
         ZERO_ADDRESS,
         "1",
@@ -48,7 +48,7 @@ describe("CuratorVault", function () {
 
     // Should fail
     await expect(
-      curatorVault.buyCuratorShares(
+      curatorVault.buyCuratorTokens(
         chainId,
         ZERO_ADDRESS,
         "1",
@@ -64,7 +64,7 @@ describe("CuratorVault", function () {
 
     // Should fail since there is no allowance
     await expect(
-      curatorVault.buyCuratorShares(
+      curatorVault.buyCuratorTokens(
         chainId,
         ZERO_ADDRESS,
         "1",
@@ -88,7 +88,7 @@ describe("CuratorVault", function () {
     await expect(
       curatorVault
         .connect(ALICE)
-        .buyCuratorShares(
+        .buyCuratorTokens(
           chainId,
           ZERO_ADDRESS,
           "1",
@@ -102,7 +102,7 @@ describe("CuratorVault", function () {
 
   it("Should allow purchase and sale", async function () {
     const [OWNER] = await ethers.getSigners();
-    const {curatorVault, paymentTokenErc20, curatorShares, roleManager} =
+    const {curatorVault, paymentTokenErc20, curatorToken, roleManager} =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -120,8 +120,8 @@ describe("CuratorVault", function () {
     // Approve the tokens
     await paymentTokenErc20.approve(curatorVault.address, paymentAmount);
 
-    // Get the curator share ID
-    const curatorShareId = await curatorVault.getTokenId(
+    // Get the curator Token ID
+    const curatorTokenId = await curatorVault.getTokenId(
       chainId,
       ZERO_ADDRESS,
       "1",
@@ -131,9 +131,9 @@ describe("CuratorVault", function () {
     // Expected amount for first purchase
     const expectedAmount = "165012";
 
-    // Buy curator shares for the owner
+    // Buy curator Tokens for the owner
     await expect(
-      curatorVault.buyCuratorShares(
+      curatorVault.buyCuratorTokens(
         chainId,
         ZERO_ADDRESS,
         "1",
@@ -143,9 +143,9 @@ describe("CuratorVault", function () {
         false
       )
     )
-      .to.emit(curatorVault, "CuratorSharesBought")
+      .to.emit(curatorVault, "CuratorTokensBought")
       .withArgs(
-        curatorShareId,
+        curatorTokenId,
         chainId,
         ZERO_ADDRESS,
         "1",
@@ -155,14 +155,14 @@ describe("CuratorVault", function () {
         false
       );
 
-    // Verify the shares were bought
+    // Verify the Tokens were bought
     expect(
-      await curatorShares.balanceOf(OWNER.address, curatorShareId)
+      await curatorToken.balanceOf(OWNER.address, curatorTokenId)
     ).to.equal(expectedAmount);
 
     // Now sell it back and get back full amount of funds
     await expect(
-      curatorVault.sellCuratorShares(
+      curatorVault.sellCuratorTokens(
         chainId,
         ZERO_ADDRESS,
         "1",
@@ -171,13 +171,13 @@ describe("CuratorVault", function () {
         OWNER.address
       )
     )
-      .to.emit(curatorVault, "CuratorSharesSold")
-      .withArgs(curatorShareId, paymentAmount, expectedAmount);
+      .to.emit(curatorVault, "CuratorTokensSold")
+      .withArgs(curatorTokenId, paymentAmount, expectedAmount);
   });
 
   it("Should allow purchase and sale with increasing price", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const {curatorVault, roleManager, paymentTokenErc20, curatorShares} =
+    const {curatorVault, roleManager, paymentTokenErc20, curatorToken} =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -200,7 +200,7 @@ describe("CuratorVault", function () {
       .approve(curatorVault.address, paymentAmount);
 
     // Buy for the owner
-    await curatorVault.buyCuratorShares(
+    await curatorVault.buyCuratorTokens(
       chainId,
       ZERO_ADDRESS,
       "1",
@@ -218,7 +218,7 @@ describe("CuratorVault", function () {
 
     await curatorVault
       .connect(ALICE)
-      .buyCuratorShares(
+      .buyCuratorTokens(
         chainId,
         ZERO_ADDRESS,
         "1",
@@ -228,21 +228,21 @@ describe("CuratorVault", function () {
         true
       );
 
-    // Get the curator share ID
-    const curatorShareId = await curatorVault.getTokenId(
+    // Get the curator Token ID
+    const curatorTokenId = await curatorVault.getTokenId(
       chainId,
       ZERO_ADDRESS,
       "1",
       paymentTokenErc20.address
     );
 
-    const ownerBalance = await curatorShares.balanceOf(
+    const ownerBalance = await curatorToken.balanceOf(
       OWNER.address,
-      curatorShareId
+      curatorTokenId
     );
-    const aliceBalance = await curatorShares.balanceOf(
+    const aliceBalance = await curatorToken.balanceOf(
       ALICE.address,
-      curatorShareId
+      curatorTokenId
     );
 
     expect(ownerBalance.toNumber()).to.be.greaterThan(aliceBalance.toNumber());

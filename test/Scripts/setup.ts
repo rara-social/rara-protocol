@@ -1,7 +1,7 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { BigNumber } from "ethers";
-import { ethers, upgrades } from "hardhat";
-import { TEST_NFT_URI } from "./constants";
+import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/signers";
+import {BigNumber} from "ethers";
+import {ethers, upgrades} from "hardhat";
+import {TEST_NFT_URI} from "./constants";
 
 export const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
 export const TEST_SALE_CURATOR_LIABILITY_BP = 5_000; // 50% goes to curator liability
@@ -102,16 +102,16 @@ const deploySystem = async (owner: SignerWithAddress) => {
   ]);
   const paymentTokenErc20 = TestErc20Factory.attach(deployedTestErc20.address);
 
-  // Deploy the curator Shares Token Contract
-  const CuratorShares1155Factory = await ethers.getContractFactory(
-    "CuratorShares1155"
+  // Deploy the curator token Contract
+  const CuratorToken1155Factory = await ethers.getContractFactory(
+    "CuratorToken1155"
   );
-  const deployedCuratorShares = await upgrades.deployProxy(
-    CuratorShares1155Factory,
+  const deployedCuratorToken = await upgrades.deployProxy(
+    CuratorToken1155Factory,
     [TEST_NFT_URI, addressManager.address]
   );
-  const curatorShares = CuratorShares1155Factory.attach(
-    deployedCuratorShares.address
+  const curatorToken = CuratorToken1155Factory.attach(
+    deployedCuratorToken.address
   );
 
   // Deploy the Default Curator Vault
@@ -120,7 +120,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   );
   const deployedCuratorVault = await upgrades.deployProxy(CuratorVaultFactory, [
     addressManager.address,
-    curatorShares.address,
+    curatorToken.address,
   ]);
   const curatorVault = CuratorVaultFactory.attach(deployedCuratorVault.address);
 
@@ -137,15 +137,30 @@ const deploySystem = async (owner: SignerWithAddress) => {
 
   // Update permissions in the Role Manager
   // Owner can update addresses
-  await roleManager.grantRole(await roleManager.ADDRESS_MANAGER_ADMIN(), owner.address);
+  await roleManager.grantRole(
+    await roleManager.ADDRESS_MANAGER_ADMIN(),
+    owner.address
+  );
   // Owner can update parameters
-  await roleManager.grantRole(await roleManager.PARAMETER_MANAGER_ADMIN(), owner.address);
+  await roleManager.grantRole(
+    await roleManager.PARAMETER_MANAGER_ADMIN(),
+    owner.address
+  );
   // Reaction Vault can mint/burn reactions
-  await roleManager.grantRole(await roleManager.REACTION_NFT_ADMIN(), reactionVault.address);
-  // Reaction Vault can purchase curator shares
-  await roleManager.grantRole(await roleManager.CURATOR_VAULT_PURCHASER(), reactionVault.address);
-  // Curator Vault can mint/burn curator shares
-  await roleManager.grantRole(await roleManager.CURATOR_SHARES_ADMIN(), curatorVault.address);
+  await roleManager.grantRole(
+    await roleManager.REACTION_NFT_ADMIN(),
+    reactionVault.address
+  );
+  // Reaction Vault can purchase curator token
+  await roleManager.grantRole(
+    await roleManager.CURATOR_VAULT_PURCHASER(),
+    reactionVault.address
+  );
+  // Curator Vault can mint/burn curator token
+  await roleManager.grantRole(
+    await roleManager.CURATOR_TOKEN_ADMIN(),
+    curatorVault.address
+  );
 
   // Update address manager
   await addressManager.setRoleManager(roleManager.address);
@@ -164,13 +179,17 @@ const deploySystem = async (owner: SignerWithAddress) => {
   await parameterManager.setSaleReferrerBasisPoints(TEST_SALE_REFERRER_BP);
   await parameterManager.setSpendTakerBasisPoints(TEST_SPEND_TAKER_BP);
   await parameterManager.setSpendReferrerBasisPoints(TEST_SPEND_REFERRER_BP);
-  await parameterManager.setBondingCurveParams("5000", "10000000", "29000000000000");
+  await parameterManager.setBondingCurveParams(
+    "5000",
+    "10000000",
+    "29000000000000"
+  );
 
   // Return objects for tests to use
   return {
     addressManager,
     childRegistrar,
-    curatorShares,
+    curatorToken,
     curatorVault,
     makerRegistrar,
     parameterManager,
@@ -183,4 +202,4 @@ const deploySystem = async (owner: SignerWithAddress) => {
   };
 };
 
-export { deploySystem };
+export {deploySystem};

@@ -81,18 +81,18 @@ contract Sigmoid {
                 newReserves.pow2());
     }
 
-    /// @dev Buying into the curve with payment tokens will return shares amount to be bought
+    /// @dev Buying into the curve with payment tokens will return Tokens amount to be bought
     /// @param a maxPrice of the curve / 2
     /// @param b inflectionPoint of the curve
     /// @param c slope steepness of the curve
-    /// @param currentSharesSupply current amount of shares in the curve
+    /// @param currentTokensSupply current amount of Tokens in the curve
     /// @param paymentReserves current mount of payment reserves in the curve
-    /// @param paymentToSpend amount the of payment tokens to buy shares with
-    function calculateSharesBoughtFromPayment(
+    /// @param paymentToSpend amount the of payment tokens to buy Tokens with
+    function calculateTokensBoughtFromPayment(
         int256 a,
         int256 b,
         int256 c,
-        int256 currentSharesSupply,
+        int256 currentTokensSupply,
         int256 paymentReserves,
         int256 paymentToSpend
     ) public pure returns (uint256) {
@@ -108,26 +108,26 @@ contract Sigmoid {
             n5(a, b, c, newReserves)) / (d1(a, b, c, newReserves));
 
         // Return the difference
-        return uint256(newSupply - currentSharesSupply);
+        return uint256(newSupply - currentTokensSupply);
     }
 
-    /// @dev Selling shares into the curve will return payment tokens to be refunded
+    /// @dev Selling Tokens into the curve will return payment tokens to be refunded
     /// @param a maxPrice of the curve / 2
     /// @param b inflectionPoint of the curve
     /// @param c slope steepness of the curve
-    /// @param currentSharesSupply current amount of shares in the curve
+    /// @param currentTokenSupply current amount of Tokens in the curve
     /// @param paymentReserves current mount of payment reserves in the curve
-    /// @param sharesToSell amount the of shares the user wants to sell
-    function calculatePaymentReturnedFromShares(
+    /// @param tokensToSell amount the of Tokens the user wants to sell
+    function calculatePaymentReturnedFromTokens(
         int256 a,
         int256 b,
         int256 c,
-        int256 currentSharesSupply,
+        int256 currentTokenSupply,
         int256 paymentReserves,
-        int256 sharesToSell
+        int256 tokensToSell
     ) public pure returns (uint256) {
-        // Supply after shares are sold
-        int256 newSupply = currentSharesSupply - sharesToSell;
+        // Supply after Tokens are sold
+        int256 newSupply = currentTokenSupply - tokensToSell;
 
         // Calc the constant at supply = 0
         int256 constantVal = a * ((b.pow2() + c).sqrt());
