@@ -13,7 +13,7 @@ interface ICuratorVault {
         IERC20Upgradeable paymentToken
     ) external returns (uint256);
 
-    function buyCuratorShares(
+    function buyCuratorTokens(
         uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
@@ -23,14 +23,14 @@ interface ICuratorVault {
         bool isTakerPosition
     ) external returns (uint256);
 
-    function sellCuratorShares(
+    function sellCuratorTokens(
         uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
         IERC20Upgradeable paymentToken,
-        uint256 sharesToBurn,
+        uint256 tokensToBurn,
         address refundToAddress
     ) external returns (uint256);
 
-    function curatorShares() external returns (IStandard1155);
+    function curatorTokens() external returns (IStandard1155);
 }

@@ -3,14 +3,14 @@ pragma solidity 0.8.9;
 
 import "../../Token/Standard1155.sol";
 
-/// @title CuratorShares1155
-/// @dev This contract will be used to track Curator Share ownership
-/// Only the Curator Vault can mint or burn shares
-contract CuratorShares1155 is Standard1155 {
+/// @title CuratorToken1155
+/// @dev This contract will be used to track Curator Token ownership
+/// Only the Curator Vault can mint or burn tokens
+contract CuratorToken1155 is Standard1155 {
     /// @dev verifies that the calling account is the curator vault
-    modifier onlyCuratorShareAdmin() {
+    modifier onlyCuratorTokenAdmin() {
         require(
-            addressManager.roleManager().isCuratorSharesAdmin(msg.sender),
+            addressManager.roleManager().isCuratorTokenAdmin(msg.sender),
             "Not Admin"
         );
         _;
@@ -22,7 +22,7 @@ contract CuratorShares1155 is Standard1155 {
         uint256 id,
         uint256 amount,
         bytes memory data
-    ) external onlyCuratorShareAdmin {
+    ) external onlyCuratorTokenAdmin {
         _mint(to, id, amount, data);
     }
 
@@ -31,7 +31,7 @@ contract CuratorShares1155 is Standard1155 {
         address from,
         uint256 id,
         uint256 amount
-    ) external onlyCuratorShareAdmin {
+    ) external onlyCuratorTokenAdmin {
         _burn(from, id, amount);
     }
 }

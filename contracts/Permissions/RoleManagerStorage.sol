@@ -19,13 +19,13 @@ contract RoleManagerStorageV1 {
     bytes32 public constant REACTION_NFT_ADMIN =
         keccak256("REACTION_NFT_ADMIN");
 
-    /// @dev role for granting capability to purchase curator vaults shares
+    /// @dev role for granting capability to purchase curator vaults tokens
     bytes32 public constant CURATOR_VAULT_PURCHASER =
         keccak256("CURATOR_VAULT_PURCHASER");
 
-    /// @dev role for granting capability to mint and burn curator shares
-    bytes32 public constant CURATOR_SHARES_ADMIN =
-        keccak256("CURATOR_SHARES_ADMIN");
+    /// @dev role for granting capability to mint and burn curator tokens
+    bytes32 public constant CURATOR_TOKEN_ADMIN =
+        keccak256("CURATOR_TOKEN_ADMIN");
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

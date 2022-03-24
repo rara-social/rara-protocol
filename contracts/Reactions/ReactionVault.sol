@@ -46,7 +46,7 @@ contract ReactionVault is
         address referrer,
         uint256 ipfsMetadataHash,
         uint256 curatorTokenId,
-        uint256 curatorShareAmount
+        uint256 curatorTokenAmount
     );
 
     /// @dev Event emitted when rewards are granted to a creator
@@ -178,7 +178,7 @@ contract ReactionVault is
     ) internal {
         // Ensure valid quantity
         require(quantity > 0, "Invalid 0 input");
-        
+
         // Create a struct to hold local vars (and prevent "stack too deep")
         ReactionInfo memory info;
 
@@ -323,8 +323,8 @@ contract ReactionVault is
         uint256 takerAmount;
         uint256 spenderAmount;
         ICuratorVault curatorVault;
-        uint256 takerCuratorShares;
-        uint256 spenderCuratorShares;
+        uint256 takerCuratorTokens;
+        uint256 spenderCuratorTokens;
     }
 
     /// @dev Allows a reaction NFT owner to spend (burn) their tokens at a specific target Taker NFT.
@@ -393,7 +393,7 @@ contract ReactionVault is
         info.reactionDetails = reactionPriceDetailsMapping[reactionId];
 
         // Calculate the total amount of curator liability will be used to spend
-        // the reactions when buying curator shares
+        // the reactions when buying curator Tokens
         info.totalCuratorLiability =
             (info.reactionDetails.reactionPrice *
                 info.reactionDetails.saleCuratorLiabilityBasisPoints *
@@ -460,7 +460,7 @@ contract ReactionVault is
         );
 
         //
-        // Buy Curator Shares for target NFT's owner
+        // Buy Curator Tokens for target NFT's owner
         //
 
         // Approve the full amount
@@ -469,8 +469,8 @@ contract ReactionVault is
             info.totalCuratorLiability
         );
 
-        // Buy shares for the taker and store them in this contract
-        info.takerCuratorShares = info.curatorVault.buyCuratorShares(
+        // Buy Tokens for the taker and store them in this contract
+        info.takerCuratorTokens = info.curatorVault.buyCuratorTokens(
             takerNftChainId,
             takerNftAddress,
             takerNftId,
@@ -494,14 +494,14 @@ contract ReactionVault is
         );
 
         // Allocate rewards to be claimed by NFT Owner
-        nftOwnerRewards[rewardsIndex] += info.takerCuratorShares;
+        nftOwnerRewards[rewardsIndex] += info.takerCuratorTokens;
 
         //
-        // Buy Curator Shares for Reaction Spender
+        // Buy Curator Tokens for Reaction Spender
         //
 
-        // Buy shares for the spender.  Shares get sent directly to their address.
-        info.spenderCuratorShares = info.curatorVault.buyCuratorShares(
+        // Buy Tokens for the spender.  Tokens get sent directly to their address.
+        info.spenderCuratorTokens = info.curatorVault.buyCuratorTokens(
             takerNftChainId,
             takerNftAddress,
             takerNftId,
@@ -521,7 +521,7 @@ contract ReactionVault is
             referrer,
             ipfsMetadataHash,
             curatorTokenId,
-            info.spenderCuratorShares
+            info.spenderCuratorTokens
         );
     }
 
@@ -593,7 +593,7 @@ contract ReactionVault is
     /// @dev Struct to hold local vars in withdrawTakerRewards()
     struct TakerWithdrawInfo {
         uint256 rewardsIndex;
-        uint256 takerCuratorSharesBalance;
+        uint256 takerCuratorTokensBalance;
         uint256 sourceId;
         uint256 paymentTokensForMaker;
         uint256 creatorCut;
@@ -609,7 +609,7 @@ contract ReactionVault is
         IERC20Upgradeable paymentToken,
         address curatorVault,
         uint256 curatorTokenId,
-        uint256 sharesToBurn,
+        uint256 TokensToBurn,
         address refundToAddress
     ) external nonReentrant returns (uint256) {
         // Create a struct to hold local vars (and prevent "stack too deep")
@@ -629,11 +629,11 @@ contract ReactionVault is
         );
 
         // Verify the balance
-        info.takerCuratorSharesBalance = nftOwnerRewards[info.rewardsIndex];
-        require(info.takerCuratorSharesBalance > 0, "No rewards");
+        info.takerCuratorTokensBalance = nftOwnerRewards[info.rewardsIndex];
+        require(info.takerCuratorTokensBalance > 0, "No rewards");
         require(
-            info.takerCuratorSharesBalance >= sharesToBurn,
-            "Rewards balance less than sharesToBurn input value"
+            info.takerCuratorTokensBalance >= TokensToBurn,
+            "Rewards balance less than TokensToBurn input value"
         );
 
         // Look up the targeted NFT source ID
@@ -661,14 +661,14 @@ contract ReactionVault is
         // Taker is withdrawing rewards on the L2 with the same account/address
         require(owner == msg.sender, "NFT not owned");
 
-        // Sell the curator shares - payment tokens will be sent this address
+        // Sell the curator Tokens - payment tokens will be sent this address
         info.paymentTokensForMaker = ICuratorVault(curatorVault)
-            .sellCuratorShares(
+            .sellCuratorTokens(
                 takerNftChainId,
                 takerNftAddress,
                 takerNftId,
                 paymentToken,
-                info.takerCuratorSharesBalance,
+                info.takerCuratorTokensBalance,
                 address(this)
             );
 

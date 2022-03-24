@@ -9,12 +9,12 @@ import "./SigmoidCuratorVaultStorage.sol";
 import "./Curve/Sigmoid.sol";
 
 /// @title SigmoidCuratorVault
-/// @dev This contract tracks shares in a sigmoid bonding curve per Taker NFT.
+/// @dev This contract tracks tokens in a sigmoid bonding curve per Taker NFT.
 /// When users spend reactions against a Taker NFT, it will use the Curator Liability
-/// to buy curator shares against that Taker NFT and allocate to various parties.
-/// The curator shares will be priced via the sigmoid curve.  The params that control
+/// to buy curator tokens against that Taker NFT and allocate to various parties.
+/// The curator tokens will be priced via the sigmoid curve.  The params that control
 /// the shape of the sigmoid are set in the parameter manager.
-/// At any point in time the owners of the curator shares can sell them back to the
+/// At any point in time the owners of the curator tokens can sell them back to the
 /// bonding curve.
 contract SigmoidCuratorVault is
     ReentrancyGuardUpgradeable,
@@ -33,35 +33,35 @@ contract SigmoidCuratorVault is
         _;
     }
 
-    /// @dev Event triggered when curator shares are purchased
-    event CuratorSharesBought(
-        uint256 indexed curatorShareTokenId,
+    /// @dev Event triggered when curator tokens are purchased
+    event CuratorTokensBought(
+        uint256 indexed curatorTokenId,
         uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
         IERC20Upgradeable paymentToken,
         uint256 paymentTokenPaid,
-        uint256 curatorSharesBought,
+        uint256 curatorTokensBought,
         bool isTakerPosition
     );
 
-    /// @dev Event triggered when curator shares are sold
-    event CuratorSharesSold(
-        uint256 indexed curatorShareTokenId,
+    /// @dev Event triggered when curator tokens are sold
+    event CuratorTokensSold(
+        uint256 indexed curatorTokenId,
         uint256 paymentTokenRefunded,
-        uint256 curatorSharesSold
+        uint256 curatorTokensSold
     );
 
     /// @dev initializer to call after deployment, can only be called once
-    function initialize(address _addressManager, IStandard1155 _curatorShares)
+    function initialize(address _addressManager, IStandard1155 _curatorTokens)
         public
         initializer
     {
         // Save the address manager
         addressManager = IAddressManager(_addressManager);
 
-        // Save the curator share contract
-        curatorShares = _curatorShares;
+        // Save the curator token contract
+        curatorTokens = _curatorTokens;
     }
 
     /// @dev get a unique token ID for a given nft address and nft ID
@@ -88,10 +88,10 @@ contract SigmoidCuratorVault is
             );
     }
 
-    /// @dev Buy curator shares when reactions are spent.
+    /// @dev Buy curator Tokens when reactions are spent.
     /// The reaction vault is the only account allowed to call this.
-    /// @return Returns the amount of curator shares purchased.
-    function buyCuratorShares(
+    /// @return Returns the amount of curator tokens purchased.
+    function buyCuratorTokens(
         uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
@@ -100,8 +100,8 @@ contract SigmoidCuratorVault is
         address mintToAddress,
         bool isTakerPosition
     ) external onlyCuratorVaultPurchaser returns (uint256) {
-        // Get the curator share token ID
-        uint256 curatorShareTokenId = _getTokenId(
+        // Get the curator token token ID
+        uint256 curatorTokenId = _getTokenId(
             nftChainId,
             nftAddress,
             nftId,
@@ -119,65 +119,65 @@ contract SigmoidCuratorVault is
             .bondingCurveParams();
 
         // Calculate the amount of tokens that will be minted based on the price
-        uint256 curatorShareAmount = calculateSharesBoughtFromPayment(
+        uint256 curatorTokenAmount = calculateTokensBoughtFromPayment(
             int256(a),
             int256(b),
             int256(c),
-            int256(curatorShareSupply[curatorShareTokenId]),
-            int256(reserves[curatorShareTokenId]),
+            int256(curatorTokenSupply[curatorTokenId]),
+            int256(reserves[curatorTokenId]),
             int256(paymentAmount)
         );
 
         // Update the amounts
-        reserves[curatorShareTokenId] += paymentAmount;
-        curatorShareSupply[curatorShareTokenId] += curatorShareAmount;
+        reserves[curatorTokenId] += paymentAmount;
+        curatorTokenSupply[curatorTokenId] += curatorTokenAmount;
 
         // Mint the tokens
-        curatorShares.mint(
+        curatorTokens.mint(
             mintToAddress,
-            curatorShareTokenId,
-            curatorShareAmount,
+            curatorTokenId,
+            curatorTokenAmount,
             new bytes(0)
         );
 
         // Emit the event
-        emit CuratorSharesBought(
-            curatorShareTokenId,
+        emit CuratorTokensBought(
+            curatorTokenId,
             nftChainId,
             nftAddress,
             nftId,
             paymentToken,
             paymentAmount,
-            curatorShareAmount,
+            curatorTokenAmount,
             isTakerPosition
         );
 
-        return curatorShareAmount;
+        return curatorTokenAmount;
     }
 
-    /// @dev Sell curator shares back into the bonding curve.
-    /// Any holder who owns shares can sell them back
-    /// @return Returns the amount of payment tokens received for the curator shares.
-    function sellCuratorShares(
+    /// @dev Sell curator tokens back into the bonding curve.
+    /// Any holder who owns tokens can sell them back
+    /// @return Returns the amount of payment tokens received for the curator tokens.
+    function sellCuratorTokens(
         uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
         IERC20Upgradeable paymentToken,
-        uint256 sharesToBurn,
+        uint256 tokensToBurn,
         address refundToAddress
     ) external nonReentrant returns (uint256) {
-        require(sharesToBurn > 0, "Invalid 0 input");
+        require(tokensToBurn > 0, "Invalid 0 input");
 
-        // Get the curator share token ID
-        uint256 curatorShareTokenId = _getTokenId(
+        // Get the curator token token ID
+        uint256 curatorTokenId = _getTokenId(
             nftChainId,
             nftAddress,
             nftId,
             paymentToken
         );
 
-        // Burn the curator shares
-        curatorShares.burn(msg.sender, curatorShareTokenId, sharesToBurn);
+        // Burn the curator tokens
+        curatorTokens.burn(msg.sender, curatorTokenId, tokensToBurn);
 
         // Get curve params
         (uint256 a, uint256 b, uint256 c) = addressManager
@@ -185,24 +185,24 @@ contract SigmoidCuratorVault is
             .bondingCurveParams();
 
         // Calculate the amount of tokens that will be minted based on the price
-        uint256 refundAmount = calculatePaymentReturnedFromShares(
+        uint256 refundAmount = calculatePaymentReturnedFromTokens(
             int256(a),
             int256(b),
             int256(c),
-            int256(curatorShareSupply[curatorShareTokenId]),
-            int256(reserves[curatorShareTokenId]),
-            int256(sharesToBurn)
+            int256(curatorTokenSupply[curatorTokenId]),
+            int256(reserves[curatorTokenId]),
+            int256(tokensToBurn)
         );
 
         // Update the amounts
-        reserves[curatorShareTokenId] -= refundAmount;
-        curatorShareSupply[curatorShareTokenId] -= sharesToBurn;
+        reserves[curatorTokenId] -= refundAmount;
+        curatorTokenSupply[curatorTokenId] -= tokensToBurn;
 
         // Send payment token back
         paymentToken.safeTransfer(refundToAddress, refundAmount);
 
         // Emit the event
-        emit CuratorSharesSold(curatorShareTokenId, refundAmount, sharesToBurn);
+        emit CuratorTokensSold(curatorTokenId, refundAmount, tokensToBurn);
 
         return refundAmount;
     }

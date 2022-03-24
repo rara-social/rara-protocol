@@ -87,7 +87,7 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   // address referrer,
   // uint256 ipfsMetadataHash,
   // uint256 curatorTokenId,
-  // uint256 curatorShareAmount
+  // uint256 curatorTokenAmount
 
   //
   // User Reaction
@@ -117,7 +117,7 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   userSpend.quantity = event.params.quantity;
   userSpend.ipfsMetadataHash = event.params.ipfsMetadataHash;
   userSpend.curatorVault = event.params.curatorTokenId.toHexString();
-  userSpend.sharesPurchased = event.params.curatorShareAmount;
+  userSpend.tokensPurchased = event.params.curatorTokenAmount;
   userSpend.save();
 }
 

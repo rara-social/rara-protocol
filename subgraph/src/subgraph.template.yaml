@@ -45,10 +45,10 @@ dataSources:
         - name: SigmoidCuratorVault
           file: ../artifacts/contracts/SigmoidCuratorVault/SigmoidCuratorVault.sol/SigmoidCuratorVault.json
       eventHandlers:
-        - event: CuratorSharesBought(indexed uint256,uint256,address,uint256,address,uint256,uint256,bool)
-          handler: handleCuratorSharesBought
-        - event: CuratorSharesSold(indexed uint256,uint256,uint256)
-          handler: handleCuratorSharesSold
+        - event: CuratorTokensBought(indexed uint256,uint256,address,uint256,address,uint256,uint256,bool)
+          handler: handleCuratorTokensBought
+        - event: CuratorTokensSold(indexed uint256,uint256,uint256)
+          handler: handleCuratorTokensSold
       file: ./src/mapping/CuratorVault.ts
   - kind: ethereum/contract
     name: ReactionVault

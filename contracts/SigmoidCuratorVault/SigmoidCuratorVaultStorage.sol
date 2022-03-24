@@ -13,14 +13,14 @@ abstract contract SigmoidCuratorVaultStorageV1 is ICuratorVault {
     /// @dev local reference to the address manager contract
     IAddressManager public addressManager;
 
-    /// @dev tracks the total supply for each curator share token ID
-    mapping(uint256 => uint256) public curatorShareSupply;
+    /// @dev tracks the total supply for each curator Token token ID
+    mapping(uint256 => uint256) public curatorTokenSupply;
 
-    /// @dev tracks the total payment amount held for each curator share token ID
+    /// @dev tracks the total payment amount held for each curator Token token ID
     mapping(uint256 => uint256) public reserves;
 
-    /// @dev the 1155 contract to track curator shares
-    IStandard1155 public curatorShares;
+    /// @dev the 1155 contract to track curator Tokens
+    IStandard1155 public curatorTokens;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

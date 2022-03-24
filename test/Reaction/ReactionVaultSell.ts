@@ -71,7 +71,7 @@ describe("ReactionVault Sell", function () {
       roleManager,
       paymentTokenErc20,
       curatorVault,
-      curatorShares,
+      curatorToken,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -148,9 +148,9 @@ describe("ReactionVault Sell", function () {
     const receipt = await transaction.wait();
 
     // Calculate expected amounts
-    const expectedTakerCuratorShares = BigNumber.from("25000010678907");
-    const expectedSpenderCuratorShares = BigNumber.from("25000000000000");
-    const curatorSharesId = await curatorVault.getTokenId(
+    const expectedTakerCuratorTokens = BigNumber.from("25000010678907");
+    const expectedSpenderCuratorTokens = BigNumber.from("25000000000000");
+    const curatorTokensId = await curatorVault.getTokenId(
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
@@ -169,12 +169,12 @@ describe("ReactionVault Sell", function () {
     expect(foundEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
     expect(foundEvent!.args!.referrer).to.be.equal(ZERO_ADDRESS);
     expect(foundEvent!.args!.ipfsMetadataHash).to.be.equal(ipfsMetadataHash);
-    expect(foundEvent!.args!.curatorTokenId).to.be.equal(curatorSharesId);
+    expect(foundEvent!.args!.curatorTokenId).to.be.equal(curatorTokensId);
 
-    // Verify the spender (OWNER) got curator shares
+    // Verify the spender (OWNER) got curator Tokens
     expect(
-      await curatorShares.balanceOf(OWNER.address, curatorSharesId)
-    ).to.be.equal(expectedSpenderCuratorShares);
+      await curatorToken.balanceOf(OWNER.address, curatorTokensId)
+    ).to.be.equal(expectedSpenderCuratorTokens);
 
     // Get the rewards key for this taker
     const rewardsKey = deriveTakerRewardsKey(
@@ -182,12 +182,12 @@ describe("ReactionVault Sell", function () {
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
       curatorVault.address,
-      curatorSharesId
+      curatorTokensId
     );
 
-    // Verify the taker NFT got allocated curator shares
+    // Verify the taker NFT got allocated curator Tokens
     expect(await reactionVault.nftOwnerRewards(rewardsKey)).to.be.equal(
-      expectedTakerCuratorShares
+      expectedTakerCuratorTokens
     );
   });
 
@@ -389,16 +389,16 @@ describe("ReactionVault Sell", function () {
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Deploy a custom curator vault
-    // Deploy the curator Shares Token Contract
-    const CuratorShares1155Factory = await ethers.getContractFactory(
+    // Deploy the curator Tokens Token Contract
+    const CuratorTokens1155Factory = await ethers.getContractFactory(
       "TestErc1155"
     );
-    const deployedCuratorShares = await upgrades.deployProxy(
-      CuratorShares1155Factory,
+    const deployedCuratorTokens = await upgrades.deployProxy(
+      CuratorTokens1155Factory,
       [TEST_NFT_URI, addressManager.address]
     );
-    const curatorShares = CuratorShares1155Factory.attach(
-      deployedCuratorShares.address
+    const curatorTokens = CuratorTokens1155Factory.attach(
+      deployedCuratorTokens.address
     );
 
     // Deploy the Default Curator Vault
@@ -407,7 +407,7 @@ describe("ReactionVault Sell", function () {
     );
     const deployedCuratorVault = await upgrades.deployProxy(
       CuratorVaultFactory,
-      [addressManager.address, curatorShares.address]
+      [addressManager.address, curatorTokens.address]
     );
     const curatorVault = CuratorVaultFactory.attach(
       deployedCuratorVault.address
@@ -487,9 +487,9 @@ describe("ReactionVault Sell", function () {
     const receipt = await transaction.wait();
 
     // Calculate expected amounts
-    const expectedTakerCuratorShares = BigNumber.from("25000010678907");
-    const expectedSpenderCuratorShares = BigNumber.from("25000000000000");
-    const curatorSharesId = await curatorVault.getTokenId(
+    const expectedTakerCuratorTokens = BigNumber.from("25000010678907");
+    const expectedSpenderCuratorTokens = BigNumber.from("25000000000000");
+    const curatorTokensId = await curatorVault.getTokenId(
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
@@ -508,10 +508,10 @@ describe("ReactionVault Sell", function () {
     expect(foundEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
     expect(foundEvent!.args!.referrer).to.be.equal(ZERO_ADDRESS);
 
-    // Verify the spender (OWNER) got curator shares
+    // Verify the spender (OWNER) got curator Tokens
     expect(
-      await curatorShares.balanceOf(OWNER.address, curatorSharesId)
-    ).to.be.equal(expectedSpenderCuratorShares);
+      await curatorTokens.balanceOf(OWNER.address, curatorTokensId)
+    ).to.be.equal(expectedSpenderCuratorTokens);
 
     // Get the rewards key for this taker
     const rewardsKey = deriveTakerRewardsKey(
@@ -519,13 +519,13 @@ describe("ReactionVault Sell", function () {
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
       curatorVault.address,
-      curatorSharesId
+      curatorTokensId
     );
 
-    // Verify the taker NFT got allocated curator shares
+    // Verify the taker NFT got allocated curator Tokens
     // NftAddress -> NftId -> RewardToken -> RewardTokenId -> balance
     expect(await reactionVault.nftOwnerRewards(rewardsKey)).to.be.equal(
-      expectedTakerCuratorShares
+      expectedTakerCuratorTokens
     );
   });
 });

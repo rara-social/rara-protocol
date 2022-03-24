@@ -54,7 +54,7 @@ contract RoleManager is
         return hasRole(REACTION_NFT_ADMIN, potentialAddress);
     }
 
-    /// @dev Determines if the specified address has permission to purchase curator vaults shares
+    /// @dev Determines if the specified address has permission to purchase curator vaults token
     /// @param potentialAddress Address to check
     function isCuratorVaultPurchaser(address potentialAddress)
         external
@@ -64,13 +64,13 @@ contract RoleManager is
         return hasRole(CURATOR_VAULT_PURCHASER, potentialAddress);
     }
 
-    /// @dev Determines if the specified address has permission to mint and burn curator shares
+    /// @dev Determines if the specified address has permission to mint and burn curator token
     /// @param potentialAddress Address to check
-    function isCuratorSharesAdmin(address potentialAddress)
+    function isCuratorTokenAdmin(address potentialAddress)
         external
         view
         returns (bool)
     {
-        return hasRole(CURATOR_SHARES_ADMIN, potentialAddress);
+        return hasRole(CURATOR_TOKEN_ADMIN, potentialAddress);
     }
 }

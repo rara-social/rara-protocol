@@ -133,8 +133,8 @@ describe("ReactionVault Taker Rewards", function () {
       metadataHash
     );
 
-    // Get the expected curator share token ID
-    const curatorShareId = await curatorVault.getTokenId(
+    // Get the expected curator token token ID
+    const curatorTokenId = await curatorVault.getTokenId(
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
@@ -151,7 +151,7 @@ describe("ReactionVault Taker Rewards", function () {
           TAKER_NFT_ID,
           paymentTokenErc20.address,
           curatorVault.address,
-          curatorShareId,
+          curatorTokenId,
           "0",
           ALICE.address
         )
@@ -186,7 +186,7 @@ describe("ReactionVault Taker Rewards", function () {
           TAKER_NFT_ID,
           paymentTokenErc20.address,
           curatorVault.address,
-          curatorShareId,
+          curatorTokenId,
           "0",
           ALICE.address
         )
@@ -213,7 +213,7 @@ describe("ReactionVault Taker Rewards", function () {
           TAKER_NFT_ID,
           paymentTokenErc20.address,
           curatorVault.address,
-          curatorShareId,
+          curatorTokenId,
           "20",
           ALICE.address
         )
@@ -224,9 +224,9 @@ describe("ReactionVault Taker Rewards", function () {
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
       curatorVault.address,
-      curatorShareId
+      curatorTokenId
     );
-    const expectedShares = await reactionVault.nftOwnerRewards(rewardsIndex);
+    const expectedTokens = await reactionVault.nftOwnerRewards(rewardsIndex);
     const expectedPayment = "250000106789080000";
 
     // Now have the Taker claim - should be successful
@@ -239,8 +239,8 @@ describe("ReactionVault Taker Rewards", function () {
           TAKER_NFT_ID,
           paymentTokenErc20.address,
           curatorVault.address,
-          curatorShareId,
-          expectedShares,
+          curatorTokenId,
+          expectedTokens,
           TAKER.address
         )
     );
@@ -334,8 +334,8 @@ describe("ReactionVault Taker Rewards", function () {
       metadataHash
     );
 
-    // Get the expected curator share token ID
-    const curatorShareId = await curatorVault.getTokenId(
+    // Get the expected curator Token token ID
+    const curatorTokenId = await curatorVault.getTokenId(
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
@@ -359,9 +359,9 @@ describe("ReactionVault Taker Rewards", function () {
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
       curatorVault.address,
-      curatorShareId
+      curatorTokenId
     );
-    const expectedShares = await reactionVault.nftOwnerRewards(rewardsIndex);
+    const expectedTokens = await reactionVault.nftOwnerRewards(rewardsIndex);
     const expectedPaymentForCreator = "250000106789080000";
 
     // Now have the Taker claim - should be successful
@@ -374,8 +374,8 @@ describe("ReactionVault Taker Rewards", function () {
           TAKER_NFT_ID,
           paymentTokenErc20.address,
           curatorVault.address,
-          curatorShareId,
-          expectedShares,
+          curatorTokenId,
+          expectedTokens,
           TAKER.address
         )
     );
