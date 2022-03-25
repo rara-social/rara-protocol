@@ -1,7 +1,7 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 
 async function main() {
   // create provider
@@ -18,6 +18,7 @@ async function main() {
   const contractABI = deployConfig[80001][0].contracts.MakerRegistrar.abi;
   const MakerRegistrar = new ethers.Contract(proxyAddress, contractABI, wallet);
 
+  // registerNFT
   // {
   //   "inputs": [
   //     {
@@ -51,22 +52,20 @@ async function main() {
   //   "stateMutability": "nonpayable",
   //   "type": "function"
   // },
-
-  // registerNFT
   const nftContractAddress =
     deployConfig[80001][0].contracts.TestErc721.address;
-  const nftId = "1";
+  const nftId = "3";
   const creatorAddress = ethers.constants.AddressZero;
   const creatorSaleBasisPoints = 0;
   const optionBits = 0;
 
-  console.log({
-    nftContractAddress,
-    nftId,
-    creatorAddress,
-    creatorSaleBasisPoints,
-    optionBits,
-  });
+  // console.log({
+  //   nftContractAddress,
+  //   nftId,
+  //   creatorAddress,
+  //   creatorSaleBasisPoints,
+  //   optionBits,
+  // });
 
   const receipt = await MakerRegistrar.registerNft(
     nftContractAddress,
@@ -76,9 +75,6 @@ async function main() {
     optionBits
   );
   console.log(receipt);
-
-  // check owner
-  // console.log(await NFTContract.ownerOf("1"));
 }
 
 // We recommend this pattern to be able to use async/await everywhere
@@ -90,12 +86,21 @@ main()
     process.exit(1);
   });
 
+//
+// Graph API
+//
+
+// {
+//   sources(first: 5) {
+//     id
+//   }
+// }
+
 // {
 //   transforms(first: 5) {
 //     id
 //     source {
 //       id
 //     }
-
 //   }
 // }

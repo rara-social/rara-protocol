@@ -14,16 +14,13 @@ async function main() {
   wallet = wallet.connect(provider);
 
   // create contract
-  const contractAddress =
-    deployConfig[80001][0].contracts.ReactionVault.address;
-  const contractABI = deployConfig[80001][0].contracts.ReactionVault.abi;
   const ReactionVault = new ethers.Contract(
-    contractAddress,
-    contractABI,
+    deployConfig[80001][0].contracts.ReactionVault.address,
+    deployConfig[80001][0].contracts.ReactionVault.abi,
     wallet
   );
 
-  // setup inputs
+  // spendReaction
   // {
   //   "inputs": [
   //     {
@@ -105,9 +102,6 @@ async function main() {
     ipfsMetadataHash
   );
   console.log(receipt);
-
-  // check owner
-  // console.log(await NFTContract.ownerOf("1"));
 }
 
 // We recommend this pattern to be able to use async/await everywhere

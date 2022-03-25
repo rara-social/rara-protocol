@@ -43,12 +43,9 @@ async function main() {
   //
 
   // create contract
-  const contractAddress =
-    deployConfig[80001][0].contracts.ReactionVault.address;
-  const contractABI = deployConfig[80001][0].contracts.ReactionVault.abi;
   const ReactionVault = new ethers.Contract(
-    contractAddress,
-    contractABI,
+    deployConfig[80001][0].contracts.ReactionVault.address,
+    deployConfig[80001][0].contracts.ReactionVault.abi,
     wallet
   );
 
@@ -112,25 +109,22 @@ async function main() {
   const takerNftAddress = deployConfig[80001][0].contracts.TestErc721.address;
   const takerNftId = "2";
   const paymentToken = "0x215562e0f8f5ca0576e10c4e983fa52c56f559c8";
-
   const curatorVault =
     deployConfig[80001][0].contracts.SigmoidCuratorVault.address;
   const curatorTokenId =
     "42163091743077916819896557754904517006036922152631935109602909741936998027115";
-
   const sharesToBurn = "105";
   const refundToAddress = wallet.address;
-
-  console.log({
-    takerNftChainId,
-    takerNftAddress,
-    takerNftId,
-    paymentToken,
-    curatorVault,
-    curatorTokenId,
-    sharesToBurn,
-    refundToAddress,
-  });
+  // console.log({
+  //   takerNftChainId,
+  //   takerNftAddress,
+  //   takerNftId,
+  //   paymentToken,
+  //   curatorVault,
+  //   curatorTokenId,
+  //   sharesToBurn,
+  //   refundToAddress,
+  // });
 
   const receipt = await ReactionVault.withdrawTakerRewards(
     takerNftChainId,
@@ -143,9 +137,6 @@ async function main() {
     refundToAddress
   );
   console.log(receipt);
-
-  // check owner
-  // console.log(await NFTContract.ownerOf("1"));
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -83,7 +83,7 @@ type CuratorVaultToken @entity {
 }
 
 type UserPosition @entity {
-  id: ID! #msg.sender + curatorTokenId
+  id: ID! # if sender: msg.sender + curatorTokenId, if taker: curatorTokenId
   user: User!
   isTakerPostion: Boolean!
   curatorVaultToken: CuratorVaultToken!

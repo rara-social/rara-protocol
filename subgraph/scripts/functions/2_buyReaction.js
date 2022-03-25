@@ -33,8 +33,7 @@ async function main() {
     wallet
   );
 
-  // mint funds
-
+  // mint ERC20 funds
   // {
   //   "inputs": [
   //     {
@@ -54,6 +53,7 @@ async function main() {
   //   "type": "function"
   // },
   // const mintReceipt = await TestERC20.mint(wallet.address, reactionPrice);
+  // console.log(mintReceipt);
 
   // {
   //   "inputs": [
@@ -75,7 +75,6 @@ async function main() {
   //   "type": "function"
   // },
   const balance = await TestERC20.balanceOf(wallet.address);
-  // console.log(mintReceipt);
 
   // approve allowance
   // {

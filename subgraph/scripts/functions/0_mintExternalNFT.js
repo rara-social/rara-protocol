@@ -1,7 +1,7 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 
 async function main() {
   // create provider
@@ -14,17 +14,39 @@ async function main() {
   wallet = wallet.connect(provider);
 
   // create contract
-  const proxyAddress = deployConfig[80001][0].contracts.TestErc721.address;
-  const contractABI = deployConfig[80001][0].contracts.TestErc721.abi;
-  const NFTContract = new ethers.Contract(proxyAddress, contractABI, wallet);
+  const NFTContract = new ethers.Contract(
+    deployConfig[80001][0].contracts.TestErc721.address,
+    deployConfig[80001][0].contracts.TestErc721.abi,
+    wallet
+  );
 
-  // create
-  //   const receipt = await NFTContract.mint(wallet.address, "2");
-  //   console.log(receipt);
+  // mint
+  // {
+  //   "inputs": [
+  //     {
+  //       "internalType": "address",
+  //       "name": "to",
+  //       "type": "address"
+  //     },
+  //     {
+  //       "internalType": "uint256",
+  //       "name": "tokenId",
+  //       "type": "uint256"
+  //     }
+  //   ],
+  //   "name": "mint",
+  //   "outputs": [],
+  //   "stateMutability": "nonpayable",
+  //   "type": "function"
+  // },
+  // const receipt = await NFTContract.mint(wallet.address, "3");
+  // console.log(receipt);
 
-  console.log(await NFTContract.ownerOf("2"));
-
-  console.log();
+  // check owner
+  console.log({
+    owner: await NFTContract.ownerOf("3"),
+    id: "3",
+  });
 }
 
 // We recommend this pattern to be able to use async/await everywhere

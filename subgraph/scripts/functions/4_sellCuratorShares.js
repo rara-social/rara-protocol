@@ -14,12 +14,9 @@ async function main() {
   wallet = wallet.connect(provider);
 
   // create contract
-  const contractAddress =
-    deployConfig[80001][0].contracts.SigmoidCuratorVault.address;
-  const contractABI = deployConfig[80001][0].contracts.SigmoidCuratorVault.abi;
   const SigmoidCuratorVault = new ethers.Contract(
-    contractAddress,
-    contractABI,
+    deployConfig[80001][0].contracts.SigmoidCuratorVault.address,
+    deployConfig[80001][0].contracts.SigmoidCuratorVault.abi,
     wallet
   );
 
@@ -75,15 +72,14 @@ async function main() {
   const paymentToken = "0x215562e0f8f5ca0576e10c4e983fa52c56f559c8";
   const sharesToBurn = "1400";
   const refundToAddress = wallet.address;
-
-  console.log({
-    nftChainId,
-    nftAddress,
-    nftId,
-    paymentToken,
-    sharesToBurn,
-    refundToAddress,
-  });
+  // console.log({
+  //   nftChainId,
+  //   nftAddress,
+  //   nftId,
+  //   paymentToken,
+  //   sharesToBurn,
+  //   refundToAddress,
+  // });
 
   const receipt = await SigmoidCuratorVault.sellCuratorShares(
     nftChainId,
@@ -94,9 +90,6 @@ async function main() {
     refundToAddress
   );
   console.log(receipt);
-
-  // check owner
-  // console.log(await NFTContract.ownerOf("1"));
 }
 
 // We recommend this pattern to be able to use async/await everywhere

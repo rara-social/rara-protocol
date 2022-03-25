@@ -22,7 +22,7 @@ async function main() {
     wallet
   );
 
-  // get balance before
+  // get balance before withdraw
   const balanceBefore = await TestERC20.balanceOf(wallet.address);
 
   //
@@ -34,6 +34,7 @@ async function main() {
     wallet
   );
 
+  // ReactionVault.ownerToRewardsMapping
   // {
   //   "inputs": [
   //     {
@@ -65,35 +66,35 @@ async function main() {
   );
   // console.log(rewards);
 
-  // withdrawErc20Rewards
-  // {
-  //   "inputs": [
-  //     {
-  //       "internalType": "contract IERC20Upgradeable",
-  //       "name": "token",
-  //       "type": "address"
-  //     }
-  //   ],
-  //   "name": "withdrawErc20Rewards",
-  //   "outputs": [
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "",
-  //       "type": "uint256"
-  //     }
-  //   ],
-  //   "stateMutability": "nonpayable",
-  //   "type": "function"
-  // },
-
   if (rewards.gt(ethers.constants.Zero)) {
+    // ReactionVault.withdrawErc20Rewards
+    // {
+    //   "inputs": [
+    //     {
+    //       "internalType": "contract IERC20Upgradeable",
+    //       "name": "token",
+    //       "type": "address"
+    //     }
+    //   ],
+    //   "name": "withdrawErc20Rewards",
+    //   "outputs": [
+    //     {
+    //       "internalType": "uint256",
+    //       "name": "",
+    //       "type": "uint256"
+    //     }
+    //   ],
+    //   "stateMutability": "nonpayable",
+    //   "type": "function"
+    // },
+
     const receipt = await ReactionVault.withdrawErc20Rewards(
       deployConfig[80001][0].contracts.TestErc20.address
     );
     // console.log(receipt);
   }
 
-  // get balance before
+  // get balance after withdraw
   const balanceAfter = await TestERC20.balanceOf(wallet.address);
 
   console.log({balanceBefore, rewards, balanceAfter});
