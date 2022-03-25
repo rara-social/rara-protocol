@@ -68,14 +68,14 @@ async function main() {
     optionBits,
   });
 
-  const recipet = await MakerRegistrar.registerNft(
+  const receipt = await MakerRegistrar.registerNft(
     nftContractAddress,
     nftId,
     creatorAddress,
     creatorSaleBasisPoints,
     optionBits
   );
-  console.log(recipet);
+  console.log(receipt);
 
   // check owner
   // console.log(await NFTContract.ownerOf("1"));

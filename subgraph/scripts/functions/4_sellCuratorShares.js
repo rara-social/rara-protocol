@@ -13,77 +13,38 @@ async function main() {
   let wallet = new ethers.Wallet(process.env.DATA_TESTING_PRIVATE_KEY);
   wallet = wallet.connect(provider);
 
-  //
-  // MakerRegistrar.registerNft
-  //
-  const MakerRegistrar = new ethers.Contract(
-    deployConfig[80001][0].contracts.MakerRegistrar.address,
-    deployConfig[80001][0].contracts.MakerRegistrar.abi,
-    wallet
-  );
-
-  const nftContractAddress =
-    deployConfig[80001][0].contracts.TestErc721.address;
-  const nftId = "2";
-  const creatorAddress = ethers.constants.AddressZero;
-  const creatorSaleBasisPoints = 0;
-  const optionBits = 0;
-
-  const register_recipet = await MakerRegistrar.registerNft(
-    nftContractAddress,
-    nftId,
-    creatorAddress,
-    creatorSaleBasisPoints,
-    optionBits
-  );
-  console.log(register_recipet);
-
-  //
-  // ReactionVault.withdrawTakerRewards
-  //
-
   // create contract
   const contractAddress =
-    deployConfig[80001][0].contracts.ReactionVault.address;
-  const contractABI = deployConfig[80001][0].contracts.ReactionVault.abi;
-  const ReactionVault = new ethers.Contract(
+    deployConfig[80001][0].contracts.SigmoidCuratorVault.address;
+  const contractABI = deployConfig[80001][0].contracts.SigmoidCuratorVault.abi;
+  const SigmoidCuratorVault = new ethers.Contract(
     contractAddress,
     contractABI,
     wallet
   );
 
-  // create inputs
+  // setup inputs
   // {
   //   "inputs": [
   //     {
   //       "internalType": "uint256",
-  //       "name": "takerNftChainId",
+  //       "name": "nftChainId",
   //       "type": "uint256"
   //     },
   //     {
   //       "internalType": "address",
-  //       "name": "takerNftAddress",
+  //       "name": "nftAddress",
   //       "type": "address"
   //     },
   //     {
   //       "internalType": "uint256",
-  //       "name": "takerNftId",
+  //       "name": "nftId",
   //       "type": "uint256"
   //     },
   //     {
   //       "internalType": "contract IERC20Upgradeable",
   //       "name": "paymentToken",
   //       "type": "address"
-  //     },
-  //     {
-  //       "internalType": "address",
-  //       "name": "curatorVault",
-  //       "type": "address"
-  //     },
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "curatorTokenId",
-  //       "type": "uint256"
   //     },
   //     {
   //       "internalType": "uint256",
@@ -96,7 +57,7 @@ async function main() {
   //       "type": "address"
   //     }
   //   ],
-  //   "name": "withdrawTakerRewards",
+  //   "name": "sellCuratorShares",
   //   "outputs": [
   //     {
   //       "internalType": "uint256",
@@ -108,41 +69,31 @@ async function main() {
   //   "type": "function"
   // },
 
-  const takerNftChainId = "80001";
-  const takerNftAddress = deployConfig[80001][0].contracts.TestErc721.address;
-  const takerNftId = "2";
+  const nftChainId = "80001";
+  const nftAddress = deployConfig[80001][0].contracts.TestErc721.address;
+  const nftId = "2";
   const paymentToken = "0x215562e0f8f5ca0576e10c4e983fa52c56f559c8";
-
-  const curatorVault =
-    deployConfig[80001][0].contracts.SigmoidCuratorVault.address;
-  const curatorTokenId =
-    "42163091743077916819896557754904517006036922152631935109602909741936998027115";
-
-  const sharesToBurn = "105";
+  const sharesToBurn = "1400";
   const refundToAddress = wallet.address;
 
   console.log({
-    takerNftChainId,
-    takerNftAddress,
-    takerNftId,
+    nftChainId,
+    nftAddress,
+    nftId,
     paymentToken,
-    curatorVault,
-    curatorTokenId,
     sharesToBurn,
     refundToAddress,
   });
 
-  const recipet = await ReactionVault.withdrawTakerRewards(
-    takerNftChainId,
-    takerNftAddress,
-    takerNftId,
+  const receipt = await SigmoidCuratorVault.sellCuratorShares(
+    nftChainId,
+    nftAddress,
+    nftId,
     paymentToken,
-    curatorVault,
-    curatorTokenId,
     sharesToBurn,
     refundToAddress
   );
-  console.log(recipet);
+  console.log(receipt);
 
   // check owner
   // console.log(await NFTContract.ownerOf("1"));
@@ -161,6 +112,24 @@ main()
 // Graphquery
 //
 
+// TODO - only one created, the taker (id collision?) user spends shows 1400, taker Userposition shows 1505
+// {
+//   userPositions(first: 5) {
+//      id
+//     user {
+//       id
+//     }
+//     isTakerPostion
+//     curatorVaultToken {
+//       id
+//     }
+//     sharesTotal
+//     sharesAvailable
+//     refundsTotal
+//   }
+// }
+
+// reduced to 105
 // {
 //   curatorVaultTokens(first: 5) {
 //    id

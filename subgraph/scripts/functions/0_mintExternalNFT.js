@@ -19,8 +19,8 @@ async function main() {
   const NFTContract = new ethers.Contract(proxyAddress, contractABI, wallet);
 
   // create
-  //   const recipet = await NFTContract.mint(wallet.address, "2");
-  //   console.log(recipet);
+  //   const receipt = await NFTContract.mint(wallet.address, "2");
+  //   console.log(receipt);
 
   console.log(await NFTContract.ownerOf("2"));
 

@@ -1,18 +1,18 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
+
+// create provider
+const provider = new ethers.providers.JsonRpcProvider(
+  process.env.DATA_TESTING_RPC
+);
+
+// create wallet & connect provider
+let wallet = new ethers.Wallet(process.env.DATA_TESTING_PRIVATE_KEY);
+wallet = wallet.connect(provider);
 
 async function main() {
-  // create provider
-  const provider = new ethers.providers.JsonRpcProvider(
-    process.env.DATA_TESTING_RPC
-  );
-
-  // create wallet & connect provider
-  let wallet = new ethers.Wallet(process.env.DATA_TESTING_PRIVATE_KEY);
-  wallet = wallet.connect(provider);
-
   //
   // Get Reaction Price
   //
@@ -21,7 +21,6 @@ async function main() {
     deployConfig[80001][0].contracts.ParameterManager.abi,
     wallet
   );
-
   const reactionPrice = await ParameterManager.reactionPrice();
   // console.log({reactionPrice});
 
@@ -33,6 +32,8 @@ async function main() {
     deployConfig[80001][0].contracts.TestErc20.abi,
     wallet
   );
+
+  // mint funds
 
   // {
   //   "inputs": [
@@ -52,10 +53,31 @@ async function main() {
   //   "stateMutability": "nonpayable",
   //   "type": "function"
   // },
+  // const mintReceipt = await TestERC20.mint(wallet.address, reactionPrice);
 
-  // const mintRecipet = await TestERC20.mint(wallet.address, reactionPrice);
-  // console.log(mintRecipet);
+  // {
+  //   "inputs": [
+  //     {
+  //       "internalType": "address",
+  //       "name": "account",
+  //       "type": "address"
+  //     }
+  //   ],
+  //   "name": "balanceOf",
+  //   "outputs": [
+  //     {
+  //       "internalType": "uint256",
+  //       "name": "",
+  //       "type": "uint256"
+  //     }
+  //   ],
+  //   "stateMutability": "view",
+  //   "type": "function"
+  // },
+  const balance = await TestERC20.balanceOf(wallet.address);
+  // console.log(mintReceipt);
 
+  // approve allowance
   // {
   //   "inputs": [
   //     {
@@ -80,24 +102,33 @@ async function main() {
   //   "stateMutability": "nonpayable",
   //   "type": "function"
   // },
-
-  // const approveRecipet = await TestERC20.approve(
-  //   deployConfig[80001][0].contracts.ReactionVault_Proxy.address,
-  //   reactionPrice
-  // );
-  // console.log(approveRecipet);
+  const approveReceipt = await TestERC20.approve(
+    deployConfig[80001][0].contracts.ReactionVault.address,
+    reactionPrice
+  );
+  // console.log(approveReceipt);
 
   const allowance = await TestERC20.allowance(
     wallet.address,
     deployConfig[80001][0].contracts.ReactionVault.address
   );
-  // console.log(approveRecipet);
-  console.log({reactionPrice, allowance});
+
+  console.log({
+    balance: ethers.utils.formatEther(balance),
+    reactionPrice: ethers.utils.formatEther(reactionPrice),
+    allowance: ethers.utils.formatEther(allowance),
+  });
 
   //
   // Buy Reaction
   //
 
+  // create contract
+  const proxyAddress = deployConfig[80001][0].contracts.ReactionVault.address;
+  const contractABI = deployConfig[80001][0].contracts.ReactionVault.abi;
+  const ReactionVault = new ethers.Contract(proxyAddress, contractABI, wallet);
+
+  // buyReaction
   // {
   //   "inputs": [
   //     {
@@ -132,11 +163,6 @@ async function main() {
   //   "type": "function"
   // },
 
-  // create contract
-  const proxyAddress = deployConfig[80001][0].contracts.ReactionVault.address;
-  const contractABI = deployConfig[80001][0].contracts.ReactionVault.abi;
-  const ReactionVault = new ethers.Contract(proxyAddress, contractABI, wallet);
-
   // setup inputs
   const transformId =
     "95531200533042885588928647151875210995108781777760617956651355061538950665596";
@@ -144,36 +170,32 @@ async function main() {
   const destinationWallet = wallet.address;
   const referrer = ethers.constants.AddressZero;
   const optionBits = 0;
+  // console.log({
+  //   transformId,
+  //   quantity,
+  //   destinationWallet,
+  //   referrer,
+  //   optionBits,
+  // });
 
-  console.log({
-    transformId,
-    quantity,
-    destinationWallet,
-    referrer,
-    optionBits,
-  });
-
-  const recipet = await ReactionVault.buyReaction(
+  const receipt = await ReactionVault.buyReaction(
     transformId,
     quantity,
     destinationWallet,
     referrer,
     optionBits
   );
-  console.log(recipet);
-
-  // check owner
-  // console.log(await NFTContract.ownerOf("1"));
+  console.log(receipt);
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main()
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);
     process.exit(1);
   });
+
+exports.buyReaction = main;
 
 //
 // Graphquery

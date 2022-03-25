@@ -1,7 +1,7 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 
 async function main() {
   // create provider
@@ -94,7 +94,7 @@ async function main() {
     ipfsMetadataHash,
   });
 
-  const recipet = await ReactionVault.spendReaction(
+  const receipt = await ReactionVault.spendReaction(
     takerNftChainId,
     takerNftAddress,
     takerNftId,
@@ -104,7 +104,7 @@ async function main() {
     curatorVaultOverride,
     ipfsMetadataHash
   );
-  console.log(recipet);
+  console.log(receipt);
 
   // check owner
   // console.log(await NFTContract.ownerOf("1"));
