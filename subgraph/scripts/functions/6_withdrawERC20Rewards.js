@@ -14,7 +14,7 @@ async function main() {
   wallet = wallet.connect(provider);
 
   //
-  // Get ERC20
+  // Get ERC20 payment token
   //
   const TestERC20 = new ethers.Contract(
     deployConfig[80001][0].contracts.TestErc20.address,
