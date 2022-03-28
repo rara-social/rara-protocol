@@ -69,17 +69,32 @@ export function handleCuratorTokensBought(event: CuratorTokensBought): void {
   //
   // UserPosition
   //
-  let sender = event.transaction.from.toHexString();
-  let user = User.load(sender);
-  if (user == null) {
-    user = new User(sender);
-  }
-  user.save();
 
-  // load user
-  let userPositionKey =
-    event.transaction.from.toHexString() +
-    event.params.curatorTokenId.toHexString();
+  // this function/event is called twice from spendReaction() - once for the taker and once for the spender
+  // for taker we will use the curatorVaultTokenId as the id
+  // for spender we will create an id & user from "event.transaction.from"
+
+  let userId = event.transaction.from.toHexString();
+  let user = User.load(userId);
+  if (user == null) {
+    user = new User(userId);
+    user.save();
+  }
+
+  let userPositionKey = "";
+  if (event.params.isTakerPosition) {
+    // create taker position
+    // for taker we will use the curatorTokenId as the id
+    userPositionKey = event.params.curatorTokenId.toHexString();
+  } else {
+    // create spender position
+    // for spender we will create an id & user from "event.transaction.from" + curatorTokenId
+    userPositionKey =
+      event.transaction.from.toHexString() +
+      "-" +
+      event.params.curatorTokenId.toHexString();
+  }
+
   let userPosition = UserPosition.load(userPositionKey);
   if (userPosition == null) {
     // id: ID! #msg.sender + curatorTokenId

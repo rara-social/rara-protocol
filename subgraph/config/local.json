@@ -1,9 +1,9 @@
 {
   "network": "localhost",
-  "MakerRegistrarAddress": "0x5fc8d32690cc91d4c39d9d3abcbd16989f875707",
+  "MakerRegistrarAddress": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
   "MakerRegistrarStartBlock": 0,
-  "SigmoidCuratorVaultAddress": "0x3aa5ebb10dc797cac828524e59a333d0a371443c",
+  "SigmoidCuratorVaultAddress": "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1",
   "SigmoidCuratorVaultStartBlock": 0,
-  "ReactionVaultAddress": "0xa513e6e4b8f2a923d98304ec87f64353c4d5c853",
+  "ReactionVaultAddress": "0x9A676e781A523b5d0C0e43731313A708CB607508",
   "ReactionVaultStartBlock": 0
 }

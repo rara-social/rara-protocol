@@ -1,0 +1,109 @@
+// load env
+require("dotenv").config();
+const ethers = require("ethers");
+const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
+
+const chainId = "1337";
+
+async function main() {
+  // create provider
+  const provider = new ethers.providers.JsonRpcProvider(
+    process.env.DATA_TESTING_RPC
+  );
+
+  // create wallet & connect provider
+  let wallet = new ethers.Wallet(process.env.DATA_TESTING_PRIVATE_KEY);
+  wallet = wallet.connect(provider);
+
+  // create contract
+  const proxyAddress =
+    deployConfig[chainId][0].contracts.MakerRegistrar.address;
+  const contractABI = deployConfig[chainId][0].contracts.MakerRegistrar.abi;
+  const MakerRegistrar = new ethers.Contract(proxyAddress, contractABI, wallet);
+
+  // registerNFT
+  // {
+  //   "inputs": [
+  //     {
+  //       "internalType": "address",
+  //       "name": "nftContractAddress",
+  //       "type": "address"
+  //     },
+  //     {
+  //       "internalType": "uint256",
+  //       "name": "nftId",
+  //       "type": "uint256"
+  //     },
+  //     {
+  //       "internalType": "address",
+  //       "name": "creatorAddress",
+  //       "type": "address"
+  //     },
+  //     {
+  //       "internalType": "uint256",
+  //       "name": "creatorSaleBasisPoints",
+  //       "type": "uint256"
+  //     },
+  //     {
+  //       "internalType": "uint256",
+  //       "name": "optionBits",
+  //       "type": "uint256"
+  //     }
+  //   ],
+  //   "name": "registerNft",
+  //   "outputs": [],
+  //   "stateMutability": "nonpayable",
+  //   "type": "function"
+  // },
+  const nftContractAddress =
+    deployConfig[chainId][0].contracts.TestErc721.address;
+  const nftId = "3";
+  const creatorAddress = ethers.constants.AddressZero;
+  const creatorSaleBasisPoints = 0;
+  const optionBits = 0;
+
+  // console.log({
+  //   nftContractAddress,
+  //   nftId,
+  //   creatorAddress,
+  //   creatorSaleBasisPoints,
+  //   optionBits,
+  // });
+
+  const receipt = await MakerRegistrar.registerNft(
+    nftContractAddress,
+    nftId,
+    creatorAddress,
+    creatorSaleBasisPoints,
+    optionBits
+  );
+  console.log(receipt);
+}
+
+// We recommend this pattern to be able to use async/await everywhere
+// and properly handle errors.
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+
+//
+// Graph API
+//
+
+// {
+//   sources(first: 5) {
+//     id
+//   }
+// }
+
+// {
+//   transforms(first: 5) {
+//     id
+//     source {
+//       id
+//     }
+//   }
+// }
