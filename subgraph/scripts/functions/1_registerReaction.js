@@ -3,6 +3,8 @@ require("dotenv").config();
 const ethers = require("ethers");
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 
+const chainId = "1337";
+
 async function main() {
   // create provider
   const provider = new ethers.providers.JsonRpcProvider(
@@ -14,8 +16,9 @@ async function main() {
   wallet = wallet.connect(provider);
 
   // create contract
-  const proxyAddress = deployConfig[80001][0].contracts.MakerRegistrar.address;
-  const contractABI = deployConfig[80001][0].contracts.MakerRegistrar.abi;
+  const proxyAddress =
+    deployConfig[chainId][0].contracts.MakerRegistrar.address;
+  const contractABI = deployConfig[chainId][0].contracts.MakerRegistrar.abi;
   const MakerRegistrar = new ethers.Contract(proxyAddress, contractABI, wallet);
 
   // registerNFT
@@ -53,7 +56,7 @@ async function main() {
   //   "type": "function"
   // },
   const nftContractAddress =
-    deployConfig[80001][0].contracts.TestErc721.address;
+    deployConfig[chainId][0].contracts.TestErc721.address;
   const nftId = "3";
   const creatorAddress = ethers.constants.AddressZero;
   const creatorSaleBasisPoints = 0;

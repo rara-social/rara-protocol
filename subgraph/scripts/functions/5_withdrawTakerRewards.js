@@ -3,6 +3,8 @@ require("dotenv").config();
 const ethers = require("ethers");
 const deployConfig = require("../../deploy_data/hardhat_contracts.json");
 
+const chainId = "1337";
+
 async function main() {
   // create provider
   const provider = new ethers.providers.JsonRpcProvider(
@@ -17,13 +19,13 @@ async function main() {
   // MakerRegistrar.registerNft
   //
   const MakerRegistrar = new ethers.Contract(
-    deployConfig[80001][0].contracts.MakerRegistrar.address,
-    deployConfig[80001][0].contracts.MakerRegistrar.abi,
+    deployConfig[chainId][0].contracts.MakerRegistrar.address,
+    deployConfig[chainId][0].contracts.MakerRegistrar.abi,
     wallet
   );
 
   const nftContractAddress =
-    deployConfig[80001][0].contracts.TestErc721.address;
+    deployConfig[chainId][0].contracts.TestErc721.address;
   const nftId = "2";
   const creatorAddress = ethers.constants.AddressZero;
   const creatorSaleBasisPoints = 0;
@@ -44,8 +46,8 @@ async function main() {
 
   // create contract
   const ReactionVault = new ethers.Contract(
-    deployConfig[80001][0].contracts.ReactionVault.address,
-    deployConfig[80001][0].contracts.ReactionVault.abi,
+    deployConfig[chainId][0].contracts.ReactionVault.address,
+    deployConfig[chainId][0].contracts.ReactionVault.abi,
     wallet
   );
 
@@ -105,12 +107,12 @@ async function main() {
   //   "type": "function"
   // },
 
-  const takerNftChainId = "80001";
-  const takerNftAddress = deployConfig[80001][0].contracts.TestErc721.address;
+  const takerNftChainId = "chainId";
+  const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
   const takerNftId = "2";
   const paymentToken = "0x215562e0f8f5ca0576e10c4e983fa52c56f559c8";
   const curatorVault =
-    deployConfig[80001][0].contracts.SigmoidCuratorVault.address;
+    deployConfig[chainId][0].contracts.SigmoidCuratorVault.address;
   const curatorTokenId =
     "42163091743077916819896557754904517006036922152631935109602909741936998027115";
   const sharesToBurn = "105";

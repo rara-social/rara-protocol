@@ -3,6 +3,8 @@ require("dotenv").config();
 const ethers = require("ethers");
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 
+const chainId = "1337";
+
 async function main() {
   // create provider
   const provider = new ethers.providers.JsonRpcProvider(
@@ -15,8 +17,8 @@ async function main() {
 
   // create contract
   const ReactionVault = new ethers.Contract(
-    deployConfig[80001][0].contracts.ReactionVault.address,
-    deployConfig[80001][0].contracts.ReactionVault.abi,
+    deployConfig[chainId][0].contracts.ReactionVault.address,
+    deployConfig[chainId][0].contracts.ReactionVault.abi,
     wallet
   );
 
@@ -70,8 +72,8 @@ async function main() {
   //   "type": "function"
   // },
 
-  const takerNftChainId = "80001";
-  const takerNftAddress = deployConfig[80001][0].contracts.TestErc721.address;
+  const takerNftChainId = "chainId";
+  const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
   const takerNftId = "2";
   const reactionId =
     "0x3fc28b8fc4f55f93b527d8b4deb1d33c9673eee30bed6a224e4675826d62bd1d";
@@ -130,6 +132,7 @@ main()
 //   }
 // }
 
+// TODO - CuratorVault null
 // {
 //   userSpends(first: 5) {
 //      id
@@ -144,11 +147,11 @@ main()
 //     curatorVault {
 //       id
 //     }
-//     sharesPurchased
+//     tokensPurchased
 //   }
 // }
 
-// TODO - only one created, the taker (id collision?) user spends shows 1400, taker Userposition shows 1505
+// TODO - No UserPositions
 // {
 //   userPositions(first: 5) {
 //      id
@@ -159,14 +162,13 @@ main()
 //     curatorVaultToken {
 //       id
 //     }
-//     sharesTotal
-//     sharesAvailable
+//     tokensTotal
+//     tokensAvailable
 //     refundsTotal
 //   }
 // }
 
-// TODO - only showing 1505 total - where is the spender position & tokens?
-// TODO - curatorValutAddress is 0x00000
+// TODO - No curator vault tokens
 // {
 //   curatorVaultTokens(first: 5) {
 //    id
@@ -176,9 +178,9 @@ main()
 //     nftContractAddress
 //     nftId
 //     paymentToken
-//     sharesOutstanding
+//     tokensOutstanding
 //     currentBalance
-//     sharesTotal
+//     tokensTotal
 //     depositsTotal
 //   }
 // }

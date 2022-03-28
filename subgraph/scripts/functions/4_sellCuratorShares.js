@@ -3,6 +3,8 @@ require("dotenv").config();
 const ethers = require("ethers");
 const deployConfig = require("../../deploy_data/hardhat_contracts.json");
 
+const chainId = "1337";
+
 async function main() {
   // create provider
   const provider = new ethers.providers.JsonRpcProvider(
@@ -15,8 +17,8 @@ async function main() {
 
   // create contract
   const SigmoidCuratorVault = new ethers.Contract(
-    deployConfig[80001][0].contracts.SigmoidCuratorVault.address,
-    deployConfig[80001][0].contracts.SigmoidCuratorVault.abi,
+    deployConfig[chainId][0].contracts.SigmoidCuratorVault.address,
+    deployConfig[chainId][0].contracts.SigmoidCuratorVault.abi,
     wallet
   );
 
@@ -66,8 +68,8 @@ async function main() {
   //   "type": "function"
   // },
 
-  const nftChainId = "80001";
-  const nftAddress = deployConfig[80001][0].contracts.TestErc721.address;
+  const nftChainId = "chainId";
+  const nftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
   const nftId = "2";
   const paymentToken = "0x215562e0f8f5ca0576e10c4e983fa52c56f559c8";
   const sharesToBurn = "1400";

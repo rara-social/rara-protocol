@@ -3,6 +3,8 @@ require("dotenv").config();
 const ethers = require("ethers");
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 
+const chainId = "1337";
+
 // create provider
 const provider = new ethers.providers.JsonRpcProvider(
   process.env.DATA_TESTING_RPC
@@ -17,8 +19,8 @@ async function main() {
   // Get Reaction Price
   //
   const ParameterManager = new ethers.Contract(
-    deployConfig[80001][0].contracts.ParameterManager.address,
-    deployConfig[80001][0].contracts.ParameterManager.abi,
+    deployConfig[chainId][0].contracts.ParameterManager.address,
+    deployConfig[chainId][0].contracts.ParameterManager.abi,
     wallet
   );
   const reactionPrice = await ParameterManager.reactionPrice();
@@ -28,8 +30,8 @@ async function main() {
   // Get ERC20
   //
   const TestERC20 = new ethers.Contract(
-    deployConfig[80001][0].contracts.TestErc20.address,
-    deployConfig[80001][0].contracts.TestErc20.abi,
+    deployConfig[chainId][0].contracts.TestErc20.address,
+    deployConfig[chainId][0].contracts.TestErc20.abi,
     wallet
   );
 
@@ -102,14 +104,14 @@ async function main() {
   //   "type": "function"
   // },
   const approveReceipt = await TestERC20.approve(
-    deployConfig[80001][0].contracts.ReactionVault.address,
+    deployConfig[chainId][0].contracts.ReactionVault.address,
     reactionPrice
   );
   // console.log(approveReceipt);
 
   const allowance = await TestERC20.allowance(
     wallet.address,
-    deployConfig[80001][0].contracts.ReactionVault.address
+    deployConfig[chainId][0].contracts.ReactionVault.address
   );
 
   console.log({
@@ -123,8 +125,8 @@ async function main() {
   //
 
   // create contract
-  const proxyAddress = deployConfig[80001][0].contracts.ReactionVault.address;
-  const contractABI = deployConfig[80001][0].contracts.ReactionVault.abi;
+  const proxyAddress = deployConfig[chainId][0].contracts.ReactionVault.address;
+  const contractABI = deployConfig[chainId][0].contracts.ReactionVault.abi;
   const ReactionVault = new ethers.Contract(proxyAddress, contractABI, wallet);
 
   // buyReaction

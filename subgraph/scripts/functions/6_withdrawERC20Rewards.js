@@ -3,6 +3,8 @@ require("dotenv").config();
 const ethers = require("ethers");
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 
+const chainId = "1337";
+
 async function main() {
   // create provider
   const provider = new ethers.providers.JsonRpcProvider(
@@ -17,8 +19,8 @@ async function main() {
   // Get ERC20 payment token
   //
   const TestERC20 = new ethers.Contract(
-    deployConfig[80001][0].contracts.TestErc20.address,
-    deployConfig[80001][0].contracts.TestErc20.abi,
+    deployConfig[chainId][0].contracts.TestErc20.address,
+    deployConfig[chainId][0].contracts.TestErc20.abi,
     wallet
   );
 
@@ -29,8 +31,8 @@ async function main() {
   // ReactionVault.withdrawErc20Rewards
   //
   const ReactionVault = new ethers.Contract(
-    deployConfig[80001][0].contracts.ReactionVault.address,
-    deployConfig[80001][0].contracts.ReactionVault.abi,
+    deployConfig[chainId][0].contracts.ReactionVault.address,
+    deployConfig[chainId][0].contracts.ReactionVault.abi,
     wallet
   );
 
@@ -61,7 +63,7 @@ async function main() {
   // },
 
   const rewards = await ReactionVault.ownerToRewardsMapping(
-    deployConfig[80001][0].contracts.TestErc20.address,
+    deployConfig[chainId][0].contracts.TestErc20.address,
     wallet.address
   );
   // console.log(rewards);
@@ -89,7 +91,7 @@ async function main() {
     // },
 
     const receipt = await ReactionVault.withdrawErc20Rewards(
-      deployConfig[80001][0].contracts.TestErc20.address
+      deployConfig[chainId][0].contracts.TestErc20.address
     );
     // console.log(receipt);
   }
