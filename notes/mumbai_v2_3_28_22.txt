@@ -1,0 +1,82 @@
+mattlovan@Matts-MacBook-Pro rara-protocol % npx hardhat deploy --network mumbai --export-all ./deploy_data/hardhat_contracts.json --tags localhost --reset
+Nothing to compile
+No need to generate any newer typings.
+
+
+Deploying with account 0x668417616f1502D13EA1f9528F83072A133e8E01
+deploying "DefaultProxyAdmin" (tx: 0x038e5061e3d50fee1ccef8cd81b07b1ba458656aa2b39b7663f1ef3f446c668f)...: deployed at 0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28 with 671461 gas
+deploying "TestErc20_Implementation" (tx: 0x98821c2e3947df56842804653547f7b06805e103784c35d441d98984cb47d328)...: deployed at 0x29dEc0F92A1d0ef17ed4E4eE778564Af23abf9a8 with 1541852 gas
+deploying "TestErc20_Proxy" (tx: 0x790dcc564c41565d28edb8396ec4f9b0e2e27e8a190d77e87c0780f8f58498cb)...: deployed at 0x6d4D294c1C08D2e9fbe2216406F6b4c3F894C146 with 617662 gas
+{ testPaymentTokenErc20: '0x6d4D294c1C08D2e9fbe2216406F6b4c3F894C146' }
+reusing "DefaultProxyAdmin" at 0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28
+deploying "TestErc1155_Implementation" (tx: 0xf1722e5d9127844c2ba8747d1e4aa95803ce66c5eefc0d9b1afe92ad939ee95a)...: deployed at 0x323cc87E9070bc9Af32CBc0B5Ad298C001E853E0 with 2812930 gas
+deploying "TestErc1155_Proxy" (tx: 0x10c0c5876b0370483f3f699d6f7cbf5375983ae3ee01a42e7eae0ae1adef53b2)...: deployed at 0x1C4a82121F64Ad8F67774f5FE53571a7b8a84531 with 641310 gas
+{ test155NftAddress: '0x1C4a82121F64Ad8F67774f5FE53571a7b8a84531' }
+reusing "DefaultProxyAdmin" at 0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28
+deploying "TestErc721_Implementation" (tx: 0x3e876e59d9462f7f23f75458c86e338034c2f7ab8594b68caa7ce35bb48bc9b5)...: deployed at 0x6251aE45377573Ba2A371538cC3B9907b4782Ef0 with 2559201 gas
+deploying "TestErc721_Proxy" (tx: 0xd59c46aaa9d62342e1cfb8d23e10849cf2f1dbf12e2bb5f8eab776a7cfbfc99d)...: deployed at 0x35B212eA20d193698Be27378D3204E065CBa7EF1 with 662683 gas
+{ test721NftAddress: '0x35B212eA20d193698Be27378D3204E065CBa7EF1' }
+reusing "DefaultProxyAdmin" at 0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28
+deploying "RoleManager_Implementation" (tx: 0xffe135a1406d08be678b15f6ecfac966af653cff676769f15b4b9c3fb64fe111)...: deployed at 0xAaC6588a1d5E45EfB90fffA1f39699aBa05D731b with 1258783 gas
+deploying "RoleManager_Proxy" (tx: 0x71a83c0c56fe2905469fc1b2856aa103ba418a30933aacb6979d0bae2d66474c)...: deployed at 0xA103806d9ed75Cfe5bA1976a1fd0288316C3DDD7 with 594553 gas
+{ roleManagerAddress: '0xA103806d9ed75Cfe5bA1976a1fd0288316C3DDD7' }
+reusing "DefaultProxyAdmin" at 0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28
+deploying "AddressManager_Implementation" (tx: 0xa4eabbf5588dc31e0115cf54a31e0299658f76f907b97f85700967feae9c48c7)...: deployed at 0x3d9dCc682112A5165E4195d1f02Cf3D6C8c16A70 with 1372231 gas
+deploying "AddressManager_Proxy" (tx: 0xadfafbc574950d58c09a2e20d0dfca284ea16c02b3973a1c1d6febb449264381)...: deployed at 0x9F87ef076165229Da4231C90cdc5b21840CD630A with 570063 gas
+{ addressManagerAddress: '0x9F87ef076165229Da4231C90cdc5b21840CD630A' }
+reusing "DefaultProxyAdmin" at 0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28
+deploying "MakerRegistrar_Implementation" (tx: 0x22a202b86c92cc769fe07e062980a75724a298ef2b390d8e8ba5f9b7b46d8503)...: deployed at 0xb78a4BD9Fb46378054Ca294782d9650611e50C31 with 1466333 gas
+deploying "MakerRegistrar_Proxy" (tx: 0xd41aa7aa8db8cea610e9e626b9da5fc4a628c1619d092d321ef9d2ad2e9e74f3)...: deployed at 0x1dEA7d967CfA5202540831752578f6FBB2fdDb51 with 569939 gas
+{ makerRegistrarAddress: '0x1dEA7d967CfA5202540831752578f6FBB2fdDb51' }
+reusing "DefaultProxyAdmin" at 0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28
+deploying "ReactionVault_Implementation" (tx: 0xc22065aa7f153a78982011573c69c6d739604253026014121b75ea21707bf278)...: deployed at 0x99a4f8a5CfdA53D6dEeffdB3b40955f00c1eeEF1 with 4396738 gas
+deploying "ReactionVault_Proxy" (tx: 0xbc6b9d9393ae71a9b1074fcb20362df5dabdb1ea4ca98b6f79b6ba177d547630)...: deployed at 0x50ad2ba5C592D459dA55ECcbe047244D3f64b01E with 614562 gas
+{ reactionVaultAddress: '0x50ad2ba5C592D459dA55ECcbe047244D3f64b01E' }
+reusing "DefaultProxyAdmin" at 0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28
+deploying "ReactionNft1155_Implementation" (tx: 0xc808abdc786e0da6cc409d2eb342bfc851f65e17491dbaea074d2d3a8523605a)...: deployed at 0x4BC5b31475856A6794B498A33eA8C397F39aa82D with 3100088 gas
+deploying "ReactionNft1155_Proxy" (tx: 0xa4ba04a551449128a62096ea5c8da5369d5bafc959303e443e6ff0ff0f27fe90)...: deployed at 0x4E1C58c5afaAB0A9599485a046442dE4261bA168 with 661450 gas
+{
+  reactionNft1155Address: '0x4E1C58c5afaAB0A9599485a046442dE4261bA168'
+}
+reusing "DefaultProxyAdmin" at 0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28
+deploying "ParameterManager_Implementation" (tx: 0xd1e3ef818376b112b1fac2fcb8ca87bffb62e88cb103666ea7d67e341695e07d)...: deployed at 0x0106901c645eF3bF54DA5F17188EC186fb1faDbB with 1619304 gas
+deploying "ParameterManager_Proxy" (tx: 0xad615bc6f50115acb33782606a906bb665558de52ea3eade0b7c31d0fd320eff)...: deployed at 0x73E6C8772ee1B06e048Eeae6031eEcA2e54be60e with 569962 gas
+{
+  parameterManagerAddress: '0x73E6C8772ee1B06e048Eeae6031eEcA2e54be60e'
+}
+reusing "DefaultProxyAdmin" at 0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28
+deploying "CuratorToken1155_Implementation" (tx: 0x9b0af6169c8b672592e107f80b4210968a3c7fd477b2f1d1a7293f89f00762ee)...: deployed at 0xDa84cAAB396457EabD98A2A4Dd73dc87E0A376E2 with 3033914 gas
+deploying "CuratorToken1155_Proxy" (tx: 0xd639401cf8cb10ae11b9ab871e10117089be59f4cb82bbdc5c87c89eb7e82e66)...: deployed at 0x6598DEBcb1Db0080572fBE0B1c6f990DEB3f45e2 with 661450 gas
+{
+  curatorToken1155Address: '0x6598DEBcb1Db0080572fBE0B1c6f990DEB3f45e2'
+}
+reusing "DefaultProxyAdmin" at 0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28
+deploying "SigmoidCuratorVault_Implementation" (tx: 0x80f0feef8bf87481a9d0164cd9f9ac81759e440d57b049e5f9ed3ab5972556e4)...: deployed at 0x68433F6F8e0e29b1Ff85B533BEB01F6ecaE0c223 with 2287035 gas
+deploying "SigmoidCuratorVault_Proxy" (tx: 0x8b3e58c242f0b6c678a9cad2bdc1c14f1bddf6b1fa56af757d83e7e10aeedf87)...: deployed at 0x6BD4C54715478b16b26a69eFB7fCccf4756D6663 with 614731 gas
+{ curatorVaultAddress: '0x6BD4C54715478b16b26a69eFB7fCccf4756D6663' }
+deploying "ChildRegistrar" (tx: 0xbc7eefbbb383fa00fdab3f0e7b6b4d06910c1955e7d4d19ba121f8e7c34e7d05)...: deployed at 0x1dC10f0aaE8B93FD97f0122b5fC30F8B1b5fCEc5 with 1044212 gas
+{ childRegistrarAddress: '0x1dC10f0aaE8B93FD97f0122b5fC30F8B1b5fCEc5' }
+
+
+Updating Roles
+
+
+Granted REACTION_NFT_ADMIN to 0x50ad2ba5C592D459dA55ECcbe047244D3f64b01E
+Granted CURATOR_VAULT_PURCHASER to 0x50ad2ba5C592D459dA55ECcbe047244D3f64b01E
+Granted CURATOR_TOKEN_ADMIN to 0x6BD4C54715478b16b26a69eFB7fCccf4756D6663
+Granted ADDRESS_MANAGER_ADMIN to 0x668417616f1502D13EA1f9528F83072A133e8E01
+Granted PARAMETER_MANAGER_ADMIN to 0x668417616f1502D13EA1f9528F83072A133e8E01
+
+
+Updating addresses in the protocol
+
+
+Updating parameters in the protocol
+
+
+Revoking temp permissions for deployer
+Revoked ADDRESS_MANAGER_ADMIN to 0x668417616f1502D13EA1f9528F83072A133e8E01
+Revoked PARAMETER_MANAGER_ADMIN to 0x668417616f1502D13EA1f9528F83072A133e8E01
+
+
+Deploy complete, run "hardhat --network XXXX etherscan-verify" to verify contracts
