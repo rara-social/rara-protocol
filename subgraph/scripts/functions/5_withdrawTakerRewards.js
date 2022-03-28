@@ -107,7 +107,7 @@ async function main() {
   //   "type": "function"
   // },
 
-  const takerNftChainId = "chainId";
+  const takerNftChainId = chainId;
   const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
   const takerNftId = "2";
   const paymentToken = "0x215562e0f8f5ca0576e10c4e983fa52c56f559c8";
