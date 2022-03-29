@@ -3,7 +3,7 @@ require("dotenv").config();
 const ethers = require("ethers");
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 
-const chainId = "1337";
+const chainId = "80001";
 
 async function main() {
   // create provider
@@ -60,7 +60,7 @@ async function main() {
   const nftId = "3";
   const creatorAddress = ethers.constants.AddressZero;
   const creatorSaleBasisPoints = 0;
-  const optionBits = 0;
+  const optionBits = 1;
 
   // console.log({
   //   nftContractAddress,
@@ -96,6 +96,10 @@ main()
 // {
 //   sources(first: 5) {
 //     id
+//     nftId
+//     nftChainId
+//     nftOwnerAddress
+//     nftContractAddress
 //   }
 // }
 

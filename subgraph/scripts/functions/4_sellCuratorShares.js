@@ -3,7 +3,7 @@ require("dotenv").config();
 const ethers = require("ethers");
 const deployConfig = require("../../deploy_data/hardhat_contracts.json");
 
-const chainId = "1337";
+const chainId = "80001";
 
 async function main() {
   // create provider
@@ -68,7 +68,7 @@ async function main() {
   //   "type": "function"
   // },
 
-  const nftChainId = "chainId";
+  const nftChainId = chainId;
   const nftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
   const nftId = "2";
   const paymentToken = "0x215562e0f8f5ca0576e10c4e983fa52c56f559c8";
@@ -107,7 +107,6 @@ main()
 // Graphquery
 //
 
-// TODO - only one created, the taker (id collision?) user spends shows 1400, taker Userposition shows 1505
 // {
 //   userPositions(first: 5) {
 //      id

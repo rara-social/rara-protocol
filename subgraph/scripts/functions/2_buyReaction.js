@@ -3,7 +3,7 @@ require("dotenv").config();
 const ethers = require("ethers");
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 
-const chainId = "1337";
+const chainId = "80001";
 
 // create provider
 const provider = new ethers.providers.JsonRpcProvider(
@@ -54,8 +54,8 @@ async function main() {
   //   "stateMutability": "nonpayable",
   //   "type": "function"
   // },
-  // const mintReceipt = await TestERC20.mint(wallet.address, reactionPrice);
-  // console.log(mintReceipt);
+  const mintReceipt = await TestERC20.mint(wallet.address, reactionPrice);
+  console.log(mintReceipt);
 
   // {
   //   "inputs": [
@@ -166,7 +166,7 @@ async function main() {
 
   // setup inputs
   const transformId =
-    "95531200533042885588928647151875210995108781777760617956651355061538950665596";
+    "55226056264154490436557766319806084308635575837840880911744370522184741503559";
   const quantity = 1;
   const destinationWallet = wallet.address;
   const referrer = ethers.constants.AddressZero;

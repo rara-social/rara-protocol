@@ -3,8 +3,8 @@ require("dotenv").config();
 const ethers = require("ethers");
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 
-const chainId = "1337";
-const nftId = "3";
+const chainId = "80001";
+const nftId = "4";
 
 async function main() {
   // create provider
@@ -15,6 +15,7 @@ async function main() {
   // create wallet & connect provider
   let wallet = new ethers.Wallet(process.env.DATA_TESTING_PRIVATE_KEY);
   wallet = wallet.connect(provider);
+  console.log({wallet: wallet.address});
 
   // create contract
   const NFTContract = new ethers.Contract(
@@ -42,7 +43,7 @@ async function main() {
   //   "stateMutability": "nonpayable",
   //   "type": "function"
   // },
-  const receipt = await NFTContract.mint(wallet.address, nftId);
+  // const receipt = await NFTContract.mint(wallet.address, nftId);
   // console.log(receipt);
 
   // check owner

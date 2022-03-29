@@ -3,7 +3,7 @@ require("dotenv").config();
 const ethers = require("ethers");
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 
-const chainId = "1337";
+const chainId = "80001";
 
 async function main() {
   // create provider
@@ -72,11 +72,11 @@ async function main() {
   //   "type": "function"
   // },
 
-  const takerNftChainId = "chainId";
+  const takerNftChainId = chainId;
   const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
   const takerNftId = "2";
   const reactionId =
-    "0x3fc28b8fc4f55f93b527d8b4deb1d33c9673eee30bed6a224e4675826d62bd1d";
+    "0x1d0255db0824a1820368618318d62980724849895363dde1c37a33a0797984ce";
   const reactionQuantity = 1;
   const referrer = ethers.constants.AddressZero;
   const curatorVaultOverride = ethers.constants.AddressZero;
@@ -132,7 +132,6 @@ main()
 //   }
 // }
 
-// TODO - CuratorVault null
 // {
 //   userSpends(first: 5) {
 //      id
@@ -151,7 +150,6 @@ main()
 //   }
 // }
 
-// TODO - No UserPositions
 // {
 //   userPositions(first: 5) {
 //      id
@@ -168,7 +166,6 @@ main()
 //   }
 // }
 
-// TODO - No curator vault tokens
 // {
 //   curatorVaultTokens(first: 5) {
 //    id
