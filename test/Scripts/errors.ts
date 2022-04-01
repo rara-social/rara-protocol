@@ -10,10 +10,10 @@ const NOT_BRIDGE = "Not Bridge";
 const NO_BALANCE = "ERC20: transfer amount exceeds balance";
 const NO_REWARDS = "No rewards";
 const NO_TOKENS_TO_BURN = "ERC1155: burn amount exceeds balance";
-const REACTION_TRANSFER_RESTRICTED = "Reaction transfer restricted"
+const REACTION_TRANSFER_RESTRICTED = "Reaction transfer restricted";
 const TRANSFER_NOT_ALLOWED = "ERC20: insufficient allowance";
 const UNKNOWN_NFT = "Unknown NFT";
-
+const REWARDS_LT_BURN = "'Rewards balance < tokensToBurn'";
 
 export {
   ALREADY_REGISTERED,
@@ -31,4 +31,5 @@ export {
   REACTION_TRANSFER_RESTRICTED,
   TRANSFER_NOT_ALLOWED,
   UNKNOWN_NFT,
+  REWARDS_LT_BURN,
 };
