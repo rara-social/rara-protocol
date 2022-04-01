@@ -609,7 +609,7 @@ contract ReactionVault is
         IERC20Upgradeable paymentToken,
         address curatorVault,
         uint256 curatorTokenId,
-        uint256 TokensToBurn,
+        uint256 tokensToBurn,
         address refundToAddress
     ) external nonReentrant returns (uint256) {
         // Create a struct to hold local vars (and prevent "stack too deep")
@@ -632,8 +632,8 @@ contract ReactionVault is
         info.takerCuratorTokensBalance = nftOwnerRewards[info.rewardsIndex];
         require(info.takerCuratorTokensBalance > 0, "No rewards");
         require(
-            info.takerCuratorTokensBalance >= TokensToBurn,
-            "Rewards balance less than TokensToBurn input value"
+            info.takerCuratorTokensBalance >= tokensToBurn,
+            "Rewards balance < tokensToBurn"
         );
 
         // Look up the targeted NFT source ID
@@ -668,7 +668,7 @@ contract ReactionVault is
                 takerNftAddress,
                 takerNftId,
                 paymentToken,
-                info.takerCuratorTokensBalance,
+                tokensToBurn,
                 address(this)
             );
 
