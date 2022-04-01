@@ -13,7 +13,7 @@ const NO_TOKENS_TO_BURN = "ERC1155: burn amount exceeds balance";
 const REACTION_TRANSFER_RESTRICTED = "Reaction transfer restricted";
 const TRANSFER_NOT_ALLOWED = "ERC20: insufficient allowance";
 const UNKNOWN_NFT = "Unknown NFT";
-const REWARDS_LT_BURN = "'Rewards balance < tokensToBurn'";
+const REWARDS_LT_BURN = "Rewards balance < tokensToBurn";
 
 export {
   ALREADY_REGISTERED,
