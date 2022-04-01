@@ -21,7 +21,6 @@ export function handleCuratorTokensBought(event: CuratorTokensBought): void {
   //
   // CuratorVaultToken
   //
-
   // load CuratorVaultToken
   let curatorVaultTokenKey = event.params.curatorTokenId.toHexString();
   let curatorVaultToken = CuratorVaultToken.load(curatorVaultTokenKey);
@@ -40,7 +39,7 @@ export function handleCuratorTokensBought(event: CuratorTokensBought): void {
     //   depositsTotal: BigDecimal
     // }
     curatorVaultToken = new CuratorVaultToken(curatorVaultTokenKey);
-    // curatorVaultToken.curatorVaultAddress: Bytes! TODO
+    curatorVaultToken.curatorVaultAddress = event.address;
     curatorVaultToken.curatorTokenId = event.params.curatorTokenId;
     curatorVaultToken.nftChainId = event.params.nftChainId;
     curatorVaultToken.nftContractAddress = event.params.nftAddress;
