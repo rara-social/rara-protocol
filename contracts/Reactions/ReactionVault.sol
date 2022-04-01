@@ -672,6 +672,9 @@ contract ReactionVault is
                 address(this)
             );
 
+        // decrement owner rewards balance
+        nftOwnerRewards[info.rewardsIndex] -= tokensToBurn;
+
         // If the registration included a creator cut calculate and set aside amount
         if (creator != address(0x0) && creatorSaleBasisPoints > 0) {
             info.creatorCut =
