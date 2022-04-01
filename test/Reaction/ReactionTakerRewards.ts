@@ -21,7 +21,7 @@ import {
   REWARDS_LT_BURN,
 } from "../Scripts/errors";
 
-describe.only("ReactionVault Taker Rewards", function () {
+describe("ReactionVault Taker Rewards", function () {
   it("Should fail without rewards allocated", async function () {
     const [OWNER, MAKER, ALICE] = await ethers.getSigners();
     const {
