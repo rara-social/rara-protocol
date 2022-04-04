@@ -1,12 +1,12 @@
 import {BigInt, Address, log, BigDecimal} from "@graphprotocol/graph-ts";
 
 import {
-  User,
   UserEarnings,
-  Transform,
   Reaction,
   UserReaction,
   UserSpend,
+  CuratorVaultToken,
+  UserPosition,
 } from "../../generated/schema";
 
 import {
@@ -16,6 +16,7 @@ import {
   ReferrerRewardsGranted,
   MakerRewardsGranted,
   ERC20RewardsClaimed,
+  TakerWithdraw,
 } from "../../generated/ReactionVault/ReactionVault";
 
 export function handleReactionsPurchased(event: ReactionsPurchased): void {
@@ -32,16 +33,8 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   //
   let reaction = Reaction.load(event.params.reactionId.toHexString());
   if (reaction == null) {
-    // type Reaction @entity {
-    //   id: ID! #reactionId
-    //   transform: Transform!
-    //   parameterVersion: BigInt!
-    //   totalSold: BigInt!
-    //   referrerFeesTotal: BigDecimal!
-    //   creatorFeesTotal: BigDecimal!
-    //   makerFeesTotal: BigDecimal!
-    // }
     reaction = new Reaction(event.params.reactionId.toHexString());
+    reaction.reactionId = event.params.reactionId;
     reaction.transform = event.params.transformId.toHexString();
     reaction.parameterVersion = event.params.parameterVersion;
   }
@@ -57,37 +50,33 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
     event.transaction.from.toHexString();
   let userReaction = UserReaction.load(userReactionKey);
   if (userReaction == null) {
-    // id: ID! #reactionId + msg.sender
-    // user: User!
-    // reaction: Reaction!
-    // quantityPurchased: BigInt!
-    // quantityAvailable: BigInt!
     userReaction = new UserReaction(userReactionKey);
     userReaction.user = event.transaction.from.toHexString();
     userReaction.reaction = reaction.id;
   }
-
-  userReaction.quantityPurchased = userReaction.quantityPurchased.plus(
+  userReaction.currentBalance = userReaction.currentBalance.plus(
     event.params.quantity
   );
-  userReaction.quantityAvailable = userReaction.quantityAvailable.plus(
+  userReaction.totalPurchased = userReaction.totalPurchased.plus(
     event.params.quantity
   );
-
   userReaction.save();
 }
 
 export function handleReactionsSpent(event: ReactionsSpent): void {
   log.log(3, "ReactionsSpent");
-  //  uint256 takerNftChainId,
+  // uint256 takerNftChainId,
   // address takerNftAddress,
   // uint256 takerNftId,
   // uint256 reactionId,
+  // address paymentToken,
   // uint256 quantity,
-  // address referrer,
   // uint256 ipfsMetadataHash,
+  // address referrer,
+  // address curatorVaultAddress,
   // uint256 curatorTokenId,
-  // uint256 curatorTokenAmount
+  // uint256 curatorTokenAmount,
+  // uint256 takerTokenAmount
 
   //
   // User Reaction
@@ -97,14 +86,12 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
     "-" +
     event.transaction.from.toHexString();
   let userReaction = UserReaction.load(userReactionKey);
-  if (userReaction == null) {
-    userReaction = new UserReaction(userReactionKey);
+  if (userReaction !== null) {
+    userReaction.currentBalance = userReaction.currentBalance.minus(
+      event.params.quantity
+    );
+    userReaction.save();
   }
-  userReaction.quantityAvailable = userReaction.quantityAvailable.minus(
-    event.params.quantity
-  );
-
-  userReaction.save();
 
   //
   // UserSpend
@@ -114,11 +101,50 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   let userSpend = new UserSpend(userSpendKey);
   userSpend.user = event.transaction.from.toHexString();
   userSpend.reaction = event.params.reactionId.toHexString();
-  userSpend.quantity = event.params.quantity;
-  userSpend.ipfsMetadataHash = event.params.ipfsMetadataHash;
-  userSpend.curatorVault = event.params.curatorTokenId.toHexString();
-  userSpend.tokensPurchased = event.params.curatorTokenAmount;
+  userSpend.reactionQuantity = event.params.quantity;
+  userSpend.reactionIpfsHash = event.params.ipfsMetadataHash;
+  userSpend.curatorVaultToken = event.params.curatorTokenId.toHexString();
+  userSpend.curatorTokensPurchased = event.params.curatorTokenAmount;
   userSpend.save();
+
+  //
+  // CuratorVaultToken: increase curatorVaultToken.takerTokensAvailable
+  //
+  let curatorVaultTokenKey = event.params.curatorTokenId.toHexString();
+  let curatorVaultToken = CuratorVaultToken.load(curatorVaultTokenKey);
+  if (curatorVaultToken == null) {
+    curatorVaultToken = new CuratorVaultToken(curatorVaultTokenKey);
+    curatorVaultToken.nftChainId = event.params.takerNftChainId;
+    curatorVaultToken.nftContractAddress = event.params.takerNftAddress;
+    curatorVaultToken.nftId = event.params.takerNftId;
+    curatorVaultToken.paymentToken = event.params.paymentToken;
+    curatorVaultToken.curatorVaultAddress = event.params.curatorVaultAddress;
+    curatorVaultToken.curatorTokenId = event.params.curatorTokenId;
+  }
+  curatorVaultToken.takerTokensBalance =
+    curatorVaultToken.takerTokensBalance.plus(event.params.takerTokenAmount);
+  curatorVaultToken.save();
+
+  //
+  // UserPosition: increase userPosition.tokensAvailable & userPosition.tokensTotal
+  //
+  let userPositionKey =
+    event.transaction.from.toHexString() +
+    "-" +
+    event.params.curatorTokenId.toHexString();
+  let userPosition = UserPosition.load(userPositionKey);
+  if (userPosition == null) {
+    userPosition = new UserPosition(userPositionKey);
+    userPosition.user = event.transaction.from.toHexString();
+    userPosition.curatorVaultToken = event.params.curatorTokenId.toHexString();
+  }
+  userPosition.currentTokenBalance = userPosition.currentTokenBalance.plus(
+    event.params.curatorTokenAmount
+  );
+  userPosition.totalTokenPurchased = userPosition.totalTokenPurchased.plus(
+    event.params.curatorTokenAmount
+  );
+  userPosition.save();
 }
 
 export function handleCreatorRewardsGranted(
@@ -138,26 +164,15 @@ export function handleCreatorRewardsGranted(
     event.params.paymentToken.toHexString();
   let userEarning = UserEarnings.load(userEarningKey);
   if (userEarning == null) {
-    // type UserEarnings @entity {
-    //   id: ID! #publicAddress
-    //   paymentToken: Bytes!
-    //   makerRewardsBalance: BigDecimal!
-    //   creatorRewardsBalance: BigDecimal!
-    //   referrerRewardsBalance: BigDecimal!
-    //   makerRewardsTotal: BigDecimal!
-    //   creatorRewardsTotal: BigDecimal!
-    //   referrerRewardsTotal: BigDecimal!
-    //   withdrawTotal: BigDecimal
-    // }
     userEarning = new UserEarnings(userEarningKey);
     userEarning.paymentToken = event.params.paymentToken;
   }
 
   // increase creator rewards
-  userEarning.creatorRewardsBalance = userEarning.creatorRewardsBalance.plus(
+  userEarning.currentCreatorRewards = userEarning.currentCreatorRewards.plus(
     event.params.amount.toBigDecimal()
   );
-  userEarning.creatorRewardsTotal = userEarning.creatorRewardsTotal.plus(
+  userEarning.totalCreatorRewards = userEarning.totalCreatorRewards.plus(
     event.params.amount.toBigDecimal()
   );
 
@@ -170,7 +185,7 @@ export function handleCreatorRewardsGranted(
   if (reaction == null) {
     reaction = new Reaction(event.params.reactionId.toHexString());
   }
-  reaction.creatorFeesTotal = reaction.creatorFeesTotal.plus(
+  reaction.totalCreatorFees = reaction.totalCreatorFees.plus(
     event.params.amount.toBigDecimal()
   );
 
@@ -210,10 +225,10 @@ export function handleReferrerRewardsGranted(
   }
 
   // increase creator rewards
-  userEarning.referrerRewardsBalance = userEarning.referrerRewardsBalance.plus(
+  userEarning.currentReferrerRewards = userEarning.currentReferrerRewards.plus(
     event.params.amount.toBigDecimal()
   );
-  userEarning.referrerRewardsTotal = userEarning.referrerRewardsTotal.plus(
+  userEarning.totalReferrerRewards = userEarning.totalReferrerRewards.plus(
     event.params.amount.toBigDecimal()
   );
 
@@ -226,7 +241,7 @@ export function handleReferrerRewardsGranted(
   if (reaction == null) {
     reaction = new Reaction(event.params.reactionId.toHexString());
   }
-  reaction.referrerFeesTotal = reaction.referrerFeesTotal.plus(
+  reaction.totalReferrerFees = reaction.totalReferrerFees.plus(
     event.params.amount.toBigDecimal()
   );
 
@@ -263,10 +278,10 @@ export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
   }
 
   // increase creator rewards
-  userEarning.makerRewardsBalance = userEarning.makerRewardsBalance.plus(
+  userEarning.currentMakerRewards = userEarning.currentMakerRewards.plus(
     event.params.amount.toBigDecimal()
   );
-  userEarning.makerRewardsTotal = userEarning.makerRewardsTotal.plus(
+  userEarning.totalMakerRewards = userEarning.totalMakerRewards.plus(
     event.params.amount.toBigDecimal()
   );
 
@@ -279,7 +294,7 @@ export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
   if (reaction == null) {
     reaction = new Reaction(event.params.reactionId.toHexString());
   }
-  reaction.makerFeesTotal = reaction.makerFeesTotal.plus(
+  reaction.totalMakerFees = reaction.totalMakerFees.plus(
     event.params.amount.toBigDecimal()
   );
 
@@ -303,14 +318,43 @@ export function handleERC20RewardsClaimed(event: ERC20RewardsClaimed): void {
   }
 
   // zero-out balances
-  userEarning.creatorRewardsBalance = BigDecimal.zero();
-  userEarning.makerRewardsBalance = BigDecimal.zero();
-  userEarning.referrerRewardsBalance = BigDecimal.zero();
+  userEarning.currentMakerRewards = BigDecimal.zero();
+  userEarning.currentCreatorRewards = BigDecimal.zero();
+  userEarning.currentReferrerRewards = BigDecimal.zero();
 
   // increase total widthrawls
-  userEarning.withdrawTotal = userEarning.withdrawTotal.plus(
+  userEarning.totalRefunded = userEarning.totalRefunded.plus(
     event.params.amount.toBigDecimal()
   );
 
   userEarning.save();
+}
+
+export function handleTakerWithdraw(event: TakerWithdraw): void {
+  log.log(3, "TakerWithdraw");
+  // uint256 indexed curatorTokenId,
+  // uint256 curatorTokensSold,
+  // uint256 paymentTokenTaker,
+  // uint256 paymentTokenCreator
+
+  //
+  // CuratorVaultToken: increase curatorVaultToken.takerTokensAvailable
+  //
+  let curatorVaultTokenKey = event.params.curatorTokenId.toHexString();
+  let curatorVaultToken = CuratorVaultToken.load(curatorVaultTokenKey);
+  if (curatorVaultToken !== null) {
+    curatorVaultToken.takerTokensBalance =
+      curatorVaultToken.takerTokensBalance.minus(
+        event.params.curatorTokensSold
+      );
+    curatorVaultToken.takerRefunded = curatorVaultToken.takerRefunded.plus(
+      event.params.paymentTokenTaker
+    );
+    curatorVaultToken.takerCreatorRefunded =
+      curatorVaultToken.takerCreatorRefunded.plus(
+        event.params.paymentTokenTaker
+      );
+
+    curatorVaultToken.save();
+  }
 }
