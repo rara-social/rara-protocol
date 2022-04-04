@@ -27,7 +27,7 @@ export function handleRegistered(event: Registered): void {
   if (source == null) {
     source = new Source(sourceKey);
     source.sourceId = event.params.sourceId;
-    source.user = event.params.nftOwnerAddress.toHexString();
+    source.user = event.params.nftOwnerAddress;
     source.nftChainId = event.params.nftChainId;
     source.nftContractAddress = event.params.nftContractAddress;
     source.nftId = event.params.nftId;

@@ -1,12 +1,12 @@
 import {BigInt, Address, log, BigDecimal} from "@graphprotocol/graph-ts";
 
 import {
-  UserEarnings,
   Reaction,
   UserReaction,
   UserSpend,
   CuratorVaultToken,
   UserPosition,
+  UserEarnings,
 } from "../../generated/schema";
 
 import {
@@ -34,8 +34,14 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   let reaction = Reaction.load(event.params.reactionId.toHexString());
   if (reaction == null) {
     reaction = new Reaction(event.params.reactionId.toHexString());
+
+    // 0?
     reaction.reactionId = event.params.reactionId;
+
+    // null...
+    // let transformKey = event.params.transformId.toHexString();
     reaction.transform = event.params.transformId.toHexString();
+
     reaction.parameterVersion = event.params.parameterVersion;
   }
   reaction.totalSold = reaction.totalSold.plus(event.params.quantity);
@@ -51,7 +57,7 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   let userReaction = UserReaction.load(userReactionKey);
   if (userReaction == null) {
     userReaction = new UserReaction(userReactionKey);
-    userReaction.user = event.transaction.from.toHexString();
+    userReaction.user = event.transaction.from;
     userReaction.reaction = reaction.id;
   }
   userReaction.currentBalance = userReaction.currentBalance.plus(
@@ -99,7 +105,7 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   let userSpendKey =
     event.transaction.hash.toHex() + "-" + event.logIndex.toString();
   let userSpend = new UserSpend(userSpendKey);
-  userSpend.user = event.transaction.from.toHexString();
+  userSpend.user = event.transaction.from;
   userSpend.reaction = event.params.reactionId.toHexString();
   userSpend.reactionQuantity = event.params.quantity;
   userSpend.reactionIpfsHash = event.params.ipfsMetadataHash;
@@ -135,7 +141,7 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   let userPosition = UserPosition.load(userPositionKey);
   if (userPosition == null) {
     userPosition = new UserPosition(userPositionKey);
-    userPosition.user = event.transaction.from.toHexString();
+    userPosition.user = event.transaction.from;
     userPosition.curatorVaultToken = event.params.curatorTokenId.toHexString();
   }
   userPosition.currentTokenBalance = userPosition.currentTokenBalance.plus(

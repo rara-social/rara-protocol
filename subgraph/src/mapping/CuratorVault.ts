@@ -1,6 +1,6 @@
 import {BigInt, Address, log} from "@graphprotocol/graph-ts";
 
-import {User, CuratorVaultToken, UserPosition} from "../../generated/schema";
+import {CuratorVaultToken, UserPosition} from "../../generated/schema";
 
 import {
   CuratorTokensBought,
@@ -83,4 +83,22 @@ export function handleCuratorTokensSold(event: CuratorTokensSold): void {
     );
 
   curatorVaultToken.save();
+
+  //
+  // UserPosition: decrease userPosition.tokensAvailable & userPosition.tokensTotal
+  //
+  let userPositionKey =
+    event.transaction.from.toHexString() +
+    "-" +
+    event.params.curatorTokenId.toHexString();
+  let userPosition = UserPosition.load(userPositionKey);
+  if (userPosition == null) {
+    userPosition = new UserPosition(userPositionKey);
+    userPosition.user = event.transaction.from;
+    userPosition.curatorVaultToken = event.params.curatorTokenId.toHexString();
+  }
+  userPosition.currentTokenBalance = userPosition.currentTokenBalance.minus(
+    event.params.curatorTokensSold
+  );
+  userPosition.save();
 }

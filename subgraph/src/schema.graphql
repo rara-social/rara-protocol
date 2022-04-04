@@ -1,28 +1,7 @@
-type User @entity {
-  id: ID! #publicAddress
-}
-
-type UserEarnings @entity {
-  id: ID! #publicAddress + "-" + paymentToken
-  user: User!
-  paymentToken: Bytes!
-
-  # current
-  currentMakerRewards: BigDecimal!
-  currentCreatorRewards: BigDecimal!
-  currentReferrerRewards: BigDecimal!
-
-  # historical
-  totalMakerRewards: BigDecimal!
-  totalCreatorRewards: BigDecimal!
-  totalReferrerRewards: BigDecimal!
-  totalRefunded: BigDecimal!
-}
-
 type Source @entity {
   id: ID! #sourceId
   sourceId: BigInt!
-  user: User!
+  user: Bytes!
 
   # maker media
   nftChainId: BigInt!
@@ -58,7 +37,7 @@ type Reaction @entity {
 
 type UserReaction @entity {
   id: ID! #reactionId + "-" + msg.sender
-  user: User!
+  user: Bytes!
   reaction: Reaction!
 
   # current
@@ -70,7 +49,7 @@ type UserReaction @entity {
 
 type UserSpend @entity {
   id: ID! #event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  user: User!
+  user: Bytes!
 
   # spend
   reaction: Reaction!
@@ -84,7 +63,7 @@ type UserSpend @entity {
 
 type UserPosition @entity {
   id: ID! #curatorTokenId + "-" + msg.sender
-  user: User!
+  user: Bytes!
   curatorVaultToken: CuratorVaultToken!
 
   # current
@@ -118,4 +97,21 @@ type CuratorVaultToken @entity {
   takerTokensBalance: BigInt!
   takerRefunded: BigInt!
   takerCreatorRefunded: BigInt!
+}
+
+type UserEarnings @entity {
+  id: ID! #publicAddress + "-" + paymentToken
+  user: Bytes!
+  paymentToken: Bytes!
+
+  # current
+  currentMakerRewards: BigDecimal!
+  currentCreatorRewards: BigDecimal!
+  currentReferrerRewards: BigDecimal!
+
+  # historical
+  totalMakerRewards: BigDecimal!
+  totalCreatorRewards: BigDecimal!
+  totalReferrerRewards: BigDecimal!
+  totalRefunded: BigDecimal!
 }
