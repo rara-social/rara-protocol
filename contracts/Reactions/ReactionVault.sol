@@ -42,11 +42,14 @@ contract ReactionVault is
         address takerNftAddress,
         uint256 takerNftId,
         uint256 reactionId,
+        address paymentToken,
         uint256 quantity,
-        address referrer,
         uint256 ipfsMetadataHash,
+        address referrer,
+        address curatorVaultAddress,
         uint256 curatorTokenId,
-        uint256 curatorTokenAmount
+        uint256 curatorTokenAmount,
+        uint256 takerTokenAmount
     );
 
     /// @dev Event emitted when rewards are granted to a creator
@@ -75,6 +78,14 @@ contract ReactionVault is
 
     /// @dev Event emitted when an account withdraws ERC20 rewards
     event ERC20RewardsClaimed(address token, uint256 amount, address recipient);
+
+    /// @dev Event emitted when taker claims curator tokens
+    event TakerWithdraw(
+        uint256 indexed curatorTokenId,
+        uint256 curatorTokensSold,
+        uint256 paymentTokenTaker,
+        uint256 paymentTokenCreator
+    );
 
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IAddressManager _addressManager) public initializer {
@@ -517,11 +528,14 @@ contract ReactionVault is
             takerNftAddress,
             takerNftId,
             reactionId,
+            address(info.reactionDetails.paymentToken),
             reactionQuantity,
-            referrer,
             ipfsMetadataHash,
+            referrer,
+            address(info.curatorVault),
             curatorTokenId,
-            info.spenderCuratorTokens
+            info.spenderCuratorTokens,
+            info.takerCuratorTokens
         );
     }
 
@@ -695,6 +709,13 @@ contract ReactionVault is
 
         // Transfer the remaining amount to the caller (Maker)
         paymentToken.safeTransfer(refundToAddress, info.paymentTokensForMaker);
+
+        emit TakerWithdraw(
+            curatorTokenId,
+            tokensToBurn,
+            info.paymentTokensForMaker,
+            info.creatorCut
+        );
 
         // Return the amount of payment tokens received
         return info.paymentTokensForMaker;

@@ -73,7 +73,7 @@ dataSources:
       eventHandlers:
         - event: ReactionsPurchased(uint256,uint256,address,address,uint256,uint256)
           handler: handleReactionsPurchased
-        - event: ReactionsSpent(uint256,address,uint256,uint256,uint256,address,uint256,uint256,uint256)
+        - event: ReactionsSpent(uint256,address,uint256,uint256,address,uint256,uint256,address,address,uint256,uint256,uint256)
           handler: handleReactionsSpent
         - event: CreatorRewardsGranted(address,address,uint256,uint256)
           handler: handleCreatorRewardsGranted

@@ -25,19 +25,6 @@ export function handleCuratorTokensBought(event: CuratorTokensBought): void {
   let curatorVaultTokenKey = event.params.curatorTokenId.toHexString();
   let curatorVaultToken = CuratorVaultToken.load(curatorVaultTokenKey);
   if (curatorVaultToken == null) {
-    // type CuratorVaultToken @entity {
-    //   id: ID! #curatorTokenId
-    //   curatorVaultAddress: Bytes!
-    //   curatorTokenId: BigInt!
-    //   nftChainId: BigInt!
-    //   nftContractAddress: Bytes!
-    //   nftId: BigInt!
-    //   paymentToken: Bytes!
-    //   tokensOutstanding: BigInt
-    //   currentBalance: BigDecimal
-    //   tokensTotal: BigInt
-    //   depositsTotal: BigDecimal
-    // }
     curatorVaultToken = new CuratorVaultToken(curatorVaultTokenKey);
     curatorVaultToken.curatorVaultAddress = event.address;
     curatorVaultToken.curatorTokenId = event.params.curatorTokenId;
@@ -47,76 +34,25 @@ export function handleCuratorTokensBought(event: CuratorTokensBought): void {
     curatorVaultToken.paymentToken = event.params.paymentToken;
   }
 
-  // increase tokens
-  curatorVaultToken.tokensOutstanding =
-    curatorVaultToken.tokensOutstanding.plus(event.params.curatorTokensBought);
+  // increase current balances
+  curatorVaultToken.currentTokensOutstanding =
+    curatorVaultToken.currentTokensOutstanding.plus(
+      event.params.curatorTokensBought
+    );
+  curatorVaultToken.currentDepositBalance =
+    curatorVaultToken.currentDepositBalance.plus(
+      event.params.paymentTokenPaid.toBigDecimal()
+    );
 
-  curatorVaultToken.tokensTotal = curatorVaultToken.tokensTotal.plus(
+  // increase historical totals
+  curatorVaultToken.totalTokenSold = curatorVaultToken.totalTokenSold.plus(
     event.params.curatorTokensBought
   );
-
-  // increase balance
-  curatorVaultToken.currentBalance = curatorVaultToken.currentBalance.plus(
-    event.params.paymentTokenPaid.toBigDecimal()
-  );
-  curatorVaultToken.depositsTotal = curatorVaultToken.depositsTotal.plus(
+  curatorVaultToken.totalDeposited = curatorVaultToken.totalDeposited.plus(
     event.params.paymentTokenPaid.toBigDecimal()
   );
 
   curatorVaultToken.save();
-
-  //
-  // UserPosition
-  //
-
-  // this function/event is called twice from spendReaction() - once for the taker and once for the spender
-  // for taker we will use the curatorVaultTokenId as the id
-  // for spender we will create an id & user from "event.transaction.from"
-
-  let userId = event.transaction.from.toHexString();
-  let user = User.load(userId);
-  if (user == null) {
-    user = new User(userId);
-    user.save();
-  }
-
-  let userPositionKey = "";
-  if (event.params.isTakerPosition) {
-    // create taker position
-    // for taker we will use the curatorTokenId as the id
-    userPositionKey = event.params.curatorTokenId.toHexString();
-  } else {
-    // create spender position
-    // for spender we will create an id & user from "event.transaction.from" + curatorTokenId
-    userPositionKey =
-      event.transaction.from.toHexString() +
-      "-" +
-      event.params.curatorTokenId.toHexString();
-  }
-
-  let userPosition = UserPosition.load(userPositionKey);
-  if (userPosition == null) {
-    // id: ID! #msg.sender + curatorTokenId
-    // user: User!
-    // isTakerPostion: Boolean!
-    // curatorVaultToken: CuratorVaultToken!
-    // tokensAvailable: BigInt!
-    // tokensTotal: BigInt
-    // refundsTotal: BigDecimal
-    userPosition = new UserPosition(userPositionKey);
-    userPosition.user = user.id;
-    userPosition.isTakerPostion = event.params.isTakerPosition;
-    userPosition.curatorVaultToken = curatorVaultToken.id;
-  }
-
-  userPosition.tokensAvailable = userPosition.tokensAvailable.plus(
-    event.params.curatorTokensBought
-  );
-  userPosition.tokensTotal = userPosition.tokensTotal.plus(
-    event.params.curatorTokensBought
-  );
-
-  userPosition.save();
 }
 
 export function handleCuratorTokensSold(event: CuratorTokensSold): void {
@@ -136,33 +72,15 @@ export function handleCuratorTokensSold(event: CuratorTokensSold): void {
     curatorVaultToken = new CuratorVaultToken(curatorVaultTokenKey);
   }
 
-  // decrease tokens
-  curatorVaultToken.tokensOutstanding =
-    curatorVaultToken.tokensOutstanding.minus(event.params.curatorTokensSold);
-
-  // decrease balance
-  curatorVaultToken.currentBalance = curatorVaultToken.currentBalance.minus(
-    event.params.paymentTokenRefunded.toBigDecimal()
-  );
+  // decrease current balances
+  curatorVaultToken.currentTokensOutstanding =
+    curatorVaultToken.currentTokensOutstanding.minus(
+      event.params.curatorTokensSold
+    );
+  curatorVaultToken.currentDepositBalance =
+    curatorVaultToken.currentDepositBalance.minus(
+      event.params.paymentTokenRefunded.toBigDecimal()
+    );
 
   curatorVaultToken.save();
-
-  //
-  // UserPosition
-  //
-
-  // load user
-  let userPositionKey =
-    event.transaction.from.toHexString() +
-    event.params.curatorTokenId.toHexString();
-  let userPosition = UserPosition.load(userPositionKey);
-  if (userPosition == null) {
-    userPosition = new UserPosition(userPositionKey);
-  }
-
-  userPosition.tokensAvailable = userPosition.tokensAvailable.minus(
-    event.params.curatorTokensSold
-  );
-
-  userPosition.save();
 }
