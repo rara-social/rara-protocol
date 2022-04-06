@@ -27,6 +27,7 @@ type Reaction @entity {
   id: ID! #reactionId
   reactionId: BigInt!
   transform: Transform!
+
   parameterVersion: BigInt!
 
   totalSold: BigInt!
@@ -99,7 +100,7 @@ type CuratorVaultToken @entity {
   takerCreatorRefunded: BigInt!
 }
 
-type UserEarnings @entity {
+type UserEarning @entity {
   id: ID! #publicAddress + "-" + paymentToken
   user: Bytes!
   paymentToken: Bytes!
