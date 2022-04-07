@@ -1,4 +1,4 @@
-import {BigInt, Address, log, BigDecimal} from "@graphprotocol/graph-ts";
+import {log, BigDecimal} from "@graphprotocol/graph-ts";
 
 import {
   Reaction,
@@ -151,7 +151,7 @@ export function handleCreatorRewardsGranted(
   event: CreatorRewardsGranted
 ): void {
   log.log(3, "CreatorRewardsGranted");
-  // address referrer,
+  // address creator,
   // IERC20Upgradeable paymentToken,
   // uint256 amount,
   // uint256 reactionId
@@ -161,11 +161,13 @@ export function handleCreatorRewardsGranted(
   //
   let userEarningKey =
     event.params.creator.toHexString() +
+    "-" +
     event.params.paymentToken.toHexString();
   let userEarning = UserEarning.load(userEarningKey);
   if (userEarning == null) {
     userEarning = new UserEarning(userEarningKey);
     userEarning.paymentToken = event.params.paymentToken;
+    userEarning.user = event.params.creator;
   }
 
   // increase creator rewards
@@ -206,22 +208,13 @@ export function handleReferrerRewardsGranted(
   //
   let userEarningKey =
     event.params.referrer.toHexString() +
+    "-" +
     event.params.paymentToken.toHexString();
   let userEarning = UserEarning.load(userEarningKey);
   if (userEarning == null) {
-    // type UserEarning @entity {
-    //   id: ID! #publicAddress
-    //   paymentToken: Bytes!
-    //   makerRewardsBalance: BigDecimal!
-    //   creatorRewardsBalance: BigDecimal!
-    //   referrerRewardsBalance: BigDecimal!
-    //   makerRewardsTotal: BigDecimal!
-    //   creatorRewardsTotal: BigDecimal!
-    //   referrerRewardsTotal: BigDecimal!
-    //   withdrawTotal: BigDecimal
-    // }
     userEarning = new UserEarning(userEarningKey);
     userEarning.paymentToken = event.params.paymentToken;
+    userEarning.user = event.params.referrer;
   }
 
   // increase creator rewards
@@ -259,22 +252,14 @@ export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
   // User Earnings
   //
   let userEarningKey =
-    event.params.maker.toHexString() + event.params.paymentToken.toHexString();
+    event.params.maker.toHexString() +
+    "-" +
+    event.params.paymentToken.toHexString();
   let userEarning = UserEarning.load(userEarningKey);
   if (userEarning == null) {
-    // type UserEarning @entity {
-    //   id: ID! #publicAddress
-    //   paymentToken: Bytes!
-    //   makerRewardsBalance: BigDecimal!
-    //   creatorRewardsBalance: BigDecimal!
-    //   referrerRewardsBalance: BigDecimal!
-    //   makerRewardsTotal: BigDecimal!
-    //   creatorRewardsTotal: BigDecimal!
-    //   referrerRewardsTotal: BigDecimal!
-    //   withdrawTotal: BigDecimal
-    // }
     userEarning = new UserEarning(userEarningKey);
     userEarning.paymentToken = event.params.paymentToken;
+    userEarning.user = event.params.maker;
   }
 
   // increase creator rewards
@@ -311,23 +296,23 @@ export function handleERC20RewardsClaimed(event: ERC20RewardsClaimed): void {
   // User Earnings
   //
   let userEarningKey =
-    event.params.recipient.toHexString() + event.params.token.toHexString();
+    event.params.recipient.toHexString() +
+    "-" +
+    event.params.token.toHexString();
   let userEarning = UserEarning.load(userEarningKey);
-  if (userEarning == null) {
-    userEarning = new UserEarning(userEarningKey);
+  if (userEarning !== null) {
+    // zero-out balances
+    userEarning.currentMakerRewards = BigDecimal.zero();
+    userEarning.currentCreatorRewards = BigDecimal.zero();
+    userEarning.currentReferrerRewards = BigDecimal.zero();
+
+    // increase total widthrawls
+    userEarning.totalRefunded = userEarning.totalRefunded.plus(
+      event.params.amount.toBigDecimal()
+    );
+
+    userEarning.save();
   }
-
-  // zero-out balances
-  userEarning.currentMakerRewards = BigDecimal.zero();
-  userEarning.currentCreatorRewards = BigDecimal.zero();
-  userEarning.currentReferrerRewards = BigDecimal.zero();
-
-  // increase total widthrawls
-  userEarning.totalRefunded = userEarning.totalRefunded.plus(
-    event.params.amount.toBigDecimal()
-  );
-
-  userEarning.save();
 }
 
 export function handleTakerWithdraw(event: TakerWithdraw): void {
