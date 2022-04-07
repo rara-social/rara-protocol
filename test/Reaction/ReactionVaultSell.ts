@@ -132,7 +132,7 @@ describe("ReactionVault Sell", function () {
       BigNumber.from(0)
     );
 
-    const ipfsMetadataHash = BigNumber.from(111);
+    const metadataHash = "QmbQ25Dorr6SyegJQfUhx9GyxP7chKUFEbpnQKs61d1wQi"; // metadata hash
 
     // Now spend it
     const transaction = await reactionVault.spendReaction(
@@ -143,7 +143,7 @@ describe("ReactionVault Sell", function () {
       REACTION_AMOUNT,
       ZERO_ADDRESS,
       ZERO_ADDRESS,
-      ipfsMetadataHash
+      metadataHash
     );
     const receipt = await transaction.wait();
 
@@ -168,7 +168,7 @@ describe("ReactionVault Sell", function () {
     expect(foundEvent!.args!.reactionId).to.be.equal(REACTION_ID);
     expect(foundEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
     expect(foundEvent!.args!.referrer).to.be.equal(ZERO_ADDRESS);
-    expect(foundEvent!.args!.ipfsMetadataHash).to.be.equal(ipfsMetadataHash);
+    expect(foundEvent!.args!.ipfsMetadataHash).to.be.equal(metadataHash);
     expect(foundEvent!.args!.curatorTokenId).to.be.equal(curatorTokensId);
 
     // Verify the spender (OWNER) got curator Tokens

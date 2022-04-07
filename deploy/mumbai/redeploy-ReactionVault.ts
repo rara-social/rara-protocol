@@ -7,7 +7,7 @@ import {deployProxyContract} from "../../deploy_config/protocol";
 // Deploy the protocol on the L2
 // For Mumbai testnet, we will deploy test token contracts as well as the full protocol contracts
 // You must set DEPLOY_PRIVATE_KEY which is shared in RaRa 1Password
-// Run: npx hardhat deploy --network mumbai --tags mumbai
+// Run: npx hardhat deploy --network mumbai --tags mumbai-reactionvault
 module.exports = async (hre: HardhatRuntimeEnvironment) => {
   const {getNamedAccounts} = hre;
   const {deployer} = await getNamedAccounts();
@@ -21,4 +21,4 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   console.log({reactionVaultAddress});
 };
 
-module.exports.tags = ["mumbai-reaction"];
+module.exports.tags = ["mumbai-reactionvault"];

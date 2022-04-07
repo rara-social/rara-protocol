@@ -1,144 +1,98 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
+const {getWallet, sleep, getTransactionEvent} = require("../helpers/utils");
 
-const chainId = "1337";
+const chainId = "80001";
 
 async function main() {
-  // create provider
-  const provider = new ethers.providers.JsonRpcProvider(
-    process.env.DATA_TESTING_RPC
-  );
+  const creator = await getWallet("creator");
 
-  // create wallet & connect provider
-  let wallet = new ethers.Wallet(process.env.DATA_TESTING_PRIVATE_KEY);
-  wallet = wallet.connect(provider);
+  // setup curator vault
+  const takerNftChainId = chainId;
+  const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
+  const takerNftId = "15";
+  const paymentToken = deployConfig[chainId][0].contracts.TestErc20.address;
+  const curatorVault =
+    deployConfig[chainId][0].contracts.SigmoidCuratorVault.address;
+  const curatorTokenId =
+    "41270118657600183315736307945898820710535619845004420983575306950395984883859";
 
   //
-  // MakerRegistrar.registerNft
+  // check registration
   //
   const MakerRegistrar = new ethers.Contract(
     deployConfig[chainId][0].contracts.MakerRegistrar.address,
     deployConfig[chainId][0].contracts.MakerRegistrar.abi,
-    wallet
+    creator
   );
-
-  const nftContractAddress =
-    deployConfig[chainId][0].contracts.TestErc721.address;
-  const nftId = "2";
-  const creatorAddress = ethers.constants.AddressZero;
-  const creatorSaleBasisPoints = 0;
-  const optionBits = 0;
-
-  const register_receipt = await MakerRegistrar.registerNft(
-    nftContractAddress,
-    nftId,
-    creatorAddress,
-    creatorSaleBasisPoints,
-    optionBits
-  );
-  console.log(register_receipt);
+  const sourceId = deriveSourceId(takerNftChainId, takerNftAddress, takerNftId);
+  const {registered} = await MakerRegistrar.sourceToDetailsLookup(sourceId);
+  if (!registered) {
+    throw new Error(
+      "taker nft not registered. " +
+        JSON.stringify({
+          takerNftChainId,
+          takerNftAddress,
+          takerNftId,
+        })
+    );
+  }
 
   //
-  // ReactionVault.withdrawTakerRewards
+  // ReactionVault.withdrawTakerRewards()
   //
-
-  // create contract
   const ReactionVault = new ethers.Contract(
     deployConfig[chainId][0].contracts.ReactionVault.address,
     deployConfig[chainId][0].contracts.ReactionVault.abi,
-    wallet
+    creator
   );
 
-  // create inputs
-  // {
-  //   "inputs": [
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "takerNftChainId",
-  //       "type": "uint256"
-  //     },
-  //     {
-  //       "internalType": "address",
-  //       "name": "takerNftAddress",
-  //       "type": "address"
-  //     },
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "takerNftId",
-  //       "type": "uint256"
-  //     },
-  //     {
-  //       "internalType": "contract IERC20Upgradeable",
-  //       "name": "paymentToken",
-  //       "type": "address"
-  //     },
-  //     {
-  //       "internalType": "address",
-  //       "name": "curatorVault",
-  //       "type": "address"
-  //     },
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "curatorTokenId",
-  //       "type": "uint256"
-  //     },
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "sharesToBurn",
-  //       "type": "uint256"
-  //     },
-  //     {
-  //       "internalType": "address",
-  //       "name": "refundToAddress",
-  //       "type": "address"
-  //     }
-  //   ],
-  //   "name": "withdrawTakerRewards",
-  //   "outputs": [
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "",
-  //       "type": "uint256"
-  //     }
-  //   ],
-  //   "stateMutability": "nonpayable",
-  //   "type": "function"
-  // },
+  // user input
+  const tokensToBurn = "100";
+  const refundToAddress = creator.address;
 
-  const takerNftChainId = chainId;
-  const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
-  const takerNftId = "2";
-  const paymentToken = "0x215562e0f8f5ca0576e10c4e983fa52c56f559c8";
-  const curatorVault =
-    deployConfig[chainId][0].contracts.SigmoidCuratorVault.address;
-  const curatorTokenId =
-    "42163091743077916819896557754904517006036922152631935109602909741936998027115";
-  const sharesToBurn = "105";
-  const refundToAddress = wallet.address;
-  // console.log({
-  //   takerNftChainId,
-  //   takerNftAddress,
-  //   takerNftId,
-  //   paymentToken,
-  //   curatorVault,
-  //   curatorTokenId,
-  //   sharesToBurn,
-  //   refundToAddress,
-  // });
+  // check rewards balance
+  const takerRewardsKey = deriveTakerRewardsKey(
+    takerNftChainId,
+    takerNftAddress,
+    takerNftId,
+    curatorVault,
+    curatorTokenId
+  );
 
-  const receipt = await ReactionVault.withdrawTakerRewards(
+  const rewardsStart = await ReactionVault.nftOwnerRewards(takerRewardsKey);
+  if (rewardsStart < tokensToBurn) {
+    throw new Error(
+      "rewards < tokensToBurn " +
+        JSON.stringify({
+          rewardsStart: rewardsStart.toNumber(),
+          tokensToBurn: tokensToBurn,
+        })
+    );
+  }
+
+  // withdraw
+  const withdrawTakerRewardsTxn = await ReactionVault.withdrawTakerRewards(
     takerNftChainId,
     takerNftAddress,
     takerNftId,
     paymentToken,
     curatorVault,
     curatorTokenId,
-    sharesToBurn,
+    tokensToBurn,
     refundToAddress
   );
-  console.log(receipt);
+  const receipt = await withdrawTakerRewardsTxn.wait();
+  console.log("done. transactionHash:", receipt.transactionHash);
+
+  const rewardsLeft = await ReactionVault.nftOwnerRewards(takerRewardsKey);
+  console.log({
+    rewardsStart: rewardsStart.toNumber(),
+    tokensToBurn: tokensToBurn,
+    rewardsEnd: rewardsLeft.toNumber(),
+  });
 }
 
 // We recommend this pattern to be able to use async/await everywhere
@@ -150,22 +104,31 @@ main()
     process.exit(1);
   });
 
-//
-// Graphquery
-//
+function deriveTakerRewardsKey(
+  takerNftChainId,
+  takerNftAddress,
+  takerNftId,
+  curatorVaultAddress,
+  curatorTokenId
+) {
+  const encodedParams = ethers.utils.defaultAbiCoder.encode(
+    ["uint256", "address", "uint256", "address", "uint256"],
+    [
+      takerNftChainId,
+      takerNftAddress,
+      takerNftId,
+      curatorVaultAddress,
+      curatorTokenId,
+    ]
+  );
+  return ethers.utils.keccak256(encodedParams);
+}
 
-// {
-//   curatorVaultTokens(first: 5) {
-//    id
-//     curatorVaultAddress
-//     curatorTokenId
-//     nftChainId
-//     nftContractAddress
-//     nftId
-//     paymentToken
-//     sharesOutstanding
-//     currentBalance
-//     sharesTotal
-//     depositsTotal
-//   }
-// }
+const deriveSourceId = (takerNftChainId, takerNftAddress, takerNftId) => {
+  // Encode the params and hash it to get the meta URI
+  const encodedParams = ethers.utils.defaultAbiCoder.encode(
+    ["uint256", "address", "uint256"],
+    [takerNftChainId, takerNftAddress, takerNftId]
+  );
+  return ethers.utils.keccak256(encodedParams);
+};

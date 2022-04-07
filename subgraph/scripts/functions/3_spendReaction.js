@@ -2,108 +2,49 @@
 require("dotenv").config();
 const ethers = require("ethers");
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
+const {getWallet, chainId} = require("../helpers/utils");
 
-const chainId = "80001";
+// taker params
+const takerNftChainId = chainId;
+const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
+const takerNftId = "44";
+
+// reaction params
+const reactionId =
+  "0x36532001a17f2f79d2f1f592ad3579e405239a273499c48f453fd76817767b66";
+const reactionQuantity = 10;
+const ipfsMetadataHash = "QmbQ25Dorr6SyegJQfUhx9GyxP7chKUFEbpnQKs61d1wQi";
 
 async function main() {
-  // create provider
-  const provider = new ethers.providers.JsonRpcProvider(
-    process.env.DATA_TESTING_RPC
-  );
+  const reactor = await getWallet("reactor");
+  const referrer = await getWallet("referrer");
 
-  // create wallet & connect provider
-  let wallet = new ethers.Wallet(process.env.DATA_TESTING_PRIVATE_KEY);
-  wallet = wallet.connect(provider);
-
-  // create contract
+  // spendReaction
+  // const ReactionVault = new ethers.Contract(
+  //   deployConfig[chainId][0].contracts.ReactionVault.address,
+  //   deployConfig[chainId][0].contracts.ReactionVault.abi,
+  //   reactor
+  // );
   const ReactionVault = new ethers.Contract(
     deployConfig[chainId][0].contracts.ReactionVault.address,
     deployConfig[chainId][0].contracts.ReactionVault.abi,
-    wallet
+    reactor
   );
 
-  // spendReaction
-  // {
-  //   "inputs": [
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "takerNftChainId",
-  //       "type": "uint256"
-  //     },
-  //     {
-  //       "internalType": "address",
-  //       "name": "takerNftAddress",
-  //       "type": "address"
-  //     },
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "takerNftId",
-  //       "type": "uint256"
-  //     },
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "reactionId",
-  //       "type": "uint256"
-  //     },
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "reactionQuantity",
-  //       "type": "uint256"
-  //     },
-  //     {
-  //       "internalType": "address",
-  //       "name": "referrer",
-  //       "type": "address"
-  //     },
-  //     {
-  //       "internalType": "address",
-  //       "name": "curatorVaultOverride",
-  //       "type": "address"
-  //     },
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "ipfsMetadataHash",
-  //       "type": "uint256"
-  //     }
-  //   ],
-  //   "name": "spendReaction",
-  //   "outputs": [],
-  //   "stateMutability": "nonpayable",
-  //   "type": "function"
-  // },
-
-  const takerNftChainId = chainId;
-  const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
-  const takerNftId = "2";
-  const reactionId =
-    "0x1d0255db0824a1820368618318d62980724849895363dde1c37a33a0797984ce";
-  const reactionQuantity = 1;
-  const referrer = ethers.constants.AddressZero;
   const curatorVaultOverride = ethers.constants.AddressZero;
-  const ipfsMetadataHash = ethers.constants.MaxInt256;
-
-  console.log({
+  console.log("spending reactions...");
+  const spendReactionTxn = await ReactionVault.spendReaction(
     takerNftChainId,
     takerNftAddress,
     takerNftId,
     reactionId,
     reactionQuantity,
-    referrer,
-    curatorVaultOverride,
-    ipfsMetadataHash,
-  });
-
-  const receipt = await ReactionVault.spendReaction(
-    takerNftChainId,
-    takerNftAddress,
-    takerNftId,
-    reactionId,
-    reactionQuantity,
-    referrer,
+    referrer.address,
     curatorVaultOverride,
     ipfsMetadataHash
   );
-  console.log(receipt);
+  const receipt = await spendReactionTxn.wait();
+  console.log("done. transactionHash:", receipt.transactionHash);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
@@ -114,70 +55,3 @@ main()
     console.error(error);
     process.exit(1);
   });
-
-//
-// Graphquery
-//
-// {
-//   userReactions(first: 5) {
-//     id
-//     user {
-//       id
-//     }
-//     reaction {
-//       id
-//     }
-//     quantityPurchased
-//     quantityAvailable
-//   }
-// }
-
-// {
-//   userSpends(first: 5) {
-//      id
-//     user {
-//       id
-//     }
-//     reaction {
-//       id
-//     }
-//     quantity
-//     ipfsMetadataHash
-//     curatorVault {
-//       id
-//     }
-//     tokensPurchased
-//   }
-// }
-
-// {
-//   userPositions(first: 5) {
-//      id
-//     user {
-//       id
-//     }
-//     isTakerPostion
-//     curatorVaultToken {
-//       id
-//     }
-//     tokensTotal
-//     tokensAvailable
-//     refundsTotal
-//   }
-// }
-
-// {
-//   curatorVaultTokens(first: 5) {
-//    id
-//     curatorVaultAddress
-//     curatorTokenId
-//     nftChainId
-//     nftContractAddress
-//     nftId
-//     paymentToken
-//     tokensOutstanding
-//     currentBalance
-//     tokensTotal
-//     depositsTotal
-//   }
-// }

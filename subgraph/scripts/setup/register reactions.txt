@@ -1,0 +1,20 @@
+#40
+
+Mint
+- Creator Mint 1-6
+- Creator Transfer 4, 5, 6 to Maker
+
+Register
+- Maker register 4, 5, 6
+ - 4: No Creator cut
+ - 5: 1000 Creator cut, creator
+ - 6: 2500 Creator cut, deployer
+
+Buy
+- Reactor buys 100 of each 4, 5, 6
+
+Sell Reactions
+- Reactor spends 10 on 4, 5, 6
+- Reactor spends 10 on #1 (unregisterd)
+
+Sell Tokens

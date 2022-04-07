@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0xE4C31aD3C708E51C761ae0ED968DA6FF160FcaD0"
       abi: MakerRegistrar
-      startBlock: 25800000
+      startBlock: 25834605
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -31,7 +31,7 @@ dataSources:
     source:
       address: "0x3F858874B399d6A65cfdee51878C38b588eF46e5"
       abi: SigmoidCuratorVault
-      startBlock: 25800000
+      startBlock: 25834605
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -54,7 +54,7 @@ dataSources:
     source:
       address: "0x00447fe3Bb552b8C7E4482DedFb062807Da22ee8"
       abi: ReactionVault
-      startBlock: 25800000
+      startBlock: 25834605
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -72,7 +72,7 @@ dataSources:
       eventHandlers:
         - event: ReactionsPurchased(uint256,uint256,address,address,uint256,uint256)
           handler: handleReactionsPurchased
-        - event: ReactionsSpent(uint256,address,uint256,uint256,address,uint256,uint256,address,address,uint256,uint256,uint256)
+        - event: ReactionsSpent(uint256,address,uint256,uint256,address,uint256,string,address,address,uint256,uint256,uint256)
           handler: handleReactionsSpent
         - event: CreatorRewardsGranted(address,address,uint256,uint256)
           handler: handleCreatorRewardsGranted

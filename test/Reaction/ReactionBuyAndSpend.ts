@@ -77,7 +77,7 @@ describe("ReactionVault Buy", function () {
       testingStandard1155.address,
       TAKER_NFT_ID,
       ZERO_ADDRESS, // Curator vault override
-      0 // metadata hash
+      "QmbQ25Dorr6SyegJQfUhx9GyxP7chKUFEbpnQKs61d1wQi" // metadata hash
     );
     const receipt = await transaction.wait();
 
@@ -168,7 +168,7 @@ describe("ReactionVault Buy", function () {
       testingStandard1155.address,
       TAKER_NFT_ID,
       ZERO_ADDRESS, // Curator vault override
-      0 // metadata hash
+      "QmbQ25Dorr6SyegJQfUhx9GyxP7chKUFEbpnQKs61d1wQi" // metadata hash
     );
     const receipt = await transaction.wait();
 
