@@ -14086,7 +14086,7 @@
       "chainId": "80001",
       "contracts": {
         "DefaultProxyAdmin": {
-          "address": "0x023c0509387399FfC6EfAFB92404E99bB0F71cbD",
+          "address": "0x7FEB35Ba7Cdc372CcbAaA0545BE0F513Ab7258d6",
           "abi": [
             {
               "inputs": [
@@ -14251,7 +14251,7 @@
           ]
         },
         "TestErc20_Implementation": {
-          "address": "0x729c1B4dc0d15739ca7EC091018bd74eB334B540",
+          "address": "0xc6603dB666315078e3177C3A4F0da229b24498dD",
           "abi": [
             {
               "anonymous": false,
@@ -14562,7 +14562,7 @@
           ]
         },
         "TestErc20_Proxy": {
-          "address": "0x2E1777936Cbc56e40C356BdcC41500785e0Bda70",
+          "address": "0x1672AE5128AFD91C51AefDcea225909E2c719F6D",
           "abi": [
             {
               "inputs": [
@@ -14698,7 +14698,7 @@
           ]
         },
         "TestErc20": {
-          "address": "0x2E1777936Cbc56e40C356BdcC41500785e0Bda70",
+          "address": "0x1672AE5128AFD91C51AefDcea225909E2c719F6D",
           "abi": [
             {
               "anonymous": false,
@@ -15140,7 +15140,7 @@
           ]
         },
         "TestErc1155_Implementation": {
-          "address": "0xC5E2775434df3b057ecC6fb3b6b149b3dEAa2ed3",
+          "address": "0x977273a71Ecd2193AFFE91D3aD5Ac909D36270Aa",
           "abi": [
             {
               "anonymous": false,
@@ -15539,7 +15539,7 @@
           ]
         },
         "TestErc1155_Proxy": {
-          "address": "0x268Be9769E0540B81888572Ecbc8BcB101b1fEeF",
+          "address": "0x28E4E7a46A5ad018dBaF0eED2725565A67b076ba",
           "abi": [
             {
               "inputs": [
@@ -15675,7 +15675,7 @@
           ]
         },
         "TestErc1155": {
-          "address": "0x268Be9769E0540B81888572Ecbc8BcB101b1fEeF",
+          "address": "0x28E4E7a46A5ad018dBaF0eED2725565A67b076ba",
           "abi": [
             {
               "anonymous": false,
@@ -16205,7 +16205,7 @@
           ]
         },
         "TestErc721_Implementation": {
-          "address": "0x7F0EEBD2C9fFE19633caa99B259B07B72CBd716C",
+          "address": "0x12a4732A13C0807F2b439524177153D1DE934E31",
           "abi": [
             {
               "anonymous": false,
@@ -16589,7 +16589,7 @@
           ]
         },
         "TestErc721_Proxy": {
-          "address": "0x38b734C3F64A001C6b01b2AcCa4f9AA295227468",
+          "address": "0x07081c92Ee04BD9BA46F18ED61E7C593F8d90951",
           "abi": [
             {
               "inputs": [
@@ -16725,7 +16725,7 @@
           ]
         },
         "TestErc721": {
-          "address": "0x38b734C3F64A001C6b01b2AcCa4f9AA295227468",
+          "address": "0x07081c92Ee04BD9BA46F18ED61E7C593F8d90951",
           "abi": [
             {
               "anonymous": false,
@@ -17240,7 +17240,7 @@
           ]
         },
         "RoleManager_Implementation": {
-          "address": "0x0fcd2fe9d160db3A6f0448F6d71A6e30bD95c9Bb",
+          "address": "0x285a6bbCBFC735d70041AD352B2987220102355e",
           "abi": [
             {
               "anonymous": false,
@@ -17641,7 +17641,7 @@
           ]
         },
         "RoleManager_Proxy": {
-          "address": "0x51B506f8820691C7ec143d7501f1540b734544ad",
+          "address": "0xB1E6Af0eBef28236B0fe040580478F672edD1AE5",
           "abi": [
             {
               "inputs": [
@@ -17777,7 +17777,7 @@
           ]
         },
         "RoleManager": {
-          "address": "0x51B506f8820691C7ec143d7501f1540b734544ad",
+          "address": "0xB1E6Af0eBef28236B0fe040580478F672edD1AE5",
           "abi": [
             {
               "anonymous": false,
@@ -18309,7 +18309,7 @@
           ]
         },
         "AddressManager_Implementation": {
-          "address": "0x79bE36141944C0fAd9e4c373e20756e06476F23a",
+          "address": "0x809d38A8FD4ab0d0DF2e83799F043a719095A616",
           "abi": [
             {
               "inputs": [],
@@ -18483,7 +18483,7 @@
           ]
         },
         "AddressManager_Proxy": {
-          "address": "0xaC69EcdB0114F63a11D2DbC14Af9aCA589Ba28Bc",
+          "address": "0x123C438bd7ECaEE009dA01628D4817cBB4028B65",
           "abi": [
             {
               "inputs": [
@@ -18619,7 +18619,7 @@
           ]
         },
         "AddressManager": {
-          "address": "0xaC69EcdB0114F63a11D2DbC14Af9aCA589Ba28Bc",
+          "address": "0x123C438bd7ECaEE009dA01628D4817cBB4028B65",
           "abi": [
             {
               "anonymous": false,
@@ -18924,7 +18924,7 @@
           ]
         },
         "MakerRegistrar_Implementation": {
-          "address": "0xd17A27c0305D2e55832872b6dcf9e63D59788A77",
+          "address": "0xb5896dd6564fB403d14b4850b58b84207855B3b3",
           "abi": [
             {
               "anonymous": false,
@@ -19299,7 +19299,7 @@
           ]
         },
         "MakerRegistrar_Proxy": {
-          "address": "0xE4C31aD3C708E51C761ae0ED968DA6FF160FcaD0",
+          "address": "0xa307f7adAfa10992F25f81632DAbb94E83D2de2B",
           "abi": [
             {
               "inputs": [
@@ -19435,7 +19435,7 @@
           ]
         },
         "MakerRegistrar": {
-          "address": "0xE4C31aD3C708E51C761ae0ED968DA6FF160FcaD0",
+          "address": "0xa307f7adAfa10992F25f81632DAbb94E83D2de2B",
           "abi": [
             {
               "anonymous": false,
@@ -19941,7 +19941,7 @@
           ]
         },
         "ReactionVault_Implementation": {
-          "address": "0xb2beDB983e5E69d8080fab2e72D4ab979471eF92",
+          "address": "0xcbb2C550eb59beab02bC18d08b24336aEFFB79Ff",
           "abi": [
             {
               "anonymous": false,
@@ -20680,7 +20680,7 @@
           ]
         },
         "ReactionVault_Proxy": {
-          "address": "0x00447fe3Bb552b8C7E4482DedFb062807Da22ee8",
+          "address": "0x161354414b7aC43deD87Bc1176146e9326ffc671",
           "abi": [
             {
               "inputs": [
@@ -20816,7 +20816,7 @@
           ]
         },
         "ReactionVault": {
-          "address": "0x00447fe3Bb552b8C7E4482DedFb062807Da22ee8",
+          "address": "0x161354414b7aC43deD87Bc1176146e9326ffc671",
           "abi": [
             {
               "anonymous": false,
@@ -21686,7 +21686,7 @@
           ]
         },
         "ReactionNft1155_Implementation": {
-          "address": "0xbabFe2799D29467060E213e268Fa286493f986f3",
+          "address": "0x479e9324EA7E1092a8bf5E2a658b628f9D743E39",
           "abi": [
             {
               "anonymous": false,
@@ -22085,7 +22085,7 @@
           ]
         },
         "ReactionNft1155_Proxy": {
-          "address": "0x38649F2738C38F76723fff90967717Cc3E4EDe10",
+          "address": "0xb440075dF6D76e3cDD8a3929c911c1CEf7d3a1E7",
           "abi": [
             {
               "inputs": [
@@ -22221,7 +22221,7 @@
           ]
         },
         "ReactionNft1155": {
-          "address": "0x38649F2738C38F76723fff90967717Cc3E4EDe10",
+          "address": "0xb440075dF6D76e3cDD8a3929c911c1CEf7d3a1E7",
           "abi": [
             {
               "anonymous": false,
@@ -22751,7 +22751,7 @@
           ]
         },
         "ParameterManager_Implementation": {
-          "address": "0x435Af08BBD73894D3a2C956B1421fd4e4f61e695",
+          "address": "0x1079e7464980752b52E686907406236E57d0C8a6",
           "abi": [
             {
               "inputs": [],
@@ -23021,7 +23021,7 @@
           ]
         },
         "ParameterManager_Proxy": {
-          "address": "0xb33f0428146C69FEF20Fd22733a6B4Ce864AA0F4",
+          "address": "0x9b66a456b6E075F46D108a62173173c3481502c0",
           "abi": [
             {
               "inputs": [
@@ -23157,7 +23157,7 @@
           ]
         },
         "ParameterManager": {
-          "address": "0xb33f0428146C69FEF20Fd22733a6B4Ce864AA0F4",
+          "address": "0x9b66a456b6E075F46D108a62173173c3481502c0",
           "abi": [
             {
               "anonymous": false,
@@ -23558,7 +23558,7 @@
           ]
         },
         "CuratorToken1155_Implementation": {
-          "address": "0xE4Bf4a936ed8d11A796b138C00A79f71d51E2E77",
+          "address": "0x511308A44148D71f3686e054549DB9773AaE68a9",
           "abi": [
             {
               "anonymous": false,
@@ -23957,7 +23957,7 @@
           ]
         },
         "CuratorToken1155_Proxy": {
-          "address": "0xC3DF88df48022528D04513DA8a59384206f24B10",
+          "address": "0x18246DcBE239A5cC0414c8c4bf63d7952E06B9b3",
           "abi": [
             {
               "inputs": [
@@ -24093,7 +24093,7 @@
           ]
         },
         "CuratorToken1155": {
-          "address": "0xC3DF88df48022528D04513DA8a59384206f24B10",
+          "address": "0x18246DcBE239A5cC0414c8c4bf63d7952E06B9b3",
           "abi": [
             {
               "anonymous": false,
@@ -24623,7 +24623,7 @@
           ]
         },
         "SigmoidCuratorVault_Implementation": {
-          "address": "0x540A06087f77d6622C98F5Eb3EE7678B481d2679",
+          "address": "0x69c6dDa9eE72281B272c45E492c0ED577A765369",
           "abi": [
             {
               "anonymous": false,
@@ -25005,7 +25005,7 @@
           ]
         },
         "SigmoidCuratorVault_Proxy": {
-          "address": "0x3F858874B399d6A65cfdee51878C38b588eF46e5",
+          "address": "0x79aa569a6D58d175731531790f94FaC8C7141985",
           "abi": [
             {
               "inputs": [
@@ -25141,7 +25141,7 @@
           ]
         },
         "SigmoidCuratorVault": {
-          "address": "0x3F858874B399d6A65cfdee51878C38b588eF46e5",
+          "address": "0x79aa569a6D58d175731531790f94FaC8C7141985",
           "abi": [
             {
               "anonymous": false,
@@ -25654,7 +25654,7 @@
           ]
         },
         "ChildRegistrar": {
-          "address": "0x5f5CB8E855522d59080C7D0627335e02a4bA4Ee7",
+          "address": "0x3262731c2679c4053048Dcf2f6e5d77a97597c04",
           "abi": [
             {
               "inputs": [
