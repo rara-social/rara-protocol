@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: GPL-3.0-only
 pragma solidity 0.8.9;
 
 import "../Permissions/IRoleManager.sol";
@@ -60,8 +60,18 @@ interface IParameterManager {
     function setApprovedCuratorVaults(address vault, bool approved) external;
 
     // @dev Getter for curator vault bonding curve params
-    function bondingCurveParams() external returns(uint256, uint256, uint256);
+    function bondingCurveParams()
+        external
+        returns (
+            uint256,
+            uint256,
+            uint256
+        );
 
     // @dev Setter for curator vault bonding curve params
-    function setBondingCurveParams(uint256 a, uint256 b, uint256 c) external;
+    function setBondingCurveParams(
+        uint256 a,
+        uint256 b,
+        uint256 c
+    ) external;
 }
