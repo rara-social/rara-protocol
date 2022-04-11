@@ -14,8 +14,8 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - User
-        - Reaction
+        - Source
+        - Transform
       abis:
         - name: MakerRegistrar
           file: ../artifacts/contracts/maker/MakerRegistrar.sol/MakerRegistrar.json
@@ -37,10 +37,8 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - User
-        - Reaction
-        - TakerNFT
-        - CuratorPosition
+        - CuratorVaultToken
+        - UserPosition
       abis:
         - name: SigmoidCuratorVault
           file: ../artifacts/contracts/SigmoidCuratorVault/SigmoidCuratorVault.sol/SigmoidCuratorVault.json
@@ -62,18 +60,19 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - User
         - Reaction
-        - TakerNFT
-        - CuratorPosition
-        - CuratorReaction
+        - UserReaction
+        - UserSpend
+        - CuratorVaultToken
+        - UserPosition
+        - UserEarnings
       abis:
         - name: ReactionVault
           file: ../artifacts/contracts/Reactions/ReactionVault.sol/ReactionVault.json
       eventHandlers:
         - event: ReactionsPurchased(uint256,uint256,address,address,uint256,uint256)
           handler: handleReactionsPurchased
-        - event: ReactionsSpent(uint256,address,uint256,uint256,uint256,address,uint256,uint256,uint256)
+        - event: ReactionsSpent(uint256,address,uint256,uint256,address,uint256,uint256,address,address,uint256,uint256,uint256)
           handler: handleReactionsSpent
         - event: CreatorRewardsGranted(address,address,uint256,uint256)
           handler: handleCreatorRewardsGranted
@@ -83,4 +82,6 @@ dataSources:
           handler: handleMakerRewardsGranted
         - event: ERC20RewardsClaimed(address,uint256,address)
           handler: handleERC20RewardsClaimed
+        - event: TakerWithdraw(indexed uint256,uint256,uint256,uint256)
+          handler: handleTakerWithdraw
       file: ./src/mapping/ReactionVault.ts

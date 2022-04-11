@@ -5,7 +5,7 @@
       "chainId": "5",
       "contracts": {
         "DefaultProxyAdmin": {
-          "address": "0xEbD4846575AD2233e536c85F973CD5723f090953",
+          "address": "0x4D1431dAf0A145454BDd58855b104F73ee967AEc",
           "abi": [
             {
               "inputs": [
@@ -170,7 +170,7 @@
           ]
         },
         "RootRegistrar": {
-          "address": "0xb8f7A3577ce8d0F9DeC2bb2fe198277825E36e4d",
+          "address": "0xC3C93DBf716006900146B2cf6055ff7a217316C7",
           "abi": [
             {
               "inputs": [
@@ -365,7 +365,7 @@
           ]
         },
         "TestErc1155": {
-          "address": "0xc39FaDE0be5261DFB189C638A586387B587dFe09",
+          "address": "0x540614C108C478984c40E3915162fB5D8f6E457E",
           "abi": [
             {
               "anonymous": false,
@@ -895,7 +895,7 @@
           ]
         },
         "TestErc1155_Implementation": {
-          "address": "0xf7BD75264150C8D35849F9E650D9830e099609b6",
+          "address": "0xCc03f283DA03027B8DE9cc53E21f0F06A3612c25",
           "abi": [
             {
               "anonymous": false,
@@ -1294,7 +1294,7 @@
           ]
         },
         "TestErc1155_Proxy": {
-          "address": "0xc39FaDE0be5261DFB189C638A586387B587dFe09",
+          "address": "0x540614C108C478984c40E3915162fB5D8f6E457E",
           "abi": [
             {
               "inputs": [
@@ -1430,7 +1430,7 @@
           ]
         },
         "TestErc721": {
-          "address": "0xA8A7B8B1FE9154236F329BFE970d6f57cae8F778",
+          "address": "0xA0871E275E6dF619a78806705F31CAD7ba85C3E6",
           "abi": [
             {
               "anonymous": false,
@@ -1945,7 +1945,7 @@
           ]
         },
         "TestErc721_Implementation": {
-          "address": "0x6b63Cf5F2875ED0F4Ac895B5fB0C0D38F02775ec",
+          "address": "0x540614C108C478984c40E3915162fB5D8f6E457E",
           "abi": [
             {
               "anonymous": false,
@@ -2329,7 +2329,7 @@
           ]
         },
         "TestErc721_Proxy": {
-          "address": "0xA8A7B8B1FE9154236F329BFE970d6f57cae8F778",
+          "address": "0xA0871E275E6dF619a78806705F31CAD7ba85C3E6",
           "abi": [
             {
               "inputs": [
@@ -8119,7 +8119,7 @@
                 },
                 {
                   "internalType": "uint256",
-                  "name": "TokensToBurn",
+                  "name": "tokensToBurn",
                   "type": "uint256"
                 },
                 {
@@ -8830,7 +8830,7 @@
                 },
                 {
                   "internalType": "uint256",
-                  "name": "TokensToBurn",
+                  "name": "tokensToBurn",
                   "type": "uint256"
                 },
                 {
@@ -14086,7 +14086,7 @@
       "chainId": "80001",
       "contracts": {
         "DefaultProxyAdmin": {
-          "address": "0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28",
+          "address": "0x023c0509387399FfC6EfAFB92404E99bB0F71cbD",
           "abi": [
             {
               "inputs": [
@@ -14251,7 +14251,7 @@
           ]
         },
         "TestErc20_Implementation": {
-          "address": "0x29dEc0F92A1d0ef17ed4E4eE778564Af23abf9a8",
+          "address": "0x729c1B4dc0d15739ca7EC091018bd74eB334B540",
           "abi": [
             {
               "anonymous": false,
@@ -14562,7 +14562,7 @@
           ]
         },
         "TestErc20_Proxy": {
-          "address": "0x6d4D294c1C08D2e9fbe2216406F6b4c3F894C146",
+          "address": "0x2E1777936Cbc56e40C356BdcC41500785e0Bda70",
           "abi": [
             {
               "inputs": [
@@ -14698,7 +14698,7 @@
           ]
         },
         "TestErc20": {
-          "address": "0x6d4D294c1C08D2e9fbe2216406F6b4c3F894C146",
+          "address": "0x2E1777936Cbc56e40C356BdcC41500785e0Bda70",
           "abi": [
             {
               "anonymous": false,
@@ -15140,7 +15140,7 @@
           ]
         },
         "TestErc1155_Implementation": {
-          "address": "0x323cc87E9070bc9Af32CBc0B5Ad298C001E853E0",
+          "address": "0xC5E2775434df3b057ecC6fb3b6b149b3dEAa2ed3",
           "abi": [
             {
               "anonymous": false,
@@ -15539,7 +15539,7 @@
           ]
         },
         "TestErc1155_Proxy": {
-          "address": "0x1C4a82121F64Ad8F67774f5FE53571a7b8a84531",
+          "address": "0x268Be9769E0540B81888572Ecbc8BcB101b1fEeF",
           "abi": [
             {
               "inputs": [
@@ -15675,7 +15675,7 @@
           ]
         },
         "TestErc1155": {
-          "address": "0x1C4a82121F64Ad8F67774f5FE53571a7b8a84531",
+          "address": "0x268Be9769E0540B81888572Ecbc8BcB101b1fEeF",
           "abi": [
             {
               "anonymous": false,
@@ -16205,7 +16205,7 @@
           ]
         },
         "TestErc721_Implementation": {
-          "address": "0x6251aE45377573Ba2A371538cC3B9907b4782Ef0",
+          "address": "0x7F0EEBD2C9fFE19633caa99B259B07B72CBd716C",
           "abi": [
             {
               "anonymous": false,
@@ -16589,7 +16589,7 @@
           ]
         },
         "TestErc721_Proxy": {
-          "address": "0x35B212eA20d193698Be27378D3204E065CBa7EF1",
+          "address": "0x38b734C3F64A001C6b01b2AcCa4f9AA295227468",
           "abi": [
             {
               "inputs": [
@@ -16725,7 +16725,7 @@
           ]
         },
         "TestErc721": {
-          "address": "0x35B212eA20d193698Be27378D3204E065CBa7EF1",
+          "address": "0x38b734C3F64A001C6b01b2AcCa4f9AA295227468",
           "abi": [
             {
               "anonymous": false,
@@ -17240,7 +17240,7 @@
           ]
         },
         "RoleManager_Implementation": {
-          "address": "0xAaC6588a1d5E45EfB90fffA1f39699aBa05D731b",
+          "address": "0x0fcd2fe9d160db3A6f0448F6d71A6e30bD95c9Bb",
           "abi": [
             {
               "anonymous": false,
@@ -17641,7 +17641,7 @@
           ]
         },
         "RoleManager_Proxy": {
-          "address": "0xA103806d9ed75Cfe5bA1976a1fd0288316C3DDD7",
+          "address": "0x51B506f8820691C7ec143d7501f1540b734544ad",
           "abi": [
             {
               "inputs": [
@@ -17777,7 +17777,7 @@
           ]
         },
         "RoleManager": {
-          "address": "0xA103806d9ed75Cfe5bA1976a1fd0288316C3DDD7",
+          "address": "0x51B506f8820691C7ec143d7501f1540b734544ad",
           "abi": [
             {
               "anonymous": false,
@@ -18309,7 +18309,7 @@
           ]
         },
         "AddressManager_Implementation": {
-          "address": "0x3d9dCc682112A5165E4195d1f02Cf3D6C8c16A70",
+          "address": "0x79bE36141944C0fAd9e4c373e20756e06476F23a",
           "abi": [
             {
               "inputs": [],
@@ -18483,7 +18483,7 @@
           ]
         },
         "AddressManager_Proxy": {
-          "address": "0x9F87ef076165229Da4231C90cdc5b21840CD630A",
+          "address": "0xaC69EcdB0114F63a11D2DbC14Af9aCA589Ba28Bc",
           "abi": [
             {
               "inputs": [
@@ -18619,7 +18619,7 @@
           ]
         },
         "AddressManager": {
-          "address": "0x9F87ef076165229Da4231C90cdc5b21840CD630A",
+          "address": "0xaC69EcdB0114F63a11D2DbC14Af9aCA589Ba28Bc",
           "abi": [
             {
               "anonymous": false,
@@ -18924,7 +18924,7 @@
           ]
         },
         "MakerRegistrar_Implementation": {
-          "address": "0xb78a4BD9Fb46378054Ca294782d9650611e50C31",
+          "address": "0xd17A27c0305D2e55832872b6dcf9e63D59788A77",
           "abi": [
             {
               "anonymous": false,
@@ -19299,7 +19299,7 @@
           ]
         },
         "MakerRegistrar_Proxy": {
-          "address": "0x1dEA7d967CfA5202540831752578f6FBB2fdDb51",
+          "address": "0xE4C31aD3C708E51C761ae0ED968DA6FF160FcaD0",
           "abi": [
             {
               "inputs": [
@@ -19435,7 +19435,7 @@
           ]
         },
         "MakerRegistrar": {
-          "address": "0x1dEA7d967CfA5202540831752578f6FBB2fdDb51",
+          "address": "0xE4C31aD3C708E51C761ae0ED968DA6FF160FcaD0",
           "abi": [
             {
               "anonymous": false,
@@ -19941,7 +19941,7 @@
           ]
         },
         "ReactionVault_Implementation": {
-          "address": "0x99a4f8a5CfdA53D6dEeffdB3b40955f00c1eeEF1",
+          "address": "0xb2beDB983e5E69d8080fab2e72D4ab979471eF92",
           "abi": [
             {
               "anonymous": false,
@@ -20102,8 +20102,20 @@
                 },
                 {
                   "indexed": false,
+                  "internalType": "address",
+                  "name": "paymentToken",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
                   "internalType": "uint256",
                   "name": "quantity",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "ipfsMetadataHash",
                   "type": "uint256"
                 },
                 {
@@ -20114,9 +20126,9 @@
                 },
                 {
                   "indexed": false,
-                  "internalType": "uint256",
-                  "name": "ipfsMetadataHash",
-                  "type": "uint256"
+                  "internalType": "address",
+                  "name": "curatorVaultAddress",
+                  "type": "address"
                 },
                 {
                   "indexed": false,
@@ -20128,6 +20140,12 @@
                   "indexed": false,
                   "internalType": "uint256",
                   "name": "curatorTokenAmount",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "takerTokenAmount",
                   "type": "uint256"
                 }
               ],
@@ -20163,6 +20181,37 @@
                 }
               ],
               "name": "ReferrerRewardsGranted",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": true,
+                  "internalType": "uint256",
+                  "name": "curatorTokenId",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "curatorTokensSold",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "paymentTokenTaker",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "paymentTokenCreator",
+                  "type": "uint256"
+                }
+              ],
+              "name": "TakerWithdraw",
               "type": "event"
             },
             {
@@ -20608,7 +20657,7 @@
                 },
                 {
                   "internalType": "uint256",
-                  "name": "TokensToBurn",
+                  "name": "tokensToBurn",
                   "type": "uint256"
                 },
                 {
@@ -20631,7 +20680,7 @@
           ]
         },
         "ReactionVault_Proxy": {
-          "address": "0x50ad2ba5C592D459dA55ECcbe047244D3f64b01E",
+          "address": "0x00447fe3Bb552b8C7E4482DedFb062807Da22ee8",
           "abi": [
             {
               "inputs": [
@@ -20767,7 +20816,7 @@
           ]
         },
         "ReactionVault": {
-          "address": "0x50ad2ba5C592D459dA55ECcbe047244D3f64b01E",
+          "address": "0x00447fe3Bb552b8C7E4482DedFb062807Da22ee8",
           "abi": [
             {
               "anonymous": false,
@@ -21038,8 +21087,20 @@
                 },
                 {
                   "indexed": false,
+                  "internalType": "address",
+                  "name": "paymentToken",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
                   "internalType": "uint256",
                   "name": "quantity",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "ipfsMetadataHash",
                   "type": "uint256"
                 },
                 {
@@ -21050,9 +21111,9 @@
                 },
                 {
                   "indexed": false,
-                  "internalType": "uint256",
-                  "name": "ipfsMetadataHash",
-                  "type": "uint256"
+                  "internalType": "address",
+                  "name": "curatorVaultAddress",
+                  "type": "address"
                 },
                 {
                   "indexed": false,
@@ -21064,6 +21125,12 @@
                   "indexed": false,
                   "internalType": "uint256",
                   "name": "curatorTokenAmount",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "takerTokenAmount",
                   "type": "uint256"
                 }
               ],
@@ -21099,6 +21166,37 @@
                 }
               ],
               "name": "ReferrerRewardsGranted",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": true,
+                  "internalType": "uint256",
+                  "name": "curatorTokenId",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "curatorTokensSold",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "paymentTokenTaker",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "paymentTokenCreator",
+                  "type": "uint256"
+                }
+              ],
+              "name": "TakerWithdraw",
               "type": "event"
             },
             {
@@ -21544,7 +21642,7 @@
                 },
                 {
                   "internalType": "uint256",
-                  "name": "TokensToBurn",
+                  "name": "tokensToBurn",
                   "type": "uint256"
                 },
                 {
@@ -21588,7 +21686,7 @@
           ]
         },
         "ReactionNft1155_Implementation": {
-          "address": "0x4BC5b31475856A6794B498A33eA8C397F39aa82D",
+          "address": "0xbabFe2799D29467060E213e268Fa286493f986f3",
           "abi": [
             {
               "anonymous": false,
@@ -21987,7 +22085,7 @@
           ]
         },
         "ReactionNft1155_Proxy": {
-          "address": "0x4E1C58c5afaAB0A9599485a046442dE4261bA168",
+          "address": "0x38649F2738C38F76723fff90967717Cc3E4EDe10",
           "abi": [
             {
               "inputs": [
@@ -22123,7 +22221,7 @@
           ]
         },
         "ReactionNft1155": {
-          "address": "0x4E1C58c5afaAB0A9599485a046442dE4261bA168",
+          "address": "0x38649F2738C38F76723fff90967717Cc3E4EDe10",
           "abi": [
             {
               "anonymous": false,
@@ -22653,7 +22751,7 @@
           ]
         },
         "ParameterManager_Implementation": {
-          "address": "0x0106901c645eF3bF54DA5F17188EC186fb1faDbB",
+          "address": "0x435Af08BBD73894D3a2C956B1421fd4e4f61e695",
           "abi": [
             {
               "inputs": [],
@@ -22923,7 +23021,7 @@
           ]
         },
         "ParameterManager_Proxy": {
-          "address": "0x73E6C8772ee1B06e048Eeae6031eEcA2e54be60e",
+          "address": "0xb33f0428146C69FEF20Fd22733a6B4Ce864AA0F4",
           "abi": [
             {
               "inputs": [
@@ -23059,7 +23157,7 @@
           ]
         },
         "ParameterManager": {
-          "address": "0x73E6C8772ee1B06e048Eeae6031eEcA2e54be60e",
+          "address": "0xb33f0428146C69FEF20Fd22733a6B4Ce864AA0F4",
           "abi": [
             {
               "anonymous": false,
@@ -23460,7 +23558,7 @@
           ]
         },
         "CuratorToken1155_Implementation": {
-          "address": "0xDa84cAAB396457EabD98A2A4Dd73dc87E0A376E2",
+          "address": "0xE4Bf4a936ed8d11A796b138C00A79f71d51E2E77",
           "abi": [
             {
               "anonymous": false,
@@ -23859,7 +23957,7 @@
           ]
         },
         "CuratorToken1155_Proxy": {
-          "address": "0x6598DEBcb1Db0080572fBE0B1c6f990DEB3f45e2",
+          "address": "0xC3DF88df48022528D04513DA8a59384206f24B10",
           "abi": [
             {
               "inputs": [
@@ -23995,7 +24093,7 @@
           ]
         },
         "CuratorToken1155": {
-          "address": "0x6598DEBcb1Db0080572fBE0B1c6f990DEB3f45e2",
+          "address": "0xC3DF88df48022528D04513DA8a59384206f24B10",
           "abi": [
             {
               "anonymous": false,
@@ -24525,7 +24623,7 @@
           ]
         },
         "SigmoidCuratorVault_Implementation": {
-          "address": "0x68433F6F8e0e29b1Ff85B533BEB01F6ecaE0c223",
+          "address": "0x540A06087f77d6622C98F5Eb3EE7678B481d2679",
           "abi": [
             {
               "anonymous": false,
@@ -24907,7 +25005,7 @@
           ]
         },
         "SigmoidCuratorVault_Proxy": {
-          "address": "0x6BD4C54715478b16b26a69eFB7fCccf4756D6663",
+          "address": "0x3F858874B399d6A65cfdee51878C38b588eF46e5",
           "abi": [
             {
               "inputs": [
@@ -25043,7 +25141,7 @@
           ]
         },
         "SigmoidCuratorVault": {
-          "address": "0x6BD4C54715478b16b26a69eFB7fCccf4756D6663",
+          "address": "0x3F858874B399d6A65cfdee51878C38b588eF46e5",
           "abi": [
             {
               "anonymous": false,
@@ -25556,7 +25654,7 @@
           ]
         },
         "ChildRegistrar": {
-          "address": "0x1dC10f0aaE8B93FD97f0122b5fC30F8B1b5fCEc5",
+          "address": "0x5f5CB8E855522d59080C7D0627335e02a4bA4Ee7",
           "abi": [
             {
               "inputs": [

@@ -1,6 +1,6 @@
 import {BigInt, log} from "@graphprotocol/graph-ts";
 
-import {User, Source, Transform} from "../../generated/schema";
+import {Source, Transform} from "../../generated/schema";
 
 import {
   Registered,
@@ -20,16 +20,6 @@ export function handleRegistered(event: Registered): void {
   // uint256 transformId
 
   //
-  // User
-  //
-  let sender = event.params.nftOwnerAddress.toHexString();
-  let user = User.load(sender);
-  if (user == null) {
-    user = new User(sender);
-  }
-  user.save();
-
-  //
   // Source
   //
   let sourceKey = event.params.sourceId.toHexString();
@@ -37,18 +27,16 @@ export function handleRegistered(event: Registered): void {
   if (source == null) {
     source = new Source(sourceKey);
     source.sourceId = event.params.sourceId;
+    source.user = event.params.nftOwnerAddress;
     source.nftChainId = event.params.nftChainId;
     source.nftContractAddress = event.params.nftContractAddress;
     source.nftId = event.params.nftId;
-    source.nftOwnerAddress = event.params.nftOwnerAddress;
-    source.registered = true;
-    source.user = user.id;
   }
 
   // these are be updated each time "registered()"" is called
-  source.nftCreatorAddress = event.params.nftCreatorAddress;
+  source.creatorAddress = event.params.nftCreatorAddress;
   source.creatorSaleBasisPoints = event.params.creatorSaleBasisPoints;
-
+  source.registered = true;
   source.save();
 
   //
@@ -59,9 +47,8 @@ export function handleRegistered(event: Registered): void {
   if (transform == null) {
     transform = new Transform(transformKey);
     transform.transformId = event.params.transformId;
+    transform.source = event.params.sourceId.toHexString();
     transform.optionBits = event.params.optionBits;
-    transform.source = source.id;
-    transform.totalSold = BigInt.zero();
   }
   transform.save();
 }

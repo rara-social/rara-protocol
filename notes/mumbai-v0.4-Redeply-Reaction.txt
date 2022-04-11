@@ -1,0 +1,32 @@
+mattlovan@Matts-MacBook-Pro rara-protocol % npx hardhat deploy --network mumbai --tags mumbai-reaction
+Nothing to compile
+No need to generate any newer typings.
+
+
+Deploying with account 0xE27B562C20f689c0e80e6eAaA59D17ABB662129F
+reusing "DefaultProxyAdmin" at 0x290c187b9bE6c831CEBC7476Bf30Cb4A7895BD28
+An unexpected error occurred:
+
+Error: ERROR processing /Users/mattlovan/Projects/rara/rara-protocol/deploy/mumbai/re-deploy-reactionVault.ts:
+Error: To change owner/admin, you need to call transferOwnership on DefaultProxyAdmin
+    at _deployViaProxy (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat-deploy/src/helpers.ts:1399:15)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at async Object.module.exports [as func] (/Users/mattlovan/Projects/rara/rara-protocol/deploy/mumbai/re-deploy-reactionVault.ts:18:13)
+    at async DeploymentsManager.executeDeployScripts (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1220:22)
+    at async DeploymentsManager.runDeploy (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1053:5)
+    at async SimpleTaskDefinition.action (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat-deploy/src/index.ts:422:5)
+    at async Environment._runTaskDefinition (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat/src/internal/core/runtime-environment.ts:217:14)
+    at async Environment.run (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat/src/internal/core/runtime-environment.ts:129:14)
+    at async SimpleTaskDefinition.action (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat-deploy/src/index.ts:568:32)
+    at async Environment._runTaskDefinition (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat/src/internal/core/runtime-environment.ts:217:14)
+    at DeploymentsManager.executeDeployScripts (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1223:19)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at async DeploymentsManager.runDeploy (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat-deploy/src/DeploymentsManager.ts:1053:5)
+    at async SimpleTaskDefinition.action (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat-deploy/src/index.ts:422:5)
+    at async Environment._runTaskDefinition (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat/src/internal/core/runtime-environment.ts:217:14)
+    at async Environment.run (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat/src/internal/core/runtime-environment.ts:129:14)
+    at async SimpleTaskDefinition.action (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat-deploy/src/index.ts:568:32)
+    at async Environment._runTaskDefinition (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat/src/internal/core/runtime-environment.ts:217:14)
+    at async Environment.run (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat/src/internal/core/runtime-environment.ts:129:14)
+    at async SimpleTaskDefinition.action (/Users/mattlovan/Projects/rara/rara-protocol/node_modules/hardhat-deploy/src/index.ts:653:5)
+mattlovan@Matts-MacBook-Pro rara-protocol % 

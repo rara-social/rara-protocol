@@ -1,95 +1,118 @@
-type User @entity {
-  id: ID! #publicAddress
-}
-
-type UserEarnings @entity {
-  id: ID! #publicAddress + paymentToken
-  paymentToken: Bytes!
-  makerRewardsBalance: BigDecimal!
-  creatorRewardsBalance: BigDecimal!
-  referrerRewardsBalance: BigDecimal!
-
-  makerRewardsTotal: BigDecimal!
-  creatorRewardsTotal: BigDecimal!
-  referrerRewardsTotal: BigDecimal!
-
-  withdrawTotal: BigDecimal!
-}
-
 type Source @entity {
   id: ID! #sourceId
   sourceId: BigInt!
+  user: Bytes!
+
+  # maker media
   nftChainId: BigInt!
   nftContractAddress: Bytes!
   nftId: BigInt!
-  nftOwnerAddress: Bytes!
-  nftCreatorAddress: Bytes!
+
+  # creator info
+  creatorAddress: Bytes!
   creatorSaleBasisPoints: BigInt!
+
+  # status
   registered: Boolean!
-  user: User!
 }
 
 type Transform @entity {
   id: ID! #transformId
   transformId: BigInt!
-  optionBits: BigInt!
   source: Source!
-  totalSold: BigInt!
+  optionBits: BigInt!
 }
 
 type Reaction @entity {
   id: ID! #reactionId
+  reactionId: BigInt!
   transform: Transform!
+
   parameterVersion: BigInt!
 
   totalSold: BigInt!
-  referrerFeesTotal: BigDecimal!
-  creatorFeesTotal: BigDecimal!
-  makerFeesTotal: BigDecimal!
+  totalReferrerFees: BigDecimal!
+  totalCreatorFees: BigDecimal!
+  totalMakerFees: BigDecimal!
 }
 
 type UserReaction @entity {
-  id: ID! #reactionId + msg.sender
-  user: User!
+  id: ID! #reactionId + "-" + msg.sender
+  user: Bytes!
   reaction: Reaction!
-  quantityPurchased: BigInt!
-  quantityAvailable: BigInt!
+
+  # current
+  currentBalance: BigInt!
+
+  # historical
+  totalPurchased: BigInt!
 }
 
 type UserSpend @entity {
   id: ID! #event.transaction.hash.toHex() + "-" + event.logIndex.toString()
-  user: User!
+  user: Bytes!
+
+  # spend
   reaction: Reaction!
-  quantity: BigInt!
-  ipfsMetadataHash: BigInt
-  curatorVault: CuratorVaultToken!
-  tokensPurchased: BigInt!
+  reactionQuantity: BigInt!
+  reactionIpfsHash: BigInt
+
+  # result
+  curatorVaultToken: CuratorVaultToken!
+  curatorTokensPurchased: BigInt!
+}
+
+type UserPosition @entity {
+  id: ID! #curatorTokenId + "-" + msg.sender
+  user: Bytes!
+  curatorVaultToken: CuratorVaultToken!
+
+  # current
+  currentTokenBalance: BigInt!
+
+  # historical
+  totalTokenPurchased: BigInt!
+  totalRefunded: BigDecimal!
 }
 
 type CuratorVaultToken @entity {
   id: ID! #curatorTokenId
   curatorVaultAddress: Bytes!
   curatorTokenId: BigInt!
+  paymentToken: Bytes!
+
+  # taker media
   nftChainId: BigInt!
   nftContractAddress: Bytes!
   nftId: BigInt!
-  paymentToken: Bytes!
 
-  tokensOutstanding: BigInt!
-  currentBalance: BigDecimal!
+  # current pricing info
+  currentTokensOutstanding: BigInt!
+  currentDepositBalance: BigDecimal!
 
-  tokensTotal: BigInt!
-  depositsTotal: BigDecimal!
+  # historical totals
+  totalTokenSold: BigInt!
+  totalDeposited: BigDecimal!
+
+  # taker tokens
+  takerTokensBalance: BigInt!
+  takerRefunded: BigInt!
+  takerCreatorRefunded: BigInt!
 }
 
-type UserPosition @entity {
-  id: ID! # if sender: msg.sender + curatorTokenId, if taker: curatorTokenId
-  user: User!
-  isTakerPostion: Boolean!
-  curatorVaultToken: CuratorVaultToken!
+type UserEarning @entity {
+  id: ID! #publicAddress + "-" + paymentToken
+  user: Bytes!
+  paymentToken: Bytes!
 
-  tokensAvailable: BigInt!
+  # current
+  currentMakerRewards: BigDecimal!
+  currentCreatorRewards: BigDecimal!
+  currentReferrerRewards: BigDecimal!
 
-  tokensTotal: BigInt!
-  refundsTotal: BigDecimal!
+  # historical
+  totalMakerRewards: BigDecimal!
+  totalCreatorRewards: BigDecimal!
+  totalReferrerRewards: BigDecimal!
+  totalRefunded: BigDecimal!
 }
