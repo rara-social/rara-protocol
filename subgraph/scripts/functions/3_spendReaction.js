@@ -16,23 +16,28 @@ const reactionQuantity = 10;
 
 // neither of these work: '{"jsonrpc":"2.0","id":49,"error":{"code":-32000,"message":"execution reverted"}}'
 // const ipfsMetadataHash = 0;
-// const ipfsMetadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
+const ipfsMetadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
 async function main() {
   const reactor = await getWallet("reactor");
   const referrer = await getWallet("referrer");
 
-  // spendReaction
-  // const ReactionVault = new ethers.Contract(
-  //   deployConfig[chainId][0].contracts.ReactionVault.address,
-  //   deployConfig[chainId][0].contracts.ReactionVault.abi,
-  //   reactor
-  // );
   const ReactionVault = new ethers.Contract(
     deployConfig[chainId][0].contracts.ReactionVault.address,
     deployConfig[chainId][0].contracts.ReactionVault.abi,
     reactor
   );
+
+  const ReactionNft1155 = new ethers.Contract(
+    deployConfig[chainId][0].contracts.ReactionNft1155.address,
+    deployConfig[chainId][0].contracts.ReactionNft1155.abi,
+    reactor
+  );
+  const tokenBalance = await ReactionNft1155.balanceOf(
+    reactor.address,
+    reactionId
+  );
+  console.log({tokenBalance: tokenBalance.toNumber(), reactionQuantity});
 
   const curatorVaultOverride = ethers.constants.AddressZero;
   console.log("spending reactions...");
@@ -44,7 +49,10 @@ async function main() {
     reactionQuantity,
     referrer.address,
     curatorVaultOverride,
-    ipfsMetadataHash
+    ipfsMetadataHash,
+    {
+      gasLimit: 1000000,
+    }
   );
   const receipt = await spendReactionTxn.wait();
   console.log("done. transactionHash:", receipt.transactionHash);
