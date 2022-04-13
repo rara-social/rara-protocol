@@ -14,7 +14,7 @@ const reactionId =
   "0x341c6ffe3493b3337dcde53c58aec123f85799a68d0dc4d2e46424f90bc3db0d";
 const reactionQuantity = 10;
 
-// neither of theses work: '{"jsonrpc":"2.0","id":49,"error":{"code":-32000,"message":"execution reverted"}}'
+// neither of these work: '{"jsonrpc":"2.0","id":49,"error":{"code":-32000,"message":"execution reverted"}}'
 // const ipfsMetadataHash = 0;
 // const ipfsMetadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
