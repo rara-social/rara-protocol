@@ -1,4 +1,4 @@
-import {log, BigDecimal} from "@graphprotocol/graph-ts";
+import {log, BigDecimal, ipfs, json, JSONValue} from "@graphprotocol/graph-ts";
 
 import {
   Reaction,
@@ -102,7 +102,16 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   userSpend.user = event.transaction.from;
   userSpend.reaction = event.params.reactionId.toHexString();
   userSpend.reactionQuantity = event.params.quantity;
+
+  // IPFS
   userSpend.reactionIpfsHash = event.params.ipfsMetadataHash;
+  const result = ipfs.cat(event.params.ipfsMetadataHash);
+  if (result) {
+    const data = json.fromBytes(result).toObject();
+    let comment = (data.get("comment") as JSONValue).toString();
+    userSpend.reactionIpfsData = comment;
+  }
+
   userSpend.curatorVaultToken = event.params.curatorTokenId.toHexString();
   userSpend.curatorTokensPurchased = event.params.curatorTokenAmount;
   userSpend.save();

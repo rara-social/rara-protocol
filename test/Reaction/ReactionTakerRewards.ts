@@ -124,7 +124,7 @@ describe("ReactionVault Taker Rewards", function () {
       BigNumber.from(0)
     );
 
-    const metadataHash = BigNumber.from(111);
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Now spend it
     await reactionVault.spendReaction(
@@ -329,7 +329,7 @@ describe("ReactionVault Taker Rewards", function () {
       BigNumber.from(0)
     );
 
-    const metadataHash = BigNumber.from(111);
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Now spend it
     await reactionVault.spendReaction(
@@ -560,8 +560,7 @@ describe("ReactionVault Taker Rewards", function () {
       BigNumber.from(0)
     );
 
-    const metadataHash = BigNumber.from(111);
-
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
     // Now spend it
     await reactionVault.spendReaction(
       chainId,

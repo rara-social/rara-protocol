@@ -66,6 +66,7 @@ describe("ReactionVault Buy", function () {
     const REACTION_AMOUNT = BigNumber.from(1);
 
     const TAKER_NFT_ID = "2";
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Buy and spend the reaction
     const transaction = await reactionVault.buyAndSpendReaction(
@@ -77,7 +78,7 @@ describe("ReactionVault Buy", function () {
       testingStandard1155.address,
       TAKER_NFT_ID,
       ZERO_ADDRESS, // Curator vault override
-      0 // metadata hash
+      metadataHash // metadata hash
     );
     const receipt = await transaction.wait();
 
@@ -157,6 +158,7 @@ describe("ReactionVault Buy", function () {
     );
 
     const TAKER_NFT_ID = "2";
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Buy and spend the reaction
     const transaction = await reactionVault.buyAndSpendReaction(
@@ -168,7 +170,7 @@ describe("ReactionVault Buy", function () {
       testingStandard1155.address,
       TAKER_NFT_ID,
       ZERO_ADDRESS, // Curator vault override
-      0 // metadata hash
+      metadataHash // metadata hash
     );
     const receipt = await transaction.wait();
 
