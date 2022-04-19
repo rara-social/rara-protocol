@@ -25,7 +25,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         uint256 creatorSaleBasisPoints,
         uint256 optionBits,
         uint256 sourceId,
-        uint256 transformId
+        uint256 transformId,
+        string ipfsMetadataHash
     );
 
     /// @dev Event triggered when an NFT is deregistered from the system
@@ -80,7 +81,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         uint256 nftId,
         address creatorAddress,
         uint256 creatorSaleBasisPoints,
-        uint256 optionBits
+        uint256 optionBits,
+        string memory ipfsMetadataHash
     ) external {
         // Verify ownership
         require(
@@ -95,7 +97,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             nftId,
             creatorAddress,
             creatorSaleBasisPoints,
-            optionBits
+            optionBits,
+            ipfsMetadataHash
         );
     }
 
@@ -106,7 +109,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         uint256 nftId,
         address creatorAddress,
         uint256 creatorSaleBasisPoints,
-        uint256 optionBits
+        uint256 optionBits,
+        string memory ipfsMetadataHash
     ) external {
         // Verify caller is Child Registrar from the bridge
         require(msg.sender == addressManager.childRegistrar(), "Not Bridge");
@@ -118,7 +122,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             nftId,
             creatorAddress,
             creatorSaleBasisPoints,
-            optionBits
+            optionBits,
+            ipfsMetadataHash
         );
     }
 
@@ -140,7 +145,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         uint256 nftId,
         address creatorAddress,
         uint256 creatorSaleBasisPoints,
-        uint256 optionBits
+        uint256 optionBits,
+        string memory ipfsMetadataHash
     ) internal {
         // TODO: ? Block registration of a RaRa reaction NFT once Reaction Vault is built out
 
@@ -194,7 +200,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             creatorSaleBasisPoints,
             optionBits,
             sourceId,
-            transformId
+            transformId,
+            ipfsMetadataHash
         );
     }
 
