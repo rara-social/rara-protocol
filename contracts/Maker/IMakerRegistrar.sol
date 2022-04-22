@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: GPL-3.0-only
 pragma solidity 0.8.9;
 
 /// @dev Interface for the maker registrar that supports registering and de-registering NFTs
@@ -42,7 +42,8 @@ interface IMakerRegistrar {
         uint256 nftId,
         address creatorAddress,
         uint256 creatorSaleBasisPoints,
-        uint256 optionBits
+        uint256 optionBits,
+        string memory ipfsMetadataHash
     ) external;
 
     function deRegisterNftFromBridge(

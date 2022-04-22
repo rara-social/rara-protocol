@@ -18,6 +18,7 @@ describe("Bridge Registrar", function () {
     const [OWNER] = await ethers.getSigners();
     const { makerRegistrar, testingStandard1155 } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     await expect(
       makerRegistrar.registerNftFromBridge(
@@ -27,7 +28,8 @@ describe("Bridge Registrar", function () {
         "1",
         ZERO_ADDRESS,
         "0",
-        "0"
+        "0",
+        metadataHash
       )
     ).to.revertedWith(NOT_BRIDGE);
 
@@ -54,6 +56,8 @@ describe("Bridge Registrar", function () {
     // Set child registrar address as the bridge so it can call the functions
     await addressManager.setChildRegistrar(CHILD.address);
 
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
+
     // Register the NFT from Alice's account and put Bob as the creator
     await makerRegistrar
       .connect(CHILD)
@@ -64,7 +68,8 @@ describe("Bridge Registrar", function () {
         NFT_ID,
         BOB.address,
         "100",
-        "0"
+        "0",
+        metadataHash
       );
 
     // De-register

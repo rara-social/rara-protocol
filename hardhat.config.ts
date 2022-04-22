@@ -11,6 +11,8 @@ import 'hardhat-contract-sizer';
 import 'hardhat-deploy';
 import "@nomiclabs/hardhat-etherscan";
 
+const NULL_PK = '0000000000000000000000000000000000000000000000000000000000000000' // dummy private key
+
 dotenv.config();
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -43,13 +45,13 @@ const config: HardhatUserConfig = {
     mumbai: {
       url: 'https://rpc-mumbai.maticvigil.com',
       accounts: [
-        process.env.DEPLOY_PRIVATE_KEY! // Env should set private key used for deploy
+        process.env.DEPLOY_PRIVATE_KEY || NULL_PK // Env should set private key used for deploy
       ],
     },
     goerli: {
-      url: process.env.INFURA_RPC_GOERLI!, // Get infura endpoint from free acct
+      url: process.env.INFURA_RPC_GOERLI || '', // Get infura endpoint from free acct
       accounts: [
-        process.env.DEPLOY_PRIVATE_KEY! // Env should set private key used for deploy
+        process.env.DEPLOY_PRIVATE_KEY || NULL_PK // Env should set private key used for deploy
       ],
     }
   },

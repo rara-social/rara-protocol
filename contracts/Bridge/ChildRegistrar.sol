@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: GPL-3.0-only
 pragma solidity 0.8.9;
 
 import "@maticnetwork/fx-portal/contracts/tunnel/FxBaseChildTunnel.sol";
@@ -57,10 +57,20 @@ contract ChildRegistrar is FxBaseChildTunnel {
             uint256 nftId,
             address creatorAddress,
             uint256 creatorSaleBasisPoints,
-            uint256 optionBits
+            uint256 optionBits,
+            string memory ipfsMetadataHash
         ) = abi.decode(
                 syncData,
-                (address, uint256, address, uint256, address, uint256, uint256)
+                (
+                    address,
+                    uint256,
+                    address,
+                    uint256,
+                    address,
+                    uint256,
+                    uint256,
+                    string
+                )
             );
 
         // Call the registrar and register the NFT
@@ -71,7 +81,8 @@ contract ChildRegistrar is FxBaseChildTunnel {
             nftId,
             creatorAddress,
             creatorSaleBasisPoints,
-            optionBits
+            optionBits,
+            ipfsMetadataHash
         );
     }
 

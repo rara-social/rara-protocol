@@ -1,7 +1,7 @@
-import {expect} from "chai";
-import {BigNumber} from "ethers";
-import {ethers, upgrades} from "hardhat";
-import {TEST_NFT_URI, ZERO_ADDRESS} from "../Scripts/constants";
+import { expect } from "chai";
+import { BigNumber } from "ethers";
+import { ethers, upgrades } from "hardhat";
+import { TEST_NFT_URI, ZERO_ADDRESS } from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -24,7 +24,7 @@ import {
 describe("ReactionVault Sell", function () {
   it("Should verify spender has reaction NFT", async function () {
     const [OWNER] = await ethers.getSigners();
-    const {reactionVault} = await deploySystem(OWNER);
+    const { reactionVault } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // If the user tries to spend reactions they don't have it should fail
@@ -44,7 +44,7 @@ describe("ReactionVault Sell", function () {
 
   it("Should verify reaction quantity > 0", async function () {
     const [OWNER] = await ethers.getSigners();
-    const {reactionVault} = await deploySystem(OWNER);
+    const { reactionVault } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // If the user tries to spend reactions they don't have it should fail
@@ -89,7 +89,8 @@ describe("ReactionVault Sell", function () {
         MAKER_NFT_ID,
         CREATOR.address,
         TEST_SALE_CREATOR_BP,
-        "0"
+        "0",
+        ""
       );
 
     // Get the NFT source ID
@@ -216,7 +217,8 @@ describe("ReactionVault Sell", function () {
         MAKER_NFT_ID,
         CREATOR.address,
         TEST_SALE_CREATOR_BP,
-        "0"
+        "0",
+        ""
       );
 
     // Get the NFT source ID
@@ -317,7 +319,8 @@ describe("ReactionVault Sell", function () {
         MAKER_NFT_ID,
         CREATOR.address,
         TEST_SALE_CREATOR_BP,
-        "0"
+        "0",
+        ""
       );
 
     // Get the NFT source ID
@@ -430,7 +433,8 @@ describe("ReactionVault Sell", function () {
         MAKER_NFT_ID,
         CREATOR.address,
         TEST_SALE_CREATOR_BP,
-        "0"
+        "0",
+        ""
       );
 
     // Get the NFT source ID
