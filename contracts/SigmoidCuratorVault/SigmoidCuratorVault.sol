@@ -3,6 +3,7 @@ pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+import "@openzeppelin/contracts/utils/math/SafeCast.sol";
 import "../Token/IStandard1155.sol";
 import "../Config/IAddressManager.sol";
 import "./SigmoidCuratorVaultStorage.sol";
@@ -120,12 +121,12 @@ contract SigmoidCuratorVault is
 
         // Calculate the amount of tokens that will be minted based on the price
         uint256 curatorTokenAmount = calculateTokensBoughtFromPayment(
-            int256(a),
-            int256(b),
-            int256(c),
-            int256(curatorTokenSupply[curatorTokenId]),
-            int256(reserves[curatorTokenId]),
-            int256(paymentAmount)
+            SafeCast.toInt256(a),
+            SafeCast.toInt256(b),
+            SafeCast.toInt256(c),
+            SafeCast.toInt256(curatorTokenSupply[curatorTokenId]),
+            SafeCast.toInt256(reserves[curatorTokenId]),
+            SafeCast.toInt256(paymentAmount)
         );
 
         // Update the amounts
@@ -186,12 +187,12 @@ contract SigmoidCuratorVault is
 
         // Calculate the amount of tokens that will be minted based on the price
         uint256 refundAmount = calculatePaymentReturnedFromTokens(
-            int256(a),
-            int256(b),
-            int256(c),
-            int256(curatorTokenSupply[curatorTokenId]),
-            int256(reserves[curatorTokenId]),
-            int256(tokensToBurn)
+            SafeCast.toInt256(a),
+            SafeCast.toInt256(b),
+            SafeCast.toInt256(c),
+            SafeCast.toInt256(curatorTokenSupply[curatorTokenId]),
+            SafeCast.toInt256(reserves[curatorTokenId]),
+            SafeCast.toInt256(tokensToBurn)
         );
 
         // Update the amounts

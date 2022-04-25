@@ -2,6 +2,7 @@
 pragma solidity 0.8.9;
 
 import "./ExtendedMath.sol";
+import "@openzeppelin/contracts/utils/math/SafeCast.sol";
 
 /// @dev This is a sigmoid bonding curve implementation to calculate buying and selling amounts
 /// Formulas are inspired from https://medium.com/molecule-blog/designing-different-fundraising-scenarios-with-sigmoidal-token-bonding-curves-ceafc734ed97
@@ -108,7 +109,7 @@ contract Sigmoid {
             n5(a, b, c, newReserves)) / (d1(a, b, c, newReserves));
 
         // Return the difference
-        return uint256(newSupply - currentTokensSupply);
+        return SafeCast.toUint256(newSupply - currentTokensSupply);
     }
 
     /// @dev Selling Tokens into the curve will return payment tokens to be refunded
@@ -137,6 +138,6 @@ contract Sigmoid {
             (((b - newSupply).pow2() + c).sqrt() + newSupply)) - constantVal;
 
         // Return the difference
-        return uint256(paymentReserves - newReserves);
+        return SafeCast.toUint256(paymentReserves - newReserves);
     }
 }
