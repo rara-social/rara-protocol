@@ -57,6 +57,9 @@ contract SigmoidCuratorVault is
         public
         initializer
     {
+        require(address(_addressManager) != address(0x0), ZERO_INPUT);
+        require(address(_curatorTokens) != address(0x0), ZERO_INPUT);
+
         // Save the address manager
         addressManager = IAddressManager(_addressManager);
 
