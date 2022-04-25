@@ -16,6 +16,10 @@ import "./Curve/Sigmoid.sol";
 /// the shape of the sigmoid are set in the parameter manager.
 /// At any point in time the owners of the curator tokens can sell them back to the
 /// bonding curve.
+/// Note: This contract is protected via a permissioned account set in the role manager.  Caution should
+/// be used as the role owner could renounce the role leaving all future actions disabled.  Additionally,
+/// if a malicious account was able to obtain the role, they could use it to set values to malicious values.
+/// See the public documentation website for more details.
 contract SigmoidCuratorVault is
     ReentrancyGuardUpgradeable,
     Sigmoid,
