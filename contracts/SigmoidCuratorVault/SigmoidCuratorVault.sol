@@ -108,11 +108,6 @@ contract SigmoidCuratorVault is
             paymentToken
         );
 
-        //
-        // Pull value from ReactionVault
-        //
-        paymentToken.safeTransferFrom(msg.sender, address(this), paymentAmount);
-
         // Get curve params
         (uint256 a, uint256 b, uint256 c) = addressManager
             .parameterManager()
@@ -131,6 +126,11 @@ contract SigmoidCuratorVault is
         // Update the amounts
         reserves[curatorTokenId] += paymentAmount;
         curatorTokenSupply[curatorTokenId] += curatorTokenAmount;
+
+        //
+        // Pull value from ReactionVault as payment
+        //
+        paymentToken.safeTransferFrom(msg.sender, address(this), paymentAmount);
 
         // Mint the tokens
         curatorTokens.mint(
