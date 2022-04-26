@@ -24,7 +24,9 @@ describe("ParameterManager", function () {
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
     // Set it to Alice's address
-    await parameterManager.setPaymentToken(ALICE.address);
+    await expect(parameterManager.setPaymentToken(ALICE.address))
+      .to.emit(parameterManager, "PaymentTokenUpdated")
+      .withArgs(ALICE.address);
 
     // Verify it got set
     const currentVal = await parameterManager.paymentToken();
@@ -47,8 +49,11 @@ describe("ParameterManager", function () {
       INVALID_ZERO_PARAM
     );
 
-    // Set it to Alice's address
-    await parameterManager.setReactionPrice(val);
+    // Set it to the value
+    await expect(parameterManager.setReactionPrice(val))
+      .to.emit(parameterManager, "ReactionPriceUpdated")
+      .withArgs(val);
+
 
     // Verify it got set
     const currentVal = await parameterManager.reactionPrice();
@@ -71,8 +76,10 @@ describe("ParameterManager", function () {
       parameterManager.setSaleCuratorLiabilityBasisPoints(0)
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
-    // Set it to Alice's address
-    await parameterManager.setSaleCuratorLiabilityBasisPoints(val);
+    // Set it to the value
+    await expect(parameterManager.setSaleCuratorLiabilityBasisPoints(val))
+      .to.emit(parameterManager, "SaleCuratorLiabilityBasisPointsUpdated")
+      .withArgs(val);
 
     // Verify it got set
     const currentVal = await parameterManager.saleCuratorLiabilityBasisPoints();
@@ -95,8 +102,10 @@ describe("ParameterManager", function () {
       parameterManager.setSaleReferrerBasisPoints(0)
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
-    // Set it to Alice's address
-    await parameterManager.setSaleReferrerBasisPoints(val);
+    // Set it to the value
+    await expect(parameterManager.setSaleReferrerBasisPoints(val))
+      .to.emit(parameterManager, "SaleReferrerBasisPointsUpdated")
+      .withArgs(val);
 
     // Verify it got set
     const currentVal = await parameterManager.saleReferrerBasisPoints();
@@ -119,8 +128,10 @@ describe("ParameterManager", function () {
       INVALID_ZERO_PARAM
     );
 
-    // Set it to Alice's address
-    await parameterManager.setSpendTakerBasisPoints(val);
+    // Set it to the value
+    await expect(parameterManager.setSpendTakerBasisPoints(val))
+      .to.emit(parameterManager, "SpendTakerBasisPointsUpdated")
+      .withArgs(val);
 
     // Verify it got set
     const currentVal = await parameterManager.spendTakerBasisPoints();
@@ -143,8 +154,10 @@ describe("ParameterManager", function () {
       parameterManager.setSpendReferrerBasisPoints(0)
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
-    // Set it to Alice's address
-    await parameterManager.setSpendReferrerBasisPoints(val);
+    // Set it to the value
+    await expect(parameterManager.setSpendReferrerBasisPoints(val))
+      .to.emit(parameterManager, "SpendReferrerBasisPointsUpdated")
+      .withArgs(val);
 
     // Verify it got set
     const currentVal = await parameterManager.spendReferrerBasisPoints();
@@ -165,8 +178,10 @@ describe("ParameterManager", function () {
       parameterManager.setApprovedCuratorVaults(ZERO_ADDRESS, true)
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
-    // Set it to Alice's address
-    await parameterManager.setApprovedCuratorVaults(ALICE.address, true);
+    // Set it to allowed
+    await expect(parameterManager.setApprovedCuratorVaults(ALICE.address, true))
+      .to.emit(parameterManager, "ApprovedCuratorVaultsUpdated")
+      .withArgs(ALICE.address, true);
 
     // Verify it got set
     const currentVal = await parameterManager.approvedCuratorVaults(

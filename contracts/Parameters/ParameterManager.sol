@@ -16,6 +16,15 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
         _;
     }
 
+    /// @dev Events emitted on updates
+    event PaymentTokenUpdated(IERC20Upgradeable newValue);
+    event ReactionPriceUpdated(uint256 newValue);
+    event SaleCuratorLiabilityBasisPointsUpdated(uint256 newValue);
+    event SaleReferrerBasisPointsUpdated(uint256 newValue);
+    event SpendTakerBasisPointsUpdated(uint256 newValue);
+    event SpendReferrerBasisPointsUpdated(uint256 newValue);
+    event ApprovedCuratorVaultsUpdated(address vault, bool approved);
+
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IAddressManager _addressManager) public initializer {
         addressManager = _addressManager;
@@ -28,12 +37,14 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     {
         require(address(_paymentToken) != address(0x0), ZERO_INPUT);
         paymentToken = _paymentToken;
+        emit PaymentTokenUpdated(_paymentToken);
     }
 
     /// @dev Setter for the reaction price
     function setReactionPrice(uint256 _reactionPrice) external onlyAdmin {
         require(_reactionPrice != 0, ZERO_INPUT);
         reactionPrice = _reactionPrice;
+        emit ReactionPriceUpdated(_reactionPrice);
     }
 
     /// @dev Setter for the reaction price
@@ -42,6 +53,9 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     ) external onlyAdmin {
         require(_saleCuratorLiabilityBasisPoints != 0, ZERO_INPUT);
         saleCuratorLiabilityBasisPoints = _saleCuratorLiabilityBasisPoints;
+        emit SaleCuratorLiabilityBasisPointsUpdated(
+            _saleCuratorLiabilityBasisPoints
+        );
     }
 
     /// @dev Setter for the reaction price
@@ -51,6 +65,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     {
         require(_saleReferrerBasisPoints != 0, ZERO_INPUT);
         saleReferrerBasisPoints = _saleReferrerBasisPoints;
+        emit SaleReferrerBasisPointsUpdated(_saleReferrerBasisPoints);
     }
 
     /// @dev Setter for the spend taker basis points
@@ -60,6 +75,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     {
         require(_spendTakerBasisPoints != 0, ZERO_INPUT);
         spendTakerBasisPoints = _spendTakerBasisPoints;
+        emit SpendTakerBasisPointsUpdated(_spendTakerBasisPoints);
     }
 
     /// @dev Setter for the spend referrer basis points
@@ -69,6 +85,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     {
         require(_spendReferrerBasisPoints != 0, ZERO_INPUT);
         spendReferrerBasisPoints = _spendReferrerBasisPoints;
+        emit SpendReferrerBasisPointsUpdated(_spendReferrerBasisPoints);
     }
 
     /// @dev Setter for the list of curator vaults allowed to be used
@@ -78,6 +95,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     {
         require(vault != address(0x0), ZERO_INPUT);
         approvedCuratorVaults[vault] = approved;
+        emit ApprovedCuratorVaultsUpdated(vault, approved);
     }
 
     // @dev Setter for curator vault bonding curve params
