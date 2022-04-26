@@ -52,16 +52,30 @@ contract SigmoidCuratorVault is
         uint256 curatorTokensSold
     );
 
-    /// @dev initializer to call after deployment, can only be called once
-    function initialize(address _addressManager, IStandard1155 _curatorTokens)
-        public
-        initializer
-    {
+    /// @notice initializer to call after deployment,
+    /// @dev can only be called once
+    /// @param _addressManager - address manager in the protocol
+    /// @param _curatorTokens - curator token contract address
+    /// @param _a - bonding curve param a
+    /// @param _b - bonding curve param b
+    /// @param _c - bonding curve param c
+    function initialize(
+        address _addressManager,
+        IStandard1155 _curatorTokens,
+        uint256 _a,
+        uint256 _b,
+        uint256 _c
+    ) public initializer {
         // Save the address manager
         addressManager = IAddressManager(_addressManager);
 
         // Save the curator token contract
         curatorTokens = _curatorTokens;
+
+        // Save the curve parameters
+        a = _a;
+        b = _b;
+        c = _c;
     }
 
     /// @dev get a unique token ID for a given nft address and nft ID
@@ -112,11 +126,6 @@ contract SigmoidCuratorVault is
         // Pull value from ReactionVault
         //
         paymentToken.safeTransferFrom(msg.sender, address(this), paymentAmount);
-
-        // Get curve params
-        (uint256 a, uint256 b, uint256 c) = addressManager
-            .parameterManager()
-            .bondingCurveParams();
 
         // Calculate the amount of tokens that will be minted based on the price
         uint256 curatorTokenAmount = calculateTokensBoughtFromPayment(
@@ -178,11 +187,6 @@ contract SigmoidCuratorVault is
 
         // Burn the curator tokens
         curatorTokens.burn(msg.sender, curatorTokenId, tokensToBurn);
-
-        // Get curve params
-        (uint256 a, uint256 b, uint256 c) = addressManager
-            .parameterManager()
-            .bondingCurveParams();
 
         // Calculate the amount of tokens that will be minted based on the price
         uint256 refundAmount = calculatePaymentReturnedFromTokens(

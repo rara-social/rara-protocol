@@ -384,7 +384,6 @@ describe("ReactionVault Sell", function () {
       reactionVault,
       testingStandard1155,
       makerRegistrar,
-      roleManager,
       paymentTokenErc20,
       addressManager,
       parameterManager,
@@ -410,7 +409,12 @@ describe("ReactionVault Sell", function () {
     );
     const deployedCuratorVault = await upgrades.deployProxy(
       CuratorVaultFactory,
-      [addressManager.address, curatorTokens.address]
+      [
+        addressManager.address,
+        curatorTokens.address,
+        "5000",
+        "10000000",
+        "29000000000000"]
     );
     const curatorVault = CuratorVaultFactory.attach(
       deployedCuratorVault.address

@@ -21,6 +21,11 @@ abstract contract SigmoidCuratorVaultStorageV1 is ICuratorVault {
 
     /// @dev the 1155 contract to track curator Tokens
     IStandard1155 public curatorTokens;
+
+    /// @dev Curve parameters
+    uint256 public a;
+    uint256 public b;
+    uint256 public c;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below
