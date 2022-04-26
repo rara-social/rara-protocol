@@ -8,16 +8,10 @@ library ExtendedMath {
      * @return The given number raised to the power of 2
      */
     function pow2(int256 a) internal pure returns (int256) {
-        if (a == 0) {
-            return 0;
-        }
         return a * a;
     }
 
     function pow3(int256 a) internal pure returns (int256) {
-        if (a == 0) {
-            return 0;
-        }
         return a * a * a;
     }
 
