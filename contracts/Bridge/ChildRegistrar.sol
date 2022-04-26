@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: GPL-3.0-only
 pragma solidity 0.8.9;
 
-import "@maticnetwork/fx-portal/contracts/tunnel/FxBaseChildTunnel.sol";
+import "./FxBaseChildTunnel.sol";
 import "../Config/IAddressManager.sol";
 
 /// @dev This contract lives on the L2 and receives messages from the L1 to register and unregister
@@ -14,6 +14,9 @@ contract ChildRegistrar is FxBaseChildTunnel {
     /// @dev local reference to the address manager contract
     IAddressManager public addressManager;
 
+    /// @dev the address that deployed this contract is the only one that can update the fxRootTunnel
+    address public deployer;
+
     /// @param _fxChild - This is the contract deployed on the L2 that will be sending messages here.
     /// This is a well known deployed contract that Matic has set up.
     /// @param _addressManager - This is the address manager on the protocol
@@ -22,6 +25,16 @@ contract ChildRegistrar is FxBaseChildTunnel {
         FxBaseChildTunnel(_fxChild)
     {
         addressManager = _addressManager;
+        deployer = msg.sender;
+    }
+
+    /// @dev Set fxRootTunnel if not set already
+    /// Only the deploying account can update this
+    /// Overrides the function in the base contract
+    function setFxRootTunnel(address _fxRootTunnel) external override {
+        require(deployer == msg.sender, "Only deployer");
+        require(fxRootTunnel == address(0x0), "Already set");
+        fxRootTunnel = _fxRootTunnel;
     }
 
     /// @dev The base contract ensures that the incoming message is from the contract _fxChild passed in the constructor.

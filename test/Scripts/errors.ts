@@ -10,6 +10,7 @@ const NOT_BRIDGE = "Not Bridge";
 const NO_BALANCE = "ERC20: transfer amount exceeds balance";
 const NO_REWARDS = "No rewards";
 const NO_TOKENS_TO_BURN = "ERC1155: burn amount exceeds balance";
+const ONLY_DEPLOYER = "Only deployer";
 const REACTION_TRANSFER_RESTRICTED = "Reaction transfer restricted";
 const TRANSFER_NOT_ALLOWED = "ERC20: insufficient allowance";
 const UNKNOWN_NFT = "Unknown NFT";
@@ -28,6 +29,7 @@ export {
   NO_BALANCE,
   NO_REWARDS,
   NO_TOKENS_TO_BURN,
+  ONLY_DEPLOYER,
   REACTION_TRANSFER_RESTRICTED,
   TRANSFER_NOT_ALLOWED,
   UNKNOWN_NFT,
