@@ -2,6 +2,11 @@
 pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
+
+interface IPunk {
+    function punkIndexToAddress(uint256 index) external view returns (address);
+}
 
 /// @dev This is a library for other contracts to use that need to verify ownership of an NFT on the current chain.
 /// Since this only has internal functions, it will be inlined into the calling contract at
@@ -14,40 +19,33 @@ library NftOwnership {
         address potentialOwner
     ) internal view returns (bool) {
         // Try ERC1155
-        (bool success, bytes memory result) = nftContractAddress.staticcall(
-            abi.encodeWithSignature(
-                "balanceOf(address,uint256)",
+        try
+            IERC1155Upgradeable(nftContractAddress).balanceOf(
                 potentialOwner,
                 nftId
             )
-        );
-
-        // If success, check the balance
-        if (success) {
-            uint256 balance = abi.decode(result, (uint256));
+        returns (uint256 balance) {
             return balance > 0;
+        } catch {
+            // Ignore error
         }
 
         // Try ERC721
-        (success, result) = nftContractAddress.staticcall(
-            abi.encodeWithSignature("ownerOf(uint256)", nftId)
-        );
-
-        // If success, check the owner returned
-        if (success) {
-            address foundOwner = abi.decode(result, (address));
+        try IERC721Upgradeable(nftContractAddress).ownerOf(nftId) returns (
+            address foundOwner
+        ) {
             return foundOwner == potentialOwner;
+        } catch {
+            // Ignore error
         }
 
         // Try CryptoPunk
-        (success, result) = nftContractAddress.staticcall(
-            abi.encodeWithSignature("punkIndexToAddress(uint256)", nftId)
-        );
-
-        // If success, check the owner returned
-        if (success) {
-            address foundOwner = abi.decode(result, (address));
+        try IPunk(nftContractAddress).punkIndexToAddress(nftId) returns (
+            address foundOwner
+        ) {
             return foundOwner == potentialOwner;
+        } catch {
+            // Ignore error
         }
 
         return false;
