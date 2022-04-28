@@ -42,7 +42,8 @@ interface IMakerRegistrar {
         uint256 nftId,
         address creatorAddress,
         uint256 creatorSaleBasisPoints,
-        uint256 optionBits
+        uint256 optionBits,
+        string memory ipfsMetadataHash
     ) external;
 
     function deRegisterNftFromBridge(

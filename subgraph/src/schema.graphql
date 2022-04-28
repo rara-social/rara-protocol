@@ -55,7 +55,8 @@ type UserSpend @entity {
   # spend
   reaction: Reaction!
   reactionQuantity: BigInt!
-  reactionIpfsHash: BigInt
+  reactionIpfsHash: String
+  reactionIpfsData: String
 
   # result
   curatorVaultToken: CuratorVaultToken!

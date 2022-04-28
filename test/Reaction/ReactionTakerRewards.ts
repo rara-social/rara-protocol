@@ -1,7 +1,7 @@
-import {expect} from "chai";
-import {BigNumber} from "ethers";
-import {ethers} from "hardhat";
-import {ZERO_ADDRESS} from "../Scripts/constants";
+import { expect } from "chai";
+import { BigNumber } from "ethers";
+import { ethers } from "hardhat";
+import { ZERO_ADDRESS } from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -81,7 +81,8 @@ describe("ReactionVault Taker Rewards", function () {
         MAKER_NFT_ID,
         CREATOR.address,
         TEST_SALE_CREATOR_BP,
-        "0"
+        "0",
+        ""
       );
 
     // Get the NFT source ID
@@ -124,7 +125,7 @@ describe("ReactionVault Taker Rewards", function () {
       BigNumber.from(0)
     );
 
-    const metadataHash = BigNumber.from(111);
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Now spend it
     await reactionVault.spendReaction(
@@ -173,7 +174,8 @@ describe("ReactionVault Taker Rewards", function () {
         TAKER_NFT_ID,
         CREATOR.address,
         TEST_SALE_CREATOR_BP,
-        "0"
+        "0",
+        ""
       );
 
     // Unregister it so that it is found but not registered
@@ -205,7 +207,8 @@ describe("ReactionVault Taker Rewards", function () {
         TAKER_NFT_ID,
         CREATOR.address,
         "0",
-        "0"
+        "0",
+        ""
       );
 
     // Now try to get ALICE to claim... should fail since she doesn't own it
@@ -286,7 +289,8 @@ describe("ReactionVault Taker Rewards", function () {
         MAKER_NFT_ID,
         CREATOR.address,
         TEST_SALE_CREATOR_BP,
-        "0"
+        "0",
+        ""
       );
 
     // Get the NFT source ID
@@ -329,7 +333,7 @@ describe("ReactionVault Taker Rewards", function () {
       BigNumber.from(0)
     );
 
-    const metadataHash = BigNumber.from(111);
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Now spend it
     await reactionVault.spendReaction(
@@ -378,7 +382,8 @@ describe("ReactionVault Taker Rewards", function () {
         TAKER_NFT_ID,
         CREATOR.address,
         TEST_SALE_CREATOR_BP,
-        "0"
+        "0",
+        ""
       );
 
     // Unregister it so that it is found but not registered
@@ -410,7 +415,8 @@ describe("ReactionVault Taker Rewards", function () {
         TAKER_NFT_ID,
         CREATOR.address,
         "0",
-        "0"
+        "0",
+        ""
       );
 
     // Now try to get ALICE to claim... should fail since she doesn't own it
@@ -517,7 +523,8 @@ describe("ReactionVault Taker Rewards", function () {
         MAKER_NFT_ID,
         ZERO_ADDRESS,
         "0",
-        "0"
+        "0",
+        ""
       );
 
     // Get the NFT source ID
@@ -560,8 +567,7 @@ describe("ReactionVault Taker Rewards", function () {
       BigNumber.from(0)
     );
 
-    const metadataHash = BigNumber.from(111);
-
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
     // Now spend it
     await reactionVault.spendReaction(
       chainId,
@@ -591,7 +597,8 @@ describe("ReactionVault Taker Rewards", function () {
       TAKER_NFT_ID,
       CREATOR.address,
       "10000", // 100% should go to creator (10k basis points is 100%)
-      "0"
+      "0",
+      ""
     );
 
     const rewardsIndex = deriveTakerRewardsKey(

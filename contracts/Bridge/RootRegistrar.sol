@@ -27,7 +27,8 @@ contract RootRegistrar is FxBaseRootTunnel {
         uint256 nftId,
         address creatorAddress,
         uint256 creatorSaleBasisPoints,
-        uint256 optionBits
+        uint256 optionBits,
+        string memory ipfsMetadataHash
     ) external {
         // Verify ownership
         require(
@@ -39,7 +40,7 @@ contract RootRegistrar is FxBaseRootTunnel {
             "NFT not owned"
         );
 
-        // REGISTER, encode(owner, chainId, nftContractAddress, nftId, creatorAddress, optionBits)
+        // REGISTER, encode(owner, chainId, nftContractAddress, nftId, creatorAddress, optionBits, ipfsMetadataHash)
         bytes memory message = abi.encode(
             REGISTER,
             abi.encode(
@@ -49,7 +50,8 @@ contract RootRegistrar is FxBaseRootTunnel {
                 nftId,
                 creatorAddress,
                 creatorSaleBasisPoints,
-                optionBits
+                optionBits,
+                ipfsMetadataHash
             )
         );
         _sendMessageToChild(message);

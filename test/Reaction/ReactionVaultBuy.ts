@@ -1,7 +1,7 @@
-import {expect} from "chai";
-import {BigNumber} from "ethers";
-import {ethers} from "hardhat";
-import {ZERO_ADDRESS} from "../Scripts/constants";
+import { expect } from "chai";
+import { BigNumber } from "ethers";
+import { ethers } from "hardhat";
+import { ZERO_ADDRESS } from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -24,7 +24,7 @@ import {
 describe("ReactionVault Buy", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
-    const {reactionVault, addressManager} = await deploySystem(OWNER);
+    const { reactionVault, addressManager } = await deploySystem(OWNER);
 
     // Verify the address manager was set
     const currentAddressManager = await reactionVault.addressManager();
@@ -33,7 +33,7 @@ describe("ReactionVault Buy", function () {
 
   it("Should verify NFT is registered", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const {reactionVault, testingStandard1155, makerRegistrar, roleManager} =
+    const { reactionVault, testingStandard1155, makerRegistrar, roleManager } =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -56,7 +56,7 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0", "0");
+      .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0", "0", "");
 
     const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
@@ -103,7 +103,7 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0", "0");
+      .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0", "0", "");
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
@@ -182,7 +182,8 @@ describe("ReactionVault Buy", function () {
         NFT_ID,
         CREATOR.address,
         TEST_SALE_CREATOR_BP,
-        "0"
+        "0",
+        ""
       );
 
     // Get the NFT source ID
@@ -329,7 +330,8 @@ describe("ReactionVault Buy", function () {
         NFT_ID,
         CREATOR.address,
         TEST_SALE_CREATOR_BP,
-        "0"
+        "0",
+        ""
       );
 
     // Get the NFT source ID

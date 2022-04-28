@@ -1,7 +1,7 @@
-import {expect} from "chai";
-import {BigNumber} from "ethers";
-import {ethers} from "hardhat";
-import {ZERO_ADDRESS} from "../Scripts/constants";
+import { expect } from "chai";
+import { BigNumber } from "ethers";
+import { ethers } from "hardhat";
+import { ZERO_ADDRESS } from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -9,7 +9,7 @@ import {
   TEST_SALE_CURATOR_LIABILITY_BP,
   TEST_SALE_REFERRER_BP,
 } from "../Scripts/setup";
-import {deriveTransformId} from "../Scripts/derivedParams";
+import { deriveTransformId } from "../Scripts/derivedParams";
 import {
   NFT_NOT_REGISTERED,
   NO_BALANCE,
@@ -43,7 +43,8 @@ describe("ReactionVault Buy", function () {
         NFT_ID,
         CREATOR.address,
         TEST_SALE_CREATOR_BP,
-        "0"
+        "0",
+        ""
       );
 
     // Get the NFT source ID
@@ -66,6 +67,7 @@ describe("ReactionVault Buy", function () {
     const REACTION_AMOUNT = BigNumber.from(1);
 
     const TAKER_NFT_ID = "2";
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Buy and spend the reaction
     const transaction = await reactionVault.buyAndSpendReaction(
@@ -77,7 +79,7 @@ describe("ReactionVault Buy", function () {
       testingStandard1155.address,
       TAKER_NFT_ID,
       ZERO_ADDRESS, // Curator vault override
-      0 // metadata hash
+      metadataHash // metadata hash
     );
     const receipt = await transaction.wait();
 
@@ -131,7 +133,8 @@ describe("ReactionVault Buy", function () {
         NFT_ID,
         CREATOR.address,
         TEST_SALE_CREATOR_BP,
-        "0"
+        "0",
+        ""
       );
 
     // Get the NFT source ID
@@ -157,6 +160,7 @@ describe("ReactionVault Buy", function () {
     );
 
     const TAKER_NFT_ID = "2";
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Buy and spend the reaction
     const transaction = await reactionVault.buyAndSpendReaction(
@@ -168,7 +172,7 @@ describe("ReactionVault Buy", function () {
       testingStandard1155.address,
       TAKER_NFT_ID,
       ZERO_ADDRESS, // Curator vault override
-      0 // metadata hash
+      metadataHash // metadata hash
     );
     const receipt = await transaction.wait();
 

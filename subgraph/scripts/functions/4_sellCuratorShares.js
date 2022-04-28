@@ -1,97 +1,61 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
+const {getWallet, sleep, getTransactionEvent} = require("../helpers/utils");
 
 const chainId = "80001";
 
 async function main() {
-  // create provider
-  const provider = new ethers.providers.JsonRpcProvider(
-    process.env.DATA_TESTING_RPC
-  );
+  const reactor = await getWallet("reactor");
+  const referrer = await getWallet("referrer");
 
-  // create wallet & connect provider
-  let wallet = new ethers.Wallet(process.env.DATA_TESTING_PRIVATE_KEY);
-  wallet = wallet.connect(provider);
+  // check data
+  // wallet curatorToken balance
+  const CuratorToken1155 = new ethers.Contract(
+    deployConfig[chainId][0].contracts.CuratorToken1155.address,
+    deployConfig[chainId][0].contracts.CuratorToken1155.abi,
+    reactor
+  );
+  const contractBalance = await CuratorToken1155.balanceOf(
+    reactor.address,
+    "66954332059455703478329131628727554600048614184431182165646164267454208164847"
+  );
 
   // create contract
   const SigmoidCuratorVault = new ethers.Contract(
     deployConfig[chainId][0].contracts.SigmoidCuratorVault.address,
     deployConfig[chainId][0].contracts.SigmoidCuratorVault.abi,
-    wallet
+    reactor
   );
 
-  // setup inputs
-  // {
-  //   "inputs": [
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "nftChainId",
-  //       "type": "uint256"
-  //     },
-  //     {
-  //       "internalType": "address",
-  //       "name": "nftAddress",
-  //       "type": "address"
-  //     },
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "nftId",
-  //       "type": "uint256"
-  //     },
-  //     {
-  //       "internalType": "contract IERC20Upgradeable",
-  //       "name": "paymentToken",
-  //       "type": "address"
-  //     },
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "sharesToBurn",
-  //       "type": "uint256"
-  //     },
-  //     {
-  //       "internalType": "address",
-  //       "name": "refundToAddress",
-  //       "type": "address"
-  //     }
-  //   ],
-  //   "name": "sellCuratorShares",
-  //   "outputs": [
-  //     {
-  //       "internalType": "uint256",
-  //       "name": "",
-  //       "type": "uint256"
-  //     }
-  //   ],
-  //   "stateMutability": "nonpayable",
-  //   "type": "function"
-  // },
-
+  // curatorVault info
   const nftChainId = chainId;
   const nftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
-  const nftId = "2";
-  const paymentToken = "0x215562e0f8f5ca0576e10c4e983fa52c56f559c8";
-  const sharesToBurn = "1400";
-  const refundToAddress = wallet.address;
+  const nftId = "5";
+  const paymentToken = deployConfig[chainId][0].contracts.TestErc20.address;
+
+  // user input
+  const tokensToBurn = 58;
+  const refundToAddress = reactor.address;
   // console.log({
   //   nftChainId,
   //   nftAddress,
   //   nftId,
   //   paymentToken,
-  //   sharesToBurn,
+  //   tokensToBurn,
   //   refundToAddress,
   // });
-
-  const receipt = await SigmoidCuratorVault.sellCuratorShares(
+  const sellCuratorTokensTxn = await SigmoidCuratorVault.sellCuratorTokens(
     nftChainId,
     nftAddress,
     nftId,
     paymentToken,
-    sharesToBurn,
+    tokensToBurn,
     refundToAddress
   );
-  console.log(receipt);
+  const receipt = await sellCuratorTokensTxn.wait();
+  console.log("done. transactionHash:", receipt.transactionHash);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
@@ -102,40 +66,3 @@ main()
     console.error(error);
     process.exit(1);
   });
-
-//
-// Graphquery
-//
-
-// {
-//   userPositions(first: 5) {
-//      id
-//     user {
-//       id
-//     }
-//     isTakerPostion
-//     curatorVaultToken {
-//       id
-//     }
-//     sharesTotal
-//     sharesAvailable
-//     refundsTotal
-//   }
-// }
-
-// reduced to 105
-// {
-//   curatorVaultTokens(first: 5) {
-//    id
-//     curatorVaultAddress
-//     curatorTokenId
-//     nftChainId
-//     nftContractAddress
-//     nftId
-//     paymentToken
-//     sharesOutstanding
-//     currentBalance
-//     sharesTotal
-//     depositsTotal
-//   }
-// }

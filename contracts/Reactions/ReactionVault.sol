@@ -44,7 +44,7 @@ contract ReactionVault is
         uint256 reactionId,
         address paymentToken,
         uint256 quantity,
-        uint256 ipfsMetadataHash,
+        string ipfsMetadataHash,
         address referrer,
         address curatorVaultAddress,
         uint256 curatorTokenId,
@@ -355,7 +355,7 @@ contract ReactionVault is
         uint256 reactionQuantity,
         address referrer,
         address curatorVaultOverride,
-        uint256 ipfsMetadataHash
+        string memory ipfsMetadataHash
     ) external nonReentrant {
         // Call internal function
         return
@@ -380,7 +380,7 @@ contract ReactionVault is
         uint256 reactionQuantity,
         address referrer,
         address curatorVaultOverride,
-        uint256 ipfsMetadataHash
+        string memory ipfsMetadataHash
     ) internal {
         // Verify quantity
         require(reactionQuantity > 0, "Invalid 0 input");
@@ -550,7 +550,7 @@ contract ReactionVault is
         address takerNftAddress,
         uint256 takerNftId,
         address curatorVaultOverride,
-        uint256 ipfsMetadataHash
+        string memory ipfsMetadataHash
     ) external nonReentrant {
         // Buy the reactions
         _buyReaction(transformId, quantity, msg.sender, referrer, optionBits);
