@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: MakerRegistrar
-    network: "mumbai"
+    network: "localhost"
     source:
-      address: "0xa307f7adAfa10992F25f81632DAbb94E83D2de2B"
+      address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0"
       abi: MakerRegistrar
-      startBlock: 25800000
+      startBlock: 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -20,18 +20,18 @@ dataSources:
         - name: MakerRegistrar
           file: ../artifacts/contracts/maker/MakerRegistrar.sol/MakerRegistrar.json
       eventHandlers:
-        - event: Registered(uint256,indexed address,indexed uint256,indexed address,address,uint256,uint256,uint256,uint256)
+        - event: Registered(uint256,indexed address,indexed uint256,indexed address,address,uint256,uint256,uint256,uint256,string)
           handler: handleRegistered
         - event: Deregistered(uint256,indexed address,indexed uint256,indexed address,uint256)
           handler: handleDeregistered
       file: ./src/mapping/MakerRegistrar.ts
   - kind: ethereum/contract
     name: CuratorVault
-    network: "mumbai"
+    network: "localhost"
     source:
-      address: "0x79aa569a6D58d175731531790f94FaC8C7141985"
+      address: "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1"
       abi: SigmoidCuratorVault
-      startBlock: 25800000
+      startBlock: 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -50,11 +50,11 @@ dataSources:
       file: ./src/mapping/CuratorVault.ts
   - kind: ethereum/contract
     name: ReactionVault
-    network: "mumbai"
+    network: "localhost"
     source:
-      address: "0x161354414b7aC43deD87Bc1176146e9326ffc671"
+      address: "0x9A676e781A523b5d0C0e43731313A708CB607508"
       abi: ReactionVault
-      startBlock: 25800000
+      startBlock: 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

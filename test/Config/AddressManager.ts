@@ -51,7 +51,9 @@ describe("AddressManager", function () {
     ).to.be.revertedWith(INVALID_ROLE_MANAGER);
 
     // Set it to the new address
-    await addressManager.setRoleManager(newRoleManager.address);
+    await expect(addressManager.setRoleManager(newRoleManager.address))
+      .to.emit(addressManager, "RoleManagerAddressUpdated")
+      .withArgs(newRoleManager.address);
 
     // Verify it got set
     const currentVal = await addressManager.roleManager();
@@ -68,7 +70,9 @@ describe("AddressManager", function () {
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
     // Set it to Alice's address
-    await addressManager.setParameterManager(ALICE.address);
+    await expect(addressManager.setParameterManager(ALICE.address))
+      .to.emit(addressManager, "ParameterManagerAddressUpdated")
+      .withArgs(ALICE.address);
 
     // Verify it got set
     const currentVal = await addressManager.parameterManager();
@@ -90,7 +94,9 @@ describe("AddressManager", function () {
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
     // Set it to Alice's address
-    await addressManager.setMakerRegistrar(ALICE.address);
+    await expect(addressManager.setMakerRegistrar(ALICE.address))
+      .to.emit(addressManager, "MakerRegistrarAddressUpdated")
+      .withArgs(ALICE.address);
 
     // Verify it got set
     const currentVal = await addressManager.makerRegistrar();
@@ -112,7 +118,9 @@ describe("AddressManager", function () {
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
     // Set it to Alice's address
-    await addressManager.setReactionNftContract(ALICE.address);
+    await expect(addressManager.setReactionNftContract(ALICE.address))
+      .to.emit(addressManager, "ReactionNftContractAddressUpdated")
+      .withArgs(ALICE.address);
 
     // Verify it got set
     const currentVal = await addressManager.reactionNftContract();
@@ -121,6 +129,30 @@ describe("AddressManager", function () {
     // Verify non owner can't update address
     await expect(
       addressManager.connect(ALICE).setReactionNftContract(BOB.address)
+    ).to.revertedWith(NOT_ADMIN);
+  });
+
+  it("Should allow owner to set default curator vault address", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const { addressManager } = await deploySystem(OWNER);
+
+    // Verify the setter checks invalid input
+    await expect(
+      addressManager.setDefaultCuratorVault(ZERO_ADDRESS)
+    ).to.revertedWith(INVALID_ZERO_PARAM);
+
+    // Set it to Alice's address
+    await expect(addressManager.setDefaultCuratorVault(ALICE.address))
+      .to.emit(addressManager, "DefaultCuratorVaultAddressUpdated")
+      .withArgs(ALICE.address);
+
+    // Verify it got set
+    const currentVal = await addressManager.defaultCuratorVault();
+    expect(currentVal).to.equal(ALICE.address);
+
+    // Verify non owner can't update address
+    await expect(
+      addressManager.connect(ALICE).setDefaultCuratorVault(BOB.address)
     ).to.revertedWith(NOT_ADMIN);
   });
 
@@ -134,7 +166,9 @@ describe("AddressManager", function () {
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
     // Set it to Alice's address
-    await addressManager.setChildRegistrar(ALICE.address);
+    await expect(addressManager.setChildRegistrar(ALICE.address))
+      .to.emit(addressManager, "ChildRegistrarAddressUpdated")
+      .withArgs(ALICE.address);
 
     // Verify it got set
     const currentVal = await addressManager.childRegistrar();

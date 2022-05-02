@@ -10,6 +10,9 @@ import "../CuratorVault/ICuratorVault.sol";
 /// CuratorVault to inherit from the later version.  This ensures there are no storage layout
 /// corruptions when upgrading.
 abstract contract SigmoidCuratorVaultStorageV1 is ICuratorVault {
+    /// @dev Input error for 0 value param
+    string internal constant ZERO_INPUT = "Invalid 0 input";
+
     /// @dev local reference to the address manager contract
     IAddressManager public addressManager;
 
@@ -21,6 +24,11 @@ abstract contract SigmoidCuratorVaultStorageV1 is ICuratorVault {
 
     /// @dev the 1155 contract to track curator Tokens
     IStandard1155 public curatorTokens;
+
+    /// @dev Curve parameters
+    uint256 public a;
+    uint256 public b;
+    uint256 public c;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

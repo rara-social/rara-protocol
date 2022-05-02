@@ -1,8 +1,9 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import { ethers, upgrades } from "hardhat";
 import { ZERO_ADDRESS } from "../Scripts/constants";
 import { deploySystem } from "../Scripts/setup";
-import { INVALID_ZERO_PARAM, NOT_ADMIN } from "../Scripts/errors";
+import { INVALID_BP, INVALID_ZERO_PARAM, NOT_ADMIN, OUT_OF_BOUNDS } from "../Scripts/errors";
+import { BigNumber } from "ethers";
 
 describe("ParameterManager", function () {
   it("Should get initialized with address manager", async function () {
@@ -12,6 +13,16 @@ describe("ParameterManager", function () {
     // Verify the role manager was set
     const currentAddressManager = await parameterManager.addressManager();
     expect(currentAddressManager).to.equal(addressManager.address);
+  });
+
+  it("Should check address on init", async function () {
+    const ParameterManagerFactory = await ethers.getContractFactory(
+      "ParameterManager"
+    );
+    await expect(upgrades.deployProxy(
+      ParameterManagerFactory,
+      [ZERO_ADDRESS]
+    )).to.revertedWith(INVALID_ZERO_PARAM);
   });
 
   it("Should allow owner to set payment token address", async function () {
@@ -24,7 +35,9 @@ describe("ParameterManager", function () {
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
     // Set it to Alice's address
-    await parameterManager.setPaymentToken(ALICE.address);
+    await expect(parameterManager.setPaymentToken(ALICE.address))
+      .to.emit(parameterManager, "PaymentTokenUpdated")
+      .withArgs(ALICE.address);
 
     // Verify it got set
     const currentVal = await parameterManager.paymentToken();
@@ -47,8 +60,11 @@ describe("ParameterManager", function () {
       INVALID_ZERO_PARAM
     );
 
-    // Set it to Alice's address
-    await parameterManager.setReactionPrice(val);
+    // Set it to the value
+    await expect(parameterManager.setReactionPrice(val))
+      .to.emit(parameterManager, "ReactionPriceUpdated")
+      .withArgs(val);
+
 
     // Verify it got set
     const currentVal = await parameterManager.reactionPrice();
@@ -71,8 +87,17 @@ describe("ParameterManager", function () {
       parameterManager.setSaleCuratorLiabilityBasisPoints(0)
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
-    // Set it to Alice's address
-    await parameterManager.setSaleCuratorLiabilityBasisPoints(val);
+
+    // Set it to the value
+    await expect(parameterManager.setSaleCuratorLiabilityBasisPoints(val))
+      .to.emit(parameterManager, "SaleCuratorLiabilityBasisPointsUpdated")
+      .withArgs(val);
+    
+    // Verify the setter checks invalid input
+    await expect(
+      parameterManager.setSaleCuratorLiabilityBasisPoints(10_001)
+    ).to.revertedWith(INVALID_BP);
+
 
     // Verify it got set
     const currentVal = await parameterManager.saleCuratorLiabilityBasisPoints();
@@ -95,8 +120,16 @@ describe("ParameterManager", function () {
       parameterManager.setSaleReferrerBasisPoints(0)
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
-    // Set it to Alice's address
-    await parameterManager.setSaleReferrerBasisPoints(val);
+    // Set it to the value
+    await expect(parameterManager.setSaleReferrerBasisPoints(val))
+      .to.emit(parameterManager, "SaleReferrerBasisPointsUpdated")
+      .withArgs(val);
+
+    // Verify the setter checks invalid input
+    await expect(
+      parameterManager.setSaleReferrerBasisPoints(10_001)
+    ).to.revertedWith(INVALID_BP);
+
 
     // Verify it got set
     const currentVal = await parameterManager.saleReferrerBasisPoints();
@@ -119,8 +152,16 @@ describe("ParameterManager", function () {
       INVALID_ZERO_PARAM
     );
 
-    // Set it to Alice's address
-    await parameterManager.setSpendTakerBasisPoints(val);
+    // Set it to the value
+    await expect(parameterManager.setSpendTakerBasisPoints(val))
+      .to.emit(parameterManager, "SpendTakerBasisPointsUpdated")
+      .withArgs(val);
+
+    // Verify the setter checks invalid input
+    await expect(
+      parameterManager.setSpendTakerBasisPoints(10_001)
+    ).to.revertedWith(INVALID_BP);
+
 
     // Verify it got set
     const currentVal = await parameterManager.spendTakerBasisPoints();
@@ -143,8 +184,16 @@ describe("ParameterManager", function () {
       parameterManager.setSpendReferrerBasisPoints(0)
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
-    // Set it to Alice's address
-    await parameterManager.setSpendReferrerBasisPoints(val);
+    // Set it to the value
+    await expect(parameterManager.setSpendReferrerBasisPoints(val))
+      .to.emit(parameterManager, "SpendReferrerBasisPointsUpdated")
+      .withArgs(val);
+
+    // Verify the setter checks invalid input
+    await expect(
+      parameterManager.setSpendReferrerBasisPoints(10_001)
+    ).to.revertedWith(INVALID_BP);
+
 
     // Verify it got set
     const currentVal = await parameterManager.spendReferrerBasisPoints();
@@ -165,8 +214,10 @@ describe("ParameterManager", function () {
       parameterManager.setApprovedCuratorVaults(ZERO_ADDRESS, true)
     ).to.revertedWith(INVALID_ZERO_PARAM);
 
-    // Set it to Alice's address
-    await parameterManager.setApprovedCuratorVaults(ALICE.address, true);
+    // Set it to allowed
+    await expect(parameterManager.setApprovedCuratorVaults(ALICE.address, true))
+      .to.emit(parameterManager, "ApprovedCuratorVaultsUpdated")
+      .withArgs(ALICE.address, true);
 
     // Verify it got set
     const currentVal = await parameterManager.approvedCuratorVaults(
@@ -182,37 +233,5 @@ describe("ParameterManager", function () {
     ).to.be.revertedWith(NOT_ADMIN);
   });
 
-  it("Should allow owner to set bonding curve params", async function () {
-    const [OWNER, ALICE] = await ethers.getSigners();
-    const { parameterManager } = await deploySystem(OWNER);
-
-    // Verify the setter checks invalid input
-    await expect(
-      parameterManager.setBondingCurveParams("0", "1", "1")
-    ).to.revertedWith(INVALID_ZERO_PARAM);
-
-    await expect(
-      parameterManager.setBondingCurveParams("1", "0", "1")
-    ).to.revertedWith(INVALID_ZERO_PARAM);
-
-    await expect(
-      parameterManager.setBondingCurveParams("1", "1", "0")
-    ).to.revertedWith(INVALID_ZERO_PARAM);
-
-    // Set it 
-    await parameterManager.setBondingCurveParams("1", "2", "3")
-
-    // Verify it got set
-    const values = await parameterManager.bondingCurveParams();
-    expect(values[0]).to.equal("1");
-    expect(values[1]).to.equal("2");
-    expect(values[2]).to.equal("3");
-
-    // Verify non owner can't update address
-    await expect(
-      parameterManager
-        .connect(ALICE)
-        .setBondingCurveParams("1", "2", "3")
-    ).to.be.revertedWith(NOT_ADMIN);
-  });
 });
+

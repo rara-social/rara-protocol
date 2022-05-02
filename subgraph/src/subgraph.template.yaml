@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "{{MakerRegistrarAddress}}"
       abi: MakerRegistrar
-      startBlock: {{MakerRegistrarStartBlock}}
+      startBlock: {{StartBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -20,7 +20,7 @@ dataSources:
         - name: MakerRegistrar
           file: ../artifacts/contracts/maker/MakerRegistrar.sol/MakerRegistrar.json
       eventHandlers:
-        - event: Registered(uint256,indexed address,indexed uint256,indexed address,address,uint256,uint256,uint256,uint256)
+        - event: Registered(uint256,indexed address,indexed uint256,indexed address,address,uint256,uint256,uint256,uint256,string)
           handler: handleRegistered
         - event: Deregistered(uint256,indexed address,indexed uint256,indexed address,uint256)
           handler: handleDeregistered
@@ -31,7 +31,7 @@ dataSources:
     source:
       address: "{{SigmoidCuratorVaultAddress}}"
       abi: SigmoidCuratorVault
-      startBlock: {{SigmoidCuratorVaultStartBlock}}
+      startBlock: {{StartBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -54,7 +54,7 @@ dataSources:
     source:
       address: "{{ReactionVaultAddress}}"
       abi: ReactionVault
-      startBlock: {{ReactionVaultStartBlock}}
+      startBlock: {{StartBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
