@@ -18,6 +18,7 @@ contract RoleManager is
 {
     /// @dev initializer to call after deployment, can only be called once
     function initialize(address protocolAdmin) public initializer {
+        require(address(protocolAdmin) != address(0x0), "Invalid 0 input");
         __AccessControl_init();
         _setupRole(DEFAULT_ADMIN_ROLE, protocolAdmin);
     }

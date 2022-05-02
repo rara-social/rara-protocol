@@ -22,6 +22,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
 
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IAddressManager _addressManager) public initializer {
+        require(address(_addressManager) != address(0x0), ZERO_INPUT);
         addressManager = _addressManager;
     }
 
@@ -45,6 +46,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
         uint256 _saleCuratorLiabilityBasisPoints
     ) external onlyAdmin {
         require(_saleCuratorLiabilityBasisPoints != 0, ZERO_INPUT);
+        require(_saleCuratorLiabilityBasisPoints <= 10_000, "Invalid bp");
         saleCuratorLiabilityBasisPoints = _saleCuratorLiabilityBasisPoints;
     }
 
@@ -54,6 +56,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
         onlyAdmin
     {
         require(_saleReferrerBasisPoints != 0, ZERO_INPUT);
+        require(_saleReferrerBasisPoints <= 10_000, "Invalid bp");
         saleReferrerBasisPoints = _saleReferrerBasisPoints;
     }
 
@@ -63,6 +66,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
         onlyAdmin
     {
         require(_spendTakerBasisPoints != 0, ZERO_INPUT);
+        require(_spendTakerBasisPoints <= 10_000, "Invalid bp");
         spendTakerBasisPoints = _spendTakerBasisPoints;
     }
 
@@ -72,6 +76,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
         onlyAdmin
     {
         require(_spendReferrerBasisPoints != 0, ZERO_INPUT);
+        require(_spendReferrerBasisPoints <= 10_000, "Invalid bp");
         spendReferrerBasisPoints = _spendReferrerBasisPoints;
     }
 
@@ -91,6 +96,12 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
         uint256 c
     ) external onlyAdmin {
         require(a > 0 && b > 0 && c > 0, ZERO_INPUT);
+        require(
+            a <= uint256(type(int256).max) &&
+                b <= uint256(type(int256).max) &&
+                c <= uint256(type(int256).max),
+            "Out of bounds"
+        );
         bondingCurveParams = SigmoidCurveParameters(a, b, c);
     }
 }
