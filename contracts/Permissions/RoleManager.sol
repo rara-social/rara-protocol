@@ -7,6 +7,10 @@ import "./RoleManagerStorage.sol";
 
 /// @title RoleManager
 /// @dev This contract will track the roles and permissions in the RARA protocol
+/// Note: This contract is protected via a permissioned account set via the initializer.  Caution should
+/// be used as the owner could renounce the role leaving all future actions disabled.  Additionally,
+/// if a malicious account was able to obtain the role, they could use it to grant permissions to malicious accounts.
+/// See the public documentation website for more details.
 contract RoleManager is
     IRoleManager,
     AccessControlUpgradeable,
@@ -14,6 +18,7 @@ contract RoleManager is
 {
     /// @dev initializer to call after deployment, can only be called once
     function initialize(address protocolAdmin) public initializer {
+        require(address(protocolAdmin) != address(0x0), "Invalid 0 input");
         __AccessControl_init();
         _setupRole(DEFAULT_ADMIN_ROLE, protocolAdmin);
     }

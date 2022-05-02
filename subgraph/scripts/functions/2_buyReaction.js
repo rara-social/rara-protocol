@@ -6,8 +6,8 @@ const {getWallet, chainId} = require("../helpers/utils");
 
 const quantity = 100;
 const transformId =
-  "3395088052680335319447026751004393022415856593150704027995938207879478715546";
-const optionBits = 0;
+  "26558492574181019257204954570271967580276199177746413169112957474912028002414";
+const optionBits = 1;
 
 async function main() {
   // get creator wallet
@@ -24,7 +24,6 @@ async function main() {
   );
   const reactionPrice = await ParameterManager.reactionPrice(); // buy 100
   const purchasePrice = reactionPrice.mul(quantity);
-
   // console.log({reactionPrice});
 
   //

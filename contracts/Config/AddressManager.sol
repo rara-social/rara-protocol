@@ -5,6 +5,10 @@ import "./AddressManagerStorage.sol";
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
+/// @dev Note: This contract is protected via a permissioned account set in the role manager.  Caution should
+/// be used as the role owner could renounce the role leaving all future actions disabled.  Additionally,
+/// if a malicious account was able to obtain the role, they could use it to set values to malicious addresses.
+/// See the public documentation website for more details.
 contract AddressManager is Initializable, AddressManagerStorageV1 {
     /// @dev Verifies with the role manager that the calling address has ADMIN role
     modifier onlyAdmin() {

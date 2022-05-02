@@ -1,5 +1,7 @@
-import {expect} from "chai";
-import {ethers, upgrades} from "hardhat";
+import { expect } from "chai";
+import { ethers, upgrades } from "hardhat";
+import { ZERO_ADDRESS } from "../Scripts/constants";
+import { INVALID_ZERO_PARAM } from "../Scripts/errors";
 
 describe("RoleManager", function () {
   it("Should set deploying address as owner by default", async function () {
@@ -20,6 +22,16 @@ describe("RoleManager", function () {
 
     result = await manager.hasRole(defaultAdminRole, ALICE.address);
     expect(result).to.equal(false);
+  });
+
+  it("Should check address on init", async function () {
+    const RoleManagerFactory = await ethers.getContractFactory(
+      "RoleManager"
+    );
+    await expect(upgrades.deployProxy(
+      RoleManagerFactory,
+      [ZERO_ADDRESS]
+    )).to.revertedWith(INVALID_ZERO_PARAM);
   });
 
   it("Should allow owner to set address manager", async function () {

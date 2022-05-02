@@ -4,7 +4,7 @@ const ethers = require("ethers");
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 const {getWallet, chainId} = require("../helpers/utils");
 
-const nftId = "52";
+const nftId = "91";
 
 async function main() {
   // get creator wallet

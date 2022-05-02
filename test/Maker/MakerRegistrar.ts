@@ -6,7 +6,7 @@ import { deploySystem, TEST_SALE_CREATOR_BP } from "../Scripts/setup";
 import { deriveTransformId } from "../Scripts/derivedParams";
 import {
   ALREADY_REGISTERED,
-  INVALID_MAKER_BP,
+  INVALID_BP,
   NFT_NOT_OWNED,
   NFT_NOT_REGISTERED,
 } from "../Scripts/errors";
@@ -153,7 +153,7 @@ describe("MakerRegistrar", function () {
           "0",
           metadataHash
         )
-    ).to.revertedWith(INVALID_MAKER_BP);
+    ).to.revertedWith(INVALID_BP);
   });
 
   it("Should emit registration event and verify mappings", async function () {

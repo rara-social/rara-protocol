@@ -1,9 +1,7 @@
 {
   "network": "mumbai",
-  "MakerRegistrarAddress": "0xa307f7adAfa10992F25f81632DAbb94E83D2de2B",
-  "MakerRegistrarStartBlock": 25800000,
-  "SigmoidCuratorVaultAddress": "0x79aa569a6D58d175731531790f94FaC8C7141985",
-  "SigmoidCuratorVaultStartBlock": 25800000,
-  "ReactionVaultAddress": "0x161354414b7aC43deD87Bc1176146e9326ffc671",
-  "ReactionVaultStartBlock": 25800000
+  "StartBlock": 26083345,
+  "MakerRegistrarAddress": "0x73fd08B62A1F82782Cd7FB26c0d1f9B7a7f4b823",
+  "SigmoidCuratorVaultAddress": "0x0b00EedF638B5d88d53357Ab01277c8Cfe0B06Cc",
+  "ReactionVaultAddress": "0x5fa23BD09b3C48F638fF79934b0d16fC0504fe32"
 }
