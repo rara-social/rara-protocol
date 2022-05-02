@@ -1,4 +1,4 @@
-import {BigInt, log} from "@graphprotocol/graph-ts";
+import {BigInt, log, ipfs, json, JSONValue} from "@graphprotocol/graph-ts";
 
 import {Source, Transform} from "../../generated/schema";
 
@@ -49,6 +49,17 @@ export function handleRegistered(event: Registered): void {
     transform.transformId = event.params.transformId;
     transform.source = event.params.sourceId.toHexString();
     transform.optionBits = event.params.optionBits;
+
+    // IPFS
+    transform.ipfsHash = event.params.ipfsMetadataHash;
+    const result = ipfs.cat(event.params.ipfsMetadataHash);
+    if (result) {
+      const data = json.fromBytes(result).toObject();
+      let name = (data.get("name") as JSONValue).toString();
+      transform.name = name;
+      let tags = (data.get("tags") as JSONValue).toString();
+      transform.tags = tags;
+    }
   }
   transform.save();
 }

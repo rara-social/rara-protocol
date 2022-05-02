@@ -21,6 +21,9 @@ type Transform @entity {
   transformId: BigInt!
   source: Source!
   optionBits: BigInt!
+  ipfsHash: String
+  name: String
+  tags: String
 }
 
 type Reaction @entity {
@@ -55,8 +58,9 @@ type UserSpend @entity {
   # spend
   reaction: Reaction!
   reactionQuantity: BigInt!
-  reactionIpfsHash: String
-  reactionIpfsData: String
+  ipfsHash: String
+  comment: String
+  tags: String
 
   # result
   curatorVaultToken: CuratorVaultToken!

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { BigNumber } from "ethers";
-import { ethers } from "hardhat";
+import { ethers, upgrades } from "hardhat";
 import { ZERO_ADDRESS } from "../Scripts/constants";
 import {
   deploySystem,
@@ -15,6 +15,7 @@ import {
   deriveReactionParameterVersion,
 } from "../Scripts/derivedParams";
 import {
+  INVALID_ZERO_PARAM,
   NFT_NOT_REGISTERED,
   NO_BALANCE,
   TRANSFER_NOT_ALLOWED,
@@ -29,6 +30,16 @@ describe("ReactionVault Buy", function () {
     // Verify the address manager was set
     const currentAddressManager = await reactionVault.addressManager();
     expect(currentAddressManager).to.equal(addressManager.address);
+  });
+
+  it("Should check address on init", async function () {
+    const ReactionVaultFactory = await ethers.getContractFactory(
+      "ReactionVault"
+    );
+    await expect(upgrades.deployProxy(
+      ReactionVaultFactory,
+      [ZERO_ADDRESS]
+    )).to.revertedWith(INVALID_ZERO_PARAM);
   });
 
   it("Should verify NFT is registered", async function () {
