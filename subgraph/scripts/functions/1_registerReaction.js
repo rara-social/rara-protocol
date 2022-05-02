@@ -4,17 +4,17 @@ const ethers = require("ethers");
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 const {getWallet, chainId} = require("../helpers/utils");
 
-const nftId = "51";
+const nftId = "93";
 const nftContractAddress =
   deployConfig[chainId][0].contracts.TestErc721.address;
 
 const creatorSaleBasisPoints = 2500;
 const optionBits = 0;
+const ipfsMetadataHash = "QmbyKrvQ8m9WTzMqcdFdTdt7Ezq533qAHf4peC47GPXeQw";
 
 async function main() {
   const creator = await getWallet("creator");
   const maker = await getWallet("maker");
-  // const maker = await getWallet("maker");
 
   // registerNFT
   const MakerRegistrar = new ethers.Contract(
@@ -27,7 +27,8 @@ async function main() {
     nftId,
     creator.address,
     creatorSaleBasisPoints,
-    optionBits
+    optionBits,
+    ipfsMetadataHash
   );
   const receipt = await registerNftTxn.wait();
   console.log("done. transactionHash:", receipt.transactionHash);
