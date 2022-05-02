@@ -1,7 +1,7 @@
-import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/signers";
-import {BigNumber} from "ethers";
-import {ethers, upgrades} from "hardhat";
-import {TEST_NFT_URI} from "./constants";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import { BigNumber } from "ethers";
+import { ethers, upgrades } from "hardhat";
+import { TEST_NFT_URI } from "./constants";
 
 export const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
 export const TEST_SALE_CURATOR_LIABILITY_BP = 5_000; // 50% goes to curator liability
@@ -121,6 +121,9 @@ const deploySystem = async (owner: SignerWithAddress) => {
   const deployedCuratorVault = await upgrades.deployProxy(CuratorVaultFactory, [
     addressManager.address,
     curatorToken.address,
+    "5000",
+    "10000000",
+    "29000000000000"
   ]);
   const curatorVault = CuratorVaultFactory.attach(deployedCuratorVault.address);
 
@@ -179,11 +182,6 @@ const deploySystem = async (owner: SignerWithAddress) => {
   await parameterManager.setSaleReferrerBasisPoints(TEST_SALE_REFERRER_BP);
   await parameterManager.setSpendTakerBasisPoints(TEST_SPEND_TAKER_BP);
   await parameterManager.setSpendReferrerBasisPoints(TEST_SPEND_REFERRER_BP);
-  await parameterManager.setBondingCurveParams(
-    "5000",
-    "10000000",
-    "29000000000000"
-  );
 
   // Return objects for tests to use
   return {
@@ -202,4 +200,4 @@ const deploySystem = async (owner: SignerWithAddress) => {
   };
 };
 
-export {deploySystem};
+export { deploySystem };

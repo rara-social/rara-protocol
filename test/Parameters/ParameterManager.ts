@@ -280,5 +280,6 @@ describe("ParameterManager", function () {
         .setBondingCurveParams("1", "2", "3")
     ).to.be.revertedWith(NOT_ADMIN);
   });
+
 });
 

@@ -44,9 +44,6 @@ abstract contract ParameterManagerStorageV1 is IParameterManager {
     /// @dev Mapping of the approved curator vaults (other than the default)
     /// If set to true then it is allowed to be used.
     mapping(address => bool) public approvedCuratorVaults;
-
-    /// @dev The parameters that define the bonding curve for the curator vault
-    SigmoidCurveParameters public bondingCurveParams;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

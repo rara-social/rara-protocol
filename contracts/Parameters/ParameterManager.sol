@@ -106,20 +106,4 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
         approvedCuratorVaults[vault] = approved;
         emit ApprovedCuratorVaultsUpdated(vault, approved);
     }
-
-    // @dev Setter for curator vault bonding curve params
-    function setBondingCurveParams(
-        uint256 a,
-        uint256 b,
-        uint256 c
-    ) external onlyAdmin {
-        require(a > 0 && b > 0 && c > 0, ZERO_INPUT);
-        require(
-            a <= uint256(type(int256).max) &&
-                b <= uint256(type(int256).max) &&
-                c <= uint256(type(int256).max),
-            "Out of bounds"
-        );
-        bondingCurveParams = SigmoidCurveParameters(a, b, c);
-    }
 }
