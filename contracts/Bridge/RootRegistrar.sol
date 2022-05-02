@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: GPL-3.0-only
 pragma solidity 0.8.9;
 
-import "@maticnetwork/fx-portal/contracts/tunnel/FxBaseRootTunnel.sol";
+import "./FxBaseRootTunnel.sol";
 import "../Maker/NftOwnership.sol";
 
 /// @dev This contract lives on the L1 and allows NFT owners to register NFTs that live on the L1.
@@ -12,12 +12,26 @@ contract RootRegistrar is FxBaseRootTunnel {
     bytes32 public constant REGISTER = keccak256("REGISTER");
     bytes32 public constant DE_REGISTER = keccak256("DE_REGISTER");
 
+    /// @dev the address that deployed this contract is the only one that can update the fxRootTunnel
+    address public deployer;
+
     /// @param _checkpointManager This is a well known contract deployed by matic that is used to verify messages coming from the L2 down to L1.
     /// @param _fxRoot This is a well known contract deployed by matic that will emit the events going from L1 to L2.
     /// @dev You must call setFxChildTunnel() with the ChildRegistrar address on the L2 after deployment
     constructor(address _checkpointManager, address _fxRoot)
         FxBaseRootTunnel(_checkpointManager, _fxRoot)
-    {}
+    {
+        deployer = msg.sender;
+    }
+
+    /// @dev Set fxChildTunnel if not set already
+    /// Only the deploying account can update this
+    /// Overrides the function in the base contract
+    function setFxChildTunnel(address _fxChildTunnel) public override {
+        require(deployer == msg.sender, "Only deployer");
+        require(fxChildTunnel == address(0x0), "Already set");
+        fxChildTunnel = _fxChildTunnel;
+    }
 
     /// @dev Allows a NFT owner to register the NFT in the protocol on L1
     /// Once the ownership is verified a message will be sent to the Child contract
