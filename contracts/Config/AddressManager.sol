@@ -16,6 +16,14 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
         _;
     }
 
+    /// @dev Events emitted on updates
+    event RoleManagerAddressUpdated(address newAddress);
+    event ParameterManagerAddressUpdated(address newAddress);
+    event MakerRegistrarAddressUpdated(address newAddress);
+    event ReactionNftContractAddressUpdated(address newAddress);
+    event DefaultCuratorVaultAddressUpdated(address newAddress);
+    event ChildRegistrarAddressUpdated(address newAddress);
+
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IRoleManager _roleManager) public initializer {
         require(address(_roleManager) != address(0x0), ZERO_INPUT);
@@ -34,6 +42,7 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
         require(_roleManager.isAdmin(msg.sender), "RM invalid");
 
         roleManager = _roleManager;
+        emit RoleManagerAddressUpdated(address(_roleManager));
     }
 
     /// @dev Setter for the role manager address
@@ -43,6 +52,7 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
     {
         require(address(_parameterManager) != address(0x0), ZERO_INPUT);
         parameterManager = _parameterManager;
+        emit ParameterManagerAddressUpdated(address(_parameterManager));
     }
 
     /// @dev Setter for the maker registrar address
@@ -52,6 +62,7 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
     {
         require(address(_makerRegistrar) != address(0x0), ZERO_INPUT);
         makerRegistrar = _makerRegistrar;
+        emit MakerRegistrarAddressUpdated(address(_makerRegistrar));
     }
 
     /// @dev Setter for the maker registrar address
@@ -61,6 +72,7 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
     {
         require(address(_reactionNftContract) != address(0x0), ZERO_INPUT);
         reactionNftContract = _reactionNftContract;
+        emit ReactionNftContractAddressUpdated(address(_reactionNftContract));
     }
 
     /// @dev Setter for the default curator vault address
@@ -70,11 +82,13 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
     {
         require(address(_defaultCuratorVault) != address(0x0), ZERO_INPUT);
         defaultCuratorVault = _defaultCuratorVault;
+        emit DefaultCuratorVaultAddressUpdated(address(_defaultCuratorVault));
     }
 
     /// @dev Setter for the L2 bridge registrar
     function setChildRegistrar(address _childRegistrar) external onlyAdmin {
         require(address(_childRegistrar) != address(0x0), ZERO_INPUT);
         childRegistrar = _childRegistrar;
+        emit ChildRegistrarAddressUpdated(address(_childRegistrar));
     }
 }
