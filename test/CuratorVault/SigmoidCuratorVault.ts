@@ -10,7 +10,7 @@ import {
 } from "../Scripts/errors";
 import {BigNumber} from "ethers";
 
-describe.only("Sigmoid Curator Vault", function () {
+describe("Sigmoid Curator Vault", function () {
   it("Should check address on init", async function () {
     const SigmoidCuratorVaultFactory = await ethers.getContractFactory(
       "SigmoidCuratorVault"
