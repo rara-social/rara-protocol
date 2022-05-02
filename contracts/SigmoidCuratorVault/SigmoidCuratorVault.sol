@@ -3,6 +3,7 @@ pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+import "@openzeppelin/contracts/utils/math/SafeCast.sol";
 import "../Token/IStandard1155.sol";
 import "../Config/IAddressManager.sol";
 import "./SigmoidCuratorVaultStorage.sol";
@@ -16,6 +17,10 @@ import "./Curve/Sigmoid.sol";
 /// the shape of the sigmoid are set in the parameter manager.
 /// At any point in time the owners of the curator tokens can sell them back to the
 /// bonding curve.
+/// Note: This contract is protected via a permissioned account set in the role manager.  Caution should
+/// be used as the role owner could renounce the role leaving all future actions disabled.  Additionally,
+/// if a malicious account was able to obtain the role, they could use it to set values to malicious values.
+/// See the public documentation website for more details.
 contract SigmoidCuratorVault is
     ReentrancyGuardUpgradeable,
     Sigmoid,
@@ -57,6 +62,9 @@ contract SigmoidCuratorVault is
         public
         initializer
     {
+        require(address(_addressManager) != address(0x0), ZERO_INPUT);
+        require(address(_curatorTokens) != address(0x0), ZERO_INPUT);
+
         // Save the address manager
         addressManager = IAddressManager(_addressManager);
 
@@ -108,11 +116,6 @@ contract SigmoidCuratorVault is
             paymentToken
         );
 
-        //
-        // Pull value from ReactionVault
-        //
-        paymentToken.safeTransferFrom(msg.sender, address(this), paymentAmount);
-
         // Get curve params
         (uint256 a, uint256 b, uint256 c) = addressManager
             .parameterManager()
@@ -120,17 +123,22 @@ contract SigmoidCuratorVault is
 
         // Calculate the amount of tokens that will be minted based on the price
         uint256 curatorTokenAmount = calculateTokensBoughtFromPayment(
-            int256(a),
-            int256(b),
-            int256(c),
-            int256(curatorTokenSupply[curatorTokenId]),
-            int256(reserves[curatorTokenId]),
-            int256(paymentAmount)
+            SafeCast.toInt256(a),
+            SafeCast.toInt256(b),
+            SafeCast.toInt256(c),
+            SafeCast.toInt256(curatorTokenSupply[curatorTokenId]),
+            SafeCast.toInt256(reserves[curatorTokenId]),
+            SafeCast.toInt256(paymentAmount)
         );
 
         // Update the amounts
         reserves[curatorTokenId] += paymentAmount;
         curatorTokenSupply[curatorTokenId] += curatorTokenAmount;
+
+        //
+        // Pull value from ReactionVault as payment
+        //
+        paymentToken.safeTransferFrom(msg.sender, address(this), paymentAmount);
 
         // Mint the tokens
         curatorTokens.mint(
@@ -186,12 +194,12 @@ contract SigmoidCuratorVault is
 
         // Calculate the amount of tokens that will be minted based on the price
         uint256 refundAmount = calculatePaymentReturnedFromTokens(
-            int256(a),
-            int256(b),
-            int256(c),
-            int256(curatorTokenSupply[curatorTokenId]),
-            int256(reserves[curatorTokenId]),
-            int256(tokensToBurn)
+            SafeCast.toInt256(a),
+            SafeCast.toInt256(b),
+            SafeCast.toInt256(c),
+            SafeCast.toInt256(curatorTokenSupply[curatorTokenId]),
+            SafeCast.toInt256(reserves[curatorTokenId]),
+            SafeCast.toInt256(tokensToBurn)
         );
 
         // Update the amounts
