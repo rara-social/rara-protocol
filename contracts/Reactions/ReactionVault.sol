@@ -209,16 +209,11 @@ contract ReactionVault is
         ) = info.makerRegistrar.sourceToDetailsLookup(info.sourceId);
         require(info.registered, "NFT not registered");
 
-        // Move the funds into the this contract from the buyer
+        // Calculate the funds to move into the this contract from the buyer
         info.parameterManager = addressManager.parameterManager();
         IERC20Upgradeable paymentToken = info.parameterManager.paymentToken();
         info.reactionPrice = info.parameterManager.reactionPrice();
         info.totalPurchasePrice = info.reactionPrice * quantity;
-        paymentToken.safeTransferFrom(
-            msg.sender,
-            address(this),
-            info.totalPurchasePrice
-        );
 
         // calc payment parameter version
         info.parameterVersion = deriveParameterVersion(info.parameterManager);
@@ -302,6 +297,13 @@ contract ReactionVault is
             paymentToken,
             info.reactionPrice,
             saleCuratorLiabilityBasisPoints
+        );
+
+        // Move the funds in as payment
+        paymentToken.safeTransferFrom(
+            msg.sender,
+            address(this),
+            info.totalPurchasePrice
         );
 
         // Mint NFTs to destination wallet
