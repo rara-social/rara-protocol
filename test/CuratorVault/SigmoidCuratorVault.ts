@@ -1,25 +1,40 @@
-import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
-import { ZERO_ADDRESS } from "../Scripts/constants";
-import { deploySystem } from "../Scripts/setup";
-import { INVALID_ZERO_PARAM, NOT_ADMIN, NO_BALANCE, TRANSFER_NOT_ALLOWED } from "../Scripts/errors";
-import { BigNumber } from "ethers";
+import {expect} from "chai";
+import {ethers, upgrades} from "hardhat";
+import {ZERO_ADDRESS} from "../Scripts/constants";
+import {deploySystem} from "../Scripts/setup";
+import {
+  INVALID_ZERO_PARAM,
+  NOT_ADMIN,
+  NO_BALANCE,
+  TRANSFER_NOT_ALLOWED,
+} from "../Scripts/errors";
+import {BigNumber} from "ethers";
 
-describe("Sigmoid Curator Vault", function () {
+describe.only("Sigmoid Curator Vault", function () {
   it("Should check address on init", async function () {
     const SigmoidCuratorVaultFactory = await ethers.getContractFactory(
       "SigmoidCuratorVault"
     );
     const [OWNER] = await ethers.getSigners();
-    await expect(upgrades.deployProxy(
-      SigmoidCuratorVaultFactory,
-      [ZERO_ADDRESS, OWNER.address]
-    )).to.revertedWith(INVALID_ZERO_PARAM);
+    await expect(
+      upgrades.deployProxy(SigmoidCuratorVaultFactory, [
+        ZERO_ADDRESS,
+        OWNER.address,
+        0,
+        0,
+        0,
+      ])
+    ).to.revertedWith(INVALID_ZERO_PARAM);
 
-    await expect(upgrades.deployProxy(
-      SigmoidCuratorVaultFactory,
-      [OWNER.address, ZERO_ADDRESS]
-    )).to.revertedWith(INVALID_ZERO_PARAM);
+    await expect(
+      upgrades.deployProxy(SigmoidCuratorVaultFactory, [
+        ZERO_ADDRESS,
+        OWNER.address,
+        0,
+        0,
+        0,
+      ])
+    ).to.revertedWith(INVALID_ZERO_PARAM);
   });
 
   it("Should buy and sell small amounts", async function () {
