@@ -20,9 +20,7 @@ abstract contract MakerRegistrarStorageV1 is IMakerRegistrar {
     mapping(uint256 => uint256) public override transformToSourceLookup;
 
     /// @dev Mapping to look up nft details from source ID
-    mapping(uint256 => IMakerRegistrar.NftDetails)
-        public
-        override sourceToDetailsLookup;
+    mapping(uint256 => IMakerRegistrar.NftDetails) public sourceToDetails;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

@@ -7,8 +7,8 @@ interface IMakerRegistrar {
     struct NftDetails {
         bool registered;
         address owner;
-        address creator;
-        uint256 creatorSaleBasisPoints;
+        address[] creators;
+        uint256[] creatorSaleBasisPoints;
     }
 
     function transformToSourceLookup(uint256 metaId) external returns (uint256);
@@ -22,12 +22,7 @@ interface IMakerRegistrar {
     /// @dev lookup for NftDetails from source ID
     function sourceToDetailsLookup(uint256)
         external
-        returns (
-            bool,
-            address,
-            address,
-            uint256
-        );
+        returns (NftDetails memory);
 
     function verifyOwnership(
         address nftContractAddress,
@@ -40,8 +35,8 @@ interface IMakerRegistrar {
         uint256 chainId,
         address nftContractAddress,
         uint256 nftId,
-        address creatorAddress,
-        uint256 creatorSaleBasisPoints,
+        address[] memory nftCreatorAddresses,
+        uint256[] memory creatorSaleBasisPoints,
         uint256 optionBits,
         string memory ipfsMetadataHash
     ) external;

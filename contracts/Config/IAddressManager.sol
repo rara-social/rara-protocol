@@ -46,4 +46,10 @@ interface IAddressManager {
 
     /// @dev Setter for the L2 bridge registrar
     function setChildRegistrar(address _childRegistrar) external;
+
+    /// @dev Getter for the address of the royalty registry
+    function royaltyRegistry() external returns (address);
+
+    /// @dev Setter for the address of the royalty registry
+    function setRoyaltyRegistry(address _royaltyRegistry) external;
 }

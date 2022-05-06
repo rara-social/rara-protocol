@@ -26,8 +26,8 @@ describe("Bridge Registrar", function () {
         chainId,
         testingStandard1155.address,
         "1",
-        ZERO_ADDRESS,
-        "0",
+        [ZERO_ADDRESS],
+        ["0"],
         "0",
         metadataHash
       )
@@ -66,8 +66,8 @@ describe("Bridge Registrar", function () {
         chainId,
         testingStandard1155.address,
         NFT_ID,
-        BOB.address,
-        "100",
+        [BOB.address],
+        ["100"],
         "0",
         metadataHash
       );

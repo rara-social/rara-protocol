@@ -635,4 +635,160 @@ describe("ReactionVault Taker Rewards", function () {
       )
     ).to.be.equal(expectedPaymentForCreator);
   });
+
+  it("Should spend reaction and let 2 creators get all rewards withdraw", async function () {
+    const [OWNER, ALICE, CREATOR, REFERRER, TAKER, CREATOR2] = await ethers.getSigners();
+    const {
+      reactionVault,
+      testingStandard1155,
+      makerRegistrar,
+      addressManager,
+      paymentTokenErc20,
+      curatorVault,
+    } = await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
+
+    // Now register an NFT and get the Meta ID
+    // Mint an NFT to Alice
+    const MAKER_NFT_ID = "1";
+    const TAKER_NFT_ID = "2";
+    testingStandard1155.mint(ALICE.address, MAKER_NFT_ID, "1", [0]);
+
+    // Now deploy and set the rewards registry
+    const TestRoyaltyRegistryFactory = await ethers.getContractFactory(
+      "TestRoyaltyRegistry"
+    );
+    const royaltyRegistry = await TestRoyaltyRegistryFactory.deploy();
+    await addressManager.setRoyaltyRegistry(royaltyRegistry.address);
+
+    // Register it
+    await makerRegistrar
+      .connect(ALICE)
+      .registerNft(
+        testingStandard1155.address,
+        MAKER_NFT_ID,
+        ZERO_ADDRESS,
+        "0",
+        "0",
+        ""
+      );
+
+    // Get the NFT source ID
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
+      chainId,
+      testingStandard1155.address,
+      MAKER_NFT_ID
+    );
+
+    // Encode the params and hash it to get the meta URI
+    const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
+
+    // Mint the purchase price amount of tokens to the owner
+    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
+
+    // Approve the transfer of payment tokens
+    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE);
+
+    const REACTION_AMOUNT = BigNumber.from(1);
+
+    // Buy the reaction
+    await reactionVault.buyReaction(
+      TRANSFORM_ID,
+      REACTION_AMOUNT,
+      OWNER.address, // Where reactions should end up
+      REFERRER.address, // Referrer
+      BigNumber.from(0)
+    );
+
+    // Derive the reaction meta ID
+    const REACTION_NFT_PARAMETER_VERSION = deriveReactionParameterVersion(
+      paymentTokenErc20.address,
+      TEST_REACTION_PRICE,
+      BigNumber.from(TEST_SALE_CURATOR_LIABILITY_BP)
+    );
+
+    const REACTION_NFT_META_ID = deriveReactionId(
+      BigNumber.from(REACTION_NFT_PARAMETER_VERSION),
+      BigNumber.from(TRANSFORM_ID),
+      BigNumber.from(0)
+    );
+
+    const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
+    // Now spend it
+    await reactionVault.spendReaction(
+      chainId,
+      testingStandard1155.address,
+      TAKER_NFT_ID,
+      REACTION_NFT_META_ID,
+      REACTION_AMOUNT,
+      ZERO_ADDRESS,
+      ZERO_ADDRESS,
+      metadataHash
+    );
+
+    // Get the expected curator Token token ID
+    const curatorTokenId = await curatorVault.getTokenId(
+      chainId,
+      testingStandard1155.address,
+      TAKER_NFT_ID,
+      paymentTokenErc20.address
+    );
+
+    // Mint the NFT to the taker
+    testingStandard1155.mint(TAKER.address, TAKER_NFT_ID, "1", [0]);
+
+    // Set both creator addresses to get rewards - 10k rewards basis points = 100%
+    await royaltyRegistry.setRoyalties([CREATOR2.address, CREATOR.address], ["5000", "5000"]);
+
+    // Register it
+    await makerRegistrar.connect(TAKER).registerNft(
+      testingStandard1155.address,
+      TAKER_NFT_ID,
+      CREATOR.address,
+      "1", // 1% should be ignored
+      "0",
+      ""
+    );
+
+    const rewardsIndex = deriveTakerRewardsKey(
+      chainId,
+      testingStandard1155.address,
+      BigNumber.from(TAKER_NFT_ID),
+      curatorVault.address,
+      curatorTokenId
+    );
+    const expectedTokens = await reactionVault.nftOwnerRewards(rewardsIndex);
+    const expectedPaymentForCreator = "125000053394540000"; // 250000106789080000 / 2
+
+    // Now have the Taker claim - should be successful
+    await expect(
+      reactionVault
+        .connect(TAKER)
+        .withdrawTakerRewards(
+          chainId,
+          testingStandard1155.address,
+          TAKER_NFT_ID,
+          paymentTokenErc20.address,
+          curatorVault.address,
+          curatorTokenId,
+          expectedTokens,
+          TAKER.address
+        )
+    );
+
+    // Verify the payment was assigned to both creators
+    expect(
+      await reactionVault.ownerToRewardsMapping(
+        paymentTokenErc20.address,
+        CREATOR.address
+      )
+    ).to.be.equal(expectedPaymentForCreator);
+
+    expect(
+      await reactionVault.ownerToRewardsMapping(
+        paymentTokenErc20.address,
+        CREATOR2.address
+      )
+    ).to.be.equal(expectedPaymentForCreator);
+  });
 });

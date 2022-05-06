@@ -14,6 +14,7 @@ const config: DeployConfig = {
   bondingCurveC: "29000000000000", // Super flat curve - this is steepness param
   fxRootBridgeAddress: "", // Not set for mumbai L2
   fxRootCheckPointManager: "", // Not set for mumbai L2
+  royaltyRegistry: "0x0a01E11887f727D1b1Cd81251eeEE9BEE4262D07", // deployed royalty registry https://royaltyregistry.xyz/lookup
 }
 
 export default config;

@@ -179,4 +179,32 @@ describe("AddressManager", function () {
       addressManager.connect(ALICE).setChildRegistrar(BOB.address)
     ).to.revertedWith(NOT_ADMIN);
   });
+
+  it("Should allow owner to set royalty registry address", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const { addressManager } = await deploySystem(OWNER);
+
+    // Set it to Alice's address
+    await expect(addressManager.setRoyaltyRegistry(ALICE.address))
+      .to.emit(addressManager, "RoyaltyRegistryAddressUpdated")
+      .withArgs(ALICE.address);
+
+    // Verify it got set
+    let currentVal = await addressManager.royaltyRegistry();
+    expect(currentVal).to.equal(ALICE.address);
+
+    // Verify non owner can't update address
+    await expect(
+      addressManager.connect(ALICE).setRoyaltyRegistry(BOB.address)
+    ).to.revertedWith(NOT_ADMIN);
+
+    // Check setting to ZERO addr
+    await expect(addressManager.setRoyaltyRegistry(ZERO_ADDRESS))
+      .to.emit(addressManager, "RoyaltyRegistryAddressUpdated")
+      .withArgs(ZERO_ADDRESS);
+
+    // Verify it got set
+    currentVal = await addressManager.royaltyRegistry();
+    expect(currentVal).to.equal(ZERO_ADDRESS);
+  });
 });

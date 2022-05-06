@@ -202,8 +202,8 @@ describe("MakerRegistrar", function () {
         testingStandard1155.address,
         BigNumber.from(NFT_ID),
         ALICE.address,
-        BOB.address,
-        BigNumber.from(TEST_SALE_CREATOR_BP),
+        [BOB.address],
+        [BigNumber.from(TEST_SALE_CREATOR_BP)],
         BigNumber.from(OPTION_BITS),
         BigNumber.from(EXPECTED_SOURCE_ID),
         derivedMetaId,
@@ -226,13 +226,13 @@ describe("MakerRegistrar", function () {
     ).to.equal(EXPECTED_SOURCE_ID);
 
     // Verify registration details from source id
-    const [registered, owner, creator] =
+    const [registered, owner, creators] =
       await makerRegistrar.sourceToDetailsLookup(
         BigNumber.from(EXPECTED_SOURCE_ID)
       );
     expect(registered).to.equal(true);
     expect(owner).to.equal(ALICE.address);
-    expect(creator).to.equal(BOB.address);
+    expect(creators[0]).to.equal(BOB.address);
   });
 
   it("Should verify NFT ownership on deregister", async function () {
