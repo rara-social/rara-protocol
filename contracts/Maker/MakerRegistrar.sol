@@ -93,7 +93,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
 
         // Get the royalties for the creator addresses - use fallback if none set on chain
         (
-            address[] memory addressesAarray,
+            address[] memory addressesArray,
             uint256[] memory creatorBasisPointsArray
         ) = Royalties._getRoyaltyOverride(
                 addressManager.royaltyRegistry(),
@@ -105,7 +105,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
 
         // Verify royalties before registering
         require(
-            addressesAarray.length == creatorBasisPointsArray.length,
+            addressesArray.length == creatorBasisPointsArray.length,
             "Royalty lengths"
         );
 
@@ -119,7 +119,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             block.chainid, // Use current chain ID
             nftContractAddress,
             nftId,
-            addressesAarray,
+            addressesArray,
             creatorBasisPointsArray,
             optionBits,
             ipfsMetadataHash

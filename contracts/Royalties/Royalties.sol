@@ -98,12 +98,12 @@ library Royalties {
             }
         }
         // None found, use fallback
-        address[] memory addressesAarray = new address[](1);
-        addressesAarray[0] = fallbackCreator;
+        address[] memory addressesArray = new address[](1);
+        addressesArray[0] = fallbackCreator;
 
         uint256[] memory creatorBasisPointsArray = new uint256[](1);
         creatorBasisPointsArray[0] = fallbackCreatorBasisPoints;
 
-        return (addressesAarray, creatorBasisPointsArray);
+        return (addressesArray, creatorBasisPointsArray);
     }
 }

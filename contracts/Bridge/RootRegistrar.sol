@@ -63,7 +63,7 @@ contract RootRegistrar is FxBaseRootTunnel {
 
         // Get the royalties for the creator addresses - use fallback if none set on chain
         (
-            address[] memory addressesAarray,
+            address[] memory addressesArray,
             uint256[] memory creatorBasisPointsArray
         ) = Royalties._getRoyaltyOverride(
                 royaltyRegistry,
@@ -75,7 +75,7 @@ contract RootRegistrar is FxBaseRootTunnel {
 
         // Verify royalties before registering
         require(
-            addressesAarray.length == creatorBasisPointsArray.length,
+            addressesArray.length == creatorBasisPointsArray.length,
             "Royalty lengths"
         );
 
@@ -92,7 +92,7 @@ contract RootRegistrar is FxBaseRootTunnel {
                 block.chainid,
                 nftContractAddress,
                 nftId,
-                addressesAarray,
+                addressesArray,
                 creatorBasisPointsArray,
                 optionBits,
                 ipfsMetadataHash
