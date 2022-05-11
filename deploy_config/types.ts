@@ -9,6 +9,7 @@ type DeployConfig = {
   paymentTokenAddress: string,
   reactionNftUri: string,
   reactionPrice: string,
+  royaltyRegistry: string,
   saleReferrerBasisPoints: string,
   spendReferrerBasisPoints: string,
   spendTakerBasisPoints: string,

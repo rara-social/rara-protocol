@@ -100,15 +100,13 @@ contract ReactionVault is
         IMakerRegistrar makerRegistrar;
         IParameterManager parameterManager;
         uint256 sourceId;
-        bool registered;
-        address owner;
-        address creator;
-        uint256 creatorSaleBasisPoints;
+        IMakerRegistrar.NftDetails nftDetails;
         uint256 reactionPrice;
         uint256 totalPurchasePrice;
         uint256 creatorCut;
         uint256 referrerCut;
         uint256 makerCut;
+        uint256 fullMakerCut;
         uint256 curatorLiabilityCut;
         uint256 reactionId;
         uint256 parameterVersion;
@@ -202,13 +200,10 @@ contract ReactionVault is
         require(info.sourceId != 0, "Unknown NFT");
 
         // Verify it is registered
-        (
-            info.registered,
-            info.owner,
-            info.creator,
-            info.creatorSaleBasisPoints
-        ) = info.makerRegistrar.sourceToDetailsLookup(info.sourceId);
-        require(info.registered, "NFT not registered");
+        info.nftDetails = info.makerRegistrar.sourceToDetailsLookup(
+            info.sourceId
+        );
+        require(info.nftDetails.registered, "NFT not registered");
 
         // Calculate the funds to move into the this contract from the buyer
         info.parameterManager = addressManager.parameterManager();
@@ -262,32 +257,41 @@ contract ReactionVault is
 
         // Next, subtract the Creator cut from the Maker cut if it is set
         info.creatorCut = 0;
-        if (info.creator != address(0x0) && info.creatorSaleBasisPoints > 0) {
-            // Calc the amount
-            info.creatorCut =
-                (info.creatorSaleBasisPoints * info.makerCut) /
-                10_000;
+        info.fullMakerCut = info.makerCut;
+        for (uint16 i = 0; i < info.nftDetails.creators.length; i++) {
+            if (
+                info.nftDetails.creators[i] != address(0x0) &&
+                info.nftDetails.creatorSaleBasisPoints[i] > 0
+            ) {
+                // Calc the amount from the full maker cut
+                info.creatorCut =
+                    (info.nftDetails.creatorSaleBasisPoints[i] *
+                        info.fullMakerCut) /
+                    10_000;
 
-            // Assign awards to creator
-            ownerToRewardsMapping[paymentToken][info.creator] += info
-                .creatorCut;
+                // Assign awards to creator
+                ownerToRewardsMapping[paymentToken][
+                    info.nftDetails.creators[i]
+                ] += info.creatorCut;
 
-            // emit event
-            emit CreatorRewardsGranted(
-                info.creator,
-                paymentToken,
-                info.creatorCut,
-                info.reactionId
-            );
+                // emit event
+                emit CreatorRewardsGranted(
+                    info.nftDetails.creators[i],
+                    paymentToken,
+                    info.creatorCut,
+                    info.reactionId
+                );
 
-            // Subtract the creator cut from the maker cut
-            info.makerCut -= info.creatorCut;
+                // Subtract the creator cut from the maker cut
+                info.makerCut -= info.creatorCut;
+            }
         }
 
         // Assign awards to maker
-        ownerToRewardsMapping[paymentToken][info.owner] += info.makerCut;
+        ownerToRewardsMapping[paymentToken][info.nftDetails.owner] += info
+            .makerCut;
         emit MakerRewardsGranted(
-            info.owner,
+            info.nftDetails.owner,
             paymentToken,
             info.makerCut,
             info.reactionId
@@ -613,6 +617,7 @@ contract ReactionVault is
         uint256 takerCuratorTokensBalance;
         uint256 sourceId;
         uint256 paymentTokensForMaker;
+        uint256 fullPaymentTokensForMaker;
         uint256 creatorCut;
     }
 
@@ -661,22 +666,17 @@ contract ReactionVault is
         );
 
         // Get the details about the NFT
-        (
-            bool registered,
-            address owner,
-            address creator,
-            uint256 creatorSaleBasisPoints
-        ) = (addressManager.makerRegistrar()).sourceToDetailsLookup(
-                info.sourceId
-            );
+        IMakerRegistrar.NftDetails memory nftDetails = (
+            addressManager.makerRegistrar()
+        ).sourceToDetailsLookup(info.sourceId);
 
         // Verify it is registered and the caller is the one who registered it
         // Since NFTs may be on a different chain (L1 vs L2) we cannot directly check this
-        require(registered, "NFT not registered");
+        require(nftDetails.registered, "NFT not registered");
 
         // This NFT could have been registered on another chain, but this assumes the
         // Taker is withdrawing rewards on the L2 with the same account/address
-        require(owner == msg.sender, "NFT not owned");
+        require(nftDetails.owner == msg.sender, "NFT not owned");
 
         // Sell the curator Tokens - payment tokens will be sent this address
         info.paymentTokensForMaker = ICuratorVault(curatorVault)
@@ -693,21 +693,30 @@ contract ReactionVault is
         nftOwnerRewards[info.rewardsIndex] -= tokensToBurn;
 
         // If the registration included a creator cut calculate and set aside amount
-        if (creator != address(0x0) && creatorSaleBasisPoints > 0) {
-            info.creatorCut =
-                (info.paymentTokensForMaker * creatorSaleBasisPoints) /
-                10_000;
+        info.fullPaymentTokensForMaker = info.paymentTokensForMaker;
+        for (uint16 i = 0; i < nftDetails.creators.length; i++) {
+            if (
+                nftDetails.creators[i] != address(0x0) &&
+                nftDetails.creatorSaleBasisPoints[i] > 0
+            ) {
+                info.creatorCut =
+                    (info.fullPaymentTokensForMaker *
+                        nftDetails.creatorSaleBasisPoints[i]) /
+                    10_000;
 
-            // Allocate for the creator
-            ownerToRewardsMapping[paymentToken][creator] += info.creatorCut;
-            emit CreatorRewardsGranted(
-                creator,
-                paymentToken,
-                info.creatorCut,
-                info.sourceId
-            );
+                // Allocate for the creator
+                ownerToRewardsMapping[paymentToken][
+                    nftDetails.creators[i]
+                ] += info.creatorCut;
+                emit CreatorRewardsGranted(
+                    nftDetails.creators[i],
+                    paymentToken,
+                    info.creatorCut,
+                    info.sourceId
+                );
 
-            info.paymentTokensForMaker -= info.creatorCut;
+                info.paymentTokensForMaker -= info.creatorCut;
+            }
         }
 
         // Transfer the remaining amount to the caller (Maker)

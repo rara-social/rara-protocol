@@ -7,6 +7,7 @@ import "../Permissions/IRoleManager.sol";
 import "./IMakerRegistrar.sol";
 import "./MakerRegistrarStorage.sol";
 import "./NftOwnership.sol";
+import "../Royalties/Royalties.sol";
 
 /// @title MakerRegistrar
 /// @dev This contract tracks registered NFTs.  Owners of an NFT can register
@@ -21,8 +22,8 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address indexed nftContractAddress,
         uint256 indexed nftId,
         address indexed nftOwnerAddress,
-        address nftCreatorAddress,
-        uint256 creatorSaleBasisPoints,
+        address[] nftCreatorAddresses,
+        uint256[] creatorSaleBasisPoints,
         uint256 optionBits,
         uint256 sourceId,
         uint256 transformId,
@@ -82,7 +83,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address creatorAddress,
         uint256 creatorSaleBasisPoints,
         uint256 optionBits,
-        string memory ipfsMetadataHash
+        string calldata ipfsMetadataHash
     ) external {
         // Verify ownership
         require(
@@ -90,13 +91,25 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             "NFT not owned"
         );
 
+        // Get the royalties for the creator addresses - use fallback if none set on chain
+        (
+            address[] memory addressesArray,
+            uint256[] memory creatorBasisPointsArray
+        ) = Royalties._getRoyaltyOverride(
+                addressManager.royaltyRegistry(),
+                nftContractAddress,
+                nftId,
+                creatorAddress,
+                creatorSaleBasisPoints
+            );
+
         _registerForOwner(
             msg.sender,
             block.chainid, // Use current chain ID
             nftContractAddress,
             nftId,
-            creatorAddress,
-            creatorSaleBasisPoints,
+            addressesArray,
+            creatorBasisPointsArray,
             optionBits,
             ipfsMetadataHash
         );
@@ -107,10 +120,10 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         uint256 chainId,
         address nftContractAddress,
         uint256 nftId,
-        address creatorAddress,
-        uint256 creatorSaleBasisPoints,
+        address[] memory creatorAddresses,
+        uint256[] memory creatorSaleBasisPoints,
         uint256 optionBits,
-        string memory ipfsMetadataHash
+        string calldata ipfsMetadataHash
     ) external {
         // Verify caller is Child Registrar from the bridge
         require(msg.sender == addressManager.childRegistrar(), "Not Bridge");
@@ -120,7 +133,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             chainId,
             nftContractAddress,
             nftId,
-            creatorAddress,
+            creatorAddresses,
             creatorSaleBasisPoints,
             optionBits,
             ipfsMetadataHash
@@ -132,7 +145,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
     /// @param chainId - Chain where NFT lives
     /// @param nftContractAddress - Address of NFT to be registered
     /// @param nftId - ID of NFT to be registered
-    /// @param creatorAddress - (optional) Address of the creator to give creatorSaleBasisPoints cut of Maker rewards
+    /// @param creatorAddresses - (optional) Address of the creator to give creatorSaleBasisPoints cut of Maker rewards
     /// @param creatorSaleBasisPoints (optional) Basis points for the creator during a reaction sale
     ///        This is the percentage of the Maker rewards to give to the Creator
     ///        Basis points are percentage divided by 100 (e.g. 100 Basis Points is 1%)
@@ -143,16 +156,11 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         uint256 chainId,
         address nftContractAddress,
         uint256 nftId,
-        address creatorAddress,
-        uint256 creatorSaleBasisPoints,
+        address[] memory creatorAddresses,
+        uint256[] memory creatorSaleBasisPoints,
         uint256 optionBits,
-        string memory ipfsMetadataHash
+        string calldata ipfsMetadataHash
     ) internal {
-        // TODO: ? Block registration of a RaRa reaction NFT once Reaction Vault is built out
-
-        // Verify that creatorSaleBasisPoints is within bounds (can't allow more than 100%)
-        require(creatorSaleBasisPoints <= 10_000, "Invalid bp");
-
         //
         // "Source" - external NFT's
         // sourceId is derived from [chainId, nftContractAddress, nftId]`
@@ -167,11 +175,12 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         //
         // Generate source ID
         uint256 sourceId = _deriveSourceId(chainId, nftContractAddress, nftId);
+
         // add to mapping
-        sourceToDetailsLookup[sourceId] = NftDetails(
+        sourceToDetails[sourceId] = NftDetails(
             true,
             owner,
-            creatorAddress,
+            creatorAddresses,
             creatorSaleBasisPoints
         );
 
@@ -196,7 +205,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             nftContractAddress,
             nftId,
             owner,
-            creatorAddress,
+            creatorAddresses,
             creatorSaleBasisPoints,
             optionBits,
             sourceId,
@@ -244,12 +253,20 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         uint256 sourceId = _deriveSourceId(chainId, nftContractAddress, nftId);
 
         // Verify it is registered
-        NftDetails storage details = sourceToDetailsLookup[sourceId];
+        NftDetails storage details = sourceToDetails[sourceId];
         require(details.registered, "NFT not registered");
 
         // Update the param
         details.registered = false;
 
         emit Deregistered(chainId, nftContractAddress, nftId, owner, sourceId);
+    }
+
+    function sourceToDetailsLookup(uint256 index)
+        external
+        view
+        returns (NftDetails memory)
+    {
+        return sourceToDetails[index];
     }
 }

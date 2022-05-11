@@ -23,6 +23,7 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
     event ReactionNftContractAddressUpdated(address newAddress);
     event DefaultCuratorVaultAddressUpdated(address newAddress);
     event ChildRegistrarAddressUpdated(address newAddress);
+    event RoyaltyRegistryAddressUpdated(address newAddress);
 
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IRoleManager _roleManager) public initializer {
@@ -90,5 +91,12 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
         require(address(_childRegistrar) != address(0x0), ZERO_INPUT);
         childRegistrar = _childRegistrar;
         emit ChildRegistrarAddressUpdated(address(_childRegistrar));
+    }
+
+    /// @dev Setter for the address of the royalty registry
+    function setRoyaltyRegistry(address _royaltyRegistry) external onlyAdmin {
+        // We DO allow the royalty registry to be set to 0x0 as this disables the lookup
+        royaltyRegistry = _royaltyRegistry;
+        emit RoyaltyRegistryAddressUpdated(royaltyRegistry);
     }
 }

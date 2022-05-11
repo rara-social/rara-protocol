@@ -14,6 +14,7 @@ const config: DeployConfig = {
   saleReferrerBasisPoints: "",
   spendReferrerBasisPoints: "",
   spendTakerBasisPoints: "",
+  royaltyRegistry: "0x0000000000000000000000000000000000000000", // Not available on Goerli
 }
 
 export default config;

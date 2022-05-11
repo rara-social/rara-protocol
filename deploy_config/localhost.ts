@@ -14,6 +14,7 @@ const config: DeployConfig = {
   saleReferrerBasisPoints: "100",// 1% goes to the referrer on reaction sale
   spendReferrerBasisPoints: "100", // 1% of curator liability goes to the referrer
   spendTakerBasisPoints: "700", // 7% of curator liability goes to the taker
+  royaltyRegistry: "0x0000000000000000000000000000000000000000", // Not set
 }
 
 export default config;

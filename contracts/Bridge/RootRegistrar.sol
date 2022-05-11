@@ -3,6 +3,7 @@ pragma solidity 0.8.9;
 
 import "./FxBaseRootTunnel.sol";
 import "../Maker/NftOwnership.sol";
+import "../Royalties/Royalties.sol";
 
 /// @dev This contract lives on the L1 and allows NFT owners to register NFTs that live on the L1.
 /// Once ownership is verified, it will send a message up to the contracts on the L2 specifying that
@@ -15,13 +16,19 @@ contract RootRegistrar is FxBaseRootTunnel {
     /// @dev the address that deployed this contract is the only one that can update the fxRootTunnel
     address public deployer;
 
+    /// @dev the address where the registry royalty is deployed
+    address royaltyRegistry;
+
     /// @param _checkpointManager This is a well known contract deployed by matic that is used to verify messages coming from the L2 down to L1.
     /// @param _fxRoot This is a well known contract deployed by matic that will emit the events going from L1 to L2.
     /// @dev You must call setFxChildTunnel() with the ChildRegistrar address on the L2 after deployment
-    constructor(address _checkpointManager, address _fxRoot)
-        FxBaseRootTunnel(_checkpointManager, _fxRoot)
-    {
+    constructor(
+        address _checkpointManager,
+        address _fxRoot,
+        address _royaltyRegistry
+    ) FxBaseRootTunnel(_checkpointManager, _fxRoot) {
         deployer = msg.sender;
+        royaltyRegistry = _royaltyRegistry;
     }
 
     /// @dev Set fxChildTunnel if not set already
@@ -54,6 +61,18 @@ contract RootRegistrar is FxBaseRootTunnel {
             "NFT not owned"
         );
 
+        // Get the royalties for the creator addresses - use fallback if none set on chain
+        (
+            address[] memory addressesArray,
+            uint256[] memory creatorBasisPointsArray
+        ) = Royalties._getRoyaltyOverride(
+                royaltyRegistry,
+                nftContractAddress,
+                nftId,
+                creatorAddress,
+                creatorSaleBasisPoints
+            );
+
         // REGISTER, encode(owner, chainId, nftContractAddress, nftId, creatorAddress, optionBits, ipfsMetadataHash)
         bytes memory message = abi.encode(
             REGISTER,
@@ -62,8 +81,8 @@ contract RootRegistrar is FxBaseRootTunnel {
                 block.chainid,
                 nftContractAddress,
                 nftId,
-                creatorAddress,
-                creatorSaleBasisPoints,
+                addressesArray,
+                creatorBasisPointsArray,
                 optionBits,
                 ipfsMetadataHash
             )

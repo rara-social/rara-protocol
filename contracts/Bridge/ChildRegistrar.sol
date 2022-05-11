@@ -68,8 +68,8 @@ contract ChildRegistrar is FxBaseChildTunnel {
             uint256 chainId,
             address nftContractAddress,
             uint256 nftId,
-            address creatorAddress,
-            uint256 creatorSaleBasisPoints,
+            address[] memory creatorAddresses,
+            uint256[] memory creatorSaleBasisPoints,
             uint256 optionBits,
             string memory ipfsMetadataHash
         ) = abi.decode(
@@ -79,8 +79,8 @@ contract ChildRegistrar is FxBaseChildTunnel {
                     uint256,
                     address,
                     uint256,
-                    address,
-                    uint256,
+                    address[],
+                    uint256[],
                     uint256,
                     string
                 )
@@ -92,7 +92,7 @@ contract ChildRegistrar is FxBaseChildTunnel {
             chainId,
             nftContractAddress,
             nftId,
-            creatorAddress,
+            creatorAddresses,
             creatorSaleBasisPoints,
             optionBits,
             ipfsMetadataHash

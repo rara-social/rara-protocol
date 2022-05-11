@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { deploySystem } from "../Scripts/setup";
 import { ONLY_DEPLOYER } from "../Scripts/errors";
+import { ZERO_ADDRESS } from "../Scripts/constants";
 
 describe("Root Registrar", function () {
   it("Should validate only deployer can update", async function () {
@@ -12,6 +13,7 @@ describe("Root Registrar", function () {
     );
     // Fake addresses in the deploy - they aren't used
     const rootRegistrar = await RootRegistrarFactory.deploy(
+      ZERO_ADDRESS,
       CAROL.address,
       "0x3d1d3E34f7fB6D26245E6640E1c50710eFFf15bA"
     );
