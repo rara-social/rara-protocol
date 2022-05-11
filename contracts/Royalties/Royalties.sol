@@ -97,10 +97,12 @@ library Royalties {
                 // Ignore an errors
             }
         }
-        // None found, use fallback
+        // None found, use fallback address... address 0x0 means no creator rewards
         address[] memory addressesArray = new address[](1);
         addressesArray[0] = fallbackCreator;
 
+        // Use fallback value, and ensure it is not above 100%
+        require(fallbackCreatorBasisPoints <= 10_000, "Invalid bp");
         uint256[] memory creatorBasisPointsArray = new uint256[](1);
         creatorBasisPointsArray[0] = fallbackCreatorBasisPoints;
 

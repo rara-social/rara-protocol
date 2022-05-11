@@ -73,17 +73,6 @@ contract RootRegistrar is FxBaseRootTunnel {
                 creatorSaleBasisPoints
             );
 
-        // Verify royalties before registering
-        require(
-            addressesArray.length == creatorBasisPointsArray.length,
-            "Royalty lengths"
-        );
-
-        // Verify that creatorSaleBasisPoints is within bounds (can't allow more than 100%)
-        for (uint8 i = 0; i < creatorBasisPointsArray.length; i++) {
-            require(creatorBasisPointsArray[i] <= 10_000, "Invalid bp");
-        }
-
         // REGISTER, encode(owner, chainId, nftContractAddress, nftId, creatorAddress, optionBits, ipfsMetadataHash)
         bytes memory message = abi.encode(
             REGISTER,
