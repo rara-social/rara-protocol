@@ -9,8 +9,8 @@ type Source @entity {
   nftId: BigInt!
 
   # creator info
-  creatorAddress: Bytes!
-  creatorSaleBasisPoints: BigInt!
+  creatorAddresses: [Bytes!]!
+  creatorSaleBasisPoints: [BigInt!]
 
   # status
   registered: Boolean!

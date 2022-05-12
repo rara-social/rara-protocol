@@ -14086,7 +14086,7 @@
       "chainId": "80001",
       "contracts": {
         "DefaultProxyAdmin": {
-          "address": "0xEaeb0e4618BC31fFc1dc8312D112cBfbc10eb778",
+          "address": "0xD871FC0BEd5e3901796A5ECBc6Bfa46C0f6E4801",
           "abi": [
             {
               "inputs": [
@@ -14251,7 +14251,7 @@
           ]
         },
         "TestErc20_Implementation": {
-          "address": "0xaeDCC463747cF4f94fe867F5468025337FAd0C59",
+          "address": "0xe4dE9d2f63A59c9c230e12339dfF092c12D6711e",
           "abi": [
             {
               "anonymous": false,
@@ -14562,7 +14562,7 @@
           ]
         },
         "TestErc20_Proxy": {
-          "address": "0x2f982217E8C5c3AA4d79756eca66b3974FF30FEf",
+          "address": "0x7C333Be7CB68A7eED8eefF99C988AA28162f1D07",
           "abi": [
             {
               "inputs": [
@@ -14698,7 +14698,7 @@
           ]
         },
         "TestErc20": {
-          "address": "0x2f982217E8C5c3AA4d79756eca66b3974FF30FEf",
+          "address": "0x7C333Be7CB68A7eED8eefF99C988AA28162f1D07",
           "abi": [
             {
               "anonymous": false,
@@ -15140,7 +15140,7 @@
           ]
         },
         "TestErc1155_Implementation": {
-          "address": "0x9a7E732986Ae61f0bAd438848ec3d8982D36704d",
+          "address": "0xCAa48520Fe3f6Cfd8cEB9EeE295101FaBa614f13",
           "abi": [
             {
               "anonymous": false,
@@ -15539,7 +15539,7 @@
           ]
         },
         "TestErc1155_Proxy": {
-          "address": "0xa7574286B629ed02b0B45A8757a95C6FFaD88C4C",
+          "address": "0x794E2a1CAB2e3c680542BBbCC33a1e5e305Aaa1f",
           "abi": [
             {
               "inputs": [
@@ -15675,7 +15675,7 @@
           ]
         },
         "TestErc1155": {
-          "address": "0xa7574286B629ed02b0B45A8757a95C6FFaD88C4C",
+          "address": "0x794E2a1CAB2e3c680542BBbCC33a1e5e305Aaa1f",
           "abi": [
             {
               "anonymous": false,
@@ -16205,7 +16205,7 @@
           ]
         },
         "TestErc721_Implementation": {
-          "address": "0x3e8544AA734A57f292D3584c9589d6ed0d2e151D",
+          "address": "0xc108D3BDB31A8a4EBBD241cfD89aD07B0Cd0F3dd",
           "abi": [
             {
               "anonymous": false,
@@ -16589,7 +16589,7 @@
           ]
         },
         "TestErc721_Proxy": {
-          "address": "0x5f53A8d4B487cA72E4A5aAAC39C7124531DD1F8F",
+          "address": "0x850417287C1Fa3867e4A20c43879d19b8b37737c",
           "abi": [
             {
               "inputs": [
@@ -16725,7 +16725,7 @@
           ]
         },
         "TestErc721": {
-          "address": "0x5f53A8d4B487cA72E4A5aAAC39C7124531DD1F8F",
+          "address": "0x850417287C1Fa3867e4A20c43879d19b8b37737c",
           "abi": [
             {
               "anonymous": false,
@@ -17240,7 +17240,7 @@
           ]
         },
         "RoleManager_Implementation": {
-          "address": "0x4656E3c675c89ff198034955e80fCD2667511F5f",
+          "address": "0x11E71597D958f51793657942E367E476742ce10B",
           "abi": [
             {
               "anonymous": false,
@@ -17641,7 +17641,7 @@
           ]
         },
         "RoleManager_Proxy": {
-          "address": "0x984CA954C436e058fb82409f1DE92C1D7DDf57Ac",
+          "address": "0x2601dC3c7f1d2bfe2Df392E8ddaCcb76E0ed7C25",
           "abi": [
             {
               "inputs": [
@@ -17777,7 +17777,7 @@
           ]
         },
         "RoleManager": {
-          "address": "0x984CA954C436e058fb82409f1DE92C1D7DDf57Ac",
+          "address": "0x2601dC3c7f1d2bfe2Df392E8ddaCcb76E0ed7C25",
           "abi": [
             {
               "anonymous": false,
@@ -18309,8 +18309,99 @@
           ]
         },
         "AddressManager_Implementation": {
-          "address": "0x8940522aF61FeDA91632aad25d952629e71a720e",
+          "address": "0x493C71d7B6b42781af4122Dfa849e13811F650Ba",
           "abi": [
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "ChildRegistrarAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "DefaultCuratorVaultAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "MakerRegistrarAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "ParameterManagerAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "ReactionNftContractAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "RoleManagerAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "RoyaltyRegistryAddressUpdated",
+              "type": "event"
+            },
             {
               "inputs": [],
               "name": "childRegistrar",
@@ -18403,6 +18494,19 @@
               "type": "function"
             },
             {
+              "inputs": [],
+              "name": "royaltyRegistry",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
               "inputs": [
                 {
                   "internalType": "address",
@@ -18479,11 +18583,24 @@
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "_royaltyRegistry",
+                  "type": "address"
+                }
+              ],
+              "name": "setRoyaltyRegistry",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
             }
           ]
         },
         "AddressManager_Proxy": {
-          "address": "0x56b97055FEc20E4c244Bb3C0200956f4F9558ed3",
+          "address": "0x7006f13F835929a9BfA073b6a0113b3fC2Af3567",
           "abi": [
             {
               "inputs": [
@@ -18619,7 +18736,7 @@
           ]
         },
         "AddressManager": {
-          "address": "0x56b97055FEc20E4c244Bb3C0200956f4F9558ed3",
+          "address": "0x7006f13F835929a9BfA073b6a0113b3fC2Af3567",
           "abi": [
             {
               "anonymous": false,
@@ -18732,6 +18849,97 @@
               "type": "receive"
             },
             {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "ChildRegistrarAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "DefaultCuratorVaultAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "MakerRegistrarAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "ParameterManagerAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "ReactionNftContractAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "RoleManagerAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "RoyaltyRegistryAddressUpdated",
+              "type": "event"
+            },
+            {
               "inputs": [],
               "name": "childRegistrar",
               "outputs": [
@@ -18823,6 +19031,19 @@
               "type": "function"
             },
             {
+              "inputs": [],
+              "name": "royaltyRegistry",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
               "inputs": [
                 {
                   "internalType": "address",
@@ -18904,6 +19125,19 @@
               "inputs": [
                 {
                   "internalType": "address",
+                  "name": "_royaltyRegistry",
+                  "type": "address"
+                }
+              ],
+              "name": "setRoyaltyRegistry",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
                   "name": "initialLogic",
                   "type": "address"
                 },
@@ -18924,7 +19158,7 @@
           ]
         },
         "MakerRegistrar_Implementation": {
-          "address": "0x49118D954DC436Eb6999EcC8b35D5FCAF2bFf34d",
+          "address": "0x2777612979ef8F559D254a0fDB68DD5718720D14",
           "abi": [
             {
               "anonymous": false,
@@ -18992,15 +19226,15 @@
                 },
                 {
                   "indexed": false,
-                  "internalType": "address",
-                  "name": "nftCreatorAddress",
-                  "type": "address"
+                  "internalType": "address[]",
+                  "name": "nftCreatorAddresses",
+                  "type": "address[]"
                 },
                 {
                   "indexed": false,
-                  "internalType": "uint256",
+                  "internalType": "uint256[]",
                   "name": "creatorSaleBasisPoints",
-                  "type": "uint256"
+                  "type": "uint256[]"
                 },
                 {
                   "indexed": false,
@@ -19205,14 +19439,14 @@
                   "type": "uint256"
                 },
                 {
-                  "internalType": "address",
-                  "name": "creatorAddress",
-                  "type": "address"
+                  "internalType": "address[]",
+                  "name": "creatorAddresses",
+                  "type": "address[]"
                 },
                 {
-                  "internalType": "uint256",
+                  "internalType": "uint256[]",
                   "name": "creatorSaleBasisPoints",
-                  "type": "uint256"
+                  "type": "uint256[]"
                 },
                 {
                   "internalType": "uint256",
@@ -19238,7 +19472,7 @@
                   "type": "uint256"
                 }
               ],
-              "name": "sourceToDetailsLookup",
+              "name": "sourceToDetails",
               "outputs": [
                 {
                   "internalType": "bool",
@@ -19249,16 +19483,47 @@
                   "internalType": "address",
                   "name": "owner",
                   "type": "address"
-                },
-                {
-                  "internalType": "address",
-                  "name": "creator",
-                  "type": "address"
-                },
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
                 {
                   "internalType": "uint256",
-                  "name": "creatorSaleBasisPoints",
+                  "name": "index",
                   "type": "uint256"
+                }
+              ],
+              "name": "sourceToDetailsLookup",
+              "outputs": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bool",
+                      "name": "registered",
+                      "type": "bool"
+                    },
+                    {
+                      "internalType": "address",
+                      "name": "owner",
+                      "type": "address"
+                    },
+                    {
+                      "internalType": "address[]",
+                      "name": "creators",
+                      "type": "address[]"
+                    },
+                    {
+                      "internalType": "uint256[]",
+                      "name": "creatorSaleBasisPoints",
+                      "type": "uint256[]"
+                    }
+                  ],
+                  "internalType": "struct IMakerRegistrar.NftDetails",
+                  "name": "",
+                  "type": "tuple"
                 }
               ],
               "stateMutability": "view",
@@ -19315,7 +19580,7 @@
           ]
         },
         "MakerRegistrar_Proxy": {
-          "address": "0x73fd08B62A1F82782Cd7FB26c0d1f9B7a7f4b823",
+          "address": "0x06493B0362b3892EEc7C63023e8bC0C0c64646eb",
           "abi": [
             {
               "inputs": [
@@ -19451,7 +19716,7 @@
           ]
         },
         "MakerRegistrar": {
-          "address": "0x73fd08B62A1F82782Cd7FB26c0d1f9B7a7f4b823",
+          "address": "0x06493B0362b3892EEc7C63023e8bC0C0c64646eb",
           "abi": [
             {
               "anonymous": false,
@@ -19629,15 +19894,15 @@
                 },
                 {
                   "indexed": false,
-                  "internalType": "address",
-                  "name": "nftCreatorAddress",
-                  "type": "address"
+                  "internalType": "address[]",
+                  "name": "nftCreatorAddresses",
+                  "type": "address[]"
                 },
                 {
                   "indexed": false,
-                  "internalType": "uint256",
+                  "internalType": "uint256[]",
                   "name": "creatorSaleBasisPoints",
-                  "type": "uint256"
+                  "type": "uint256[]"
                 },
                 {
                   "indexed": false,
@@ -19842,14 +20107,14 @@
                   "type": "uint256"
                 },
                 {
-                  "internalType": "address",
-                  "name": "creatorAddress",
-                  "type": "address"
+                  "internalType": "address[]",
+                  "name": "creatorAddresses",
+                  "type": "address[]"
                 },
                 {
-                  "internalType": "uint256",
+                  "internalType": "uint256[]",
                   "name": "creatorSaleBasisPoints",
-                  "type": "uint256"
+                  "type": "uint256[]"
                 },
                 {
                   "internalType": "uint256",
@@ -19875,7 +20140,7 @@
                   "type": "uint256"
                 }
               ],
-              "name": "sourceToDetailsLookup",
+              "name": "sourceToDetails",
               "outputs": [
                 {
                   "internalType": "bool",
@@ -19886,16 +20151,47 @@
                   "internalType": "address",
                   "name": "owner",
                   "type": "address"
-                },
-                {
-                  "internalType": "address",
-                  "name": "creator",
-                  "type": "address"
-                },
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
                 {
                   "internalType": "uint256",
-                  "name": "creatorSaleBasisPoints",
+                  "name": "index",
                   "type": "uint256"
+                }
+              ],
+              "name": "sourceToDetailsLookup",
+              "outputs": [
+                {
+                  "components": [
+                    {
+                      "internalType": "bool",
+                      "name": "registered",
+                      "type": "bool"
+                    },
+                    {
+                      "internalType": "address",
+                      "name": "owner",
+                      "type": "address"
+                    },
+                    {
+                      "internalType": "address[]",
+                      "name": "creators",
+                      "type": "address[]"
+                    },
+                    {
+                      "internalType": "uint256[]",
+                      "name": "creatorSaleBasisPoints",
+                      "type": "uint256[]"
+                    }
+                  ],
+                  "internalType": "struct IMakerRegistrar.NftDetails",
+                  "name": "",
+                  "type": "tuple"
                 }
               ],
               "stateMutability": "view",
@@ -19973,7 +20269,7 @@
           ]
         },
         "ReactionVault_Implementation": {
-          "address": "0x81F394effc52E4995244364db311794776E004F0",
+          "address": "0x936cab89f80C0C5D47b1D1DD74B4959F9a0Dc669",
           "abi": [
             {
               "anonymous": false,
@@ -20712,7 +21008,7 @@
           ]
         },
         "ReactionVault_Proxy": {
-          "address": "0x5fa23BD09b3C48F638fF79934b0d16fC0504fe32",
+          "address": "0xA374674F97885BD378059708e97f7117CB74683d",
           "abi": [
             {
               "inputs": [
@@ -20848,7 +21144,7 @@
           ]
         },
         "ReactionVault": {
-          "address": "0x5fa23BD09b3C48F638fF79934b0d16fC0504fe32",
+          "address": "0xA374674F97885BD378059708e97f7117CB74683d",
           "abi": [
             {
               "anonymous": false,
@@ -21718,7 +22014,7 @@
           ]
         },
         "ReactionNft1155_Implementation": {
-          "address": "0x0f26490c1a591CB1392C7f60f11f79aD94d9c34a",
+          "address": "0xdf5D7982149c51210511110Ecd378258E678a1d0",
           "abi": [
             {
               "anonymous": false,
@@ -22117,7 +22413,7 @@
           ]
         },
         "ReactionNft1155_Proxy": {
-          "address": "0x503C61099B72f6e520Ebbc7266446A51d60ce1b7",
+          "address": "0x76dC4217D77B23e0013E4Ba885Ca585f4b7d0866",
           "abi": [
             {
               "inputs": [
@@ -22253,7 +22549,7 @@
           ]
         },
         "ReactionNft1155": {
-          "address": "0x503C61099B72f6e520Ebbc7266446A51d60ce1b7",
+          "address": "0x76dC4217D77B23e0013E4Ba885Ca585f4b7d0866",
           "abi": [
             {
               "anonymous": false,
@@ -22783,8 +23079,105 @@
           ]
         },
         "ParameterManager_Implementation": {
-          "address": "0x6eaC04978FA1076Ee7Df8c765Bc828c8559Bd0e0",
+          "address": "0xdC61ACA7E0494cD9116c49C658994663ea09570c",
           "abi": [
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "vault",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "bool",
+                  "name": "approved",
+                  "type": "bool"
+                }
+              ],
+              "name": "ApprovedCuratorVaultsUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "contract IERC20Upgradeable",
+                  "name": "newValue",
+                  "type": "address"
+                }
+              ],
+              "name": "PaymentTokenUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "newValue",
+                  "type": "uint256"
+                }
+              ],
+              "name": "ReactionPriceUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "newValue",
+                  "type": "uint256"
+                }
+              ],
+              "name": "SaleCuratorLiabilityBasisPointsUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "newValue",
+                  "type": "uint256"
+                }
+              ],
+              "name": "SaleReferrerBasisPointsUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "newValue",
+                  "type": "uint256"
+                }
+              ],
+              "name": "SpendReferrerBasisPointsUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "newValue",
+                  "type": "uint256"
+                }
+              ],
+              "name": "SpendTakerBasisPointsUpdated",
+              "type": "event"
+            },
             {
               "inputs": [],
               "name": "addressManager",
@@ -22812,29 +23205,6 @@
                   "internalType": "bool",
                   "name": "",
                   "type": "bool"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [],
-              "name": "bondingCurveParams",
-              "outputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "a",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "b",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "c",
-                  "type": "uint256"
                 }
               ],
               "stateMutability": "view",
@@ -22919,29 +23289,6 @@
                 }
               ],
               "name": "setApprovedCuratorVaults",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "a",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "b",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "c",
-                  "type": "uint256"
-                }
-              ],
-              "name": "setBondingCurveParams",
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
@@ -23053,7 +23400,7 @@
           ]
         },
         "ParameterManager_Proxy": {
-          "address": "0xC39AB5FF0338f3df82dcd4F7b10D5A6f1853e66a",
+          "address": "0x36f73C79a1c74C34343A5559074D82992F891eEa",
           "abi": [
             {
               "inputs": [
@@ -23189,7 +23536,7 @@
           ]
         },
         "ParameterManager": {
-          "address": "0xC39AB5FF0338f3df82dcd4F7b10D5A6f1853e66a",
+          "address": "0x36f73C79a1c74C34343A5559074D82992F891eEa",
           "abi": [
             {
               "anonymous": false,
@@ -23302,6 +23649,103 @@
               "type": "receive"
             },
             {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "vault",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "bool",
+                  "name": "approved",
+                  "type": "bool"
+                }
+              ],
+              "name": "ApprovedCuratorVaultsUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "contract IERC20Upgradeable",
+                  "name": "newValue",
+                  "type": "address"
+                }
+              ],
+              "name": "PaymentTokenUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "newValue",
+                  "type": "uint256"
+                }
+              ],
+              "name": "ReactionPriceUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "newValue",
+                  "type": "uint256"
+                }
+              ],
+              "name": "SaleCuratorLiabilityBasisPointsUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "newValue",
+                  "type": "uint256"
+                }
+              ],
+              "name": "SaleReferrerBasisPointsUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "newValue",
+                  "type": "uint256"
+                }
+              ],
+              "name": "SpendReferrerBasisPointsUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "newValue",
+                  "type": "uint256"
+                }
+              ],
+              "name": "SpendTakerBasisPointsUpdated",
+              "type": "event"
+            },
+            {
               "inputs": [],
               "name": "addressManager",
               "outputs": [
@@ -23328,29 +23772,6 @@
                   "internalType": "bool",
                   "name": "",
                   "type": "bool"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [],
-              "name": "bondingCurveParams",
-              "outputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "a",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "b",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "c",
-                  "type": "uint256"
                 }
               ],
               "stateMutability": "view",
@@ -23435,29 +23856,6 @@
                 }
               ],
               "name": "setApprovedCuratorVaults",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "a",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "b",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "c",
-                  "type": "uint256"
-                }
-              ],
-              "name": "setBondingCurveParams",
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
@@ -23590,7 +23988,7 @@
           ]
         },
         "CuratorToken1155_Implementation": {
-          "address": "0x7ffA734954Be63ADB22950e9D4256A168436C291",
+          "address": "0x31992CdE7eD7453d8f9b8F061953CFc85e1dd47b",
           "abi": [
             {
               "anonymous": false,
@@ -23989,7 +24387,7 @@
           ]
         },
         "CuratorToken1155_Proxy": {
-          "address": "0x46c42730573ef84346AA5649b3a22Db1F52F678f",
+          "address": "0xa059f2e0e6e5cD9e62E4E2191EE87A1024247b7D",
           "abi": [
             {
               "inputs": [
@@ -24125,7 +24523,7 @@
           ]
         },
         "CuratorToken1155": {
-          "address": "0x46c42730573ef84346AA5649b3a22Db1F52F678f",
+          "address": "0xa059f2e0e6e5cD9e62E4E2191EE87A1024247b7D",
           "abi": [
             {
               "anonymous": false,
@@ -24655,7 +25053,7 @@
           ]
         },
         "SigmoidCuratorVault_Implementation": {
-          "address": "0x3174d20Bbd326c0bD83a7aAb2701dfAC7E9D2Fb9",
+          "address": "0x6Ed0B9932529E79204Aaee1E423944ac06b02d03",
           "abi": [
             {
               "anonymous": false,
@@ -24739,12 +25137,38 @@
             },
             {
               "inputs": [],
+              "name": "a",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
               "name": "addressManager",
               "outputs": [
                 {
                   "internalType": "contract IAddressManager",
                   "name": "",
                   "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "b",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
                 }
               ],
               "stateMutability": "view",
@@ -24797,6 +25221,19 @@
                 }
               ],
               "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "c",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
               "type": "function"
             },
             {
@@ -24964,6 +25401,21 @@
                   "internalType": "contract IStandard1155",
                   "name": "_curatorTokens",
                   "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "_a",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "_b",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "_c",
+                  "type": "uint256"
                 }
               ],
               "name": "initialize",
@@ -25037,7 +25489,7 @@
           ]
         },
         "SigmoidCuratorVault_Proxy": {
-          "address": "0x0b00EedF638B5d88d53357Ab01277c8Cfe0B06Cc",
+          "address": "0xff63B24Ce497d1e0ea7F45a08bF2C93631B017C1",
           "abi": [
             {
               "inputs": [
@@ -25173,7 +25625,7 @@
           ]
         },
         "SigmoidCuratorVault": {
-          "address": "0x0b00EedF638B5d88d53357Ab01277c8Cfe0B06Cc",
+          "address": "0xff63B24Ce497d1e0ea7F45a08bF2C93631B017C1",
           "abi": [
             {
               "anonymous": false,
@@ -25367,12 +25819,38 @@
             },
             {
               "inputs": [],
+              "name": "a",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
               "name": "addressManager",
               "outputs": [
                 {
                   "internalType": "contract IAddressManager",
                   "name": "",
                   "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "b",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
                 }
               ],
               "stateMutability": "view",
@@ -25425,6 +25903,19 @@
                 }
               ],
               "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "c",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
               "type": "function"
             },
             {
@@ -25592,6 +26083,21 @@
                   "internalType": "contract IStandard1155",
                   "name": "_curatorTokens",
                   "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "_a",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "_b",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "_c",
+                  "type": "uint256"
                 }
               ],
               "name": "initialize",
@@ -25686,7 +26192,7 @@
           ]
         },
         "ChildRegistrar": {
-          "address": "0x10F892F9e8A2Bb0C098457e2ae74a3863A723703",
+          "address": "0x021EFD74619d80bc8B2e447c8DaB50d2AaB7CE43",
           "abi": [
             {
               "inputs": [
@@ -25749,6 +26255,19 @@
               "outputs": [
                 {
                   "internalType": "contract IAddressManager",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "deployer",
+              "outputs": [
+                {
+                  "internalType": "address",
                   "name": "",
                   "type": "address"
                 }

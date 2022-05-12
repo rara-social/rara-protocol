@@ -1,4 +1,4 @@
-import {BigInt, log, ipfs, json, JSONValue} from "@graphprotocol/graph-ts";
+import {Bytes, log, ipfs, json, JSONValue} from "@graphprotocol/graph-ts";
 
 import {Source, Transform} from "../../generated/schema";
 
@@ -13,7 +13,7 @@ export function handleRegistered(event: Registered): void {
   // address indexed nftContractAddress,
   // uint256 indexed nftId,
   // address indexed nftOwnerAddress,
-  // address nftCreatorAddress,
+  // address nftCreatorAddress[],
   // uint256 creatorSaleBasisPoints,
   // uint256 optionBits,
   // uint256 sourceId,
@@ -34,7 +34,10 @@ export function handleRegistered(event: Registered): void {
   }
 
   // these are be updated each time "registered()"" is called
-  source.creatorAddress = event.params.nftCreatorAddress;
+  source.creatorAddresses = changetype<Bytes[]>(
+    event.params.nftCreatorAddresses
+  );
+
   source.creatorSaleBasisPoints = event.params.creatorSaleBasisPoints;
   source.registered = true;
   source.save();
