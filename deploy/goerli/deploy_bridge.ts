@@ -5,7 +5,7 @@ import { deployContract, deployProxyContract } from "../../deploy_config/protoco
 import { ZERO_ADDRESS } from '../../test/Scripts/constants';
 
 
-// Deploy the protocol on the L2
+// Deploy the bridge on the L1
 // Run: npx hardhat deploy --network goerli --tags goerli
 module.exports = async (hre: HardhatRuntimeEnvironment) => {
   const { getNamedAccounts } = hre;
@@ -13,7 +13,7 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   console.log("\n\nDeploying with account " + deployer);
 
   // Deploy the root bridge
-  let res = await deployContract(hre, 'RootRegistrar', [config.fxRootCheckPointManager, config.fxRootBridgeAddress, ZERO_ADDRESS]);
+  let res = await deployContract(hre, 'RootRegistrar', [config.fxRootCheckPointManager, config.fxRootBridgeAddress, config.royaltyRegistry]);
   const rootRegistrarAddress = res.address;
   console.log({ rootRegistrarAddress })
 

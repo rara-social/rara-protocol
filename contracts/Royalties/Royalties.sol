@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: GPL-3.0-only
+//SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.9;
 
 import "@manifoldxyz/royalty-registry-solidity/contracts/IRoyaltyEngineV1.sol";
