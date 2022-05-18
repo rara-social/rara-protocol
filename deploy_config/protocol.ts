@@ -95,7 +95,7 @@ const deployProtocol = async (
   console.log({ parameterManagerAddress });
 
   res = await deployProxyContract(hre, "CuratorToken1155", [
-    config.reactionNftUri,
+    config.curatorTokenNftUri,
     addressManagerAddress,
   ]);
   const curatorToken1155Address = res.address;

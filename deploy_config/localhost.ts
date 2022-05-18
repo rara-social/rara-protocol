@@ -5,11 +5,12 @@ const config: DeployConfig = {
   bondingCurveB: "10000000", // midpoint is 10m tokens sold
   bondingCurveC: "29000000000000", // Super flat curve - this is steepness param
   curatorLiabilityBasisPoints: "9000", // 90% goes to curator liability
+  curatorTokenNftUri: "https://protocol-api.rara.social/internal/curatortoken/{id}",
   fxChildBridgeAddress: "0xCf73231F28B7331BBe3124B907840A94851f9f11",
   fxRootBridgeAddress: "", // Not set for L2
   fxRootCheckPointManager: "", // Not set for L2
   paymentTokenAddress: "", // Empty for mumbai - we will manually deploy one to test with
-  reactionNftUri: "https://rara.social/test-nfts/{id}.json",
+  reactionNftUri: "https://protocol-api.rara.social/internal/reaction/{id}",
   reactionPrice: "1000000", // Base units of payment token with 6 decimals
   saleReferrerBasisPoints: "100",// 1% goes to the referrer on reaction sale
   spendReferrerBasisPoints: "100", // 1% of curator liability goes to the referrer

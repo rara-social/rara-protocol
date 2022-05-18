@@ -14,7 +14,7 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   // Deploy the protocol with config
   await deployProtocol(hre, config);
 
-  console.log('Deploy complete... verify contracts and hand over ownership of BOTH DefaultProxyAdmin and RoleManager')
+  console.log('Deploy complete... verify contracts and hand over ownership of BOTH DefaultProxyAdmin and RoleManager to the multisig')
 };
 
 module.exports.tags = ["polygon"];

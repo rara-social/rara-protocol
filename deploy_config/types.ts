@@ -3,6 +3,7 @@ type DeployConfig = {
   bondingCurveB: string,
   bondingCurveC: string,
   curatorLiabilityBasisPoints: string,
+  curatorTokenNftUri: string,
   fxChildBridgeAddress: string,
   fxRootBridgeAddress: string
   fxRootCheckPointManager: string,
