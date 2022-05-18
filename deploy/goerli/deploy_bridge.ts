@@ -13,7 +13,7 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   console.log("\n\nDeploying with account " + deployer);
 
   // Deploy the root bridge
-  let res = await deployContract(hre, 'RootRegistrar', [config.fxRootCheckPointManager, config.fxRootBridgeAddress]);
+  let res = await deployContract(hre, 'RootRegistrar', [config.fxRootCheckPointManager, config.fxRootBridgeAddress, ZERO_ADDRESS]);
   const rootRegistrarAddress = res.address;
   console.log({ rootRegistrarAddress })
 
