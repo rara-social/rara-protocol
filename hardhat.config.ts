@@ -53,10 +53,22 @@ const config: HardhatUserConfig = {
       accounts: [
         process.env.DEPLOY_PRIVATE_KEY || NULL_PK // Env should set private key used for deploy
       ],
+    },
+    mainnet: {
+      url: process.env.INFURA_RPC_MAINNET || '', // Get infura endpoint from free acct
+      accounts: [
+        process.env.DEPLOY_PRIVATE_KEY || NULL_PK // Env should set private key used for deploy
+      ],
+    },
+    polygon: {
+      url: process.env.INFURA_RPC_POLYGON || '', // Get infura endpoint from free acct
+      accounts: [
+        process.env.DEPLOY_PRIVATE_KEY || NULL_PK // Env should set private key used for deploy
+      ],
     }
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: process.env.ETHERSCAN_API_KEY, // Get key on etherscan/polygonscan with free account
   },
   namedAccounts: {
     // For deployment scripts under /deploy
