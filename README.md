@@ -8,7 +8,7 @@ Pronounced *“Rah rah!”* like a cheer, the goal of RARA’s protocol is to gi
 * Enable personal expression through NFT-backed reactions; and
 * Create public, composable curation data.
 
-This project is the implementation of RARA's protocol. 
+This project is the implementation of RARA's protocol as further detailed in our [documentation](https://docs.rara.social/).
 
 ## Hardhat commands
 
@@ -59,7 +59,7 @@ npx hardhat --network mumbai etherscan-verify
 
 ## Performance optimizations
 
-For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
+For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see the [documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
 
 # Local Development
 
