@@ -1,6 +1,14 @@
-# RARA Protocol
+# RARA, the Social Curation Protocol for NFTs
 
-This project is the protocol powering RARA!
+RARA is a social curation protocol first published on March 31st, 2022 in our [Loud Paper](https://rara.mirror.xyz/czut-1X7ubQcAwt3PnNPQHJ3DHn2TiQJvm4nxR8AwpQ).
+
+Pronounced *“Rah rah!”* like a cheer, the goal of RARA’s protocol is to give a voice to a world of curators with NFT-backed reactions tokens, the Web3 equivalent of a like, emoji, or meme. Open to anyone wishing to curate NFTs with others, the objectives of the protocol are:
+
+* Reward discovery and curation of NFTs;
+* Enable personal expression through NFT-backed reactions; and
+* Create public, composable curation data.
+
+This project is the implementation of RARA's protocol. 
 
 ## Hardhat commands
 
