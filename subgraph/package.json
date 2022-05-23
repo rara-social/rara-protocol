@@ -11,8 +11,9 @@
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 rara-social/rara-social-curation-protocol",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ rara-social/rara-social-curation-protocol",
     "prepare-mumbai": "mustache ./config/mumbai.json src/subgraph.template.yaml > subgraph.yaml",
-    "deploy-mumbai": "npm run prepare-mumbai && graph deploy --product hosted-service rara-social/rara-social-curation-protocol",
-    "deploy-mumbai-staging": "npm run prepare-mumbai && graph deploy --product hosted-service rara-social/staging"
+    "deploy-mumbai": "npm run prepare-mumbai && graph deploy --product hosted-service rara-social/staging",
+    "prepare-main": "mustache ./config/polygon.json src/subgraph.template.yaml > subgraph.yaml",
+    "deploy-main": "npm run prepare-main && graph deploy --product hosted-service rara-social/rara-social-curation-protocol"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.22.1",
