@@ -12,8 +12,10 @@
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ rara-social/rara-social-curation-protocol",
     "prepare-mumbai": "mustache ./config/mumbai.json src/subgraph.template.yaml > subgraph.yaml",
     "deploy-mumbai": "npm run prepare-mumbai && graph deploy --product hosted-service rara-social/staging",
-    "prepare-main": "mustache ./config/polygon.json src/subgraph.template.yaml > subgraph.yaml",
-    "deploy-main": "npm run prepare-main && graph deploy --product hosted-service rara-social/rara-social-curation-protocol"
+    "prepare-polygon": "mustache ./config/polygon.json src/subgraph.template.yaml > subgraph.yaml",
+    "deploy-polygon": "npm run prepare-polygon && graph deploy --product hosted-service rara-social/rara-social-curation-protocol",
+    "prepare-polygon-staging": "mustache ./config/polygon.json src/subgraph.template.yaml > subgraph.yaml",
+    "deploy-polygon-staging": "npm run prepare-polygon-staging && graph deploy --product hosted-service rara-social/polygonstaging"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.22.1",

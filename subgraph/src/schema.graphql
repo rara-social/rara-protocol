@@ -9,7 +9,7 @@ type Source @entity {
   nftId: BigInt!
 
   # creator info
-  creatorAddresses: [Bytes!]!
+  creatorAddresses: [String!]
   creatorSaleBasisPoints: [BigInt!]
 
   # status
@@ -23,7 +23,7 @@ type Transform @entity {
   optionBits: BigInt!
   ipfsHash: String
   name: String
-  tags: String
+  tags: [String!]
 }
 
 type Reaction @entity {

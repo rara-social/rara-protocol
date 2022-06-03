@@ -42,7 +42,9 @@ export function handleRegistered(event: Registered): void {
   }
 
   // these are be updated each time "registered()" is called
-  // source.creatorAddresses = event.params.nftCreatorAddresses;
+  source.creatorAddresses = event.params.nftCreatorAddresses.map<string>(
+    (item) => item.toHexString()
+  );
   source.creatorSaleBasisPoints = event.params.creatorSaleBasisPoints;
   source.registered = true;
   source.save();
@@ -63,10 +65,16 @@ export function handleRegistered(event: Registered): void {
     const result = ipfs.cat(event.params.ipfsMetadataHash);
     if (result) {
       const data = json.fromBytes(result).toObject();
-      let name = (data.get("name") as JSONValue).toString();
-      transform.name = name;
-      let tags = (data.get("tags") as JSONValue).toString();
-      transform.tags = tags;
+      let name = data.get("reactionName");
+      if (name) {
+        transform.name = name.toString();
+      }
+
+      let tags = data.get("reactionTags");
+      if (tags) {
+        let tagArray = tags.toArray();
+        transform.tags = tagArray.map<string>((item) => item.toString());
+      }
     }
   }
   transform.save();
