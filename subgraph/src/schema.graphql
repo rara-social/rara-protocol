@@ -60,7 +60,7 @@ type UserSpend @entity {
   reactionQuantity: BigInt!
   ipfsHash: String
   comment: String
-  tags: String
+  tags: [String!]
 
   # result
   curatorVaultToken: CuratorVaultToken!

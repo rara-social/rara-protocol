@@ -108,10 +108,17 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   const result = ipfs.cat(event.params.ipfsMetadataHash);
   if (result) {
     const data = json.fromBytes(result).toObject();
-    let comment = (data.get("comment") as JSONValue).toString();
-    userSpend.comment = comment;
-    let tags = (data.get("tags") as JSONValue).toString();
-    userSpend.tags = tags;
+    let comment = data.get("comment");
+    if (comment) {
+      userSpend.comment = comment.toString();
+    }
+    let tags = data.get("tags");
+    if (tags) {
+      let tagArray = tags.toArray();
+      if (tagArray.length > 0) {
+        userSpend.tags = tagArray.map<string>((item) => item.toString());
+      }
+    }
   }
 
   userSpend.curatorVaultToken = event.params.curatorTokenId.toHexString();

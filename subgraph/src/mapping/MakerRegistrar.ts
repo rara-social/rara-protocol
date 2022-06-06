@@ -69,11 +69,12 @@ export function handleRegistered(event: Registered): void {
       if (name) {
         transform.name = name.toString();
       }
-
       let tags = data.get("reactionTags");
       if (tags) {
         let tagArray = tags.toArray();
-        transform.tags = tagArray.map<string>((item) => item.toString());
+        if (tagArray.length > 0) {
+          transform.tags = tagArray.map<string>((item) => item.toString());
+        }
       }
     }
   }
