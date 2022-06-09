@@ -192,7 +192,7 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         //  - look up source to make sure its registered
         //  - used to derive reactionMetaId
 
-        // Generate reaction ID
+        // Generate transform ID
         uint256 transformId = uint256(
             keccak256(abi.encode(MAKER_META_PREFIX, sourceId, optionBits))
         );
