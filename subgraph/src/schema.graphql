@@ -14,6 +14,10 @@ type Source @entity {
 
   # status
   registered: Boolean!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
 }
 
 type Transform @entity {
@@ -24,6 +28,10 @@ type Transform @entity {
   ipfsHash: String
   name: String
   tags: [String!]
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
 }
 
 type Reaction @entity {
@@ -37,6 +45,10 @@ type Reaction @entity {
   totalReferrerFees: BigDecimal!
   totalCreatorFees: BigDecimal!
   totalMakerFees: BigDecimal!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
 }
 
 type UserReaction @entity {
@@ -49,6 +61,10 @@ type UserReaction @entity {
 
   # historical
   totalPurchased: BigInt!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
 }
 
 type UserSpend @entity {
@@ -65,6 +81,10 @@ type UserSpend @entity {
   # result
   curatorVaultToken: CuratorVaultToken!
   curatorTokensPurchased: BigInt!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
 }
 
 type UserPosition @entity {
@@ -78,6 +98,10 @@ type UserPosition @entity {
   # historical
   totalTokenPurchased: BigInt!
   totalRefunded: BigDecimal!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
 }
 
 type CuratorVaultToken @entity {
@@ -103,7 +127,13 @@ type CuratorVaultToken @entity {
   takerTokensBalance: BigInt!
   takerRefunded: BigInt!
   takerCreatorRefunded: BigInt!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
 }
+
+# -----
 
 type UserEarning @entity {
   id: ID! #publicAddress + "-" + paymentToken
@@ -120,4 +150,8 @@ type UserEarning @entity {
   totalCreatorRewards: BigDecimal!
   totalReferrerRewards: BigDecimal!
   totalRefunded: BigDecimal!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
 }
