@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: MakerRegistrar
-    network: "mumbai"
+    network: "matic"
     source:
-      address: "0x06493B0362b3892EEc7C63023e8bC0C0c64646eb"
+      address: "0x47CD3266FA94E40613B37a88D98196325Cd28412"
       abi: MakerRegistrar
-      startBlock: 26642329
+      startBlock: 28479000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -27,11 +27,11 @@ dataSources:
       file: ./src/mapping/MakerRegistrar.ts
   - kind: ethereum/contract
     name: CuratorVault
-    network: "mumbai"
+    network: "matic"
     source:
-      address: "0xff63B24Ce497d1e0ea7F45a08bF2C93631B017C1"
+      address: "0x7D278Aa2d95ABa7C969c9F316be6f0cFE0D18A50"
       abi: SigmoidCuratorVault
-      startBlock: 26642329
+      startBlock: 28479000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -50,11 +50,11 @@ dataSources:
       file: ./src/mapping/CuratorVault.ts
   - kind: ethereum/contract
     name: ReactionVault
-    network: "mumbai"
+    network: "matic"
     source:
-      address: "0xA374674F97885BD378059708e97f7117CB74683d"
+      address: "0xE5BA5c73378BC8Da94738CB04490680ae3eab88C"
       abi: ReactionVault
-      startBlock: 26642329
+      startBlock: 28479000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

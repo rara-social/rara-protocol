@@ -1,6 +1,7 @@
 type Source @entity {
   id: ID! #sourceId
   sourceId: BigInt!
+  sourceIdHex: String
   user: Bytes!
 
   # maker media
