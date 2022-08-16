@@ -1,7 +1,7 @@
 require("dotenv").config();
 const ethers = require("ethers");
 
-const chainId = "80001";
+const chainId = "137";
 
 async function getWallet(name) {
   // create provider
@@ -11,6 +11,9 @@ async function getWallet(name) {
 
   let privateKey = null;
   switch (name) {
+    case "deployer":
+      privateKey = process.env.DEPLOY_PRIVATE_KEY;
+      break;
     case "creator":
       privateKey = process.env.CREATOR_PRIVATE_KEY;
       break;
