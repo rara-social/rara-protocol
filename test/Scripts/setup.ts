@@ -1,9 +1,10 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { BigNumber } from "ethers";
-import { ethers, upgrades } from "hardhat";
-import { TEST_NFT_URI } from "./constants";
+import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/signers";
+import {BigNumber} from "ethers";
+import {ethers, upgrades} from "hardhat";
+import {TEST_NFT_URI} from "./constants";
 
-export const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
+// export const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
+export const TEST_REACTION_PRICE = BigNumber.from(0).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
 export const TEST_SALE_CURATOR_LIABILITY_BP = 5_000; // 50% goes to curator liability
 export const TEST_SALE_CREATOR_BP = 200; // 2% goes to the creator
 export const TEST_SALE_REFERRER_BP = 100; // 1% goes to the referrer
@@ -118,13 +119,25 @@ const deploySystem = async (owner: SignerWithAddress) => {
   const CuratorVaultFactory = await ethers.getContractFactory(
     "SigmoidCuratorVault"
   );
+
+  // => Current params
+  // const deployedCuratorVault = await upgrades.deployProxy(CuratorVaultFactory, [
+  //   addressManager.address,
+  //   curatorToken.address,
+  //   "5000",
+  //   "10000000",
+  //   "29000000000000",
+  // ]);
+
+  // => v1, b=100000
   const deployedCuratorVault = await upgrades.deployProxy(CuratorVaultFactory, [
     addressManager.address,
     curatorToken.address,
     "5000",
     "10000000",
-    "29000000000000"
+    "29000000000000",
   ]);
+
   const curatorVault = CuratorVaultFactory.attach(deployedCuratorVault.address);
 
   // Deploy the Child Registrar on the current chain.
@@ -200,4 +213,4 @@ const deploySystem = async (owner: SignerWithAddress) => {
   };
 };
 
-export { deploySystem };
+export {deploySystem};
