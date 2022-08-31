@@ -10,16 +10,18 @@ import "./Standard1155Storage.sol";
 abstract contract Standard1155 is
     IStandard1155,
     ERC1155Upgradeable,
-    Standard1155StorageV1
+    Standard1155StorageV2
 {
     /// @dev initializer to call after deployment, can only be called once
-    function initialize(string memory _uri, address _addressManager)
-        public
-        initializer
-    {
-        // TODO: Should the URI be updateable?
+    function initialize(
+        string memory _uri,
+        address _addressManager,
+        string memory _contractUri
+    ) public initializer {
         __ERC1155_init(_uri);
 
         addressManager = IAddressManager(_addressManager);
+
+        contractUri = _contractUri;
     }
 }
