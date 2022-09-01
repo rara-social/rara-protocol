@@ -41,7 +41,7 @@ async function main() {
     wallet
   );
   const reactionTxn = await ReactionNft1155.setContractUri(
-    "https://protocol-api.rara.social/internal/contract/reaction",
+    "https://protocol-api-staging.rara.social/internal/contract/reaction",
     {gasLimit: "200000"}
   );
   reactionTxn.wait();
@@ -54,7 +54,7 @@ async function main() {
     wallet
   );
   const curatorTxn = await CuratorToken1155.setContractUri(
-    "https://protocol-api.rara.social/internal/contract/curatortoken",
+    "https://protocol-api-staging.rara.social/internal/contract/curatortoken",
     {gasLimit: "200000"}
   );
   await curatorTxn.wait();
