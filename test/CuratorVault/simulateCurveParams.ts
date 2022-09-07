@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {ethers, upgrades} from "hardhat";
 import {ZERO_ADDRESS} from "../Scripts/constants";
-import {deploySystem} from "../Scripts/setup";
+import {deploySystem, A, B, C} from "../Scripts/setup";
 import {
   INVALID_ZERO_PARAM,
   NOT_ADMIN,
@@ -17,13 +17,10 @@ describe.only("Simulate Purchases", function () {
     const {curatorVault, paymentTokenErc20, curatorToken, roleManager} =
       await deploySystem(OWNER);
 
-    const a = "5000";
-    const b = "10000000";
-    const c = "19000000000000";
-
-    // const USDCpurchase = "10";
-    const USDCpurchase = "10";
+    const USDCpurchase = "1";
     const numberOfPurchases = 125;
+    const folder = "current";
+    const filename = `p1`;
 
     // ----
     // Setup buyer account
@@ -39,22 +36,6 @@ describe.only("Simulate Purchases", function () {
     );
 
     // ----
-    // Setup Buy params
-    // ----
-    const chainId = "1";
-    const contractAddress = ZERO_ADDRESS;
-    const tokenId = "1";
-    const curatorTokenId = await curatorVault.getTokenId(
-      chainId,
-      contractAddress,
-      tokenId,
-      paymentTokenErc20.address
-    );
-    const purchaseAmount = BigNumber.from(USDCpurchase).mul(
-      BigNumber.from(10).pow(6)
-    ); // $10
-
-    // ----
     // Create data
     // ----
 
@@ -65,12 +46,26 @@ describe.only("Simulate Purchases", function () {
         "contractTokenBalance",
         "contractReservesBalance",
         "refundPerThousand",
+        "tokensPerPurchase",
       ].join(),
     ];
+
     for (let index = 0; index < numberOfPurchases; index++) {
       // ----
       // Buy
       // ----
+      const chainId = "1";
+      const contractAddress = ZERO_ADDRESS;
+      const tokenId = "1";
+      const curatorTokenId = await curatorVault.getTokenId(
+        chainId,
+        contractAddress,
+        tokenId,
+        paymentTokenErc20.address
+      );
+      const purchaseAmount = BigNumber.from(USDCpurchase).mul(
+        BigNumber.from(10).pow(6)
+      ); // $10
       const txn = await curatorVault.buyCuratorTokens(
         chainId,
         ZERO_ADDRESS,
@@ -81,10 +76,12 @@ describe.only("Simulate Purchases", function () {
         false
       );
       const receipt = await txn.wait();
-      // console.log(receipt);
+      const filter = curatorVault.filters.CuratorTokensBought();
+      const events = await curatorVault.queryFilter(filter);
+      const {curatorTokensBought} = events[index].args;
 
       // ----
-      // Check & Log
+      // Get data
       // ----
       const contractTokenBalance = await curatorVault.curatorTokenSupply(
         curatorTokenId
@@ -92,57 +89,45 @@ describe.only("Simulate Purchases", function () {
       const contractReservesBalance = await curatorVault.reserves(
         curatorTokenId
       );
-
-      // console.log({
-      //   index: index,
-      //   // purchaseAmount: purchaseAmount.toNumber() / 1_000_000,
-      //   // tokensPurchased: tokensPerPurchase.toNumber(),
-      //   contractTokenBalance: contractTokenBalance.toNumber(),
-      //   contractReservesBalance: contractReservesBalance.toNumber() / 1_000_000,
-      //   // refundPerThousand: refundPerThousand.toNumber() / 1_000_000,
-      // });
-
       let refundPerThousand =
         await curatorVault.calculatePaymentReturnedFromTokens(
-          a,
-          b,
-          c,
+          A,
+          B,
+          C,
           contractTokenBalance,
           contractReservesBalance,
           1000
         );
       const tokensPerPurchase =
         await curatorVault.calculateTokensBoughtFromPayment(
-          a,
-          b,
-          c,
+          A,
+          B,
+          C,
           contractTokenBalance,
           contractReservesBalance,
           purchaseAmount
         );
 
-      // console.log({
-      //   index: index,
-      //   purchaseAmount: purchaseAmount.toNumber() / 1_000_000,
-      //   tokensPurchased: tokensPerPurchase.toNumber(),
-      //   contractTokenBalance: contractTokenBalance.toNumber(),
-      //   contractReservesBalance: contractReservesBalance.toNumber() / 1_000_000,
-      //   refundPerThousand: refundPerThousand.toNumber() / 1_000_000,
-      // });
-
+      // ----
+      // Concat
+      // ----
       data = data.concat(
         [
           (purchaseAmount.toNumber() / 1_000_000).toString(),
-          tokensPerPurchase.toString(),
+          curatorTokensBought.toString(),
           contractTokenBalance.toString(),
           (contractReservesBalance.toNumber() / 1_000_000).toString(),
           (refundPerThousand.toNumber() / 1_000_000).toString(),
+          tokensPerPurchase.toString(),
         ].join()
       );
     }
 
+    // ----
+    // Write
+    // ----
     fsPromises.writeFile(
-      `./simulation_output/${USDCpurchase}_(${a},${b},${c}).csv`,
+      `./simulation_output/${folder}/${filename}.csv`,
       data.join("\r\n")
     );
 

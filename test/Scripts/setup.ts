@@ -4,12 +4,16 @@ import {ethers, upgrades} from "hardhat";
 import {TEST_NFT_URI} from "./constants";
 
 // export const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
-export const TEST_REACTION_PRICE = BigNumber.from(0).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
+export const TEST_REACTION_PRICE = BigNumber.from(1).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
 export const TEST_SALE_CURATOR_LIABILITY_BP = 5_000; // 50% goes to curator liability
 export const TEST_SALE_CREATOR_BP = 200; // 2% goes to the creator
 export const TEST_SALE_REFERRER_BP = 100; // 1% goes to the referrer
 export const TEST_SPEND_REFERRER_BP = 100; // 1% of curator liability goes to the referrer
 export const TEST_SPEND_TAKER_BP = 5_000; // 50% of curator liability goes to the taker
+
+export const A = "5000"; // => 5000
+export const B = "10000000"; // => 10000000
+export const C = "29000000000000"; // => 29000000000000
 
 const deploySystem = async (owner: SignerWithAddress) => {
   // Deploy the Role Manager first
@@ -119,25 +123,13 @@ const deploySystem = async (owner: SignerWithAddress) => {
   const CuratorVaultFactory = await ethers.getContractFactory(
     "SigmoidCuratorVault"
   );
-
-  // => Current params
-  // const deployedCuratorVault = await upgrades.deployProxy(CuratorVaultFactory, [
-  //   addressManager.address,
-  //   curatorToken.address,
-  //   "5000",
-  //   "10000000",
-  //   "29000000000000",
-  // ]);
-
-  // => v1, b=100000
   const deployedCuratorVault = await upgrades.deployProxy(CuratorVaultFactory, [
     addressManager.address,
     curatorToken.address,
-    "5000",
-    "10000000",
-    "29000000000000",
+    A,
+    B,
+    C,
   ]);
-
   const curatorVault = CuratorVaultFactory.attach(deployedCuratorVault.address);
 
   // Deploy the Child Registrar on the current chain.
