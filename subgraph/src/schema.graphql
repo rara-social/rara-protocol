@@ -156,3 +156,17 @@ type UserEarning @entity {
   updatedAt: BigInt!
   blockNumber: BigInt!
 }
+
+type UserSell @entity {
+  id: ID! #event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  user: Bytes!
+
+  # sell
+  curatorVaultToken: CuratorVaultToken!
+  paymentTokenRefunded: BigInt!
+  curatorTokensSold: BigInt!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
+}
