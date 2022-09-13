@@ -11,7 +11,7 @@ import {
 import {BigNumber} from "ethers";
 import {promises as fsPromises} from "fs";
 
-describe("Simulate Purchases - 1", function () {
+describe.only("Simulate Purchases - 1", function () {
   it("Setup", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
     const {curatorVault, paymentTokenErc20, curatorToken, roleManager} =
