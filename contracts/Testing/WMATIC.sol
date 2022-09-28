@@ -73,13 +73,19 @@ contract WMATIC {
         address dst,
         uint256 wad
     ) public returns (bool) {
-        require(balanceOf[src] >= wad, "No balance");
+        require(
+            balanceOf[src] >= wad,
+            "ERC20: transfer amount exceeds balance"
+        );
 
         if (
             src != msg.sender &&
             allowance[src][msg.sender] != uint256(2**256 - 1)
         ) {
-            require(allowance[src][msg.sender] >= wad, "No allowance");
+            require(
+                allowance[src][msg.sender] >= wad,
+                "ERC20: insufficient allowance"
+            );
             allowance[src][msg.sender] -= wad;
         }
 

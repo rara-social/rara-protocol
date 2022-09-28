@@ -3,6 +3,7 @@ pragma solidity 0.8.9;
 
 import "./ParameterManagerStorage.sol";
 import "../Config/IAddressManager.sol";
+import "../Token/IWMATIC.sol";
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
@@ -21,7 +22,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     }
 
     /// @dev Events emitted on updates
-    event PaymentTokenUpdated(IERC20Upgradeable newValue);
+    event PaymentTokenUpdated(IWMATIC newValue);
     event ReactionPriceUpdated(uint256 newValue);
     event SaleCuratorLiabilityBasisPointsUpdated(uint256 newValue);
     event SaleReferrerBasisPointsUpdated(uint256 newValue);
@@ -36,10 +37,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     }
 
     /// @dev Setter for the payment token
-    function setPaymentToken(IERC20Upgradeable _paymentToken)
-        external
-        onlyAdmin
-    {
+    function setPaymentToken(IWMATIC _paymentToken) external onlyAdmin {
         require(address(_paymentToken) != address(0x0), ZERO_INPUT);
         paymentToken = _paymentToken;
         emit PaymentTokenUpdated(_paymentToken);

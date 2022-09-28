@@ -95,12 +95,6 @@ describe("ReactionVault Taker Rewards", function () {
     // Encode the params and hash it to get the meta URI
     const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE);
-
     const REACTION_AMOUNT = BigNumber.from(1);
 
     // Buy the reaction
@@ -109,7 +103,8 @@ describe("ReactionVault Taker Rewards", function () {
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
-      BigNumber.from(0)
+      BigNumber.from(0),
+      { value: TEST_REACTION_PRICE }
     );
 
     // Derive the reaction meta ID
@@ -303,12 +298,6 @@ describe("ReactionVault Taker Rewards", function () {
     // Encode the params and hash it to get the meta URI
     const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE);
-
     const REACTION_AMOUNT = BigNumber.from(1);
 
     // Buy the reaction
@@ -317,7 +306,8 @@ describe("ReactionVault Taker Rewards", function () {
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
-      BigNumber.from(0)
+      BigNumber.from(0),
+      { value: TEST_REACTION_PRICE }
     );
 
     // Derive the reaction meta ID
@@ -537,12 +527,6 @@ describe("ReactionVault Taker Rewards", function () {
     // Encode the params and hash it to get the meta URI
     const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE);
-
     const REACTION_AMOUNT = BigNumber.from(1);
 
     // Buy the reaction
@@ -551,7 +535,8 @@ describe("ReactionVault Taker Rewards", function () {
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
-      BigNumber.from(0)
+      BigNumber.from(0),
+      { value: TEST_REACTION_PRICE }
     );
 
     // Derive the reaction meta ID
@@ -683,12 +668,6 @@ describe("ReactionVault Taker Rewards", function () {
     // Encode the params and hash it to get the meta URI
     const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE);
-
     const REACTION_AMOUNT = BigNumber.from(1);
 
     // Buy the reaction
@@ -697,7 +676,8 @@ describe("ReactionVault Taker Rewards", function () {
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
-      BigNumber.from(0)
+      BigNumber.from(0),
+      { value: TEST_REACTION_PRICE }
     );
 
     // Derive the reaction meta ID

@@ -1,13 +1,13 @@
-import {expect} from "chai";
-import {ethers} from "hardhat";
-import {ZERO_ADDRESS} from "../Scripts/constants";
-import {deploySystem} from "../Scripts/setup";
-import {NOT_ADMIN, NO_BALANCE, TRANSFER_NOT_ALLOWED} from "../Scripts/errors";
+import { expect } from "chai";
+import { ethers } from "hardhat";
+import { ZERO_ADDRESS } from "../Scripts/constants";
+import { deploySystem } from "../Scripts/setup";
+import { NOT_ADMIN, NO_BALANCE, TRANSFER_NOT_ALLOWED } from "../Scripts/errors";
 
 describe("CuratorVault", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
-    const {curatorVault, addressManager} = await deploySystem(OWNER);
+    const { curatorVault, addressManager } = await deploySystem(OWNER);
 
     // Verify the address manager was set
     const currentAddressManager = await curatorVault.addressManager();
@@ -16,7 +16,7 @@ describe("CuratorVault", function () {
 
   it("Should not allow address other than reaction vault purchase", async function () {
     const [OWNER] = await ethers.getSigners();
-    const {curatorVault, paymentTokenErc20} = await deploySystem(OWNER);
+    const { curatorVault, paymentTokenErc20 } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Should fail
@@ -35,7 +35,7 @@ describe("CuratorVault", function () {
 
   it("Should verify payment token", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const {curatorVault, paymentTokenErc20, roleManager} = await deploySystem(
+    const { curatorVault, paymentTokenErc20, roleManager } = await deploySystem(
       OWNER
     );
     const chainId = (await ethers.provider.getNetwork()).chainId;
@@ -57,10 +57,10 @@ describe("CuratorVault", function () {
         OWNER.address,
         false
       )
-    ).to.be.revertedWith(TRANSFER_NOT_ALLOWED);
+    ).to.be.revertedWith(NO_BALANCE);
 
     // Give the account a balance
-    await paymentTokenErc20.mint(OWNER.address, "1000000000");
+    await paymentTokenErc20.connect(OWNER).deposit({ value: "1000000000" });
 
     // Should fail since there is no allowance
     await expect(
@@ -102,7 +102,7 @@ describe("CuratorVault", function () {
 
   it("Should allow purchase and sale", async function () {
     const [OWNER] = await ethers.getSigners();
-    const {curatorVault, paymentTokenErc20, curatorToken, roleManager} =
+    const { curatorVault, paymentTokenErc20, curatorToken, roleManager } =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -115,7 +115,7 @@ describe("CuratorVault", function () {
     const paymentAmount = "100000000";
 
     // Give the account a balance
-    await paymentTokenErc20.mint(OWNER.address, paymentAmount);
+    await paymentTokenErc20.connect(OWNER).deposit({ value: paymentAmount });
 
     // Approve the tokens
     await paymentTokenErc20.approve(curatorVault.address, paymentAmount);
@@ -177,7 +177,7 @@ describe("CuratorVault", function () {
 
   it("Should allow purchase and sale with increasing price", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const {curatorVault, roleManager, paymentTokenErc20, curatorToken} =
+    const { curatorVault, roleManager, paymentTokenErc20, curatorToken } =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -190,8 +190,8 @@ describe("CuratorVault", function () {
     const paymentAmount = "100000000"; // 6 decimal places for $1
 
     // Give the account a balance
-    await paymentTokenErc20.mint(OWNER.address, paymentAmount);
-    await paymentTokenErc20.mint(ALICE.address, paymentAmount);
+    await paymentTokenErc20.connect(ALICE).deposit({ value: paymentAmount });
+    await paymentTokenErc20.connect(OWNER).deposit({ value: paymentAmount });
 
     // Approve the tokens
     await paymentTokenErc20.approve(curatorVault.address, paymentAmount);

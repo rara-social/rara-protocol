@@ -1,6 +1,7 @@
 const ALREADY_REGISTERED = "Already registered";
 const INVALID_BP = "Invalid bp";
 const INVALID_CURATOR_VAULT = "Err CuratorVault";
+const INVALID_PAYMENT = "Invalid payment";
 const INVALID_ROLE_MANAGER = "RM invalid";
 const INVALID_ZERO_PARAM = "Invalid 0 input";
 const NFT_NOT_OWNED = "NFT not owned";
@@ -21,6 +22,7 @@ export {
   ALREADY_REGISTERED,
   INVALID_BP,
   INVALID_CURATOR_VAULT,
+  INVALID_PAYMENT,
   INVALID_ROLE_MANAGER,
   INVALID_ZERO_PARAM,
   NFT_NOT_OWNED,

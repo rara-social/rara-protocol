@@ -6,30 +6,30 @@ import { ZERO_ADDRESS } from "../Scripts/constants";
 describe("Wrapped Matic Token", function () {
   it("Should get deployed", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { wrappedMatic } = await deploySystem(OWNER);
+    const { paymentTokenErc20 } = await deploySystem(OWNER);
 
-    expect(wrappedMatic.address).to.not.equal(ZERO_ADDRESS);
+    expect(paymentTokenErc20.address).to.not.equal(ZERO_ADDRESS);
   });
 
   it("Should wrap, transfer, and unwrap", async function () {
     const [OWNER, MINTER, BURNER] = await ethers.getSigners();
-    const { wrappedMatic } = await deploySystem(OWNER);
+    const { paymentTokenErc20 } = await deploySystem(OWNER);
 
     // Wrap
-    await wrappedMatic.connect(MINTER).deposit({ value: "1000" })
+    await paymentTokenErc20.connect(MINTER).deposit({ value: "1000" })
 
     // Verify balance
-    let balance = await wrappedMatic.balanceOf(MINTER.address);
+    let balance = await paymentTokenErc20.balanceOf(MINTER.address);
     expect(balance.toString()).to.equal("1000");
 
     // Transfer
-    await wrappedMatic.connect(MINTER).transfer(BURNER.address, "500")
-    balance = await wrappedMatic.balanceOf(MINTER.address);
+    await paymentTokenErc20.connect(MINTER).transfer(BURNER.address, "500")
+    balance = await paymentTokenErc20.balanceOf(MINTER.address);
     expect(balance.toString()).to.equal("500");
 
     // Unwrap
     const originalBalance = await BURNER.getBalance()
-    const tx = await wrappedMatic.connect(BURNER).withdraw("100")
+    const tx = await paymentTokenErc20.connect(BURNER).withdraw("100")
 
     // Calc the amount of ETH used in gas for the tx
     const receipt = await tx.wait()

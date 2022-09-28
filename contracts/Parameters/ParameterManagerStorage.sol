@@ -2,8 +2,8 @@
 pragma solidity 0.8.9;
 
 import "../Config/IAddressManager.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "./IParameterManager.sol";
+import "../Token/IWMATIC.sol";
 
 /// @title ParameterManagerStorage
 /// @dev This contract will hold all local variables for the ParameterManager Contract
@@ -18,7 +18,7 @@ abstract contract ParameterManagerStorageV1 is IParameterManager {
     IAddressManager public addressManager;
 
     /// @dev The payment token used to buy reactions
-    IERC20Upgradeable public paymentToken;
+    IWMATIC public paymentToken;
 
     /// @dev The amount each reaction costs in paymentToken
     uint256 public reactionPrice;
