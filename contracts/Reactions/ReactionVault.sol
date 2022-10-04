@@ -599,8 +599,11 @@ contract ReactionVault is
         // Reset amount back to 0
         ownerToRewardsMapping[token][msg.sender] = 0;
 
-        // Send tokens
-        token.safeTransfer(msg.sender, rewardAmount);
+        // Unwrap rewards into this address
+        token.withdraw(rewardAmount);
+
+        // Send MATIC to destination
+        payable(msg.sender).transfer(rewardAmount);
 
         // Emit event
         emit ERC20RewardsClaimed(address(token), rewardAmount, msg.sender);
@@ -718,7 +721,11 @@ contract ReactionVault is
         }
 
         // Transfer the remaining amount to the caller (Maker)
-        paymentToken.safeTransfer(refundToAddress, info.paymentTokensForMaker);
+        // First, unwrap rewards into this address
+        paymentToken.withdraw(info.paymentTokensForMaker);
+
+        // Second, send MATIC to destination
+        payable(refundToAddress).transfer(info.paymentTokensForMaker);
 
         emit TakerWithdraw(
             curatorTokenId,
@@ -730,4 +737,7 @@ contract ReactionVault is
         // Return the amount of payment tokens received
         return info.paymentTokensForMaker;
     }
+
+    /// @dev Allows WMATIC to be unwrapped to this address
+    receive() external payable {}
 }
