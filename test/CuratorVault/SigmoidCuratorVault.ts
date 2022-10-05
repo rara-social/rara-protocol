@@ -1,14 +1,14 @@
-import {expect} from "chai";
-import {ethers, upgrades} from "hardhat";
-import {ZERO_ADDRESS} from "../Scripts/constants";
-import {deploySystem} from "../Scripts/setup";
+import { expect } from "chai";
+import { ethers, upgrades } from "hardhat";
+import { ZERO_ADDRESS } from "../Scripts/constants";
+import { deploySystem } from "../Scripts/setup";
 import {
   INVALID_ZERO_PARAM,
   NOT_ADMIN,
   NO_BALANCE,
   TRANSFER_NOT_ALLOWED,
 } from "../Scripts/errors";
-import {BigNumber} from "ethers";
+import { BigNumber } from "ethers";
 
 describe("Sigmoid Curator Vault", function () {
   it("Should check address on init", async function () {
@@ -366,5 +366,37 @@ describe("Sigmoid Curator Vault", function () {
       priceAmount
     );
     expect(BigNumber.from(7_360_625)).to.be.equal(tokensPurchased);
+  });
+
+  it("Should sweep contract of ETH", async function () {
+    const [OWNER, ALICE] = await ethers.getSigners();
+    const {
+      curatorVault
+    } = await deploySystem(OWNER);
+
+    const amount = ethers.utils.parseEther("1.0")
+
+    // Send 1 ETH into contract
+    await OWNER.sendTransaction({
+      to: curatorVault.address,
+      value: amount
+    })
+
+    // Should verify non owner can't sweep
+    await expect(
+      curatorVault.connect(ALICE).sweep()
+    ).to.be.revertedWith(NOT_ADMIN);
+
+    // Capture balance before call
+    const originalBalance = await OWNER.getBalance()
+
+    // Verify owner can get it out
+    const tx = await curatorVault.connect(OWNER).sweep()
+    let receipt = await tx.wait()
+    let gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice)
+
+    // Calculate the new balance has the sweep value
+    let balance = await OWNER.getBalance()
+    expect(balance.toString()).to.be.equal(originalBalance.add(amount).sub(gasUsedInEth));
   });
 });

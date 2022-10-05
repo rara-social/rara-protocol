@@ -9,7 +9,7 @@ import {
   TEST_SALE_REFERRER_BP,
 } from "../Scripts/setup";
 import { deriveTransformId } from "../Scripts/derivedParams";
-import { INVALID_ZERO_PARAM } from "../Scripts/errors";
+import { INVALID_ZERO_PARAM, NOT_ADMIN } from "../Scripts/errors";
 
 describe("ReactionVault Withdraw ERC20", function () {
   it("Should buy a single reaction", async function () {
@@ -138,5 +138,37 @@ describe("ReactionVault Withdraw ERC20", function () {
         .connect(MAKER)
         .withdrawErc20Rewards(paymentTokenErc20.address)
     ).to.be.revertedWith(INVALID_ZERO_PARAM);
+  });
+
+  it("Should sweep contract of ETH", async function () {
+    const [OWNER, ALICE] = await ethers.getSigners();
+    const {
+      reactionVault
+    } = await deploySystem(OWNER);
+
+    const amount = ethers.utils.parseEther("1.0")
+
+    // Send 1 ETH into contract
+    await OWNER.sendTransaction({
+      to: reactionVault.address,
+      value: amount
+    })
+
+    // Should verify non owner can't sweep
+    await expect(
+      reactionVault.connect(ALICE).sweep()
+    ).to.be.revertedWith(NOT_ADMIN);
+
+    // Capture balance before call
+    const originalBalance = await OWNER.getBalance()
+
+    // Verify owner can get it out
+    const tx = await reactionVault.connect(OWNER).sweep()
+    let receipt = await tx.wait()
+    let gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice)
+
+    // Calculate the new balance has the sweep value
+    let balance = await OWNER.getBalance()
+    expect(balance.toString()).to.be.equal(originalBalance.add(amount).sub(gasUsedInEth));
   });
 });

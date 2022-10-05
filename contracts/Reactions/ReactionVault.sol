@@ -679,7 +679,7 @@ contract ReactionVault is
         // Taker is withdrawing rewards on the L2 with the same account/address
         require(nftDetails.owner == msg.sender, "NFT not owned");
 
-        // Sell the curator Tokens - payment tokens will be sent this address
+        // Sell the curator Tokens - payment amount in native MATIC will be sent this address
         info.paymentTokensForMaker = ICuratorVault(curatorVault)
             .sellCuratorTokens(
                 takerNftChainId,
@@ -717,14 +717,13 @@ contract ReactionVault is
                 );
 
                 info.paymentTokensForMaker -= info.creatorCut;
+
+                // Wrap the MATIC to ERC20 for later withdrawal
+                paymentToken.deposit{value: info.creatorCut}();
             }
         }
 
-        // Transfer the remaining amount to the caller (Maker)
-        // First, unwrap rewards into this address
-        paymentToken.withdraw(info.paymentTokensForMaker);
-
-        // Second, send MATIC to destination
+        // Send remaining MATIC to destination - native MATIC was sent here during sellCuratorTokens() call
         payable(refundToAddress).transfer(info.paymentTokensForMaker);
 
         emit TakerWithdraw(
@@ -740,4 +739,10 @@ contract ReactionVault is
 
     /// @dev Allows WMATIC to be unwrapped to this address
     receive() external payable {}
+
+    /// @dev Allows the admin account to sweep any MATIC that was accidentally sent
+    function sweep() external {
+        require(addressManager.roleManager().isAdmin(msg.sender), "Not Admin");
+        payable(msg.sender).transfer(address(this).balance);
+    }
 }
