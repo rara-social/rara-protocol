@@ -173,6 +173,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
 
   // Update the Parameters in the protocol
   await parameterManager.setPaymentToken(paymentTokenErc20.address);
+  await parameterManager.setNativeWrappedToken(paymentTokenErc20.address);
   await parameterManager.setReactionPrice(TEST_REACTION_PRICE);
   await parameterManager.setSaleCuratorLiabilityBasisPoints(
     TEST_SALE_CURATOR_LIABILITY_BP

@@ -46,10 +46,14 @@ abstract contract ParameterManagerStorageV1 is IParameterManager {
     mapping(address => bool) public approvedCuratorVaults;
 }
 
+abstract contract ParameterManagerStorageV2 is ParameterManagerStorageV1 {
+    IERC20Upgradeable public nativeWrappedToken;
+}
+
 /// On the next version of the protocol, if new variables are added, put them in the below
 /// contract and use this as the inheritance chain.
 /**
-contract ParameterManagerStorageV2 is ParameterManagerStorageV1 {
+contract ParameterManagerStorageV3 is ParameterManagerStorageV2 {
   address newVariable;
 }
  */
