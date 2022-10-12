@@ -305,9 +305,22 @@ contract ReactionVault is
             saleCuratorLiabilityBasisPoints
         );
 
-        // Wrap the native currency into the wrapped ERC20
-        require(msg.value == info.totalPurchasePrice, "Invalid payment");
-        paymentToken.deposit{value: msg.value}();
+        // Determine whether to purchase with ERC20 or native asset
+        if (
+            address(paymentToken) ==
+            address(addressManager.parameterManager().nativeWrappedToken())
+        ) {
+            // Wrap the native currency into the wrapped ERC20
+            require(msg.value == info.totalPurchasePrice, "Invalid payment");
+            paymentToken.deposit{value: msg.value}();
+        } else {
+            // Move the ERC20 funds in as payment
+            paymentToken.safeTransferFrom(
+                msg.sender,
+                address(this),
+                info.totalPurchasePrice
+            );
+        }
 
         // Mint NFTs to destination wallet
         IStandard1155 reactionNftContract = addressManager
@@ -599,11 +612,20 @@ contract ReactionVault is
         // Reset amount back to 0
         ownerToRewardsMapping[token][msg.sender] = 0;
 
-        // Unwrap rewards into this address
-        token.withdraw(rewardAmount);
+        // Determine whether to send ERC20 or send native asset
+        if (
+            address(token) ==
+            address(addressManager.parameterManager().nativeWrappedToken())
+        ) {
+            // Unwrap rewards into this address
+            token.withdraw(rewardAmount);
 
-        // Send MATIC to destination
-        payable(msg.sender).transfer(rewardAmount);
+            // Send MATIC to destination
+            payable(msg.sender).transfer(rewardAmount);
+        } else {
+            // Send ERC20
+            token.safeTransfer(msg.sender, rewardAmount);
+        }
 
         // Emit event
         emit ERC20RewardsClaimed(address(token), rewardAmount, msg.sender);
@@ -718,13 +740,32 @@ contract ReactionVault is
 
                 info.paymentTokensForMaker -= info.creatorCut;
 
-                // Wrap the MATIC to ERC20 for later withdrawal
-                paymentToken.deposit{value: info.creatorCut}();
+                // Wrap the MATIC to ERC20 for later withdrawal if it is native asset
+                if (
+                    address(paymentToken) ==
+                    address(
+                        addressManager.parameterManager().nativeWrappedToken()
+                    )
+                ) {
+                    paymentToken.deposit{value: info.creatorCut}();
+                }
             }
         }
 
-        // Send remaining MATIC to destination - native MATIC was sent here during sellCuratorTokens() call
-        payable(refundToAddress).transfer(info.paymentTokensForMaker);
+        // Determine whether to send ERC20 or send native asset
+        if (
+            address(paymentToken) ==
+            address(addressManager.parameterManager().nativeWrappedToken())
+        ) {
+            // Send remaining MATIC to destination - native MATIC was sent here during sellCuratorTokens() call
+            payable(refundToAddress).transfer(info.paymentTokensForMaker);
+        } else {
+            // Send ERC20
+            paymentToken.safeTransfer(
+                refundToAddress,
+                info.paymentTokensForMaker
+            );
+        }
 
         emit TakerWithdraw(
             curatorTokenId,

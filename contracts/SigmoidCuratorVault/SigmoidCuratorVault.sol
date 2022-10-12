@@ -146,7 +146,7 @@ contract SigmoidCuratorVault is
         curatorTokenSupply[curatorTokenId] += curatorTokenAmount;
 
         //
-        // Pull value from ReactionVault as payment
+        // Pull value from ReactionVault as payment - will always be wrapped as ERC20 in the reaction vault
         //
         paymentToken.safeTransferFrom(msg.sender, address(this), paymentAmount);
 
@@ -211,11 +211,20 @@ contract SigmoidCuratorVault is
         reserves[curatorTokenId] -= refundAmount;
         curatorTokenSupply[curatorTokenId] -= tokensToBurn;
 
-        // First, unwrap the sale amount into this address
-        paymentToken.withdraw(refundAmount);
+        // Determine whether to send back ERC20 or native asset
+        if (
+            address(paymentToken) ==
+            address(addressManager.parameterManager().nativeWrappedToken())
+        ) {
+            // First, unwrap the sale amount into this address
+            paymentToken.withdraw(refundAmount);
 
-        // Send the unwrapped payment token back (native MATIC)
-        payable(refundToAddress).transfer(refundAmount);
+            // Send the unwrapped payment token back (native MATIC)
+            payable(refundToAddress).transfer(refundAmount);
+        } else {
+            // Send payment token back
+            paymentToken.safeTransfer(refundToAddress, refundAmount);
+        }
 
         // Emit the event
         emit CuratorTokensSold(curatorTokenId, refundAmount, tokensToBurn);

@@ -52,4 +52,11 @@ interface IParameterManager {
 
     /// @dev Setter for the list of curator vaults allowed to be used
     function setApprovedCuratorVaults(address vault, bool approved) external;
+
+    /// @dev Getter for the native wrapped ERC20 token (e.g. WMATIC)
+    function nativeWrappedToken() external returns (IERC20Upgradeable);
+
+    /// @dev Setter for the native wrapped ERC20 token (e.g. WMATIC)
+    function setNativeWrappedToken(IERC20Upgradeable _nativeWrappedToken)
+        external;
 }

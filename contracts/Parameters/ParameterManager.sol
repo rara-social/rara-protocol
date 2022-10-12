@@ -11,7 +11,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 /// be used as the role owner could renounce the role leaving all future actions disabled.  Additionally,
 /// if a malicious account was able to obtain the role, they could use it to set values to malicious values.
 /// See the public documentation website for more details.
-contract ParameterManager is Initializable, ParameterManagerStorageV1 {
+contract ParameterManager is Initializable, ParameterManagerStorageV2 {
     /// @dev Verifies with the role manager that the calling address has ADMIN role
     modifier onlyAdmin() {
         require(
@@ -29,6 +29,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     event SpendTakerBasisPointsUpdated(uint256 newValue);
     event SpendReferrerBasisPointsUpdated(uint256 newValue);
     event ApprovedCuratorVaultsUpdated(address vault, bool approved);
+    event NativeWrappedTokenUpdated(IERC20Upgradeable newValue);
 
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IAddressManager _addressManager) public initializer {
@@ -103,5 +104,15 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
         require(vault != address(0x0), ZERO_INPUT);
         approvedCuratorVaults[vault] = approved;
         emit ApprovedCuratorVaultsUpdated(vault, approved);
+    }
+
+    /// @dev Setter for the native wrapped ERC20 token (e.g. WMATIC)
+    function setNativeWrappedToken(IERC20Upgradeable _nativeWrappedToken)
+        external
+        onlyAdmin
+    {
+        require(address(_nativeWrappedToken) != address(0x0), ZERO_INPUT);
+        nativeWrappedToken = _nativeWrappedToken;
+        emit NativeWrappedTokenUpdated(_nativeWrappedToken);
     }
 }

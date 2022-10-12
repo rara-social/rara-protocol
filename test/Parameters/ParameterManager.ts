@@ -49,6 +49,30 @@ describe("ParameterManager", function () {
     ).to.be.revertedWith(NOT_ADMIN);
   });
 
+  it("Should allow owner to set native wrapped token address", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const { parameterManager } = await deploySystem(OWNER);
+
+    // Verify the setter checks invalid input
+    await expect(
+      parameterManager.setNativeWrappedToken(ZERO_ADDRESS)
+    ).to.revertedWith(INVALID_ZERO_PARAM);
+
+    // Set it to Alice's address
+    await expect(parameterManager.setNativeWrappedToken(ALICE.address))
+      .to.emit(parameterManager, "NativeWrappedTokenUpdated")
+      .withArgs(ALICE.address);
+
+    // Verify it got set
+    const currentVal = await parameterManager.nativeWrappedToken();
+    expect(currentVal).to.equal(ALICE.address);
+
+    // Verify non owner can't update address
+    await expect(
+      parameterManager.connect(ALICE).setNativeWrappedToken(BOB.address)
+    ).to.be.revertedWith(NOT_ADMIN);
+  });
+
   it("Should allow owner to set reaction price", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
     const { parameterManager } = await deploySystem(OWNER);
@@ -92,7 +116,7 @@ describe("ParameterManager", function () {
     await expect(parameterManager.setSaleCuratorLiabilityBasisPoints(val))
       .to.emit(parameterManager, "SaleCuratorLiabilityBasisPointsUpdated")
       .withArgs(val);
-    
+
     // Verify the setter checks invalid input
     await expect(
       parameterManager.setSaleCuratorLiabilityBasisPoints(10_001)
