@@ -102,6 +102,12 @@ const deploySystem = async (owner: SignerWithAddress) => {
   ]);
   const paymentTokenErc20 = TestErc20Factory.attach(deployedTestErc20.address);
 
+  // Deploy test Wrapped Matic
+  const WMaticFactory = await ethers.getContractFactory(
+    "WMATIC"
+  );
+  const wrappedMatic = await WMaticFactory.deploy();
+
   // Deploy the curator token Contract
   const CuratorToken1155Factory = await ethers.getContractFactory(
     "CuratorToken1155"
@@ -197,6 +203,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
     roleManager,
     testingStandard1155,
     testingStandard721,
+    wrappedMatic,
   };
 };
 
