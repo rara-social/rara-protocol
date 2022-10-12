@@ -232,25 +232,28 @@ describe("ReactionVault Taker Rewards", function () {
     const expectedTokens = await reactionVault.nftOwnerRewards(rewardsIndex);
     const expectedPayment = "250000106789080000";
 
+    const originalBalance = await TAKER.getBalance()
+
     // Now have the Taker claim - should be successful
-    await expect(
-      reactionVault
-        .connect(TAKER)
-        .withdrawTakerRewards(
-          chainId,
-          testingStandard1155.address,
-          TAKER_NFT_ID,
-          paymentTokenErc20.address,
-          curatorVault.address,
-          curatorTokenId,
-          expectedTokens,
-          TAKER.address
-        )
-    );
+    const tx = await reactionVault
+      .connect(TAKER)
+      .withdrawTakerRewards(
+        chainId,
+        testingStandard1155.address,
+        TAKER_NFT_ID,
+        paymentTokenErc20.address,
+        curatorVault.address,
+        curatorTokenId,
+        expectedTokens,
+        TAKER.address
+      )
+    let receipt = await tx.wait()
+    let gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice)
 
     // Verify the payment got sent
-    expect(await paymentTokenErc20.balanceOf(TAKER.address)).to.be.equal(
-      expectedPayment
+    let balance = await TAKER.getBalance()
+    expect(balance).to.be.equal(
+      originalBalance.add(expectedPayment).sub(gasUsedInEth)
     );
 
     // Verify nftOwnerRewards was decremented
@@ -459,25 +462,29 @@ describe("ReactionVault Taker Rewards", function () {
     const tokensToBurn = Math.floor(startingRewards.toNumber() / 2); // withdraw half
     const expectedPayment = "125000053394540000";
 
+    let originalBalance = await TAKER.getBalance()
+
     // Now have the Taker claim - should be successful
-    await expect(
-      reactionVault
-        .connect(TAKER)
-        .withdrawTakerRewards(
-          chainId,
-          testingStandard1155.address,
-          TAKER_NFT_ID,
-          paymentTokenErc20.address,
-          curatorVault.address,
-          curatorTokenId,
-          tokensToBurn,
-          TAKER.address
-        )
-    );
+    const tx = await reactionVault
+      .connect(TAKER)
+      .withdrawTakerRewards(
+        chainId,
+        testingStandard1155.address,
+        TAKER_NFT_ID,
+        paymentTokenErc20.address,
+        curatorVault.address,
+        curatorTokenId,
+        tokensToBurn,
+        TAKER.address
+      )
+    let receipt = await tx.wait()
+    let gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice)
+
 
     // Verify the payment got sent
-    expect(await paymentTokenErc20.balanceOf(TAKER.address)).to.be.equal(
-      expectedPayment
+    let balance = await TAKER.getBalance()
+    expect(balance).to.be.equal(
+      originalBalance.add(expectedPayment).sub(gasUsedInEth)
     );
 
     // Verify nftOwnerRewards was decremented

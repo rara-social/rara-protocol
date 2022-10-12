@@ -2,7 +2,7 @@
 pragma solidity 0.8.9;
 
 import "../Token/IStandard1155.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+import "../Token/IWMATIC.sol";
 
 /// @dev Interface for the curator vault
 interface ICuratorVault {
@@ -10,14 +10,14 @@ interface ICuratorVault {
         uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
-        IERC20Upgradeable paymentToken
+        IWMATIC paymentToken
     ) external returns (uint256);
 
     function buyCuratorTokens(
         uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
-        IERC20Upgradeable paymentToken,
+        IWMATIC paymentToken,
         uint256 paymentAmount,
         address mintToAddress,
         bool isTakerPosition
@@ -27,7 +27,7 @@ interface ICuratorVault {
         uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
-        IERC20Upgradeable paymentToken,
+        IWMATIC paymentToken,
         uint256 tokensToBurn,
         address refundToAddress
     ) external returns (uint256);

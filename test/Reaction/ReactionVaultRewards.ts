@@ -9,7 +9,7 @@ import {
   TEST_SALE_REFERRER_BP,
 } from "../Scripts/setup";
 import { deriveTransformId } from "../Scripts/derivedParams";
-import { INVALID_ZERO_PARAM } from "../Scripts/errors";
+import { INVALID_ZERO_PARAM, NOT_ADMIN } from "../Scripts/errors";
 
 describe("ReactionVault Withdraw ERC20", function () {
   it("Should buy a single reaction", async function () {
@@ -91,31 +91,46 @@ describe("ReactionVault Withdraw ERC20", function () {
       reactionVault.withdrawErc20Rewards(ALICE.address)
     ).to.be.revertedWith(INVALID_ZERO_PARAM);
 
-    // Withdraw creator rewards and event
-    await expect(
-      reactionVault
-        .connect(CREATOR)
-        .withdrawErc20Rewards(paymentTokenErc20.address)
-    )
-      .to.emit(reactionVault, "ERC20RewardsClaimed")
-      .withArgs(paymentTokenErc20.address, CREATOR_CUT, CREATOR.address);
+    // Get the balance for the creator before withdrawing
+    let originalBalance = await CREATOR.getBalance()
 
-    let balance = await paymentTokenErc20.balanceOf(CREATOR.address);
-    expect(balance.toString()).to.be.equal(CREATOR_CUT.toString());
+    // Withdraw creator rewards
+    let tx = await reactionVault
+      .connect(CREATOR)
+      .withdrawErc20Rewards(paymentTokenErc20.address)
+    let receipt = await tx.wait()
+    let gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice)
+
+    // Check balance
+    let balance = await CREATOR.getBalance()
+    expect(balance.toString()).to.be.equal(originalBalance.add(CREATOR_CUT).sub(gasUsedInEth));
+
+    // Check event
+    let event = receipt.events?.find(e => e.event == 'ERC20RewardsClaimed')
+    expect(event!.args!['token']).to.be.equal(paymentTokenErc20.address)
+    expect(event!.args!['amount']).to.be.equal(CREATOR_CUT)
+    expect(event!.args!['recipient']).to.be.equal(CREATOR.address)
+
 
     // Withdraw referrer rewards
-    await reactionVault
+    originalBalance = await REFERRER.getBalance()
+    tx = await reactionVault
       .connect(REFERRER)
       .withdrawErc20Rewards(paymentTokenErc20.address);
-    balance = await paymentTokenErc20.balanceOf(REFERRER.address);
-    expect(balance.toString()).to.be.equal(REFERRER_CUT.toString());
+    receipt = await tx.wait()
+    gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice)
+    balance = await REFERRER.getBalance()
+    expect(balance).to.be.equal(originalBalance.add(REFERRER_CUT).sub(gasUsedInEth));
 
     // Withdraw maker rewards
-    await reactionVault
+    originalBalance = await MAKER.getBalance()
+    tx = await reactionVault
       .connect(MAKER)
       .withdrawErc20Rewards(paymentTokenErc20.address);
-    balance = await paymentTokenErc20.balanceOf(MAKER.address);
-    expect(balance.toString()).to.be.equal(MAKER_CUT.toString());
+    receipt = await tx.wait()
+    gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice)
+    balance = await MAKER.getBalance()
+    expect(balance).to.be.equal(originalBalance.add(MAKER_CUT).sub(gasUsedInEth));
 
     // After rewards are withdrawn, a second attempt should fail
     expect(
@@ -123,5 +138,37 @@ describe("ReactionVault Withdraw ERC20", function () {
         .connect(MAKER)
         .withdrawErc20Rewards(paymentTokenErc20.address)
     ).to.be.revertedWith(INVALID_ZERO_PARAM);
+  });
+
+  it("Should sweep contract of ETH", async function () {
+    const [OWNER, ALICE] = await ethers.getSigners();
+    const {
+      reactionVault
+    } = await deploySystem(OWNER);
+
+    const amount = ethers.utils.parseEther("1.0")
+
+    // Send 1 ETH into contract
+    await OWNER.sendTransaction({
+      to: reactionVault.address,
+      value: amount
+    })
+
+    // Should verify non owner can't sweep
+    await expect(
+      reactionVault.connect(ALICE).sweep()
+    ).to.be.revertedWith(NOT_ADMIN);
+
+    // Capture balance before call
+    const originalBalance = await OWNER.getBalance()
+
+    // Verify owner can get it out
+    const tx = await reactionVault.connect(OWNER).sweep()
+    let receipt = await tx.wait()
+    let gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice)
+
+    // Calculate the new balance has the sweep value
+    let balance = await OWNER.getBalance()
+    expect(balance.toString()).to.be.equal(originalBalance.add(amount).sub(gasUsedInEth));
   });
 });

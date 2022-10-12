@@ -599,8 +599,11 @@ contract ReactionVault is
         // Reset amount back to 0
         ownerToRewardsMapping[token][msg.sender] = 0;
 
-        // Send tokens
-        token.safeTransfer(msg.sender, rewardAmount);
+        // Unwrap rewards into this address
+        token.withdraw(rewardAmount);
+
+        // Send MATIC to destination
+        payable(msg.sender).transfer(rewardAmount);
 
         // Emit event
         emit ERC20RewardsClaimed(address(token), rewardAmount, msg.sender);
@@ -676,7 +679,7 @@ contract ReactionVault is
         // Taker is withdrawing rewards on the L2 with the same account/address
         require(nftDetails.owner == msg.sender, "NFT not owned");
 
-        // Sell the curator Tokens - payment tokens will be sent this address
+        // Sell the curator Tokens - payment amount in native MATIC will be sent this address
         info.paymentTokensForMaker = ICuratorVault(curatorVault)
             .sellCuratorTokens(
                 takerNftChainId,
@@ -714,11 +717,14 @@ contract ReactionVault is
                 );
 
                 info.paymentTokensForMaker -= info.creatorCut;
+
+                // Wrap the MATIC to ERC20 for later withdrawal
+                paymentToken.deposit{value: info.creatorCut}();
             }
         }
 
-        // Transfer the remaining amount to the caller (Maker)
-        paymentToken.safeTransfer(refundToAddress, info.paymentTokensForMaker);
+        // Send remaining MATIC to destination - native MATIC was sent here during sellCuratorTokens() call
+        payable(refundToAddress).transfer(info.paymentTokensForMaker);
 
         emit TakerWithdraw(
             curatorTokenId,
@@ -729,5 +735,14 @@ contract ReactionVault is
 
         // Return the amount of payment tokens received
         return info.paymentTokensForMaker;
+    }
+
+    /// @dev Allows WMATIC to be unwrapped to this address
+    receive() external payable {}
+
+    /// @dev Allows the admin account to sweep any MATIC that was accidentally sent
+    function sweep() external {
+        require(addressManager.roleManager().isAdmin(msg.sender), "Not Admin");
+        payable(msg.sender).transfer(address(this).balance);
     }
 }
