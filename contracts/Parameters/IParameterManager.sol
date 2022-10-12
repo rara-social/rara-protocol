@@ -2,14 +2,14 @@
 pragma solidity 0.8.9;
 
 import "../Permissions/IRoleManager.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "../Token/IWMATIC.sol";
 
 interface IParameterManager {
     /// @dev Getter for the payment token
-    function paymentToken() external returns (IERC20Upgradeable);
+    function paymentToken() external returns (IWMATIC);
 
     /// @dev Setter for the payment token
-    function setPaymentToken(IERC20Upgradeable _paymentToken) external;
+    function setPaymentToken(IWMATIC _paymentToken) external;
 
     /// @dev Getter for the reaction price
     function reactionPrice() external returns (uint256);

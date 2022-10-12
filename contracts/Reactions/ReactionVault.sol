@@ -13,6 +13,7 @@ import "./ReactionVaultStorage.sol";
 import "../Maker/IMakerRegistrar.sol";
 import "../Parameters/IParameterManager.sol";
 import "../Token/IStandard1155.sol";
+import "../Token/IWMATIC.sol";
 
 /// @title ReactionVault
 /// @dev This contract buying and spending reactions
@@ -24,7 +25,7 @@ contract ReactionVault is
     ReactionVaultStorageV1
 {
     /// @dev Use the safe methods when interacting with transfers with outside ERC20s
-    using SafeERC20Upgradeable for IERC20Upgradeable;
+    using SafeERC20Upgradeable for IWMATIC;
 
     /// @dev Event emitted when a reaction is purchased
     event ReactionsPurchased(
@@ -55,7 +56,7 @@ contract ReactionVault is
     /// @dev Event emitted when rewards are granted to a creator
     event CreatorRewardsGranted(
         address creator,
-        IERC20Upgradeable paymentToken,
+        IWMATIC paymentToken,
         uint256 amount,
         uint256 reactionId
     );
@@ -63,7 +64,7 @@ contract ReactionVault is
     /// @dev Event emitted when rewards are granted to a referrer
     event ReferrerRewardsGranted(
         address referrer,
-        IERC20Upgradeable paymentToken,
+        IWMATIC paymentToken,
         uint256 amount,
         uint256 reactionId
     );
@@ -71,7 +72,7 @@ contract ReactionVault is
     /// @dev Event emitted when rewards are granted to a maker
     event MakerRewardsGranted(
         address maker,
-        IERC20Upgradeable paymentToken,
+        IWMATIC paymentToken,
         uint256 amount,
         uint256 reactionId
     );
@@ -125,7 +126,7 @@ contract ReactionVault is
         address destinationWallet,
         address referrer,
         uint256 optionBits
-    ) external nonReentrant {
+    ) external payable nonReentrant {
         // Call internal function
         return
             _buyReaction(
@@ -207,7 +208,7 @@ contract ReactionVault is
 
         // Calculate the funds to move into the this contract from the buyer
         info.parameterManager = addressManager.parameterManager();
-        IERC20Upgradeable paymentToken = info.parameterManager.paymentToken();
+        IWMATIC paymentToken = info.parameterManager.paymentToken();
         info.reactionPrice = info.parameterManager.reactionPrice();
         info.totalPurchasePrice = info.reactionPrice * quantity;
 
@@ -304,12 +305,9 @@ contract ReactionVault is
             saleCuratorLiabilityBasisPoints
         );
 
-        // Move the funds in as payment
-        paymentToken.safeTransferFrom(
-            msg.sender,
-            address(this),
-            info.totalPurchasePrice
-        );
+        // Wrap the native currency into the wrapped ERC20
+        require(msg.value == info.totalPurchasePrice, "Invalid payment");
+        paymentToken.deposit{value: msg.value}();
 
         // Mint NFTs to destination wallet
         IStandard1155 reactionNftContract = addressManager
@@ -558,7 +556,7 @@ contract ReactionVault is
         uint256 takerNftId,
         address curatorVaultOverride,
         string memory ipfsMetadataHash
-    ) external nonReentrant {
+    ) external payable nonReentrant {
         // Buy the reactions
         _buyReaction(transformId, quantity, msg.sender, referrer, optionBits);
 
@@ -589,7 +587,7 @@ contract ReactionVault is
 
     /// @dev Allows an account that has been allocated rewards to withdraw (Maker, creator, referrer)
     /// @param token ERC20 token that rewards are valued in
-    function withdrawErc20Rewards(IERC20Upgradeable token)
+    function withdrawErc20Rewards(IWMATIC token)
         external
         nonReentrant
         returns (uint256)
@@ -628,7 +626,7 @@ contract ReactionVault is
         uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId,
-        IERC20Upgradeable paymentToken,
+        IWMATIC paymentToken,
         address curatorVault,
         uint256 curatorTokenId,
         uint256 tokensToBurn,
