@@ -23,6 +23,9 @@ async function getWallet(name) {
     case "referrer":
       privateKey = process.env.REFERRER_PRIVATE_KEY;
       break;
+    case "signer":
+      privateKey = process.env.SIGNING_KEY;
+      break;
     default:
       break;
   }
