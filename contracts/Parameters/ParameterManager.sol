@@ -3,6 +3,7 @@ pragma solidity 0.8.9;
 
 import "./ParameterManagerStorage.sol";
 import "../Config/IAddressManager.sol";
+import "../Token/IWMATIC.sol";
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
@@ -10,7 +11,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 /// be used as the role owner could renounce the role leaving all future actions disabled.  Additionally,
 /// if a malicious account was able to obtain the role, they could use it to set values to malicious values.
 /// See the public documentation website for more details.
-contract ParameterManager is Initializable, ParameterManagerStorageV1 {
+contract ParameterManager is Initializable, ParameterManagerStorageV2 {
     /// @dev Verifies with the role manager that the calling address has ADMIN role
     modifier onlyAdmin() {
         require(
@@ -21,13 +22,14 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     }
 
     /// @dev Events emitted on updates
-    event PaymentTokenUpdated(IERC20Upgradeable newValue);
+    event PaymentTokenUpdated(IWMATIC newValue);
     event ReactionPriceUpdated(uint256 newValue);
     event SaleCuratorLiabilityBasisPointsUpdated(uint256 newValue);
     event SaleReferrerBasisPointsUpdated(uint256 newValue);
     event SpendTakerBasisPointsUpdated(uint256 newValue);
     event SpendReferrerBasisPointsUpdated(uint256 newValue);
     event ApprovedCuratorVaultsUpdated(address vault, bool approved);
+    event NativeWrappedTokenUpdated(IERC20Upgradeable newValue);
 
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IAddressManager _addressManager) public initializer {
@@ -36,10 +38,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
     }
 
     /// @dev Setter for the payment token
-    function setPaymentToken(IERC20Upgradeable _paymentToken)
-        external
-        onlyAdmin
-    {
+    function setPaymentToken(IWMATIC _paymentToken) external onlyAdmin {
         require(address(_paymentToken) != address(0x0), ZERO_INPUT);
         paymentToken = _paymentToken;
         emit PaymentTokenUpdated(_paymentToken);
@@ -105,5 +104,15 @@ contract ParameterManager is Initializable, ParameterManagerStorageV1 {
         require(vault != address(0x0), ZERO_INPUT);
         approvedCuratorVaults[vault] = approved;
         emit ApprovedCuratorVaultsUpdated(vault, approved);
+    }
+
+    /// @dev Setter for the native wrapped ERC20 token (e.g. WMATIC)
+    function setNativeWrappedToken(IERC20Upgradeable _nativeWrappedToken)
+        external
+        onlyAdmin
+    {
+        require(address(_nativeWrappedToken) != address(0x0), ZERO_INPUT);
+        nativeWrappedToken = _nativeWrappedToken;
+        emit NativeWrappedTokenUpdated(_nativeWrappedToken);
     }
 }

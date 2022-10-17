@@ -15,6 +15,7 @@ import {
   deriveReactionParameterVersion,
 } from "../Scripts/derivedParams";
 import {
+  INVALID_PAYMENT,
   INVALID_ZERO_PARAM,
   NFT_NOT_REGISTERED,
   NO_BALANCE,
@@ -101,8 +102,6 @@ describe("ReactionVault Buy", function () {
       reactionVault,
       testingStandard1155,
       makerRegistrar,
-      roleManager,
-      paymentTokenErc20,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -126,46 +125,29 @@ describe("ReactionVault Buy", function () {
     // Encode the params and hash it to get the meta URI
     const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Should fail since Owner has no tokens
+    // Should fail since Owner is sending no ETH
     await expect(
       reactionVault.buyReaction(
         REACTION_ID,
         "1",
         OWNER.address,
         ZERO_ADDRESS,
-        BigNumber.from(0)
+        BigNumber.from(0),
+        { value: "0" }
       )
-    ).to.revertedWith(TRANSFER_NOT_ALLOWED);
+    ).to.revertedWith(INVALID_PAYMENT);
 
-    // Mint some tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
-
-    // Should fail since Owner has not approved transfer from
+    // Should fail since Owner is sending too much
     await expect(
       reactionVault.buyReaction(
         REACTION_ID,
         "1",
         OWNER.address,
         ZERO_ADDRESS,
-        BigNumber.from(0)
+        BigNumber.from(0),
+        { value: TEST_REACTION_PRICE.mul(10) }
       )
-    ).to.revertedWith(TRANSFER_NOT_ALLOWED);
-
-    // Even if Alice has an allowance but no tokens it should still fail
-    await paymentTokenErc20
-      .connect(BOB)
-      .approve(reactionVault.address, "10000000000000000000");
-    await expect(
-      reactionVault
-        .connect(BOB)
-        .buyReaction(
-          REACTION_ID,
-          "1",
-          OWNER.address,
-          ZERO_ADDRESS,
-          BigNumber.from(0)
-        )
-    ).to.revertedWith(NO_BALANCE);
+    ).to.revertedWith(INVALID_PAYMENT);
   });
 
   it("Should buy a single reaction", async function () {
@@ -174,7 +156,6 @@ describe("ReactionVault Buy", function () {
       reactionVault,
       testingStandard1155,
       makerRegistrar,
-      roleManager,
       paymentTokenErc20,
       reactionNFT1155,
     } = await deploySystem(OWNER);
@@ -207,12 +188,6 @@ describe("ReactionVault Buy", function () {
     // Encode the params and hash it to get the meta URI
     const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE);
-
     // Calculate how the payment will be split
     const REACTION_AMOUNT = BigNumber.from(1);
     const REFERRER_CUT = TEST_REACTION_PRICE.mul(TEST_SALE_REFERRER_BP).div(
@@ -237,7 +212,8 @@ describe("ReactionVault Buy", function () {
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
-      BigNumber.from(0)
+      BigNumber.from(0),
+      { value: TEST_REACTION_PRICE }
     );
     const receipt = await transaction.wait();
 
@@ -357,10 +333,6 @@ describe("ReactionVault Buy", function () {
 
     // Mint the purchase price amount of tokens to the owner
     const totalPaymentAmount = TEST_REACTION_PRICE.mul(REACTION_AMOUNT);
-    paymentTokenErc20.mint(OWNER.address, totalPaymentAmount);
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, totalPaymentAmount);
 
     // Calculate how the payment will be split
     const REFERRER_CUT = totalPaymentAmount
@@ -386,7 +358,8 @@ describe("ReactionVault Buy", function () {
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
-      BigNumber.from(0)
+      BigNumber.from(0),
+      { value: totalPaymentAmount }
     );
     const receipt = await transaction.wait();
 

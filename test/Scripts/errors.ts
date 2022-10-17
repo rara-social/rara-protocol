@@ -1,6 +1,7 @@
 const ALREADY_REGISTERED = "Already registered";
 const INVALID_BP = "Invalid bp";
 const INVALID_CURATOR_VAULT = "Err CuratorVault";
+const INVALID_PAYMENT = "Invalid payment";
 const INVALID_ROLE_MANAGER = "RM invalid";
 const INVALID_ZERO_PARAM = "Invalid 0 input";
 const LIKE_TRANSFER_RESTRICTED = "Like transfer restricted"
@@ -22,6 +23,7 @@ export {
   ALREADY_REGISTERED,
   INVALID_BP,
   INVALID_CURATOR_VAULT,
+  INVALID_PAYMENT,
   INVALID_ROLE_MANAGER,
   INVALID_ZERO_PARAM,
   LIKE_TRANSFER_RESTRICTED,

@@ -8,6 +8,7 @@ import "../Token/IStandard1155.sol";
 import "../Config/IAddressManager.sol";
 import "./SigmoidCuratorVaultStorage.sol";
 import "./Curve/Sigmoid.sol";
+import "../Token/IWMATIC.sol";
 
 /// @title SigmoidCuratorVault
 /// @dev This contract tracks tokens in a sigmoid bonding curve per Taker NFT.
@@ -27,7 +28,7 @@ contract SigmoidCuratorVault is
     SigmoidCuratorVaultStorageV1
 {
     /// @dev Use the safe methods when interacting with transfers with outside ERC20s
-    using SafeERC20Upgradeable for IERC20Upgradeable;
+    using SafeERC20Upgradeable for IWMATIC;
 
     /// @dev verifies that the calling address is the reaction vault
     modifier onlyCuratorVaultPurchaser() {
@@ -91,7 +92,7 @@ contract SigmoidCuratorVault is
         uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
-        IERC20Upgradeable paymentToken
+        IWMATIC paymentToken
     ) external pure returns (uint256) {
         return _getTokenId(nftChainId, nftAddress, nftId, paymentToken);
     }
@@ -117,7 +118,7 @@ contract SigmoidCuratorVault is
         uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
-        IERC20Upgradeable paymentToken,
+        IWMATIC paymentToken,
         uint256 paymentAmount,
         address mintToAddress,
         bool isTakerPosition
@@ -145,7 +146,7 @@ contract SigmoidCuratorVault is
         curatorTokenSupply[curatorTokenId] += curatorTokenAmount;
 
         //
-        // Pull value from ReactionVault as payment
+        // Pull value from ReactionVault as payment - will always be wrapped as ERC20 in the reaction vault
         //
         paymentToken.safeTransferFrom(msg.sender, address(this), paymentAmount);
 
@@ -179,7 +180,7 @@ contract SigmoidCuratorVault is
         uint256 nftChainId,
         address nftAddress,
         uint256 nftId,
-        IERC20Upgradeable paymentToken,
+        IWMATIC paymentToken,
         uint256 tokensToBurn,
         address refundToAddress
     ) external nonReentrant returns (uint256) {
@@ -210,12 +211,33 @@ contract SigmoidCuratorVault is
         reserves[curatorTokenId] -= refundAmount;
         curatorTokenSupply[curatorTokenId] -= tokensToBurn;
 
-        // Send payment token back
-        paymentToken.safeTransfer(refundToAddress, refundAmount);
+        // Determine whether to send back ERC20 or native asset
+        if (
+            address(paymentToken) ==
+            address(addressManager.parameterManager().nativeWrappedToken())
+        ) {
+            // First, unwrap the sale amount into this address
+            paymentToken.withdraw(refundAmount);
+
+            // Send the unwrapped payment token back (native MATIC)
+            payable(refundToAddress).transfer(refundAmount);
+        } else {
+            // Send payment token back
+            paymentToken.safeTransfer(refundToAddress, refundAmount);
+        }
 
         // Emit the event
         emit CuratorTokensSold(curatorTokenId, refundAmount, tokensToBurn);
 
         return refundAmount;
+    }
+
+    /// @dev Allows WMATIC to be unwrapped to this address
+    receive() external payable {}
+
+    /// @dev Allows the admin account to sweep any MATIC that was accidentally sent
+    function sweep() external {
+        require(addressManager.roleManager().isAdmin(msg.sender), "Not Admin");
+        payable(msg.sender).transfer(address(this).balance);
     }
 }
