@@ -52,4 +52,10 @@ interface IAddressManager {
 
     /// @dev Setter for the address of the royalty registry
     function setRoyaltyRegistry(address _royaltyRegistry) external;
+
+    /// @dev Getter for the address of the Like Token Factory
+    function likeTokenFactory() external returns (address);
+
+    /// @dev Setter for the address of the Like Token Factory
+    function setLikeTokenFactory(address _likeTokenFactory) external;
 }
