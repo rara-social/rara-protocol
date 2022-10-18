@@ -105,6 +105,6 @@ contract AddressManager is Initializable, AddressManagerStorageV2 {
     function setLikeTokenFactory(address _likeTokenFactory) external onlyAdmin {
         // We DO allow the Like Token Factory to be set to 0x0 as this disables the functionality
         likeTokenFactory = _likeTokenFactory;
-        emit LikeTokenFactoryAddressUpdated(royaltyRegistry);
+        emit LikeTokenFactoryAddressUpdated(likeTokenFactory);
     }
 }

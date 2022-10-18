@@ -5,6 +5,7 @@ import "./ILikeTokenFactory.sol";
 import "./LikeTokenFactoryStorage.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/ClonesUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
 
 /// @title LikeTokenFactory
 /// @dev This contract is responsible for issuing like tokens for a target NFT.
@@ -73,7 +74,17 @@ contract LikeTokenFactory is
 
             // Initialize it
             ILikeToken1155(newlyDeployed).initialize(
-                string(abi.encodePacked(baseTokenUri, newlyDeployed, "/{id}")),
+                // The URI is a concat of the base URI + addr + "/{id}
+                string(
+                    abi.encodePacked(
+                        baseTokenUri,
+                        StringsUpgradeable.toHexString(
+                            uint256(uint160(newlyDeployed)),
+                            20
+                        ),
+                        "/{id}"
+                    )
+                ),
                 address(addressManager)
             );
 

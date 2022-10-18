@@ -1,4 +1,4 @@
-import {BigNumber, ethers} from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 export const deriveTransformId = (
   nftSourceId: BigNumber,
@@ -54,6 +54,19 @@ export const deriveTakerRewardsKey = (
       curatorVaultAddress,
       curatorTokenId,
     ]
+  );
+  return ethers.utils.keccak256(encodedParams);
+};
+
+export const deriveLikeTokenIndex = (
+  takerNftChainId: number,
+  takerNftAddress: string,
+  takerNftId: number,
+) => {
+  // Encode the params and hash it
+  const encodedParams = ethers.utils.defaultAbiCoder.encode(
+    ["uint256", "address", "uint256"],
+    [takerNftChainId, takerNftAddress, takerNftId]
   );
   return ethers.utils.keccak256(encodedParams);
 };

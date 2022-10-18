@@ -26,7 +26,7 @@ describe("LikeToken1155", function () {
 
   it("Should mint tokens if authorized", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { addressManager, roleManager } = await deploySystem(OWNER);
+    const { addressManager } = await deploySystem(OWNER);
 
     const LikeToken1155Factory = await ethers.getContractFactory("LikeToken1155");
     const deployedTest1155 = await upgrades.deployProxy(LikeToken1155Factory, [
@@ -40,9 +40,8 @@ describe("LikeToken1155", function () {
       likeToken.connect(BOB).mint(ALICE.address)
     ).to.be.reverted;
 
-    // Grant authorization to Bob
-    const reactionMinterRole = await roleManager.REACTION_NFT_ADMIN();
-    roleManager.grantRole(reactionMinterRole, BOB.address);
+    // Grant authorization to Bob by setting him as the factory
+    await addressManager.setLikeTokenFactory(BOB.address);
 
     // Mint again
     await likeToken.connect(BOB).mint(ALICE.address);
@@ -65,7 +64,7 @@ describe("LikeToken1155", function () {
 
   it("Should increment token IDs", async function () {
     const [OWNER, ALICE, BOB, CAROL] = await ethers.getSigners();
-    const { addressManager, roleManager } = await deploySystem(OWNER);
+    const { addressManager } = await deploySystem(OWNER);
 
     const LikeToken1155Factory = await ethers.getContractFactory("LikeToken1155");
     const deployedTest1155 = await upgrades.deployProxy(LikeToken1155Factory, [
@@ -74,9 +73,8 @@ describe("LikeToken1155", function () {
     ]);
     const likeToken = LikeToken1155Factory.attach(deployedTest1155.address);
 
-    // Grant authorization to Bob
-    const reactionMinterRole = await roleManager.REACTION_NFT_ADMIN();
-    roleManager.grantRole(reactionMinterRole, BOB.address);
+    // Grant authorization to Bob by setting him as the factory
+    await addressManager.setLikeTokenFactory(BOB.address);
 
     // Mint 1
     await likeToken.connect(BOB).mint(ALICE.address);
@@ -97,7 +95,7 @@ describe("LikeToken1155", function () {
 
   it("Should burn owned tokens", async function () {
     const [OWNER, ALICE, BOB, CAROL] = await ethers.getSigners();
-    const { addressManager, roleManager } = await deploySystem(OWNER);
+    const { addressManager } = await deploySystem(OWNER);
 
     const LikeToken1155Factory = await ethers.getContractFactory("LikeToken1155");
     const deployedTest1155 = await upgrades.deployProxy(LikeToken1155Factory, [
@@ -106,9 +104,8 @@ describe("LikeToken1155", function () {
     ]);
     const likeToken = LikeToken1155Factory.attach(deployedTest1155.address);
 
-    // Grant authorization to Bob
-    const reactionMinterRole = await roleManager.REACTION_NFT_ADMIN();
-    roleManager.grantRole(reactionMinterRole, BOB.address);
+    // Grant authorization to Bob by setting him as the factory
+    await addressManager.setLikeTokenFactory(BOB.address);
 
     // Mint 1
     await likeToken.connect(BOB).mint(ALICE.address);

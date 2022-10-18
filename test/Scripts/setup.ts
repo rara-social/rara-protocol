@@ -1,7 +1,7 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { BigNumber } from "ethers";
 import { ethers, upgrades } from "hardhat";
-import { TEST_NFT_URI } from "./constants";
+import { TEST_LIKE_NFT_URI, TEST_NFT_URI } from "./constants";
 
 export const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
 export const TEST_SALE_CURATOR_LIABILITY_BP = 5_000; // 50% goes to curator liability
@@ -136,6 +136,24 @@ const deploySystem = async (owner: SignerWithAddress) => {
     addressManager.address
   );
 
+  // Deploy Like Token Impl and Factory
+  const LikeTokenFactory = await ethers.getContractFactory(
+    "LikeToken1155"
+  );
+  const likeTokenImpl = await LikeTokenFactory.deploy();
+  await likeTokenImpl.initialize(TEST_LIKE_NFT_URI, addressManager.address);
+
+  const LikeTokenFactoryFactory = await ethers.getContractFactory(
+    "LikeTokenFactory"
+  );
+  const deployedLikeTokenFactory = await upgrades.deployProxy(
+    LikeTokenFactoryFactory,
+    [addressManager.address, likeTokenImpl.address, TEST_LIKE_NFT_URI]
+  );
+  const likeTokenFactory = LikeTokenFactoryFactory.attach(
+    deployedLikeTokenFactory.address
+  );
+
   // Update permissions in the Role Manager
   // Owner can update addresses
   await roleManager.grantRole(
@@ -170,6 +188,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   await addressManager.setReactionNftContract(reactionNFT1155.address);
   await addressManager.setDefaultCuratorVault(curatorVault.address);
   await addressManager.setChildRegistrar(childRegistrar.address);
+  await addressManager.setLikeTokenFactory(likeTokenFactory.address);
 
   // Update the Parameters in the protocol
   await parameterManager.setPaymentToken(paymentTokenErc20.address);
@@ -188,6 +207,8 @@ const deploySystem = async (owner: SignerWithAddress) => {
     childRegistrar,
     curatorToken,
     curatorVault,
+    likeTokenFactory,
+    likeTokenImpl,
     makerRegistrar,
     parameterManager,
     paymentTokenErc20,
