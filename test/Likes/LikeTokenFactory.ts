@@ -94,11 +94,16 @@ describe("LikeTokenFactory", function () {
     const likeToken = LikeToken1155Factory.attach(deployedContract);
 
     // Verify the balance of owner was minted the first token
-    const balance = await likeToken.balanceOf(OWNER.address, "1")
+    let balance = await likeToken.balanceOf(OWNER.address, "1")
     expect(balance).to.equal("1")
 
     // Verify the URI of the token was set properly
     const uri = await likeToken.uri("1")
     expect(uri).to.equal(TEST_LIKE_NFT_URI + String(deployedContract).toLocaleLowerCase() + "/{id}")
+
+    // Issue a token for the same taker NFT  - it should be minted and should have a incremented ID of 2
+    await likeTokenFactory.issueLikeToken(OWNER.address, CHAIN_ID, NFT_ADDRESS, NFT_ID)
+    balance = await likeToken.balanceOf(OWNER.address, "2")
+    expect(balance).to.equal("1")
   });
 });
