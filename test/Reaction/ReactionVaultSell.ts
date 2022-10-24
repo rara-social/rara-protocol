@@ -1,7 +1,11 @@
-import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { ethers, upgrades } from "hardhat";
-import { TEST_NFT_URI, ZERO_ADDRESS } from "../Scripts/constants";
+import {expect} from "chai";
+import {BigNumber} from "ethers";
+import {ethers, upgrades} from "hardhat";
+import {
+  TEST_NFT_URI,
+  ZERO_ADDRESS,
+  TEST_CONTRACT_URI,
+} from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -24,7 +28,7 @@ import {
 describe("ReactionVault Sell", function () {
   it("Should verify spender has reaction NFT", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { reactionVault } = await deploySystem(OWNER);
+    const {reactionVault} = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // If the user tries to spend reactions they don't have it should fail
@@ -44,7 +48,7 @@ describe("ReactionVault Sell", function () {
 
   it("Should verify reaction quantity > 0", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { reactionVault } = await deploySystem(OWNER);
+    const {reactionVault} = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // If the user tries to spend reactions they don't have it should fail
@@ -382,7 +386,7 @@ describe("ReactionVault Sell", function () {
     );
     const deployedCuratorTokens = await upgrades.deployProxy(
       CuratorTokens1155Factory,
-      [TEST_NFT_URI, addressManager.address]
+      [TEST_NFT_URI, addressManager.address, TEST_CONTRACT_URI]
     );
     const curatorTokens = CuratorTokens1155Factory.attach(
       deployedCuratorTokens.address
@@ -399,7 +403,8 @@ describe("ReactionVault Sell", function () {
         curatorTokens.address,
         "5000",
         "10000000",
-        "29000000000000"]
+        "29000000000000",
+      ]
     );
     const curatorVault = CuratorVaultFactory.attach(
       deployedCuratorVault.address

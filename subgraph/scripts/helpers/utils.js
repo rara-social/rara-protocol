@@ -1,7 +1,7 @@
 require("dotenv").config();
 const ethers = require("ethers");
 
-const chainId = "80001";
+const chainId = "1337";
 
 async function getWallet(name) {
   // create provider
