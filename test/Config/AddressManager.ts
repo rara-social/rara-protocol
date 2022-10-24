@@ -207,4 +207,32 @@ describe("AddressManager", function () {
     currentVal = await addressManager.royaltyRegistry();
     expect(currentVal).to.equal(ZERO_ADDRESS);
   });
+
+  it("Should allow owner to set address manager address", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const { addressManager } = await deploySystem(OWNER);
+
+    // Set it to Alice's address
+    await expect(addressManager.setLikeTokenFactory(ALICE.address))
+      .to.emit(addressManager, "LikeTokenFactoryAddressUpdated")
+      .withArgs(ALICE.address);
+
+    // Verify it got set
+    let currentVal = await addressManager.likeTokenFactory();
+    expect(currentVal).to.equal(ALICE.address);
+
+    // Verify non owner can't update address
+    await expect(
+      addressManager.connect(ALICE).setLikeTokenFactory(BOB.address)
+    ).to.revertedWith(NOT_ADMIN);
+
+    // Check setting to ZERO addr
+    await expect(addressManager.setLikeTokenFactory(ZERO_ADDRESS))
+      .to.emit(addressManager, "LikeTokenFactoryAddressUpdated")
+      .withArgs(ZERO_ADDRESS);
+
+    // Verify it got set
+    currentVal = await addressManager.likeTokenFactory();
+    expect(currentVal).to.equal(ZERO_ADDRESS);
+  });
 });

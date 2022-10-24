@@ -40,8 +40,15 @@ abstract contract AddressManagerStorageV1 is IAddressManager {
 
 /// On the next version of the protocol, if new variables are added, put them in the below
 /// contract and use this as the inheritance chain.
+abstract contract AddressManagerStorageV2 is AddressManagerStorageV1 {
+    /// @dev Address of the Like Token Factory
+    address public likeTokenFactory;
+}
+
+/// On the next version of the protocol, if new variables are added, put them in the below
+/// contract and use this as the inheritance chain.
 /**
-contract AddressManagerStorageV2 is AddressManagerStorageV1 {
+contract AddressManagerStorageV3 is AddressManagerStorageV2 {
   address newVariable;
 }
  */

@@ -13,6 +13,7 @@ import "./ReactionVaultStorage.sol";
 import "../Maker/IMakerRegistrar.sol";
 import "../Parameters/IParameterManager.sol";
 import "../Token/IStandard1155.sol";
+import "../Likes/ILikeTokenFactory.sol";
 import "../Token/IWMATIC.sol";
 
 /// @title ReactionVault
@@ -354,6 +355,7 @@ contract ReactionVault is
         ICuratorVault curatorVault;
         uint256 takerCuratorTokens;
         uint256 spenderCuratorTokens;
+        address likeTokenFactory;
     }
 
     /// @dev Allows a reaction NFT owner to spend (burn) their tokens at a specific target Taker NFT.
@@ -539,6 +541,17 @@ contract ReactionVault is
             msg.sender,
             false
         );
+
+        // Issue a like token for this spend if the factory is configured
+        info.likeTokenFactory = addressManager.likeTokenFactory();
+        if (info.likeTokenFactory != address(0x0)) {
+            ILikeTokenFactory(info.likeTokenFactory).issueLikeToken(
+                msg.sender,
+                takerNftChainId,
+                takerNftAddress,
+                takerNftId
+            );
+        }
 
         // Emit the event for the overall reaction spend
         emit ReactionsSpent(
