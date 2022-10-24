@@ -65,7 +65,6 @@ describe("LikeToken1155", function () {
   it("Should increment token IDs", async function () {
     const [OWNER, ALICE, BOB, CAROL] = await ethers.getSigners();
     const { addressManager } = await deploySystem(OWNER);
-
     const LikeToken1155Factory = await ethers.getContractFactory("LikeToken1155");
     const deployedTest1155 = await upgrades.deployProxy(LikeToken1155Factory, [
       TEST_NFT_URI,
@@ -96,7 +95,6 @@ describe("LikeToken1155", function () {
   it("Should burn owned tokens", async function () {
     const [OWNER, ALICE, BOB, CAROL] = await ethers.getSigners();
     const { addressManager } = await deploySystem(OWNER);
-
     const LikeToken1155Factory = await ethers.getContractFactory("LikeToken1155");
     const deployedTest1155 = await upgrades.deployProxy(LikeToken1155Factory, [
       TEST_NFT_URI,

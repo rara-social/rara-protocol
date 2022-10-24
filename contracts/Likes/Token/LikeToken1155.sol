@@ -10,6 +10,7 @@ import "./LikeToken1155Storage.sol";
 /// When a user reacts to a target NFT, they will be issued a like token.
 /// Only a single token per unique ID will ever be issued, and IDs will be incremented in an ascending counter,
 ///   on each mint.  Only the Like Token Factory can trigger mints.
+
 /// These tokens are non-transferrable.
 /// An owner may burn a token from their own wallet.
 contract LikeToken1155 is
@@ -30,6 +31,7 @@ contract LikeToken1155 is
         addressManager = IAddressManager(_addressManager);
     }
 
+
     /// @dev verifies that the calling account is the like token factory
     modifier onlyLikeTokenFactory() {
         require(msg.sender == addressManager.likeTokenFactory(), "Not Factory");
@@ -38,6 +40,7 @@ contract LikeToken1155 is
 
     /// @dev Allows reaction minter role to mint a like token
     function mint(address to) external onlyLikeTokenFactory {
+
         // Increment the id counter
         idCount = idCount + 1;
 

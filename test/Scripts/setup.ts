@@ -59,6 +59,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   const deployedTest1155 = await upgrades.deployProxy(Test1155Factory, [
     TEST_NFT_URI,
     addressManager.address,
+    TEST_CONTRACT_URI,
   ]);
   const testingStandard1155 = Test1155Factory.attach(deployedTest1155.address);
 
@@ -76,7 +77,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   );
   const deployedReactionNFT1155 = await upgrades.deployProxy(
     ReactionNft1155Factory,
-    [TEST_NFT_URI, addressManager.address]
+    [TEST_NFT_URI, addressManager.address, TEST_CONTRACT_URI]
   );
   const reactionNFT1155 = ReactionNft1155Factory.attach(
     deployedReactionNFT1155.address
@@ -106,7 +107,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   );
   const deployedCuratorToken = await upgrades.deployProxy(
     CuratorToken1155Factory,
-    [TEST_NFT_URI, addressManager.address]
+    [TEST_NFT_URI, addressManager.address, TEST_CONTRACT_URI]
   );
   const curatorToken = CuratorToken1155Factory.attach(
     deployedCuratorToken.address
@@ -121,7 +122,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
     curatorToken.address,
     "5000",
     "10000000",
-    "29000000000000"
+    "29000000000000",
   ]);
   const curatorVault = CuratorVaultFactory.attach(deployedCuratorVault.address);
 
@@ -220,4 +221,4 @@ const deploySystem = async (owner: SignerWithAddress) => {
   };
 };
 
-export { deploySystem };
+export {deploySystem};
