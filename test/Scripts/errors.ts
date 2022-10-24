@@ -4,6 +4,7 @@ const INVALID_CURATOR_VAULT = "Err CuratorVault";
 const INVALID_PAYMENT = "Invalid payment";
 const INVALID_ROLE_MANAGER = "RM invalid";
 const INVALID_ZERO_PARAM = "Invalid 0 input";
+const LIKE_TRANSFER_RESTRICTED = "Like transfer restricted"
 const NFT_NOT_OWNED = "NFT not owned";
 const NFT_NOT_REGISTERED = "NFT not registered";
 const NOT_ADMIN = "Not Admin";
@@ -25,6 +26,7 @@ export {
   INVALID_PAYMENT,
   INVALID_ROLE_MANAGER,
   INVALID_ZERO_PARAM,
+  LIKE_TRANSFER_RESTRICTED,
   NFT_NOT_OWNED,
   NFT_NOT_REGISTERED,
   NOT_ADMIN,
