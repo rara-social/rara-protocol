@@ -1,7 +1,7 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { BigNumber } from "ethers";
-import { ethers, upgrades } from "hardhat";
-import { TEST_LIKE_NFT_URI, TEST_NFT_URI } from "./constants";
+import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/signers";
+import {BigNumber} from "ethers";
+import {ethers, upgrades} from "hardhat";
+import {TEST_LIKE_NFT_URI, TEST_NFT_URI, TEST_CONTRACT_URI} from "./constants";
 
 export const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
 export const TEST_SALE_CURATOR_LIABILITY_BP = 5_000; // 50% goes to curator liability
@@ -96,9 +96,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   );
 
   // Deploy test Wrapped Matic
-  const WMaticFactory = await ethers.getContractFactory(
-    "WMATIC"
-  );
+  const WMaticFactory = await ethers.getContractFactory("WMATIC");
   const paymentTokenErc20 = await WMaticFactory.deploy();
 
   // Deploy the curator token Contract
@@ -138,9 +136,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   );
 
   // Deploy Like Token Impl and Factory
-  const LikeTokenFactory = await ethers.getContractFactory(
-    "LikeToken1155"
-  );
+  const LikeTokenFactory = await ethers.getContractFactory("LikeToken1155");
   const likeTokenImpl = await LikeTokenFactory.deploy();
   await likeTokenImpl.initialize(TEST_LIKE_NFT_URI, addressManager.address);
 
