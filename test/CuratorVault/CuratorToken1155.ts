@@ -46,7 +46,7 @@ describe("CuratorTokens", function () {
     const {curatorToken, roleManager} = await deploySystem(OWNER);
 
     // check for contractURI
-    let contractURI = await curatorToken.contractUri();
+    let contractURI = await curatorToken.contractURI();
     expect(contractURI).to.equal(TEST_CONTRACT_URI);
 
     // try and set contract URI (unauthorized)
@@ -60,7 +60,7 @@ describe("CuratorTokens", function () {
 
     // try and set contract URI (unauth)
     await curatorToken.connect(BOB).setContractUri("test string");
-    contractURI = await curatorToken.contractUri();
+    contractURI = await curatorToken.contractURI();
     expect(contractURI).to.equal("test string");
   });
 });

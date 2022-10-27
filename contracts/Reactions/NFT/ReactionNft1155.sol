@@ -62,7 +62,7 @@ contract ReactionNft1155 is Standard1155 {
         onlyNftAdmin
         returns (bool success)
     {
-        contractUri = _contractUri;
+        contractURI = _contractUri;
 
         return true;
     }
