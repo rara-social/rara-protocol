@@ -171,7 +171,7 @@ describe("LikeToken1155", function () {
     const likeToken = LikeToken1155Factory.attach(deployedTest1155.address);
 
     // check for contractURI
-    let contractURI = await likeToken.contractUri();
+    let contractURI = await likeToken.contractURI();
     expect(contractURI).to.equal(TEST_LIKE_NFT_URI + "contract/0X");
   });
 });

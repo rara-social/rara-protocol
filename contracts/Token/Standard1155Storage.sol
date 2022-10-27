@@ -15,5 +15,5 @@ contract Standard1155StorageV1 {
 /// On the next version of the protocol, if new variables are added, put them in the below
 /// contract and use this as the inheritance chain.
 contract Standard1155StorageV2 is Standard1155StorageV1 {
-    string public contractUri;
+    string public contractURI;
 }

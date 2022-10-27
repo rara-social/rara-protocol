@@ -42,7 +42,7 @@ describe("Standard1155 Token", function () {
     const {reactionNFT1155, roleManager} = await deploySystem(OWNER);
 
     // try and set contract URI (unauth)
-    let contractURI = await reactionNFT1155.contractUri();
+    let contractURI = await reactionNFT1155.contractURI();
     expect(contractURI).to.equal(TEST_CONTRACT_URI);
   });
 });

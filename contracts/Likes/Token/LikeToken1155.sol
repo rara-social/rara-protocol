@@ -31,7 +31,7 @@ contract LikeToken1155 is
 
         addressManager = IAddressManager(_addressManager);
 
-        contractUri = _contractUri;
+        contractURI = _contractUri;
     }
 
     /// @dev verifies that the calling account is the like token factory
@@ -86,7 +86,7 @@ contract LikeToken1155 is
         onlyNftAdmin
         returns (bool success)
     {
-        contractUri = _contractUri;
+        contractURI = _contractUri;
 
         return true;
     }

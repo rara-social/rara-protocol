@@ -54,7 +54,7 @@ describe("Reaction1155 Token", function () {
     const {reactionNFT1155, roleManager} = await deploySystem(OWNER);
 
     // check for contractURI
-    let contractURI = await reactionNFT1155.contractUri();
+    let contractURI = await reactionNFT1155.contractURI();
     expect(contractURI).to.equal(TEST_CONTRACT_URI);
 
     // try and set contract URI (unauthorized)
@@ -68,7 +68,7 @@ describe("Reaction1155 Token", function () {
 
     // try and set contract URI (unauth)
     await reactionNFT1155.connect(BOB).setContractUri("test string");
-    contractURI = await reactionNFT1155.contractUri();
+    contractURI = await reactionNFT1155.contractURI();
     expect(contractURI).to.equal("test string");
   });
 });

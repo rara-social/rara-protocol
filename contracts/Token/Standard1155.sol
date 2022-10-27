@@ -22,6 +22,6 @@ abstract contract Standard1155 is
 
         addressManager = IAddressManager(_addressManager);
 
-        contractUri = _contractUri;
+        contractURI = _contractUri;
     }
 }
