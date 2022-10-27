@@ -583,20 +583,34 @@ contract ReactionVault is
         address curatorVaultOverride,
         string memory ipfsMetadataHash
     ) external payable nonReentrant {
-        // Buy the reactions
-        _buyReaction(transformId, quantity, msg.sender, referrer, optionBits);
-
         // calc payment parameter version
         uint256 parameterVersion = deriveParameterVersion(
             addressManager.parameterManager()
         );
-
         // Build reaction ID
         uint256 reactionId = deriveReactionId(
             transformId,
             optionBits,
             parameterVersion
         );
+
+        // check for free reaction
+        if (msg.value == 0) {
+            _freeSpend(
+                transformId,
+                takerNftChainId,
+                takerNftAddress,
+                takerNftId,
+                reactionId,
+                quantity,
+                ipfsMetadataHash
+            );
+
+            return;
+        }
+
+        // Buy the reactions
+        _buyReaction(transformId, quantity, msg.sender, referrer, optionBits);
 
         // Spend it from the msg senders wallet
         _spendReaction(
@@ -798,5 +812,56 @@ contract ReactionVault is
     function sweep() external {
         require(addressManager.roleManager().isAdmin(msg.sender), "Not Admin");
         payable(msg.sender).transfer(address(this).balance);
+    }
+
+    /// @dev Allow "spending" a reaction without any value
+    function _freeSpend(
+        uint256 transformId,
+        uint256 takerNftChainId,
+        address takerNftAddress,
+        uint256 takerNftId,
+        uint256 reactionId,
+        uint256 reactionQuantity,
+        string memory ipfsMetadataHash
+    ) internal {
+        // Verify quantity
+        require(reactionQuantity > 0, "Invalid 0 input");
+
+        // Get the NFT Source ID from the maker registrar
+        IMakerRegistrar makerRegistrar = addressManager.makerRegistrar();
+        uint256 sourceId = makerRegistrar.transformToSourceLookup(transformId);
+        require(sourceId != 0, "Unknown NFT");
+
+        // Verify it is registered
+        IMakerRegistrar.NftDetails memory nftDetails = makerRegistrar
+            .sourceToDetailsLookup(sourceId);
+        require(nftDetails.registered, "NFT not registered");
+
+        // Issue a like token for this spend if the factory is configured
+        address likeTokenFactory = addressManager.likeTokenFactory();
+        if (likeTokenFactory != address(0x0)) {
+            ILikeTokenFactory(likeTokenFactory).issueLikeToken(
+                msg.sender,
+                takerNftChainId,
+                takerNftAddress,
+                takerNftId
+            );
+        }
+
+        // Emit the event for the overall reaction spend
+        emit ReactionsSpent(
+            takerNftChainId,
+            takerNftAddress,
+            takerNftId,
+            reactionId,
+            address(0), // payment token
+            reactionQuantity,
+            ipfsMetadataHash,
+            address(0), //referrer
+            address(0), // curator vault
+            0, // curatorTokenId
+            0, // spenderCuratorTokens
+            0 // takerCuratorTokens
+        );
     }
 }
