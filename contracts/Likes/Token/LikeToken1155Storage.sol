@@ -11,6 +11,7 @@ import "../../Config/IAddressManager.sol";
 contract LikeToken1155StorageV1 {
     IAddressManager public addressManager;
     uint256 public idCount;
+    string public contractUri;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

@@ -85,7 +85,16 @@ contract LikeTokenFactory is
                         "/{id}"
                     )
                 ),
-                address(addressManager)
+                address(addressManager),
+                string(
+                    abi.encodePacked(
+                        string.concat(bytes(baseTokenUri), "/contract/"),
+                        StringsUpgradeable.toHexString(
+                            uint256(uint160(newlyDeployed)),
+                            20
+                        )
+                    )
+                )
             );
 
             // Save it to the mapping

@@ -138,7 +138,11 @@ const deploySystem = async (owner: SignerWithAddress) => {
   // Deploy Like Token Impl and Factory
   const LikeTokenFactory = await ethers.getContractFactory("LikeToken1155");
   const likeTokenImpl = await LikeTokenFactory.deploy();
-  await likeTokenImpl.initialize(TEST_LIKE_NFT_URI, addressManager.address);
+  await likeTokenImpl.initialize(
+    TEST_LIKE_NFT_URI,
+    addressManager.address,
+    TEST_LIKE_NFT_URI + "/contract/0X"
+  );
 
   const LikeTokenFactoryFactory = await ethers.getContractFactory(
     "LikeTokenFactory"
