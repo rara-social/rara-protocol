@@ -16,6 +16,7 @@ type DeployConfig = {
   saleReferrerBasisPoints: string;
   spendReferrerBasisPoints: string;
   spendTakerBasisPoints: string;
+  freeReactionLimit: number;
 };
 
 export default DeployConfig;

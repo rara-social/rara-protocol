@@ -30,6 +30,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV2 {
     event SpendReferrerBasisPointsUpdated(uint256 newValue);
     event ApprovedCuratorVaultsUpdated(address vault, bool approved);
     event NativeWrappedTokenUpdated(IERC20Upgradeable newValue);
+    event FreeReactionLimitUpdated(uint256 reactionLimit);
 
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IAddressManager _addressManager) public initializer {
@@ -114,5 +115,12 @@ contract ParameterManager is Initializable, ParameterManagerStorageV2 {
         require(address(_nativeWrappedToken) != address(0x0), ZERO_INPUT);
         nativeWrappedToken = _nativeWrappedToken;
         emit NativeWrappedTokenUpdated(_nativeWrappedToken);
+    }
+
+    /// @dev Setter for the native wrapped ERC20 token (e.g. WMATIC)
+    function setFreeReactionLimit(uint256 _reactionLimit) external onlyAdmin {
+        require(_reactionLimit >= 0, ZERO_INPUT);
+        freeReactionLimit = _reactionLimit;
+        emit FreeReactionLimitUpdated(_reactionLimit);
     }
 }

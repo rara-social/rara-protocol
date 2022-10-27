@@ -4,7 +4,7 @@ const INVALID_CURATOR_VAULT = "Err CuratorVault";
 const INVALID_PAYMENT = "Invalid payment";
 const INVALID_ROLE_MANAGER = "RM invalid";
 const INVALID_ZERO_PARAM = "Invalid 0 input";
-const LIKE_TRANSFER_RESTRICTED = "Like transfer restricted"
+const LIKE_TRANSFER_RESTRICTED = "Like transfer restricted";
 const NFT_NOT_OWNED = "NFT not owned";
 const NFT_NOT_REGISTERED = "NFT not registered";
 const NOT_ADMIN = "Not Admin";
@@ -19,6 +19,7 @@ const REACTION_TRANSFER_RESTRICTED = "Reaction transfer restricted";
 const REWARDS_LT_BURN = "Rewards balance < tokensToBurn";
 const TRANSFER_NOT_ALLOWED = "ERC20: insufficient allowance";
 const UNKNOWN_NFT = "Unknown NFT";
+const REACTION_QUANTITY_TOO_HIGH = "Reaction quantity above limit";
 
 export {
   ALREADY_REGISTERED,
@@ -42,4 +43,5 @@ export {
   REWARDS_LT_BURN,
   TRANSFER_NOT_ALLOWED,
   UNKNOWN_NFT,
+  REACTION_QUANTITY_TOO_HIGH,
 };

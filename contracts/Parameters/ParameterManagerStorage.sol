@@ -48,6 +48,7 @@ abstract contract ParameterManagerStorageV1 is IParameterManager {
 
 abstract contract ParameterManagerStorageV2 is ParameterManagerStorageV1 {
     IERC20Upgradeable public nativeWrappedToken;
+    uint256 public freeReactionLimit;
 }
 
 /// On the next version of the protocol, if new variables are added, put them in the below

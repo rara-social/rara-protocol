@@ -9,6 +9,7 @@ export const TEST_SALE_CREATOR_BP = 200; // 2% goes to the creator
 export const TEST_SALE_REFERRER_BP = 100; // 1% goes to the referrer
 export const TEST_SPEND_REFERRER_BP = 100; // 1% of curator liability goes to the referrer
 export const TEST_SPEND_TAKER_BP = 5_000; // 50% of curator liability goes to the taker
+export const TEST_FREE_REACTION_LIMIT = 1; // Amount of free reactions per transaction
 
 const deploySystem = async (owner: SignerWithAddress) => {
   // Deploy the Role Manager first
@@ -201,6 +202,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   await parameterManager.setSaleReferrerBasisPoints(TEST_SALE_REFERRER_BP);
   await parameterManager.setSpendTakerBasisPoints(TEST_SPEND_TAKER_BP);
   await parameterManager.setSpendReferrerBasisPoints(TEST_SPEND_REFERRER_BP);
+  await parameterManager.setFreeReactionLimit(TEST_FREE_REACTION_LIMIT);
 
   // Return objects for tests to use
   return {

@@ -825,7 +825,13 @@ contract ReactionVault is
         string memory ipfsMetadataHash
     ) internal {
         // Verify quantity
-        require(reactionQuantity > 0, "Invalid 0 input");
+        uint256 freeReactionLimit = addressManager
+            .parameterManager()
+            .freeReactionLimit();
+        require(
+            reactionQuantity <= freeReactionLimit,
+            "Reaction quantity above limit"
+        );
 
         // Get the NFT Source ID from the maker registrar
         IMakerRegistrar makerRegistrar = addressManager.makerRegistrar();
