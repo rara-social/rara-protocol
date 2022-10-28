@@ -47,7 +47,12 @@ abstract contract ParameterManagerStorageV1 is IParameterManager {
 }
 
 abstract contract ParameterManagerStorageV2 is ParameterManagerStorageV1 {
+    /// @dev address of the blockchain's wrapped token, eg, WMATIC
+    /// This allows the contracts to distinguish between payments in WMATIC vs, eg, USDC
     IERC20Upgradeable public nativeWrappedToken;
+
+    /// @dev Amount of reactions (quantity) allowed when reacting for free
+    /// If set to true then it is allowed to be used.
     uint256 public freeReactionLimit;
 }
 

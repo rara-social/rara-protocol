@@ -119,7 +119,7 @@ contract ParameterManager is Initializable, ParameterManagerStorageV2 {
 
     /// @dev Setter for the native wrapped ERC20 token (e.g. WMATIC)
     function setFreeReactionLimit(uint256 _reactionLimit) external onlyAdmin {
-        require(_reactionLimit >= 0, ZERO_INPUT);
+        require(_reactionLimit > 0, ZERO_INPUT);
         freeReactionLimit = _reactionLimit;
         emit FreeReactionLimitUpdated(_reactionLimit);
     }

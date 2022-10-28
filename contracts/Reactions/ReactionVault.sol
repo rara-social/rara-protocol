@@ -596,7 +596,7 @@ contract ReactionVault is
 
         // check for free reaction
         if (msg.value == 0) {
-            _freeSpend(
+            _freeReaction(
                 transformId,
                 takerNftChainId,
                 takerNftAddress,
@@ -814,8 +814,9 @@ contract ReactionVault is
         payable(msg.sender).transfer(address(this).balance);
     }
 
-    /// @dev Allow "spending" a reaction without any value
-    function _freeSpend(
+    /// @dev React to content without sending any value.
+    // This function will allow the user to record their reaction on-chain and collect a "like" token but not purchase any curator tokens
+    function _freeReaction(
         uint256 transformId,
         uint256 takerNftChainId,
         address takerNftAddress,
