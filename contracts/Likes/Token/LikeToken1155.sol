@@ -22,15 +22,17 @@ contract LikeToken1155 is
     uint8 public constant TOKEN_AMOUNT = 1;
 
     /// @dev initializer to call after deployment, can only be called once
-    function initialize(string memory _uri, address _addressManager)
-        public
-        initializer
-    {
+    function initialize(
+        string memory _uri,
+        address _addressManager,
+        string memory _contractUri
+    ) public initializer {
         __ERC1155_init(_uri);
 
         addressManager = IAddressManager(_addressManager);
-    }
 
+        contractURI = _contractUri;
+    }
 
     /// @dev verifies that the calling account is the like token factory
     modifier onlyLikeTokenFactory() {
@@ -38,9 +40,15 @@ contract LikeToken1155 is
         _;
     }
 
+    /// @dev restrict updates
+    modifier onlyNftAdmin() {
+        IRoleManager roleManager = IRoleManager(addressManager.roleManager());
+        require(roleManager.isReactionNftAdmin(msg.sender), "Not NFT Admin");
+        _;
+    }
+
     /// @dev Allows reaction minter role to mint a like token
     function mint(address to) external onlyLikeTokenFactory {
-
         // Increment the id counter
         idCount = idCount + 1;
 
@@ -70,5 +78,16 @@ contract LikeToken1155 is
             from == address(0x0) || to == address(0x0),
             "Like transfer restricted"
         );
+    }
+
+    /// @dev update contract URI
+    function setContractUri(string memory _contractUri)
+        external
+        onlyNftAdmin
+        returns (bool success)
+    {
+        contractURI = _contractUri;
+
+        return true;
     }
 }

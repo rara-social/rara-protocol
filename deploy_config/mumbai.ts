@@ -22,6 +22,7 @@ const config: DeployConfig = {
   saleReferrerBasisPoints: "100", // 1% goes to the referrer on reaction sale
   spendReferrerBasisPoints: "100", // 1% of curator liability goes to the referrer
   spendTakerBasisPoints: "700", // 7% of curator liability goes to the taker
+  freeReactionLimit: 1, // Amount of free reactions per transaction
 };
 
 export default config;

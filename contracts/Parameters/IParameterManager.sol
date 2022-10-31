@@ -59,4 +59,10 @@ interface IParameterManager {
     /// @dev Setter for the native wrapped ERC20 token (e.g. WMATIC)
     function setNativeWrappedToken(IERC20Upgradeable _nativeWrappedToken)
         external;
+
+    /// @dev Setter for free reaction limit
+    function freeReactionLimit() external returns (uint256);
+
+    /// @dev Setter for free reaction limit
+    function setFreeReactionLimit(uint256 limit) external;
 }

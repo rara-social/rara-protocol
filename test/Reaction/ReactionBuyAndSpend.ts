@@ -1,13 +1,13 @@
-import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { ethers } from "hardhat";
-import { ZERO_ADDRESS } from "../Scripts/constants";
+import {expect} from "chai";
+import {BigNumber} from "ethers";
+import {ethers} from "hardhat";
+import {ZERO_ADDRESS} from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
   TEST_SALE_CREATOR_BP,
 } from "../Scripts/setup";
-import { deriveTransformId } from "../Scripts/derivedParams";
+import {deriveTransformId} from "../Scripts/derivedParams";
 
 describe("ReactionVault Buy And Spend", function () {
   it("Should buy and spend a single reaction", async function () {
@@ -55,7 +55,7 @@ describe("ReactionVault Buy And Spend", function () {
     const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Buy and spend the reaction
-    const transaction = await reactionVault.buyAndSpendReaction(
+    const transaction = await reactionVault.react(
       REACTION_ID,
       REACTION_AMOUNT,
       REFERRER.address, // Referrer
@@ -65,7 +65,7 @@ describe("ReactionVault Buy And Spend", function () {
       TAKER_NFT_ID,
       ZERO_ADDRESS, // Curator vault override
       metadataHash, // metadata hash
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
     const receipt = await transaction.wait();
 
@@ -137,7 +137,7 @@ describe("ReactionVault Buy And Spend", function () {
     const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Buy and spend the reaction
-    const transaction = await reactionVault.buyAndSpendReaction(
+    const transaction = await reactionVault.react(
       REACTION_ID,
       REACTION_AMOUNT,
       REFERRER.address, // Referrer
@@ -147,7 +147,7 @@ describe("ReactionVault Buy And Spend", function () {
       TAKER_NFT_ID,
       ZERO_ADDRESS, // Curator vault override
       metadataHash, // metadata hash
-      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
+      {value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT)}
     );
     const receipt = await transaction.wait();
 

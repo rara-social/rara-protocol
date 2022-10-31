@@ -1,14 +1,19 @@
-import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
-import { ZERO_ADDRESS } from "../Scripts/constants";
-import { deploySystem } from "../Scripts/setup";
-import { INVALID_BP, INVALID_ZERO_PARAM, NOT_ADMIN, OUT_OF_BOUNDS } from "../Scripts/errors";
-import { BigNumber } from "ethers";
+import {expect} from "chai";
+import {ethers, upgrades} from "hardhat";
+import {ZERO_ADDRESS} from "../Scripts/constants";
+import {deploySystem} from "../Scripts/setup";
+import {
+  INVALID_BP,
+  INVALID_ZERO_PARAM,
+  NOT_ADMIN,
+  OUT_OF_BOUNDS,
+} from "../Scripts/errors";
+import {BigNumber} from "ethers";
 
 describe("ParameterManager", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { addressManager, parameterManager } = await deploySystem(OWNER);
+    const {addressManager, parameterManager} = await deploySystem(OWNER);
 
     // Verify the role manager was set
     const currentAddressManager = await parameterManager.addressManager();
@@ -19,15 +24,14 @@ describe("ParameterManager", function () {
     const ParameterManagerFactory = await ethers.getContractFactory(
       "ParameterManager"
     );
-    await expect(upgrades.deployProxy(
-      ParameterManagerFactory,
-      [ZERO_ADDRESS]
-    )).to.revertedWith(INVALID_ZERO_PARAM);
+    await expect(
+      upgrades.deployProxy(ParameterManagerFactory, [ZERO_ADDRESS])
+    ).to.revertedWith(INVALID_ZERO_PARAM);
   });
 
   it("Should allow owner to set payment token address", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { parameterManager } = await deploySystem(OWNER);
+    const {parameterManager} = await deploySystem(OWNER);
 
     // Verify the setter checks invalid input
     await expect(
@@ -51,7 +55,7 @@ describe("ParameterManager", function () {
 
   it("Should allow owner to set native wrapped token address", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { parameterManager } = await deploySystem(OWNER);
+    const {parameterManager} = await deploySystem(OWNER);
 
     // Verify the setter checks invalid input
     await expect(
@@ -75,7 +79,7 @@ describe("ParameterManager", function () {
 
   it("Should allow owner to set reaction price", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const { parameterManager } = await deploySystem(OWNER);
+    const {parameterManager} = await deploySystem(OWNER);
 
     const val = 100;
 
@@ -89,7 +93,6 @@ describe("ParameterManager", function () {
       .to.emit(parameterManager, "ReactionPriceUpdated")
       .withArgs(val);
 
-
     // Verify it got set
     const currentVal = await parameterManager.reactionPrice();
     expect(currentVal).to.equal(val);
@@ -102,7 +105,7 @@ describe("ParameterManager", function () {
 
   it("Should allow owner to set curator liability", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const { parameterManager } = await deploySystem(OWNER);
+    const {parameterManager} = await deploySystem(OWNER);
 
     const val = 200;
 
@@ -110,7 +113,6 @@ describe("ParameterManager", function () {
     await expect(
       parameterManager.setSaleCuratorLiabilityBasisPoints(0)
     ).to.revertedWith(INVALID_ZERO_PARAM);
-
 
     // Set it to the value
     await expect(parameterManager.setSaleCuratorLiabilityBasisPoints(val))
@@ -121,7 +123,6 @@ describe("ParameterManager", function () {
     await expect(
       parameterManager.setSaleCuratorLiabilityBasisPoints(10_001)
     ).to.revertedWith(INVALID_BP);
-
 
     // Verify it got set
     const currentVal = await parameterManager.saleCuratorLiabilityBasisPoints();
@@ -135,7 +136,7 @@ describe("ParameterManager", function () {
 
   it("Should allow owner to set sale referrer bp", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const { parameterManager } = await deploySystem(OWNER);
+    const {parameterManager} = await deploySystem(OWNER);
 
     const val = 400;
 
@@ -154,7 +155,6 @@ describe("ParameterManager", function () {
       parameterManager.setSaleReferrerBasisPoints(10_001)
     ).to.revertedWith(INVALID_BP);
 
-
     // Verify it got set
     const currentVal = await parameterManager.saleReferrerBasisPoints();
     expect(currentVal).to.equal(val);
@@ -167,7 +167,7 @@ describe("ParameterManager", function () {
 
   it("Should allow owner to set spend Taker bp", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const { parameterManager } = await deploySystem(OWNER);
+    const {parameterManager} = await deploySystem(OWNER);
 
     const val = 400;
 
@@ -186,7 +186,6 @@ describe("ParameterManager", function () {
       parameterManager.setSpendTakerBasisPoints(10_001)
     ).to.revertedWith(INVALID_BP);
 
-
     // Verify it got set
     const currentVal = await parameterManager.spendTakerBasisPoints();
     expect(currentVal).to.equal(val);
@@ -199,7 +198,7 @@ describe("ParameterManager", function () {
 
   it("Should allow owner to set spend Referrer bp", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const { parameterManager } = await deploySystem(OWNER);
+    const {parameterManager} = await deploySystem(OWNER);
 
     const val = 400;
 
@@ -218,7 +217,6 @@ describe("ParameterManager", function () {
       parameterManager.setSpendReferrerBasisPoints(10_001)
     ).to.revertedWith(INVALID_BP);
 
-
     // Verify it got set
     const currentVal = await parameterManager.spendReferrerBasisPoints();
     expect(currentVal).to.equal(val);
@@ -231,7 +229,7 @@ describe("ParameterManager", function () {
 
   it("Should allow owner to set allowed curator vault", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const { parameterManager } = await deploySystem(OWNER);
+    const {parameterManager} = await deploySystem(OWNER);
 
     // Verify the setter checks invalid input
     await expect(
@@ -257,5 +255,27 @@ describe("ParameterManager", function () {
     ).to.be.revertedWith(NOT_ADMIN);
   });
 
-});
+  it("Should allow owner to set free reaction limit", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const {parameterManager} = await deploySystem(OWNER);
 
+    // Verify the setter checks invalid input
+    await expect(
+      parameterManager.setFreeReactionLimit(ZERO_ADDRESS)
+    ).to.revertedWith(INVALID_ZERO_PARAM);
+
+    // Set it to Alice's address
+    await expect(parameterManager.setFreeReactionLimit(1))
+      .to.emit(parameterManager, "FreeReactionLimitUpdated")
+      .withArgs(1);
+
+    // Verify it got set
+    const currentVal = await parameterManager.freeReactionLimit();
+    expect(currentVal).to.equal(1);
+
+    // Verify non owner can't update address
+    await expect(
+      parameterManager.connect(ALICE).setFreeReactionLimit(100)
+    ).to.be.revertedWith(NOT_ADMIN);
+  });
+});

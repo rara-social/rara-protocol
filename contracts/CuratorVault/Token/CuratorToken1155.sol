@@ -44,7 +44,7 @@ contract CuratorToken1155 is Standard1155 {
         onlyCuratorTokenAdmin
         returns (bool success)
     {
-        contractUri = _contractUri;
+        contractURI = _contractUri;
 
         return true;
     }
