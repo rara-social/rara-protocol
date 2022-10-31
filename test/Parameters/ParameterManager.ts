@@ -10,7 +10,7 @@ import {
 } from "../Scripts/errors";
 import {BigNumber} from "ethers";
 
-describe.only("ParameterManager", function () {
+describe("ParameterManager", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
     const {addressManager, parameterManager} = await deploySystem(OWNER);

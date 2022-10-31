@@ -570,9 +570,9 @@ contract ReactionVault is
         );
     }
 
-    /// @dev Allows a user to buy and spend a reaction in 1 transaction instead of first buying and then spending
-    /// in 2 separate transactions
-    function buyAndSpendReaction(
+    /// @dev Allows a user to react to content & receive a like token.
+    /// If value is sent into this function then the user will purchase curation tokens.
+    function react(
         uint256 transformId,
         uint256 quantity,
         address referrer,

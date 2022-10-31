@@ -17,7 +17,7 @@ describe("ReactionVault Free Reaction", function () {
 
     // Trying to buy a reaction for a unknown NFT should fail
     await expect(
-      reactionVault.buyAndSpendReaction(
+      reactionVault.react(
         123456, // uint256 transformId,
         1, // uint256 quantity,
         ZERO_ADDRESS, // address ,
@@ -70,7 +70,7 @@ describe("ReactionVault Free Reaction", function () {
 
     // verify unregistered transform
     await expect(
-      reactionVault.buyAndSpendReaction(
+      reactionVault.react(
         TRANSFORM_ID, // uint256 transformId,
         1, // uint256 quantity,
         ZERO_ADDRESS, // address ,
@@ -116,7 +116,7 @@ describe("ReactionVault Free Reaction", function () {
     const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Reacting for free with a registered reaction should succeed
-    const tx = await reactionVault.connect(BOB).buyAndSpendReaction(
+    const tx = await reactionVault.connect(BOB).react(
       TRANSFORM_ID, // uint256 transformId,
       1, // uint256 quantity,
       ZERO_ADDRESS, // address ,
@@ -172,7 +172,7 @@ describe("ReactionVault Free Reaction", function () {
     const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
     // Reacting for free with a registered reaction should succeed
-    const tx = await reactionVault.connect(BOB).buyAndSpendReaction(
+    const tx = await reactionVault.connect(BOB).react(
       TRANSFORM_ID, // uint256 transformId,
       1, // uint256 quantity,
       ZERO_ADDRESS, // address ,
@@ -196,7 +196,7 @@ describe("ReactionVault Free Reaction", function () {
     // expect(tokenBalance).to.equal(1);
 
     // Reacting for money
-    const tx2 = await reactionVault.connect(ALICE).buyAndSpendReaction(
+    const tx2 = await reactionVault.connect(ALICE).react(
       TRANSFORM_ID, // uint256 transformId,
       1, // uint256 quantity,
       ZERO_ADDRESS, // address ,
@@ -215,7 +215,7 @@ describe("ReactionVault Free Reaction", function () {
     // expect(tokenBalance2).to.equal(1);
 
     // Reacting for free with a registered reaction should succeed
-    const tx3 = await reactionVault.connect(BOB).buyAndSpendReaction(
+    const tx3 = await reactionVault.connect(BOB).react(
       TRANSFORM_ID, // uint256 transformId,
       1, // uint256 quantity,
       ZERO_ADDRESS, // address ,
@@ -266,7 +266,7 @@ it("Should issue a like token", async function () {
 
   // Send two reactions => should reject
   const tx = await expect(
-    reactionVault.connect(BOB).buyAndSpendReaction(
+    reactionVault.connect(BOB).react(
       TRANSFORM_ID, // uint256 transformId,
       2, // uint256 quantity,
       ZERO_ADDRESS, // address ,
