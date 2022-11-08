@@ -234,7 +234,7 @@ describe("ReactionVault Free Reaction", function () {
   });
 });
 
-it("Should issue a like token", async function () {
+it("Should prevent spending more reactions than freeReactionLimit param", async function () {
   const [OWNER, ALICE, BOB] = await ethers.getSigners();
   const {reactionVault, testingStandard1155, makerRegistrar, roleManager} =
     await deploySystem(OWNER);
