@@ -1,7 +1,7 @@
-import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { ethers } from "hardhat";
-import { ZERO_ADDRESS } from "../Scripts/constants";
+import {expect} from "chai";
+import {BigNumber} from "ethers";
+import {ethers} from "hardhat";
+import {ZERO_ADDRESS} from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -9,13 +9,9 @@ import {
   TEST_SALE_CURATOR_LIABILITY_BP,
   TEST_SALE_REFERRER_BP,
 } from "../Scripts/setup";
-import {
-  deriveTransformId
-} from "../Scripts/derivedParams";
+import {deriveTransformId} from "../Scripts/derivedParams";
 
 describe("ReactionVault Royalties Buy", function () {
-
-
   it("Should buy a single reaction with invalid royalty params - none set", async function () {
     const [OWNER, ALICE, CREATOR, REFERRER] = await ethers.getSigners();
     const {
@@ -23,7 +19,7 @@ describe("ReactionVault Royalties Buy", function () {
       testingStandard1155,
       makerRegistrar,
       paymentTokenErc20,
-      addressManager
+      addressManager,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -90,20 +86,19 @@ describe("ReactionVault Royalties Buy", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
+      {value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT)}
     );
     let receipt = await transaction.wait();
 
     // Verify the creator reward event
     let creatorRewardEvent = receipt.events?.find(
-      (x) => x.event === "CreatorRewardsGranted"
+      (x: any) => x.event === "CreatorRewardsGranted"
     );
     expect(creatorRewardEvent!.args!.creator).to.be.equal(CREATOR.address);
     expect(creatorRewardEvent!.args!.paymentToken).to.be.equal(
       paymentTokenErc20.address
     );
     expect(creatorRewardEvent!.args!.amount).to.be.equal(CREATOR_CUT);
-
   });
 
   it("Should buy a single reaction with invalid royalty params - Invalid array lengths set", async function () {
@@ -113,7 +108,7 @@ describe("ReactionVault Royalties Buy", function () {
       testingStandard1155,
       makerRegistrar,
       paymentTokenErc20,
-      addressManager
+      addressManager,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -173,7 +168,7 @@ describe("ReactionVault Royalties Buy", function () {
 
     //////////////
     // Invalid array lengths set
-    /////////////    
+    /////////////
 
     const transaction = await reactionVault.buyReaction(
       REACTION_ID,
@@ -181,13 +176,13 @@ describe("ReactionVault Royalties Buy", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
+      {value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT)}
     );
     const receipt = await transaction.wait();
 
     // Verify the creator reward event
     const creatorRewardEvent = receipt.events?.find(
-      (x) => x.event === "CreatorRewardsGranted"
+      (x: any) => x.event === "CreatorRewardsGranted"
     );
     expect(creatorRewardEvent!.args!.creator).to.be.equal(CREATOR.address);
     expect(creatorRewardEvent!.args!.paymentToken).to.be.equal(
@@ -203,7 +198,7 @@ describe("ReactionVault Royalties Buy", function () {
       testingStandard1155,
       makerRegistrar,
       paymentTokenErc20,
-      addressManager
+      addressManager,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -261,10 +256,9 @@ describe("ReactionVault Royalties Buy", function () {
       CREATOR_CUT.add(REFERRER_CUT).add(CURATOR_LIABILITY).add(MAKER_CUT)
     );
 
-
     //////////////
     // Zero address set
-    /////////////    
+    /////////////
 
     const transaction = await reactionVault.buyReaction(
       REACTION_ID,
@@ -272,13 +266,13 @@ describe("ReactionVault Royalties Buy", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
+      {value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT)}
     );
     const receipt = await transaction.wait();
 
     // Verify the creator reward event
     const creatorRewardEvent = receipt.events?.find(
-      (x) => x.event === "CreatorRewardsGranted"
+      (x: any) => x.event === "CreatorRewardsGranted"
     );
     expect(creatorRewardEvent!.args!.creator).to.be.equal(CREATOR.address);
     expect(creatorRewardEvent!.args!.paymentToken).to.be.equal(
@@ -294,7 +288,7 @@ describe("ReactionVault Royalties Buy", function () {
       testingStandard1155,
       makerRegistrar,
       paymentTokenErc20,
-      addressManager
+      addressManager,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -354,7 +348,7 @@ describe("ReactionVault Royalties Buy", function () {
 
     //////////////
     // Over 100% set
-    /////////////    
+    /////////////
 
     const transaction = await reactionVault.buyReaction(
       REACTION_ID,
@@ -362,30 +356,30 @@ describe("ReactionVault Royalties Buy", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
+      {value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT)}
     );
     const receipt = await transaction.wait();
 
     // Verify the creator reward event
     const creatorRewardEvent = receipt.events?.find(
-      (x) => x.event === "CreatorRewardsGranted"
+      (x: any) => x.event === "CreatorRewardsGranted"
     );
     expect(creatorRewardEvent!.args!.creator).to.be.equal(CREATOR.address);
     expect(creatorRewardEvent!.args!.paymentToken).to.be.equal(
       paymentTokenErc20.address
     );
     expect(creatorRewardEvent!.args!.amount).to.be.equal(CREATOR_CUT);
-
   });
 
   it("Should buy a single reaction with invalid royalty params - Over 100% set across multiple", async function () {
-    const [OWNER, ALICE, CREATOR, REFERRER, CREATOR2] = await ethers.getSigners();
+    const [OWNER, ALICE, CREATOR, REFERRER, CREATOR2] =
+      await ethers.getSigners();
     const {
       reactionVault,
       testingStandard1155,
       makerRegistrar,
       paymentTokenErc20,
-      addressManager
+      addressManager,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -401,7 +395,10 @@ describe("ReactionVault Royalties Buy", function () {
     const royaltyRegistry = await TestRoyaltyRegistryFactory.deploy();
     await addressManager.setRoyaltyRegistry(royaltyRegistry.address);
 
-    await royaltyRegistry.setRoyalties([CREATOR.address, CREATOR2.address], ["9000", "9000"]);
+    await royaltyRegistry.setRoyalties(
+      [CREATOR.address, CREATOR2.address],
+      ["9000", "9000"]
+    );
 
     // Register it
     await makerRegistrar
@@ -445,7 +442,7 @@ describe("ReactionVault Royalties Buy", function () {
 
     //////////////
     // Over 100% set across multiple
-    /////////////    
+    /////////////
 
     const transaction = await reactionVault.buyReaction(
       REACTION_ID,
@@ -453,30 +450,30 @@ describe("ReactionVault Royalties Buy", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
+      {value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT)}
     );
     const receipt = await transaction.wait();
 
     // Verify the creator reward event
     const creatorRewardEvent = receipt.events?.find(
-      (x) => x.event === "CreatorRewardsGranted"
+      (x: any) => x.event === "CreatorRewardsGranted"
     );
     expect(creatorRewardEvent!.args!.creator).to.be.equal(CREATOR.address);
     expect(creatorRewardEvent!.args!.paymentToken).to.be.equal(
       paymentTokenErc20.address
     );
     expect(creatorRewardEvent!.args!.amount).to.be.equal(CREATOR_CUT);
-
   });
 
   it("Should buy a single reaction with multiple royalty params", async function () {
-    const [OWNER, ALICE, CREATOR, REFERRER, CREATOR2] = await ethers.getSigners();
+    const [OWNER, ALICE, CREATOR, REFERRER, CREATOR2] =
+      await ethers.getSigners();
     const {
       reactionVault,
       testingStandard1155,
       makerRegistrar,
       paymentTokenErc20,
-      addressManager
+      addressManager,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -493,7 +490,10 @@ describe("ReactionVault Royalties Buy", function () {
     await addressManager.setRoyaltyRegistry(royaltyRegistry.address);
 
     // Set both creator addresses to get rewards
-    await royaltyRegistry.setRoyalties([CREATOR2.address, CREATOR.address], [TEST_SALE_CREATOR_BP, TEST_SALE_CREATOR_BP]);
+    await royaltyRegistry.setRoyalties(
+      [CREATOR2.address, CREATOR.address],
+      [TEST_SALE_CREATOR_BP, TEST_SALE_CREATOR_BP]
+    );
 
     // Register it
     await makerRegistrar
@@ -535,13 +535,13 @@ describe("ReactionVault Royalties Buy", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
+      {value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT)}
     );
     const receipt = await transaction.wait();
 
     // Verify the creator reward event
     const creatorRewardEvents = receipt.events?.filter(
-      (x) => x.event === "CreatorRewardsGranted"
+      (x: any) => x.event === "CreatorRewardsGranted"
     );
 
     // First creator
@@ -557,8 +557,5 @@ describe("ReactionVault Royalties Buy", function () {
       paymentTokenErc20.address
     );
     expect(creatorRewardEvents![1].args!.amount).to.be.equal(CREATOR_CUT);
-
   });
-
-
 });

@@ -75,7 +75,7 @@ describe("LikeTokenFactory", function () {
     const receipt = await tx.wait();
 
     const deployEvent = receipt.events?.find(
-      (x) => x.event === "TokenDeployed"
+      (x: any) => x.event === "TokenDeployed"
     );
     expect(deployEvent).to.not.be.null;
 

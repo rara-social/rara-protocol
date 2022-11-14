@@ -3,6 +3,7 @@ pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/metatx/ERC2771ContextUpgradeable.sol";
 import "../Permissions/IRoleManager.sol";
 import "./IMakerRegistrar.sol";
 import "./MakerRegistrarStorage.sol";
@@ -15,7 +16,11 @@ import "../Royalties/Royalties.sol";
 /// Also, for the mappings, it is assumed the protocol will always look up the current owner of
 /// an NFT when running logic (which is why the owner address is not stored).  If desired, an
 /// off-chain indexer like The Graph can index registration addresses to NFTs.
-contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
+contract MakerRegistrar is
+    Initializable,
+    MakerRegistrarStorageV1,
+    ERC2771ContextUpgradeable
+{
     /// @dev Event triggered when an NFT is registered in the system
     event Registered(
         uint256 nftChainId,
@@ -38,6 +43,9 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         address indexed nftOwnerAddress,
         uint256 sourceId
     );
+
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor(address forwarder) ERC2771ContextUpgradeable(forwarder) {}
 
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IAddressManager _addressManager) public initializer {
@@ -268,5 +276,15 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
         returns (NftDetails memory)
     {
         return sourceToDetails[index];
+    }
+
+    function _msgSender()
+        internal
+        view
+        virtual
+        override(ERC2771ContextUpgradeable)
+        returns (address sender)
+    {
+        return ERC2771ContextUpgradeable._msgSender();
     }
 }

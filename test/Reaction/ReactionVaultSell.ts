@@ -116,7 +116,7 @@ describe("ReactionVault Sell", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
 
     // Derive the reaction meta ID
@@ -160,7 +160,9 @@ describe("ReactionVault Sell", function () {
     // Verify the events
 
     // Event ReactionsSpent
-    let foundEvent = receipt.events?.find((x) => x.event === "ReactionsSpent");
+    let foundEvent = receipt.events?.find(
+      (x: any) => x.event === "ReactionsSpent"
+    );
     expect(foundEvent!.args!.takerNftAddress).to.be.equal(
       testingStandard1155.address
     );
@@ -239,7 +241,7 @@ describe("ReactionVault Sell", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
 
     // Derive the reaction meta ID
@@ -279,7 +281,7 @@ describe("ReactionVault Sell", function () {
     // Verify the events
     // Event TakerRewardsGranted
     const foundEvent = receipt.events?.find(
-      (x) => x.event === "ReferrerRewardsGranted"
+      (x: any) => x.event === "ReferrerRewardsGranted"
     );
     expect(foundEvent!.args!.referrer).to.be.equal(REFERRER.address);
     expect(foundEvent!.args!.paymentToken).to.be.equal(
@@ -336,7 +338,7 @@ describe("ReactionVault Sell", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
 
     // Derive the reaction meta ID
@@ -450,7 +452,7 @@ describe("ReactionVault Sell", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
 
     // Derive the reaction meta ID
@@ -492,7 +494,9 @@ describe("ReactionVault Sell", function () {
     // Verify the events
 
     // Event ReactionsSpent
-    let foundEvent = receipt.events?.find((x) => x.event === "ReactionsSpent");
+    let foundEvent = receipt.events?.find(
+      (x: any) => x.event === "ReactionsSpent"
+    );
     expect(foundEvent!.args!.takerNftAddress).to.be.equal(
       testingStandard1155.address
     );

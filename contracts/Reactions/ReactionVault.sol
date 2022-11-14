@@ -7,6 +7,8 @@ import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.so
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/utils/ERC1155HolderUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/metatx/ERC2771ContextUpgradeable.sol";
+
 import "../Permissions/IRoleManager.sol";
 import "./IReactionVault.sol";
 import "./ReactionVaultStorage.sol";
@@ -23,7 +25,8 @@ contract ReactionVault is
     Initializable,
     ReentrancyGuardUpgradeable,
     ERC1155HolderUpgradeable,
-    ReactionVaultStorageV1
+    ReactionVaultStorageV1,
+    ERC2771ContextUpgradeable
 {
     /// @dev Use the safe methods when interacting with transfers with outside ERC20s
     using SafeERC20Upgradeable for IWMATIC;
@@ -88,6 +91,9 @@ contract ReactionVault is
         uint256 paymentTokenTaker,
         uint256 paymentTokenCreator
     );
+
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor(address forwarder) ERC2771ContextUpgradeable(forwarder) {}
 
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IAddressManager _addressManager) public initializer {

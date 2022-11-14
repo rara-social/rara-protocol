@@ -31,13 +31,27 @@ const deploySystem = async (owner: SignerWithAddress) => {
     deployedAddressManager.address
   );
 
+  // Deploy MinimalForwarder for testing
+  const MinimalForwarderFactory = await ethers.getContractFactory(
+    "TestMinimalForwarder"
+  );
+  const deployedMinimalForwarder = await upgrades.deployProxy(
+    MinimalForwarderFactory
+  );
+  const testingMinimalForwarder = MinimalForwarderFactory.attach(
+    deployedMinimalForwarder.address
+  );
+
   // Deploy Maker Registrar
   const MakerRegistrarFactory = await ethers.getContractFactory(
     "MakerRegistrar"
   );
   const deployedMakerRegistrar = await upgrades.deployProxy(
     MakerRegistrarFactory,
-    [addressManager.address]
+    [addressManager.address],
+    {
+      constructorArgs: [testingMinimalForwarder.address],
+    }
   );
   const makerRegistrar = MakerRegistrarFactory.attach(
     deployedMakerRegistrar.address
@@ -47,7 +61,10 @@ const deploySystem = async (owner: SignerWithAddress) => {
   const ReactionVaultFactory = await ethers.getContractFactory("ReactionVault");
   const deployedReactionVault = await upgrades.deployProxy(
     ReactionVaultFactory,
-    [addressManager.address]
+    [addressManager.address],
+    {
+      constructorArgs: [testingMinimalForwarder.address],
+    }
   );
   const reactionVault = ReactionVaultFactory.attach(
     deployedReactionVault.address
@@ -220,6 +237,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
     roleManager,
     testingStandard1155,
     testingStandard721,
+    testingMinimalForwarder,
   };
 };
 

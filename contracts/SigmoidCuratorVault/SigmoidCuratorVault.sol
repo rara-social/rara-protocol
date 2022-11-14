@@ -55,7 +55,8 @@ contract SigmoidCuratorVault is
     event CuratorTokensSold(
         uint256 indexed curatorTokenId,
         uint256 paymentTokenRefunded,
-        uint256 curatorTokensSold
+        uint256 curatorTokensSold,
+        address paymentToken
     );
 
     /// @notice initializer to call after deployment,
@@ -227,7 +228,12 @@ contract SigmoidCuratorVault is
         }
 
         // Emit the event
-        emit CuratorTokensSold(curatorTokenId, refundAmount, tokensToBurn);
+        emit CuratorTokensSold(
+            curatorTokenId,
+            refundAmount,
+            tokensToBurn,
+            address(paymentToken)
+        );
 
         return refundAmount;
     }

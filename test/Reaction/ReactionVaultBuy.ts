@@ -1,7 +1,7 @@
-import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { ethers, upgrades } from "hardhat";
-import { ZERO_ADDRESS } from "../Scripts/constants";
+import {expect} from "chai";
+import {BigNumber} from "ethers";
+import {ethers, upgrades} from "hardhat";
+import {ZERO_ADDRESS} from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -26,7 +26,7 @@ import {
 describe("ReactionVault Buy", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { reactionVault, addressManager } = await deploySystem(OWNER);
+    const {reactionVault, addressManager} = await deploySystem(OWNER);
 
     // Verify the address manager was set
     const currentAddressManager = await reactionVault.addressManager();
@@ -37,15 +37,16 @@ describe("ReactionVault Buy", function () {
     const ReactionVaultFactory = await ethers.getContractFactory(
       "ReactionVault"
     );
-    await expect(upgrades.deployProxy(
-      ReactionVaultFactory,
-      [ZERO_ADDRESS]
-    )).to.revertedWith(INVALID_ZERO_PARAM);
+    await expect(
+      upgrades.deployProxy(ReactionVaultFactory, [ZERO_ADDRESS], {
+        constructorArgs: [ZERO_ADDRESS],
+      })
+    ).to.revertedWith(INVALID_ZERO_PARAM);
   });
 
   it("Should verify NFT is registered", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const { reactionVault, testingStandard1155, makerRegistrar, roleManager } =
+    const {reactionVault, testingStandard1155, makerRegistrar, roleManager} =
       await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -68,7 +69,14 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0", "0", "");
+      .registerNft(
+        testingStandard1155.address,
+        NFT_ID,
+        ZERO_ADDRESS,
+        "0",
+        "0",
+        ""
+      );
 
     const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
       chainId,
@@ -98,11 +106,8 @@ describe("ReactionVault Buy", function () {
 
   it("Should validate payment succeeds", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const {
-      reactionVault,
-      testingStandard1155,
-      makerRegistrar,
-    } = await deploySystem(OWNER);
+    const {reactionVault, testingStandard1155, makerRegistrar} =
+      await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Now register an NFT and get the Meta ID
@@ -113,7 +118,14 @@ describe("ReactionVault Buy", function () {
     // Register it
     await makerRegistrar
       .connect(ALICE)
-      .registerNft(testingStandard1155.address, NFT_ID, ZERO_ADDRESS, "0", "0", "");
+      .registerNft(
+        testingStandard1155.address,
+        NFT_ID,
+        ZERO_ADDRESS,
+        "0",
+        "0",
+        ""
+      );
 
     // Get the NFT source ID
     const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
@@ -133,7 +145,7 @@ describe("ReactionVault Buy", function () {
         OWNER.address,
         ZERO_ADDRESS,
         BigNumber.from(0),
-        { value: "0" }
+        {value: "0"}
       )
     ).to.revertedWith(INVALID_PAYMENT);
 
@@ -145,7 +157,7 @@ describe("ReactionVault Buy", function () {
         OWNER.address,
         ZERO_ADDRESS,
         BigNumber.from(0),
-        { value: TEST_REACTION_PRICE.mul(10) }
+        {value: TEST_REACTION_PRICE.mul(10)}
       )
     ).to.revertedWith(INVALID_PAYMENT);
   });
@@ -213,13 +225,13 @@ describe("ReactionVault Buy", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
     const receipt = await transaction.wait();
 
     // Verify the creator reward event
     const creatorRewardEvent = receipt.events?.find(
-      (x) => x.event === "CreatorRewardsGranted"
+      (x: any) => x.event === "CreatorRewardsGranted"
     );
     expect(creatorRewardEvent!.args!.creator).to.be.equal(CREATOR.address);
     expect(creatorRewardEvent!.args!.paymentToken).to.be.equal(
@@ -229,7 +241,7 @@ describe("ReactionVault Buy", function () {
 
     // Verify the referrer reward event
     const referrerRewardEvent = receipt.events?.find(
-      (x) => x.event === "ReferrerRewardsGranted"
+      (x: any) => x.event === "ReferrerRewardsGranted"
     );
     expect(referrerRewardEvent!.args!.referrer).to.be.equal(REFERRER.address);
     expect(referrerRewardEvent!.args!.paymentToken).to.be.equal(
@@ -239,7 +251,7 @@ describe("ReactionVault Buy", function () {
 
     // Verify the maker reward event
     const makerRewardEvent = receipt.events?.find(
-      (x) => x.event === "MakerRewardsGranted"
+      (x: any) => x.event === "MakerRewardsGranted"
     );
     expect(makerRewardEvent!.args!.maker).to.be.equal(ALICE.address);
     expect(makerRewardEvent!.args!.paymentToken).to.be.equal(
@@ -276,7 +288,7 @@ describe("ReactionVault Buy", function () {
 
     // Verify the ReactionsPurchased event got fired
     const reactionPurchaseEvent = receipt.events?.find(
-      (x) => x.event === "ReactionsPurchased"
+      (x: any) => x.event === "ReactionsPurchased"
     );
     expect(reactionPurchaseEvent!.args!.transformId).to.be.equal(REACTION_ID);
     expect(reactionPurchaseEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);
@@ -359,13 +371,13 @@ describe("ReactionVault Buy", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: totalPaymentAmount }
+      {value: totalPaymentAmount}
     );
     const receipt = await transaction.wait();
 
     // Verify the creator reward event
     const creatorRewardEvent = receipt.events?.find(
-      (x) => x.event === "CreatorRewardsGranted"
+      (x: any) => x.event === "CreatorRewardsGranted"
     );
     expect(creatorRewardEvent!.args!.creator).to.be.equal(CREATOR.address);
     expect(creatorRewardEvent!.args!.paymentToken).to.be.equal(
@@ -375,7 +387,7 @@ describe("ReactionVault Buy", function () {
 
     // Verify the referrer reward event
     const referrerRewardEvent = receipt.events?.find(
-      (x) => x.event === "ReferrerRewardsGranted"
+      (x: any) => x.event === "ReferrerRewardsGranted"
     );
     expect(referrerRewardEvent!.args!.referrer).to.be.equal(REFERRER.address);
     expect(referrerRewardEvent!.args!.paymentToken).to.be.equal(
@@ -385,7 +397,7 @@ describe("ReactionVault Buy", function () {
 
     // Verify the maker reward event
     const makerRewardEvent = receipt.events?.find(
-      (x) => x.event === "MakerRewardsGranted"
+      (x: any) => x.event === "MakerRewardsGranted"
     );
     expect(makerRewardEvent!.args!.maker).to.be.equal(ALICE.address);
     expect(makerRewardEvent!.args!.paymentToken).to.be.equal(
@@ -422,7 +434,7 @@ describe("ReactionVault Buy", function () {
 
     // Verify the ReactionsPurchased event got fired
     const reactionPurchaseEvent = receipt.events?.find(
-      (x) => x.event === "ReactionsPurchased"
+      (x: any) => x.event === "ReactionsPurchased"
     );
     expect(reactionPurchaseEvent!.args!.transformId).to.be.equal(REACTION_ID);
     expect(reactionPurchaseEvent!.args!.quantity).to.be.equal(REACTION_AMOUNT);

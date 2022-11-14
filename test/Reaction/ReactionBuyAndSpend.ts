@@ -71,13 +71,13 @@ describe("ReactionVault Buy And Spend", function () {
 
     // Verify the buy event
     const purchaseEvent = receipt.events?.find(
-      (x) => x.event === "ReactionsPurchased"
+      (x: any) => x.event === "ReactionsPurchased"
     );
     expect(purchaseEvent).to.not.be.null;
 
     // Verify the spend event
     const spendEvent = receipt.events?.find(
-      (x) => x.event === "ReactionsSpent"
+      (x: any) => x.event === "ReactionsSpent"
     );
     expect(spendEvent).to.not.be.null;
 
@@ -153,13 +153,13 @@ describe("ReactionVault Buy And Spend", function () {
 
     // Verify the buy event
     const purchaseEvent = receipt.events?.find(
-      (x) => x.event === "ReactionsPurchased"
+      (x: any) => x.event === "ReactionsPurchased"
     );
     expect(purchaseEvent).to.not.be.null;
 
     // Verify the spend event
     const spendEvent = receipt.events?.find(
-      (x) => x.event === "ReactionsSpent"
+      (x: any) => x.event === "ReactionsSpent"
     );
     expect(spendEvent).to.not.be.null;
 

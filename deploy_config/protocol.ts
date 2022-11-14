@@ -1,8 +1,8 @@
-import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { DeployResult } from "hardhat-deploy/dist/types";
+import {HardhatRuntimeEnvironment} from "hardhat/types";
+import {DeployResult} from "hardhat-deploy/dist/types";
 import DeployConfig from "./types";
 
-import { ethers } from "hardhat";
+import {ethers} from "hardhat";
 
 const DEBUG_LOG = true;
 
@@ -12,9 +12,9 @@ export const deployProxyContract = async (
   name: string,
   initializeVars: any[]
 ) => {
-  const { deployments, getNamedAccounts } = hre;
-  const { deployer } = await getNamedAccounts();
-  const { deploy } = deployments;
+  const {deployments, getNamedAccounts} = hre;
+  const {deployer} = await getNamedAccounts();
+  const {deploy} = deployments;
 
   return deploy(name, {
     contract: name,
@@ -39,9 +39,9 @@ export const deployContract = async (
   name: string,
   initializeVars: any[]
 ) => {
-  const { deployments, getNamedAccounts } = hre;
-  const { deployer } = await getNamedAccounts();
-  const { deploy } = deployments;
+  const {deployments, getNamedAccounts} = hre;
+  const {deployer} = await getNamedAccounts();
+  const {deploy} = deployments;
 
   return deploy(name, {
     contract: name,
@@ -56,50 +56,62 @@ const deployProtocol = async (
   hre: HardhatRuntimeEnvironment,
   config: DeployConfig
 ) => {
-  const { getNamedAccounts } = hre;
-  const { deployer } = await getNamedAccounts();
+  const {getNamedAccounts} = hre;
+  const {deployer} = await getNamedAccounts();
 
   let res: DeployResult = await deployProxyContract(hre, "RoleManager", [
     deployer,
   ]);
   const roleManagerAddress = res.address;
-  console.log({ roleManagerAddress });
+  console.log({roleManagerAddress});
 
   res = await deployProxyContract(hre, "AddressManager", [roleManagerAddress]);
   const addressManagerAddress = res.address;
-  console.log({ addressManagerAddress });
+  console.log({addressManagerAddress});
 
+  // Deploy MinimalForwarder
+  // const MinimalForwarderFactory = await ethers.getContractFactory(
+  //   "TestMinimalForwarder"
+  // );
+  // const deployedMinimalForwarder = await upgrades.deployProxy(
+  //   MinimalForwarderFactory
+  // );
+  // const MinimalForwarder = MinimalForwarderFactory.attach(
+  //   deployedMinimalForwarder.address
+  // );
+
+  // TODO - add constructor args
   res = await deployProxyContract(hre, "MakerRegistrar", [
     addressManagerAddress,
   ]);
   const makerRegistrarAddress = res.address;
-  console.log({ makerRegistrarAddress });
+  console.log({makerRegistrarAddress});
 
   res = await deployProxyContract(hre, "ReactionVault", [
     addressManagerAddress,
   ]);
   const reactionVaultAddress = res.address;
-  console.log({ reactionVaultAddress });
+  console.log({reactionVaultAddress});
 
   res = await deployProxyContract(hre, "ReactionNft1155", [
     config.reactionNftUri,
     addressManagerAddress,
   ]);
   const reactionNft1155Address = res.address;
-  console.log({ reactionNft1155Address });
+  console.log({reactionNft1155Address});
 
   res = await deployProxyContract(hre, "ParameterManager", [
     addressManagerAddress,
   ]);
   const parameterManagerAddress = res.address;
-  console.log({ parameterManagerAddress });
+  console.log({parameterManagerAddress});
 
   res = await deployProxyContract(hre, "CuratorToken1155", [
     config.curatorTokenNftUri,
     addressManagerAddress,
   ]);
   const curatorToken1155Address = res.address;
-  console.log({ curatorToken1155Address });
+  console.log({curatorToken1155Address});
 
   res = await deployProxyContract(hre, "SigmoidCuratorVault", [
     addressManagerAddress,
@@ -109,14 +121,14 @@ const deployProtocol = async (
     config.bondingCurveC,
   ]);
   const curatorVaultAddress = res.address;
-  console.log({ curatorVaultAddress });
+  console.log({curatorVaultAddress});
 
   res = await deployContract(hre, "ChildRegistrar", [
     config.fxChildBridgeAddress,
     addressManagerAddress,
   ]);
   const childRegistrarAddress = res.address;
-  console.log({ childRegistrarAddress });
+  console.log({childRegistrarAddress});
 
   // Grant Roles for contracts in the protocol
   const roleManager = await ethers.getContractAt(
@@ -128,21 +140,21 @@ const deployProtocol = async (
   await roleManager.grantRole(
     await roleManager.REACTION_NFT_ADMIN(),
     reactionVaultAddress,
-    { gasLimit: "200000" }
+    {gasLimit: "200000"}
   );
   console.log("\n\nGranted REACTION_NFT_ADMIN to " + reactionVaultAddress);
 
   await roleManager.grantRole(
     await roleManager.CURATOR_VAULT_PURCHASER(),
     reactionVaultAddress,
-    { gasLimit: "200000" }
+    {gasLimit: "200000"}
   );
   console.log("Granted CURATOR_VAULT_PURCHASER to " + reactionVaultAddress);
 
   await roleManager.grantRole(
     await roleManager.CURATOR_TOKEN_ADMIN(),
     curatorVaultAddress,
-    { gasLimit: "200000" }
+    {gasLimit: "200000"}
   );
   console.log("Granted CURATOR_TOKEN_ADMIN to " + curatorVaultAddress);
 
@@ -150,14 +162,14 @@ const deployProtocol = async (
   const roleRes = await roleManager.grantRole(
     await roleManager.ADDRESS_MANAGER_ADMIN(),
     deployer,
-    { gasLimit: "200000" }
+    {gasLimit: "200000"}
   );
   console.log("Granted ADDRESS_MANAGER_ADMIN to " + deployer);
 
   await roleManager.grantRole(
     await roleManager.PARAMETER_MANAGER_ADMIN(),
     deployer,
-    { gasLimit: "200000" }
+    {gasLimit: "200000"}
   );
   console.log("Granted PARAMETER_MANAGER_ADMIN to " + deployer);
 
@@ -167,7 +179,7 @@ const deployProtocol = async (
     "AddressManager",
     addressManagerAddress
   );
-  await addressManager.setRoleManager(roleManagerAddress, { gasLimit: "200000" });
+  await addressManager.setRoleManager(roleManagerAddress, {gasLimit: "200000"});
   await addressManager.setParameterManager(parameterManagerAddress, {
     gasLimit: "200000",
   });
@@ -198,19 +210,19 @@ const deployProtocol = async (
   });
   await parameterManager.setSaleCuratorLiabilityBasisPoints(
     config.curatorLiabilityBasisPoints,
-    { gasLimit: "200000" }
+    {gasLimit: "200000"}
   );
   await parameterManager.setSaleReferrerBasisPoints(
     config.saleReferrerBasisPoints,
-    { gasLimit: "200000" }
+    {gasLimit: "200000"}
   );
   await parameterManager.setSpendTakerBasisPoints(
     config.spendTakerBasisPoints,
-    { gasLimit: "200000" }
+    {gasLimit: "200000"}
   );
   await parameterManager.setSpendReferrerBasisPoints(
     config.spendReferrerBasisPoints,
-    { gasLimit: "200000" }
+    {gasLimit: "200000"}
   );
 
   // Remove the temporary permissions for the deploy account not that params are updated
@@ -218,14 +230,14 @@ const deployProtocol = async (
   await roleManager.revokeRole(
     await roleManager.ADDRESS_MANAGER_ADMIN(),
     deployer,
-    { gasLimit: "200000" }
+    {gasLimit: "200000"}
   );
   console.log("Revoked ADDRESS_MANAGER_ADMIN to " + deployer);
 
   await roleManager.revokeRole(
     await roleManager.PARAMETER_MANAGER_ADMIN(),
     deployer,
-    { gasLimit: "200000" }
+    {gasLimit: "200000"}
   );
   console.log("Revoked PARAMETER_MANAGER_ADMIN to " + deployer);
 
