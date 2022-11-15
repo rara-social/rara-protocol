@@ -15,7 +15,9 @@
     "prepare-polygon": "mustache ./config/polygon.json src/subgraph.template.yaml > subgraph.yaml",
     "deploy-polygon": "npm run prepare-polygon && graph deploy --product hosted-service rara-social/rara-social-curation-protocol",
     "prepare-polygon-staging": "mustache ./config/polygon.json src/subgraph.template.yaml > subgraph.yaml",
-    "deploy-polygon-staging": "npm run prepare-polygon-staging && graph deploy --product hosted-service rara-social/polygonstaging"
+    "deploy-polygon-staging": "npm run prepare-polygon-staging && graph deploy --product hosted-service rara-social/polygonstaging",
+    "prepare-1-1": "mustache ./config/1-1.json src/subgraph.template.yaml > subgraph.yaml",
+    "deploy-1-1": "npm run prepare-mumbai && graph deploy --product hosted-service rara-social/v1-1"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.22.1",

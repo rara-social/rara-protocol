@@ -20,6 +20,7 @@ const config: DeployConfig = {
   spendTakerBasisPoints: "",
   royaltyRegistry: "0x0000000000000000000000000000000000000000", // Not available on Goerli
   freeReactionLimit: 1, // Amount of free reactions per transaction
+  likeTokenNftUri: "",
 };
 
 export default config;

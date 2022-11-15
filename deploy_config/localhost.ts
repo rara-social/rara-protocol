@@ -13,6 +13,7 @@ const config: DeployConfig = {
   fxRootBridgeAddress: "", // Not set for L2
   fxRootCheckPointManager: "", // Not set for L2
   paymentTokenAddress: "", // Empty for mumbai - we will manually deploy one to test with
+  nativeWrappedTokenAddress: "",
   reactionNftUri: "https://protocol-api.rara.social/internal/reaction/{id}",
   reactionContractUri:
     "https://protocol-api.rara.social/internal/contract/reaction",
@@ -22,6 +23,7 @@ const config: DeployConfig = {
   spendTakerBasisPoints: "700", // 7% of curator liability goes to the taker
   royaltyRegistry: "0x0000000000000000000000000000000000000000", // Not set
   freeReactionLimit: 1, // Amount of free reactions per transaction
+  likeTokenNftUri: "",
 };
 
 export default config;

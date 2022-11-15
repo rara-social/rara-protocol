@@ -13,6 +13,7 @@ const config: DeployConfig = {
   fxRootBridgeAddress: "", // Not set for L2
   fxRootCheckPointManager: "", // Not set for L2
   paymentTokenAddress: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", // USDC on polygon
+  nativeWrappedTokenAddress: "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889",
   reactionNftUri: "https://protocol-api.rara.social/internal/reaction/{id}",
   reactionContractUri:
     "https://protocol-api.rara.social/internal/contract/reaction",
@@ -22,6 +23,7 @@ const config: DeployConfig = {
   spendReferrerBasisPoints: "55", // 0.55% of curator liability goes to the referrer - this is higher because it is a fraction of a fraction
   spendTakerBasisPoints: "525", // 5.25% of curator liability goes to the taker - this is higher because it is a fraction of a fraction
   freeReactionLimit: 1, // Amount of free reactions per transaction
+  likeTokenNftUri: "",
 };
 
 export default config;

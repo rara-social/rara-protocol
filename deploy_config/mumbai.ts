@@ -24,6 +24,7 @@ const config: DeployConfig = {
   spendReferrerBasisPoints: "100", // 1% of curator liability goes to the referrer
   spendTakerBasisPoints: "700", // 7% of curator liability goes to the taker
   freeReactionLimit: 1, // Amount of free reactions per transaction
+  likeTokenNftUri: "",
 };
 
 export default config;

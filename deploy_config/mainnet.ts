@@ -20,6 +20,7 @@ const config: DeployConfig = {
   spendTakerBasisPoints: "",
   royaltyRegistry: "0x0385603ab55642cb4dd5de3ae9e306809991804f", //https://royaltyregistry.xyz/lookup
   freeReactionLimit: 1, // Amount of free reactions per transaction
+  likeTokenNftUri: "",
 };
 
 export default config;

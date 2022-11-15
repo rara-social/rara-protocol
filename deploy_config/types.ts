@@ -18,6 +18,7 @@ type DeployConfig = {
   spendReferrerBasisPoints: string;
   spendTakerBasisPoints: string;
   freeReactionLimit: number;
+  likeTokenNftUri: string;
 };
 
 export default DeployConfig;
