@@ -9,6 +9,7 @@ type DeployConfig = {
   fxRootBridgeAddress: string;
   fxRootCheckPointManager: string;
   paymentTokenAddress: string;
+  nativeWrappedTokenAddress: string;
   reactionNftUri: string;
   reactionContractUri: string;
   reactionPrice: string;
