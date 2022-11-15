@@ -1,7 +1,7 @@
 import {HardhatRuntimeEnvironment} from "hardhat/types";
 
 import config from "../../deploy_config/mumbai";
-import {ZERO_ADDRESS} from "../../test/Scripts/constants";
+import {ZERO_ADDRESS, TEST_CONTRACT_URI} from "../../test/Scripts/constants";
 import deployProtocol, {
   deployProxyContract,
 } from "../../deploy_config/protocol";
@@ -25,6 +25,7 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   res = await deployProxyContract(hre, "TestErc1155", [
     config.reactionNftUri,
     ZERO_ADDRESS,
+    TEST_CONTRACT_URI,
   ]);
   const test155NftAddress = res.address;
   console.log({test155NftAddress});

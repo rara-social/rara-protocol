@@ -13,6 +13,7 @@ const config: DeployConfig = {
   fxRootBridgeAddress: "", // Not set for mumbai L2
   fxRootCheckPointManager: "", // Not set for mumbai L2
   paymentTokenAddress: "", // Empty for mumbai - we will manually deploy one to test with
+  nativeWrappedTokenAddress: "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889",
   reactionNftUri:
     "https://protocol-api-staging.rara.social/internal/reaction/{id}",
   reactionContractUri:
