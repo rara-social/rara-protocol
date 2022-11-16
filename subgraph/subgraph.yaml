@@ -6,9 +6,9 @@ dataSources:
     name: MakerRegistrar
     network: "mumbai"
     source:
-      address: "0x06493B0362b3892EEc7C63023e8bC0C0c64646eb"
+      address: "0x8dc514bA2FB3acB74e186c7dd3674b4474fB2cbd"
       abi: MakerRegistrar
-      startBlock: 26642329
+      startBlock: 29180000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -29,9 +29,9 @@ dataSources:
     name: CuratorVault
     network: "mumbai"
     source:
-      address: "0xff63B24Ce497d1e0ea7F45a08bF2C93631B017C1"
+      address: "0x9FD49F6F7636Ca23F216471f08FE5C6C6655B4A0"
       abi: SigmoidCuratorVault
-      startBlock: 26642329
+      startBlock: 29180000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -52,9 +52,9 @@ dataSources:
     name: ReactionVault
     network: "mumbai"
     source:
-      address: "0xA374674F97885BD378059708e97f7117CB74683d"
+      address: "0xB6A165c463FD1dD32BCA3821BC696051CAAFc0AF"
       abi: ReactionVault
-      startBlock: 26642329
+      startBlock: 29180000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

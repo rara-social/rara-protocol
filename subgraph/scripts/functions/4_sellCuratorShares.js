@@ -1,7 +1,7 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../deploy_v2/hardhat_contracts.json");
 const {getWallet, sleep, getTransactionEvent} = require("../helpers/utils");
 
 const chainId = "80001";
@@ -19,8 +19,10 @@ async function main() {
   );
   const contractBalance = await CuratorToken1155.balanceOf(
     reactor.address,
-    "66954332059455703478329131628727554600048614184431182165646164267454208164847"
+    "85446361851284701209394863525538723575762912539511074083829730291922159401879"
   );
+
+  console.log({contractBalance: contractBalance.toNumber()});
 
   // create contract
   const SigmoidCuratorVault = new ethers.Contract(
@@ -32,27 +34,30 @@ async function main() {
   // curatorVault info
   const nftChainId = chainId;
   const nftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
-  const nftId = "5";
+  const nftId = "44";
   const paymentToken = deployConfig[chainId][0].contracts.TestErc20.address;
 
   // user input
   const tokensToBurn = 58;
   const refundToAddress = reactor.address;
-  // console.log({
-  //   nftChainId,
-  //   nftAddress,
-  //   nftId,
-  //   paymentToken,
-  //   tokensToBurn,
-  //   refundToAddress,
-  // });
+  console.log({
+    nftChainId,
+    nftAddress,
+    nftId,
+    paymentToken,
+    tokensToBurn,
+    refundToAddress,
+  });
   const sellCuratorTokensTxn = await SigmoidCuratorVault.sellCuratorTokens(
     nftChainId,
     nftAddress,
     nftId,
     paymentToken,
     tokensToBurn,
-    refundToAddress
+    refundToAddress,
+    {
+      gasLimit: 1000000,
+    }
   );
   const receipt = await sellCuratorTokensTxn.wait();
   console.log("done. transactionHash:", receipt.transactionHash);

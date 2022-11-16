@@ -12,13 +12,13 @@ const config: DeployConfig = {
   fxChildBridgeAddress: "0xCf73231F28B7331BBe3124B907840A94851f9f11",
   fxRootBridgeAddress: "", // Not set for mumbai L2
   fxRootCheckPointManager: "", // Not set for mumbai L2
-  paymentTokenAddress: "", // Empty for mumbai - we will manually deploy one to test with
+  paymentTokenAddress: "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889", // Wrapped MATIC
   nativeWrappedTokenAddress: "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889",
   reactionNftUri:
     "https://protocol-api-staging.rara.social/internal/reaction/{id}",
   reactionContractUri:
     "https://protocol-api-staging.rara.social/internal/contract/reaction",
-  reactionPrice: "1000000", // Base units of payment token with 6 decimals
+  reactionPrice: "1000000000000000000", // Base units of payment token with 18 decimals
   royaltyRegistry: "0x0a01E11887f727D1b1Cd81251eeEE9BEE4262D07", // deployed royalty registry https://royaltyregistry.xyz/lookup
   saleReferrerBasisPoints: "100", // 1% goes to the referrer on reaction sale
   spendReferrerBasisPoints: "100", // 1% of curator liability goes to the referrer

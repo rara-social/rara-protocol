@@ -1,9 +1,10 @@
 // load env
 
 const ethers = require("ethers");
-const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../deploy_v2/hardhat_contracts.json");
 const {getWallet, chainId} = require("../helpers/utils");
-const nftId = "93";
+
+const nftId = "105";
 
 // wallet, chainId, nftId
 async function main() {

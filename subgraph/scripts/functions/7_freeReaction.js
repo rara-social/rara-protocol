@@ -10,41 +10,55 @@ const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
 const takerNftId = "44";
 
 // reaction params
-const reactionId =
-  "98532127908366847389069520048703374891524153368824890147105623992488050591067";
-const reactionQuantity = 10;
+const transformId =
+  "17439504053626652433665070451660905710392213568054283344862170916900764029373";
+const optionBits = 1;
 const ipfsMetadataHash = "QmSBE5W5tyz8M7ve4n7Tw3sJgdHqak7k6whsorM7dDKsDL";
 
 async function main() {
   const reactor = await getWallet("reactor");
   const referrer = await getWallet("referrer");
+  // const admin = await getWallet("admin");
+  // const RoleManager = new ethers.Contract(
+  //   deployConfig[chainId][0].contracts.RoleManager.address,
+  //   deployConfig[chainId][0].contracts.RoleManager.abi,
+  //   admin
+  // );
+  // const role = await RoleManager.PARAMETER_MANAGER_ADMIN();
+  // await RoleManager.grantRole(role, admin.address);
+  // console.log("role set");
 
+  // Check reaction limit
+  // const ParameterManager = new ethers.Contract(
+  //   deployConfig[chainId][0].contracts.ParameterManager.address,
+  //   deployConfig[chainId][0].contracts.ParameterManager.abi,
+  //   reactor
+  // );
+
+  // const tx = await ParameterManager.connect(admin).setFreeReactionLimit(1, {
+  //   gasLimit: 1000000,
+  // });
+  // await tx.wait();
+  // const reactionLimit = await ParameterManager.freeReactionLimit();
+  // console.log({reactionLimit: reactionLimit.toNumber()});
+
+  // use reaction
   const ReactionVault = new ethers.Contract(
     deployConfig[chainId][0].contracts.ReactionVault.address,
     deployConfig[chainId][0].contracts.ReactionVault.abi,
     reactor
   );
-
-  const ReactionNft1155 = new ethers.Contract(
-    deployConfig[chainId][0].contracts.ReactionNft1155.address,
-    deployConfig[chainId][0].contracts.ReactionNft1155.abi,
-    reactor
-  );
-  const tokenBalance = await ReactionNft1155.balanceOf(
-    reactor.address,
-    reactionId
-  );
-  console.log({tokenBalance: tokenBalance.toNumber(), reactionQuantity});
-
   const curatorVaultOverride = ethers.constants.AddressZero;
-  console.log("spending reactions...");
-  const spendReactionTxn = await ReactionVault.spendReaction(
+  console.log("free react...");
+
+  const spendReactionTxn = await ReactionVault.react(
+    transformId,
+    reactionLimit.toNumber(),
+    referrer.address,
+    optionBits,
     takerNftChainId,
     takerNftAddress,
     takerNftId,
-    reactionId,
-    reactionQuantity,
-    referrer.address,
     curatorVaultOverride,
     ipfsMetadataHash,
     {

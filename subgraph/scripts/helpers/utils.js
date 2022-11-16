@@ -1,7 +1,7 @@
 require("dotenv").config();
 const ethers = require("ethers");
 
-const chainId = "1337";
+const chainId = "80001";
 
 async function getWallet(name) {
   // create provider
@@ -22,6 +22,9 @@ async function getWallet(name) {
       break;
     case "referrer":
       privateKey = process.env.REFERRER_PRIVATE_KEY;
+      break;
+    case "admin":
+      privateKey = process.env.DEPLOY_PRIVATE_KEY;
       break;
     default:
       break;
