@@ -1,10 +1,10 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../v2_test_fresh/hardhat_contracts.json");
 const {getWallet, chainId} = require("../helpers/utils");
 
-const nftId = "93";
+const nftId = "105";
 const nftContractAddress =
   deployConfig[chainId][0].contracts.TestErc721.address;
 

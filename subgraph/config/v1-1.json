@@ -1,0 +1,7 @@
+{
+  "network": "mumbai",
+  "StartBlock": 29173000,
+  "MakerRegistrarAddress": "0x7c4181393192AF9788386D36a07c7F3e7e7F8742",
+  "SigmoidCuratorVaultAddress": "0x0ee289e14bE317904E851cFDD4319C4Df8F2B42D",
+  "ReactionVaultAddress": "0x6265fc3591AAb193C55eE2987B73738F3C31A3d9"
+}

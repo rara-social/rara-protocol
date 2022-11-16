@@ -1,7 +1,7 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../v2_test_fresh/hardhat_contracts.json");
 const {getWallet, sleep, getTransactionEvent} = require("../helpers/utils");
 
 const chainId = "80001";

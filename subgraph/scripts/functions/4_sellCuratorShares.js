@@ -1,7 +1,7 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../v2_test_fresh/hardhat_contracts.json");
 const {getWallet, sleep, getTransactionEvent} = require("../helpers/utils");
 
 const chainId = "80001";
@@ -32,11 +32,11 @@ async function main() {
   // curatorVault info
   const nftChainId = chainId;
   const nftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
-  const nftId = "5";
+  const nftId = "46";
   const paymentToken = deployConfig[chainId][0].contracts.TestErc20.address;
 
   // user input
-  const tokensToBurn = 58;
+  const tokensToBurn = 1000;
   const refundToAddress = reactor.address;
   // console.log({
   //   nftChainId,

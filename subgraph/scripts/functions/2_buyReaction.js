@@ -1,12 +1,12 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../v2_test_fresh/hardhat_contracts.json");
 const {getWallet, chainId} = require("../helpers/utils");
 
 const quantity = 100;
 const transformId =
-  "26558492574181019257204954570271967580276199177746413169112957474912028002414";
+  "82422974008605986100164926026435778462042571413439638208706175089232148510666";
 const optionBits = 1;
 
 async function main() {
