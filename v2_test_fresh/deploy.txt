@@ -1,0 +1,66 @@
+Deploying with account 0x8f1809FA5DDcf8275cf9C92fCeF40B2154a01022
+reusing "DefaultProxyAdmin" at 0x6C8987a2dEe5ff19985C0A99E0903E24a0D8EFF6
+reusing "TestErc20_Implementation" at 0xc0c48b633Fc044Ea751C5a36c6d7Efb3BaD5C59a
+{ testPaymentTokenErc20: '0x10C24E7646Cc953591dA6CA999299C6Be321D99B' }
+reusing "DefaultProxyAdmin" at 0x6C8987a2dEe5ff19985C0A99E0903E24a0D8EFF6
+reusing "TestErc1155_Implementation" at 0xEe6618d33D800e2d0593C1D78073541F612d455e
+{ test155NftAddress: '0xf075e5978e1752Cd204c5ce49E3A1443D1256fA1' }
+reusing "DefaultProxyAdmin" at 0x6C8987a2dEe5ff19985C0A99E0903E24a0D8EFF6
+reusing "TestErc721_Implementation" at 0xc85FC0fd5aBbcBb27405938779C21E22a066D5e6
+{ test721NftAddress: '0x44fc4E11734A00E13Db41e926Bc738CEb08F6d01' }
+reusing "DefaultProxyAdmin" at 0x6C8987a2dEe5ff19985C0A99E0903E24a0D8EFF6
+reusing "RoleManager_Implementation" at 0x9a3A16E10CC2F36b1deF55334897F679fD890926
+{ roleManagerAddress: '0x9182CcA7f5c8cc9382bDE3137db7473ac8c7b940' }
+reusing "DefaultProxyAdmin" at 0x6C8987a2dEe5ff19985C0A99E0903E24a0D8EFF6
+reusing "AddressManager_Implementation" at 0xb76D5090fD25C633970337b63F3A8EBa96E9f993
+{ addressManagerAddress: '0x85E7BD499d60A4cD0FB36E2370b89c7f83AdBf2a' }
+reusing "DefaultProxyAdmin" at 0x6C8987a2dEe5ff19985C0A99E0903E24a0D8EFF6
+reusing "MakerRegistrar_Implementation" at 0x146EbBd789547a20D51d0C880C9E0d7562263F48
+{ makerRegistrarAddress: '0x7c4181393192AF9788386D36a07c7F3e7e7F8742' }
+reusing "DefaultProxyAdmin" at 0x6C8987a2dEe5ff19985C0A99E0903E24a0D8EFF6
+reusing "ReactionVault_Implementation" at 0x16F2F7fe0d69C00D042BE9CB025c7419Bc59D6CF
+{ reactionVaultAddress: '0x6265fc3591AAb193C55eE2987B73738F3C31A3d9' }
+reusing "DefaultProxyAdmin" at 0x6C8987a2dEe5ff19985C0A99E0903E24a0D8EFF6
+reusing "ReactionNft1155_Implementation" at 0x6Bb4296d08DffABc712eDa5DE33c8803aB9Dfc11
+{
+  reactionNft1155Address: '0x508A1E276f185Ae6e7ef3D3df9e92EcBF5Ae5AC8'
+}
+reusing "DefaultProxyAdmin" at 0x6C8987a2dEe5ff19985C0A99E0903E24a0D8EFF6
+reusing "ParameterManager_Implementation" at 0x39A74FD4d83e7F48971BFA50347883a4304cE4D8
+{
+  parameterManagerAddress: '0x9092Cf130E7891BB22A4959048A3Bbc2DD3DFEe0'
+}
+reusing "DefaultProxyAdmin" at 0x6C8987a2dEe5ff19985C0A99E0903E24a0D8EFF6
+reusing "CuratorToken1155_Implementation" at 0xa4b0AaA1325E54698176Ce93E5253dF70A1cBbd1
+{
+  curatorToken1155Address: '0xc0aa23C4221bF9C47fa9f9C145C0A7699D5e598E'
+}
+reusing "DefaultProxyAdmin" at 0x6C8987a2dEe5ff19985C0A99E0903E24a0D8EFF6
+reusing "SigmoidCuratorVault_Implementation" at 0xc6C1c0E05699A6230c00a509eB1bF13c93Ba8c53
+{ curatorVaultAddress: '0x0ee289e14bE317904E851cFDD4319C4Df8F2B42D' }
+deploying "ChildRegistrar" (tx: 0xc0032c4adc625364a6495567eb5c90f117c1faada0f51333096260178f48fa87)...: deployed at 0x5A96503e2021356f78DdFF5Edc8BcCa40D64BFaA with 1381912 gas
+{ childRegistrarAddress: '0x5A96503e2021356f78DdFF5Edc8BcCa40D64BFaA' }
+
+
+Updating Roles
+
+
+Granted REACTION_NFT_ADMIN to 0x6265fc3591AAb193C55eE2987B73738F3C31A3d9
+Granted CURATOR_VAULT_PURCHASER to 0x6265fc3591AAb193C55eE2987B73738F3C31A3d9
+Granted CURATOR_TOKEN_ADMIN to 0x0ee289e14bE317904E851cFDD4319C4Df8F2B42D
+Granted ADDRESS_MANAGER_ADMIN to 0x8f1809FA5DDcf8275cf9C92fCeF40B2154a01022
+Granted PARAMETER_MANAGER_ADMIN to 0x8f1809FA5DDcf8275cf9C92fCeF40B2154a01022
+
+
+Updating addresses in the protocol
+
+
+Updating parameters in the protocol
+
+
+Revoking temp permissions for deployer
+Revoked ADDRESS_MANAGER_ADMIN to 0x8f1809FA5DDcf8275cf9C92fCeF40B2154a01022
+Revoked PARAMETER_MANAGER_ADMIN to 0x8f1809FA5DDcf8275cf9C92fCeF40B2154a01022
+
+
+Deploy complete, run "hardhat --network XXXX etherscan-verify" to verify contracts
