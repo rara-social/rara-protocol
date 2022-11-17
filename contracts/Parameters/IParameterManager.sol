@@ -2,14 +2,14 @@
 pragma solidity 0.8.9;
 
 import "../Permissions/IRoleManager.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "../Token/IWMATIC.sol";
 
 interface IParameterManager {
     /// @dev Getter for the payment token
-    function paymentToken() external returns (IERC20Upgradeable);
+    function paymentToken() external returns (IWMATIC);
 
     /// @dev Setter for the payment token
-    function setPaymentToken(IERC20Upgradeable _paymentToken) external;
+    function setPaymentToken(IWMATIC _paymentToken) external;
 
     /// @dev Getter for the reaction price
     function reactionPrice() external returns (uint256);
@@ -52,4 +52,17 @@ interface IParameterManager {
 
     /// @dev Setter for the list of curator vaults allowed to be used
     function setApprovedCuratorVaults(address vault, bool approved) external;
+
+    /// @dev Getter for the native wrapped ERC20 token (e.g. WMATIC)
+    function nativeWrappedToken() external returns (IERC20Upgradeable);
+
+    /// @dev Setter for the native wrapped ERC20 token (e.g. WMATIC)
+    function setNativeWrappedToken(IERC20Upgradeable _nativeWrappedToken)
+        external;
+
+    /// @dev Setter for free reaction limit
+    function freeReactionLimit() external returns (uint256);
+
+    /// @dev Setter for free reaction limit
+    function setFreeReactionLimit(uint256 limit) external;
 }

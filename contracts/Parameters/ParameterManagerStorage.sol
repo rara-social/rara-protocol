@@ -2,8 +2,8 @@
 pragma solidity 0.8.9;
 
 import "../Config/IAddressManager.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "./IParameterManager.sol";
+import "../Token/IWMATIC.sol";
 
 /// @title ParameterManagerStorage
 /// @dev This contract will hold all local variables for the ParameterManager Contract
@@ -18,7 +18,7 @@ abstract contract ParameterManagerStorageV1 is IParameterManager {
     IAddressManager public addressManager;
 
     /// @dev The payment token used to buy reactions
-    IERC20Upgradeable public paymentToken;
+    IWMATIC public paymentToken;
 
     /// @dev The amount each reaction costs in paymentToken
     uint256 public reactionPrice;
@@ -46,10 +46,20 @@ abstract contract ParameterManagerStorageV1 is IParameterManager {
     mapping(address => bool) public approvedCuratorVaults;
 }
 
+abstract contract ParameterManagerStorageV2 is ParameterManagerStorageV1 {
+    /// @dev address of the blockchain's wrapped token, eg, WMATIC
+    /// This allows the contracts to distinguish between payments in WMATIC vs, eg, USDC
+    IERC20Upgradeable public nativeWrappedToken;
+
+    /// @dev Amount of reactions (quantity) allowed when reacting for free
+    /// If set to true then it is allowed to be used.
+    uint256 public freeReactionLimit;
+}
+
 /// On the next version of the protocol, if new variables are added, put them in the below
 /// contract and use this as the inheritance chain.
 /**
-contract ParameterManagerStorageV2 is ParameterManagerStorageV1 {
+contract ParameterManagerStorageV3 is ParameterManagerStorageV2 {
   address newVariable;
 }
  */

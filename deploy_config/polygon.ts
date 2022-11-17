@@ -5,7 +5,8 @@ const config: DeployConfig = {
   bondingCurveB: "10000000", // midpoint is 10m tokens sold
   bondingCurveC: "29000000000000", // Super flat curve - this is steepness param
   curatorLiabilityBasisPoints: "9500", // 95% goes to curator liability
-  curatorTokenNftUri: "https://protocol-api.rara.social/internal/curatortoken/{id}",
+  curatorTokenNftUri:
+    "https://protocol-api.rara.social/internal/curatortoken/{id}",
   fxChildBridgeAddress: "0x8397259c983751DAf40400790063935a11afa28a", // https://docs.polygon.technology/docs/develop/l1-l2-communication/state-transfer/
   fxRootBridgeAddress: "", // Not set for L2
   fxRootCheckPointManager: "", // Not set for L2
@@ -13,9 +14,15 @@ const config: DeployConfig = {
   reactionNftUri: "https://protocol-api.rara.social/internal/reaction/{id}",
   reactionPrice: "1000000", // Base units of payment token with 6 decimals
   royaltyRegistry: "0x28EdFcF0Be7E86b07493466e7631a213bDe8eEF2", // deployed royalty registry https://royaltyregistry.xyz/lookup
-  saleReferrerBasisPoints: "50",// 0.5% goes to the referrer on reaction sale
+  saleReferrerBasisPoints: "50", // 0.5% goes to the referrer on reaction sale
   spendReferrerBasisPoints: "55", // 0.55% of curator liability goes to the referrer - this is higher because it is a fraction of a fraction
   spendTakerBasisPoints: "525", // 5.25% of curator liability goes to the taker - this is higher because it is a fraction of a fraction
-}
+  curatorTokenContractUri: "",
+  likeTokenNftUri: "",
+  reactionContractUri: "",
+  nativeWrappedTokenAddress: "",
+  freeReactionLimit: "",
+  likeTokenContractUri: "",
+};
 
 export default config;

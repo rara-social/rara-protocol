@@ -1,12 +1,12 @@
-import { expect } from "chai";
-import { ethers } from "hardhat";
-import { deploySystem } from "../Scripts/setup";
-import { TEST_NFT_URI } from "../Scripts/constants";
+import {expect} from "chai";
+import {ethers} from "hardhat";
+import {deploySystem} from "../Scripts/setup";
+import {TEST_NFT_URI, TEST_CONTRACT_URI} from "../Scripts/constants";
 
 describe("Standard1155 Token", function () {
   it("Should get initialized with address manager", async function () {
     const [OWNER] = await ethers.getSigners();
-    const { testingStandard1155, addressManager } = await deploySystem(OWNER);
+    const {testingStandard1155, addressManager} = await deploySystem(OWNER);
 
     // Verify the address manager and uri are set
     const setURI = await testingStandard1155.uri(1);
@@ -18,7 +18,7 @@ describe("Standard1155 Token", function () {
 
   it("Should mint tokens if authorized", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { testingStandard1155 } = await deploySystem(OWNER);
+    const {testingStandard1155} = await deploySystem(OWNER);
 
     // Mint
     testingStandard1155.connect(BOB).mint(ALICE.address, "1", "1000", [0]);
@@ -35,5 +35,14 @@ describe("Standard1155 Token", function () {
     // Verify Bob balance
     balance = await testingStandard1155.balanceOf(BOB.address, "1");
     expect(balance.toString()).to.equal("250");
+  });
+
+  it("Should set contractURI", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const {reactionNFT1155, roleManager} = await deploySystem(OWNER);
+
+    // try and set contract URI (unauth)
+    let contractURI = await reactionNFT1155.contractURI();
+    expect(contractURI).to.equal(TEST_CONTRACT_URI);
   });
 });

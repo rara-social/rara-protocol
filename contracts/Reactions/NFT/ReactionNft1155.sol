@@ -56,4 +56,14 @@ contract ReactionNft1155 is Standard1155 {
             "Reaction transfer restricted"
         );
     }
+
+    function setContractUri(string memory _contractUri)
+        external
+        onlyNftAdmin
+        returns (bool success)
+    {
+        contractURI = _contractUri;
+
+        return true;
+    }
 }

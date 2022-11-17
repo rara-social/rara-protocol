@@ -16,6 +16,12 @@ const config: DeployConfig = {
   spendReferrerBasisPoints: "",
   spendTakerBasisPoints: "",
   royaltyRegistry: "0x0000000000000000000000000000000000000000", // Not available on Goerli
-}
+  curatorTokenContractUri: "",
+  likeTokenNftUri: "",
+  reactionContractUri: "",
+  nativeWrappedTokenAddress: "",
+  freeReactionLimit: "",
+  likeTokenContractUri: "",
+};
 
 export default config;

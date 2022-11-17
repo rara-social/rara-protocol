@@ -1,7 +1,7 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { BigNumber } from "ethers";
-import { ethers, upgrades } from "hardhat";
-import { TEST_NFT_URI } from "./constants";
+import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/signers";
+import {BigNumber} from "ethers";
+import {ethers, upgrades} from "hardhat";
+import {TEST_LIKE_NFT_URI, TEST_NFT_URI, TEST_CONTRACT_URI} from "./constants";
 
 export const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
 export const TEST_SALE_CURATOR_LIABILITY_BP = 5_000; // 50% goes to curator liability
@@ -9,6 +9,7 @@ export const TEST_SALE_CREATOR_BP = 200; // 2% goes to the creator
 export const TEST_SALE_REFERRER_BP = 100; // 1% goes to the referrer
 export const TEST_SPEND_REFERRER_BP = 100; // 1% of curator liability goes to the referrer
 export const TEST_SPEND_TAKER_BP = 5_000; // 50% of curator liability goes to the taker
+export const TEST_FREE_REACTION_LIMIT = 1; // Amount of free reactions per transaction
 
 const deploySystem = async (owner: SignerWithAddress) => {
   // Deploy the Role Manager first
@@ -59,6 +60,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   const deployedTest1155 = await upgrades.deployProxy(Test1155Factory, [
     TEST_NFT_URI,
     addressManager.address,
+    TEST_CONTRACT_URI,
   ]);
   const testingStandard1155 = Test1155Factory.attach(deployedTest1155.address);
 
@@ -76,7 +78,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   );
   const deployedReactionNFT1155 = await upgrades.deployProxy(
     ReactionNft1155Factory,
-    [TEST_NFT_URI, addressManager.address]
+    [TEST_NFT_URI, addressManager.address, TEST_CONTRACT_URI]
   );
   const reactionNFT1155 = ReactionNft1155Factory.attach(
     deployedReactionNFT1155.address
@@ -94,13 +96,9 @@ const deploySystem = async (owner: SignerWithAddress) => {
     deployedParameterManager.address
   );
 
-  // Deploy an ERC20 Token for testing payments
-  const TestErc20Factory = await ethers.getContractFactory("TestErc20");
-  const deployedTestErc20 = await upgrades.deployProxy(TestErc20Factory, [
-    "TEST",
-    "TST",
-  ]);
-  const paymentTokenErc20 = TestErc20Factory.attach(deployedTestErc20.address);
+  // Deploy test Wrapped Matic
+  const WMaticFactory = await ethers.getContractFactory("WMATIC");
+  const paymentTokenErc20 = await WMaticFactory.deploy();
 
   // Deploy the curator token Contract
   const CuratorToken1155Factory = await ethers.getContractFactory(
@@ -108,7 +106,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   );
   const deployedCuratorToken = await upgrades.deployProxy(
     CuratorToken1155Factory,
-    [TEST_NFT_URI, addressManager.address]
+    [TEST_NFT_URI, addressManager.address, TEST_CONTRACT_URI]
   );
   const curatorToken = CuratorToken1155Factory.attach(
     deployedCuratorToken.address
@@ -123,7 +121,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
     curatorToken.address,
     "5000",
     "10000000",
-    "29000000000000"
+    "29000000000000",
   ]);
   const curatorVault = CuratorVaultFactory.attach(deployedCuratorVault.address);
 
@@ -136,6 +134,26 @@ const deploySystem = async (owner: SignerWithAddress) => {
   const childRegistrar = await ChildRegistrarFactory.deploy(
     "0xCf73231F28B7331BBe3124B907840A94851f9f11",
     addressManager.address
+  );
+
+  // Deploy Like Token Impl and Factory
+  const LikeTokenFactory = await ethers.getContractFactory("LikeToken1155");
+  const likeTokenImpl = await LikeTokenFactory.deploy();
+  await likeTokenImpl.initialize(
+    TEST_LIKE_NFT_URI,
+    addressManager.address,
+    TEST_LIKE_NFT_URI + "/contract/0X"
+  );
+
+  const LikeTokenFactoryFactory = await ethers.getContractFactory(
+    "LikeTokenFactory"
+  );
+  const deployedLikeTokenFactory = await upgrades.deployProxy(
+    LikeTokenFactoryFactory,
+    [addressManager.address, likeTokenImpl.address, TEST_LIKE_NFT_URI]
+  );
+  const likeTokenFactory = LikeTokenFactoryFactory.attach(
+    deployedLikeTokenFactory.address
   );
 
   // Update permissions in the Role Manager
@@ -172,9 +190,11 @@ const deploySystem = async (owner: SignerWithAddress) => {
   await addressManager.setReactionNftContract(reactionNFT1155.address);
   await addressManager.setDefaultCuratorVault(curatorVault.address);
   await addressManager.setChildRegistrar(childRegistrar.address);
+  await addressManager.setLikeTokenFactory(likeTokenFactory.address);
 
   // Update the Parameters in the protocol
   await parameterManager.setPaymentToken(paymentTokenErc20.address);
+  await parameterManager.setNativeWrappedToken(paymentTokenErc20.address);
   await parameterManager.setReactionPrice(TEST_REACTION_PRICE);
   await parameterManager.setSaleCuratorLiabilityBasisPoints(
     TEST_SALE_CURATOR_LIABILITY_BP
@@ -182,6 +202,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   await parameterManager.setSaleReferrerBasisPoints(TEST_SALE_REFERRER_BP);
   await parameterManager.setSpendTakerBasisPoints(TEST_SPEND_TAKER_BP);
   await parameterManager.setSpendReferrerBasisPoints(TEST_SPEND_REFERRER_BP);
+  await parameterManager.setFreeReactionLimit(TEST_FREE_REACTION_LIMIT);
 
   // Return objects for tests to use
   return {
@@ -189,6 +210,8 @@ const deploySystem = async (owner: SignerWithAddress) => {
     childRegistrar,
     curatorToken,
     curatorVault,
+    likeTokenFactory,
+    likeTokenImpl,
     makerRegistrar,
     parameterManager,
     paymentTokenErc20,
@@ -200,4 +223,4 @@ const deploySystem = async (owner: SignerWithAddress) => {
   };
 };
 
-export { deploySystem };
+export {deploySystem};

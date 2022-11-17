@@ -16,6 +16,12 @@ const config: DeployConfig = {
   spendReferrerBasisPoints: "",
   spendTakerBasisPoints: "",
   royaltyRegistry: "0x0385603ab55642cb4dd5de3ae9e306809991804f", //https://royaltyregistry.xyz/lookup
-}
+  curatorTokenContractUri: "",
+  likeTokenNftUri: "",
+  reactionContractUri: "",
+  nativeWrappedTokenAddress: "",
+  freeReactionLimit: "",
+  likeTokenContractUri: "",
+};
 
 export default config;

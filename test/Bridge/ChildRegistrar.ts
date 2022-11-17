@@ -1,12 +1,12 @@
-import { expect } from "chai";
-import { ethers } from "hardhat";
-import { deploySystem } from "../Scripts/setup";
-import { ONLY_DEPLOYER } from "../Scripts/errors";
+import {expect} from "chai";
+import {ethers} from "hardhat";
+import {deploySystem} from "../Scripts/setup";
+import {ONLY_DEPLOYER} from "../Scripts/errors";
 
-describe("Child Registrar", function () {
+describe.only("Child Registrar", function () {
   it("Should validate only deployer can update", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const { childRegistrar } = await deploySystem(OWNER);
+    const {childRegistrar} = await deploySystem(OWNER);
 
     // Verify an account that did not deploy the contract can't set the fx root
     await expect(
@@ -16,5 +16,4 @@ describe("Child Registrar", function () {
     // Verify the owner can update it
     await childRegistrar.connect(OWNER).setFxRootTunnel(BOB.address);
   });
-
 });

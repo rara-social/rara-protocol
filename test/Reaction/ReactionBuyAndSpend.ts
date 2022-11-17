@@ -1,30 +1,21 @@
-import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { ethers } from "hardhat";
-import { ZERO_ADDRESS } from "../Scripts/constants";
+import {expect} from "chai";
+import {BigNumber} from "ethers";
+import {ethers} from "hardhat";
+import {ZERO_ADDRESS} from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
   TEST_SALE_CREATOR_BP,
-  TEST_SALE_CURATOR_LIABILITY_BP,
-  TEST_SALE_REFERRER_BP,
 } from "../Scripts/setup";
-import { deriveTransformId } from "../Scripts/derivedParams";
-import {
-  NFT_NOT_REGISTERED,
-  NO_BALANCE,
-  TRANSFER_NOT_ALLOWED,
-  UNKNOWN_NFT,
-} from "../Scripts/errors";
+import {deriveTransformId} from "../Scripts/derivedParams";
 
-describe("ReactionVault Buy", function () {
+describe("ReactionVault Buy And Spend", function () {
   it("Should buy and spend a single reaction", async function () {
     const [OWNER, ALICE, CREATOR, REFERRER] = await ethers.getSigners();
     const {
       reactionVault,
       testingStandard1155,
       makerRegistrar,
-      roleManager,
       paymentTokenErc20,
       curatorToken,
     } = await deploySystem(OWNER);
@@ -57,12 +48,6 @@ describe("ReactionVault Buy", function () {
     // Encode the params and hash it to get the meta URI
     const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE);
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE);
-
     // Buying 1 reaction
     const REACTION_AMOUNT = BigNumber.from(1);
 
@@ -70,7 +55,7 @@ describe("ReactionVault Buy", function () {
     const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Buy and spend the reaction
-    const transaction = await reactionVault.buyAndSpendReaction(
+    const transaction = await reactionVault.react(
       REACTION_ID,
       REACTION_AMOUNT,
       REFERRER.address, // Referrer
@@ -79,7 +64,8 @@ describe("ReactionVault Buy", function () {
       testingStandard1155.address,
       TAKER_NFT_ID,
       ZERO_ADDRESS, // Curator vault override
-      metadataHash // metadata hash
+      metadataHash, // metadata hash
+      {value: TEST_REACTION_PRICE}
     );
     const receipt = await transaction.wait();
 
@@ -147,23 +133,11 @@ describe("ReactionVault Buy", function () {
     // Encode the params and hash it to get the meta URI
     const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(
-      OWNER.address,
-      TEST_REACTION_PRICE.mul(REACTION_AMOUNT)
-    );
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(
-      reactionVault.address,
-      TEST_REACTION_PRICE.mul(REACTION_AMOUNT)
-    );
-
     const TAKER_NFT_ID = "2";
     const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Buy and spend the reaction
-    const transaction = await reactionVault.buyAndSpendReaction(
+    const transaction = await reactionVault.react(
       REACTION_ID,
       REACTION_AMOUNT,
       REFERRER.address, // Referrer
@@ -172,7 +146,8 @@ describe("ReactionVault Buy", function () {
       testingStandard1155.address,
       TAKER_NFT_ID,
       ZERO_ADDRESS, // Curator vault override
-      metadataHash // metadata hash
+      metadataHash, // metadata hash
+      {value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT)}
     );
     const receipt = await transaction.wait();
 

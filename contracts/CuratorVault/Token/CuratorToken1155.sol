@@ -38,4 +38,14 @@ contract CuratorToken1155 is Standard1155 {
     ) external onlyCuratorTokenAdmin {
         _burn(from, id, amount);
     }
+
+    function setContractUri(string memory _contractUri)
+        external
+        onlyCuratorTokenAdmin
+        returns (bool success)
+    {
+        contractURI = _contractUri;
+
+        return true;
+    }
 }

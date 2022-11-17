@@ -9,7 +9,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 /// be used as the role owner could renounce the role leaving all future actions disabled.  Additionally,
 /// if a malicious account was able to obtain the role, they could use it to set values to malicious addresses.
 /// See the public documentation website for more details.
-contract AddressManager is Initializable, AddressManagerStorageV1 {
+contract AddressManager is Initializable, AddressManagerStorageV2 {
     /// @dev Verifies with the role manager that the calling address has ADMIN role
     modifier onlyAdmin() {
         require(roleManager.isAddressManagerAdmin(msg.sender), "Not Admin");
@@ -24,6 +24,7 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
     event DefaultCuratorVaultAddressUpdated(address newAddress);
     event ChildRegistrarAddressUpdated(address newAddress);
     event RoyaltyRegistryAddressUpdated(address newAddress);
+    event LikeTokenFactoryAddressUpdated(address newAddress);
 
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IRoleManager _roleManager) public initializer {
@@ -98,5 +99,12 @@ contract AddressManager is Initializable, AddressManagerStorageV1 {
         // We DO allow the royalty registry to be set to 0x0 as this disables the lookup
         royaltyRegistry = _royaltyRegistry;
         emit RoyaltyRegistryAddressUpdated(royaltyRegistry);
+    }
+
+    /// @dev Setter for the address of the Like Token Factory
+    function setLikeTokenFactory(address _likeTokenFactory) external onlyAdmin {
+        // We DO allow the Like Token Factory to be set to 0x0 as this disables the functionality
+        likeTokenFactory = _likeTokenFactory;
+        emit LikeTokenFactoryAddressUpdated(likeTokenFactory);
     }
 }

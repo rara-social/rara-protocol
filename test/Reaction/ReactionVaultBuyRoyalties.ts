@@ -61,12 +61,6 @@ describe("ReactionVault Royalties Buy", function () {
     // Encode the params and hash it to get the meta URI
     const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE.mul(10));
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE.mul(10));
-
     // Calculate how the payment will be split
     const REACTION_AMOUNT = BigNumber.from(1);
     const REFERRER_CUT = TEST_REACTION_PRICE.mul(TEST_SALE_REFERRER_BP).div(
@@ -95,7 +89,8 @@ describe("ReactionVault Royalties Buy", function () {
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
-      BigNumber.from(0)
+      BigNumber.from(0),
+      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
     );
     let receipt = await transaction.wait();
 
@@ -158,12 +153,6 @@ describe("ReactionVault Royalties Buy", function () {
     // Encode the params and hash it to get the meta URI
     const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE.mul(10));
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE.mul(10));
-
     // Calculate how the payment will be split
     const REACTION_AMOUNT = BigNumber.from(1);
     const REFERRER_CUT = TEST_REACTION_PRICE.mul(TEST_SALE_REFERRER_BP).div(
@@ -191,7 +180,8 @@ describe("ReactionVault Royalties Buy", function () {
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
-      BigNumber.from(0)
+      BigNumber.from(0),
+      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
     );
     const receipt = await transaction.wait();
 
@@ -253,12 +243,6 @@ describe("ReactionVault Royalties Buy", function () {
     // Encode the params and hash it to get the meta URI
     const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE.mul(10));
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE.mul(10));
-
     // Calculate how the payment will be split
     const REACTION_AMOUNT = BigNumber.from(1);
     const REFERRER_CUT = TEST_REACTION_PRICE.mul(TEST_SALE_REFERRER_BP).div(
@@ -287,7 +271,8 @@ describe("ReactionVault Royalties Buy", function () {
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
-      BigNumber.from(0)
+      BigNumber.from(0),
+      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
     );
     const receipt = await transaction.wait();
 
@@ -349,12 +334,6 @@ describe("ReactionVault Royalties Buy", function () {
     // Encode the params and hash it to get the meta URI
     const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE.mul(10));
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE.mul(10));
-
     // Calculate how the payment will be split
     const REACTION_AMOUNT = BigNumber.from(1);
     const REFERRER_CUT = TEST_REACTION_PRICE.mul(TEST_SALE_REFERRER_BP).div(
@@ -382,7 +361,8 @@ describe("ReactionVault Royalties Buy", function () {
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
-      BigNumber.from(0)
+      BigNumber.from(0),
+      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
     );
     const receipt = await transaction.wait();
 
@@ -445,12 +425,6 @@ describe("ReactionVault Royalties Buy", function () {
     // Encode the params and hash it to get the meta URI
     const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE.mul(10));
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE.mul(10));
-
     // Calculate how the payment will be split
     const REACTION_AMOUNT = BigNumber.from(1);
     const REFERRER_CUT = TEST_REACTION_PRICE.mul(TEST_SALE_REFERRER_BP).div(
@@ -478,7 +452,8 @@ describe("ReactionVault Royalties Buy", function () {
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
-      BigNumber.from(0)
+      BigNumber.from(0),
+      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
     );
     const receipt = await transaction.wait();
 
@@ -542,12 +517,6 @@ describe("ReactionVault Royalties Buy", function () {
     // Encode the params and hash it to get the meta URI
     const REACTION_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Mint the purchase price amount of tokens to the owner
-    paymentTokenErc20.mint(OWNER.address, TEST_REACTION_PRICE.mul(10));
-
-    // Approve the transfer of payment tokens
-    paymentTokenErc20.approve(reactionVault.address, TEST_REACTION_PRICE.mul(10));
-
     // Calculate how the payment will be split
     const REACTION_AMOUNT = BigNumber.from(1);
     const REFERRER_CUT = TEST_REACTION_PRICE.mul(TEST_SALE_REFERRER_BP).div(
@@ -565,7 +534,8 @@ describe("ReactionVault Royalties Buy", function () {
       REACTION_AMOUNT,
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
-      BigNumber.from(0)
+      BigNumber.from(0),
+      { value: TEST_REACTION_PRICE.mul(REACTION_AMOUNT) }
     );
     const receipt = await transaction.wait();
 
