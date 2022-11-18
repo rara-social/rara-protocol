@@ -7,44 +7,45 @@ const {getWallet, chainId} = require("../helpers/utils");
 // taker params
 const takerNftChainId = chainId;
 const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
-const takerNftId = "46";
+const takerNftId = "44";
 
 // reaction params
-const reactionId =
-  "6979036568848592305527182868657966366740743334716642481625328657312863657830";
-const reactionQuantity = 1;
+const transformId =
+  "30928197117314826209461326755915633336396878013931804244388344068798455153987";
+const optionBits = 1;
 const ipfsMetadataHash = "QmSBE5W5tyz8M7ve4n7Tw3sJgdHqak7k6whsorM7dDKsDL";
 
 async function main() {
   const reactor = await getWallet("reactor");
   const referrer = await getWallet("referrer");
 
+  // Check reaction limit
+  const ParameterManager = new ethers.Contract(
+    deployConfig[chainId][0].contracts.ParameterManager.address,
+    deployConfig[chainId][0].contracts.ParameterManager.abi,
+    reactor
+  );
+
+  const reactionLimit = await ParameterManager.freeReactionLimit();
+  console.log({reactionLimit: reactionLimit.toNumber()});
+
+  // use reaction
   const ReactionVault = new ethers.Contract(
     deployConfig[chainId][0].contracts.ReactionVault.address,
     deployConfig[chainId][0].contracts.ReactionVault.abi,
     reactor
   );
-
-  const ReactionNft1155 = new ethers.Contract(
-    deployConfig[chainId][0].contracts.ReactionNft1155.address,
-    deployConfig[chainId][0].contracts.ReactionNft1155.abi,
-    reactor
-  );
-  const tokenBalance = await ReactionNft1155.balanceOf(
-    reactor.address,
-    reactionId
-  );
-  console.log({tokenBalance: tokenBalance.toNumber(), reactionQuantity});
-
   const curatorVaultOverride = ethers.constants.AddressZero;
-  console.log("spending reactions...");
-  const spendReactionTxn = await ReactionVault.spendReaction(
+  console.log("free react...");
+
+  const spendReactionTxn = await ReactionVault.react(
+    transformId,
+    1,
+    referrer.address,
+    optionBits,
     takerNftChainId,
     takerNftAddress,
     takerNftId,
-    reactionId,
-    reactionQuantity,
-    referrer.address,
     curatorVaultOverride,
     ipfsMetadataHash,
     {

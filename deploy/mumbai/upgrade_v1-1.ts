@@ -4,6 +4,8 @@ import {ethers} from "hardhat";
 import {deployProxyContract} from "../../deploy_config/protocol";
 import config from "../../deploy_config/mumbai";
 
+const deployConfig = require("../../v2_test_fresh/hardhat_contracts.json");
+
 // Deploy the protocol on the L2
 // For Mumbai testnet, we will deploy test token contracts as well as the full protocol contracts
 // You must set DEPLOY_PRIVATE_KEY which is shared in RaRa 1Password
@@ -15,51 +17,145 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
 
   const chainId = "80001"; // mumbai
   const chainRPC = process.env.DATA_TESTING_RPC;
-  const deployerPK = process.env.DEPLOY_PRIVATE_KEY;
-
-  const roleManagerAddress = "0x2eC607cC101dD30C4192330c0e3004CAbEAcFe68";
-  const curatorToken1155Address = "0xc0aa23C4221bF9C47fa9f9C145C0A7699D5e598E";
-  let addressManagerAddress = "0x85E7BD499d60A4cD0FB36E2370b89c7f83AdBf2a";
-  // console.log({
-  //   roleManagerAddress,
-  //   curatorToken1155Address,
-  //   addressManagerAddress,
-  // });
+  const deployerPK: any = process.env.DEPLOY_PRIVATE_KEY;
+  const provider = new ethers.providers.JsonRpcProvider(chainRPC);
+  const signer = new ethers.utils.SigningKey(deployerPK);
+  let wallet = new ethers.Wallet(signer);
+  wallet = wallet.connect(provider);
+  console.log({chainId, rpc: chainRPC, wallet: wallet.address});
 
   //
-  // Deploy new contracts
+  // Upgrade Existing Contracts
   //
-  const DefaultProxyAdmin = await ethers.getContractAt(
-    "DefaultProxyAdmin",
-    "0xa0a2b7ef6a04f1D3e2aC64E422c7cf5E8238c7EE"
+  console.log("\n\nUpgrading existing contracts");
+  const DefaultProxyAdmin = new ethers.Contract(
+    deployConfig[chainId][0].contracts.DefaultProxyAdmin.address,
+    deployConfig[chainId][0].contracts.DefaultProxyAdmin.abi,
+    wallet
   );
 
   // Address Manager
-  const res = await deployProxyContract(hre, "AddressManager", [
+  const roleManagerAddress =
+    deployConfig[chainId][0].contracts.RoleManager.address;
+  // console.log({roleManagerAddress});
+  let add = await deployProxyContract(hre, "AddressManager", [
     roleManagerAddress,
   ]);
-  addressManagerAddress = res.address;
-  console.log({addressManagerAddress});
+  let txn = await DefaultProxyAdmin.upgrade(add.address, add.implementation);
+  await txn.wait();
+  let implementation = await DefaultProxyAdmin.getProxyImplementation(
+    add.address
+  );
+  console.log({
+    name: "AddressManager",
+    address: add.address,
+    imp: add.implementation,
+    proxy_imp: implementation,
+  });
+  const addressManagerAddress = add.address;
+
+  // ParameterManager
+  let pm = await deployProxyContract(hre, "ParameterManager", [
+    addressManagerAddress,
+  ]);
+  txn = await DefaultProxyAdmin.upgrade(pm.address, pm.implementation);
+  await txn.wait();
+  implementation = await DefaultProxyAdmin.getProxyImplementation(pm.address);
+  console.log({
+    name: "ParameterManager",
+    address: pm.address,
+    imp: pm.implementation,
+    proxy_imp: implementation,
+  });
 
   // Curator1155
-  let curator = await deployProxyContract(hre, "CuratorToken1155", [
+  const ct = await deployProxyContract(hre, "CuratorToken1155", [
     config.curatorTokenNftUri,
     addressManagerAddress,
     config.curatorTokenContractUri,
   ]);
-  console.log({CuratorToken1155: curator.address});
+  txn = await DefaultProxyAdmin.upgrade(ct.address, ct.implementation);
+  await txn.wait();
+  implementation = await DefaultProxyAdmin.getProxyImplementation(ct.address);
+  console.log({
+    name: "CuratorToken1155",
+    address: ct.address,
+    imp: ct.implementation,
+    proxy_imp: implementation,
+  });
 
-  //   console.log("bailing...");
-  //   return;
+  // Reaction1155
+  let ReactionNft1155 = await deployProxyContract(hre, "ReactionNft1155", [
+    config.reactionNftUri,
+    addressManagerAddress,
+    config.reactionContractUri,
+  ]);
+  txn = await DefaultProxyAdmin.upgrade(
+    ReactionNft1155.address,
+    ReactionNft1155.implementation
+  );
+  await txn.wait();
+  implementation = await DefaultProxyAdmin.getProxyImplementation(
+    ReactionNft1155.address
+  );
+  console.log({
+    name: "ReactionNft1155",
+    address: ReactionNft1155.address,
+    imp: ReactionNft1155.implementation,
+    proxy_imp: implementation,
+  });
+
+  // ReactionVault
+  const rv = await deployProxyContract(hre, "ReactionVault", [
+    addressManagerAddress,
+  ]);
+  txn = await DefaultProxyAdmin.upgrade(rv.address, rv.implementation);
+  await txn.wait();
+  implementation = await DefaultProxyAdmin.getProxyImplementation(rv.address);
+  console.log({
+    name: "ReactionVault",
+    address: rv.address,
+    imp: rv.implementation,
+    proxy_imp: implementation,
+  });
+
+  // SigmoidCuratorVault
+  const scv = await deployProxyContract(hre, "SigmoidCuratorVault", [
+    addressManagerAddress,
+    ct.address,
+    config.bondingCurveA,
+    config.bondingCurveB,
+    config.bondingCurveC,
+  ]);
+  txn = await DefaultProxyAdmin.upgrade(scv.address, scv.implementation);
+  await txn.wait();
+  implementation = await DefaultProxyAdmin.getProxyImplementation(scv.address);
+  console.log({
+    name: "SigmoidCuratorVault",
+    address: scv.address,
+    imp: scv.implementation,
+    proxy_imp: implementation,
+  });
+
+  //
+  // Deploy new contracts
+  //
+  console.log("\n\nDeploying new contracts");
 
   // LikeTokenImplementation
   const LikeTokenFactory = await ethers.getContractFactory("LikeToken1155");
   const likeTokenImpl = await LikeTokenFactory.deploy();
-  await likeTokenImpl.initialize(
-    config.likeTokenNftUri,
-    addressManagerAddress,
-    config.likeTokenNftUri + "/contract/0X"
-  );
+  try {
+    txn = await likeTokenImpl.initialize(
+      config.likeTokenNftUri,
+      addressManagerAddress,
+      config.likeTokenContractUri,
+      {gasLimit: "200000"}
+    );
+    await txn.wait();
+  } catch (error) {
+    console.log("(error on likeTokenImpl init)");
+  }
 
   // LikeTokenFactory
   let factory = await deployProxyContract(hre, "LikeTokenFactory", [
@@ -68,50 +164,70 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
     config.likeTokenNftUri,
   ]);
 
-  // ParameterManager
-  let pm = await deployProxyContract(hre, "ParameterManager", [
-    addressManagerAddress,
-  ]);
+  // Temporarily grant roles to the deploying account
+  console.log("\n\nGranting temp permissions");
+  const roleManager = await ethers.getContractAt(
+    "RoleManager",
+    roleManagerAddress
+  );
+  await roleManager.grantRole(
+    await roleManager.ADDRESS_MANAGER_ADMIN(),
+    deployer,
+    {gasLimit: "200000"}
+  );
+  console.log("Granted ADDRESS_MANAGER_ADMIN to " + deployer);
+  await roleManager.grantRole(
+    await roleManager.PARAMETER_MANAGER_ADMIN(),
+    deployer,
+    {gasLimit: "200000"}
+  );
+  console.log("Granted PARAMETER_MANAGER_ADMIN to " + deployer);
+  await roleManager.grantRole(
+    await roleManager.REACTION_NFT_ADMIN(),
+    deployer,
+    {gasLimit: "200000"}
+  );
+  console.log("Granted REACTION_NFT_ADMIN to " + deployer);
+  await roleManager.grantRole(
+    await roleManager.CURATOR_TOKEN_ADMIN(),
+    deployer,
+    {gasLimit: "200000"}
+  );
+  console.log("Granted CURATOR_TOKEN_ADMIN to " + deployer);
 
-  // Reaction1155
-  let reaction = await deployProxyContract(hre, "ReactionNft1155", [
-    config.reactionNftUri,
-    addressManagerAddress,
-    config.reactionContractUri,
-  ]);
-
-  // ReactionVault
-  const rv = await deployProxyContract(hre, "ReactionVault", [
-    addressManagerAddress,
-  ]);
-
-  // SigmoidCuratorVault
-  const scv = await deployProxyContract(hre, "SigmoidCuratorVault", [
-    addressManagerAddress,
-    curatorToken1155Address,
-    config.bondingCurveA,
-    config.bondingCurveB,
-    config.bondingCurveC,
-  ]);
+  // NFT contract URI's
+  console.log("\n\nSetting NFT contract URI's");
+  const ReactionNft1155Contract = await ethers.getContractAt(
+    "ReactionNft1155",
+    ReactionNft1155.address
+  );
+  await ReactionNft1155Contract.setContractUri(config.reactionContractUri);
+  const CuratorToken1155 = await ethers.getContractAt(
+    "CuratorToken1155",
+    ct.address
+  );
+  await CuratorToken1155.setContractUri(config.curatorTokenContractUri);
 
   // Set addresses in address manager for the protocol
-  console.log("\n\nUpdating addresses in the protocol");
+  console.log("\n\nUpdating AddressManager");
   const addressManager = await ethers.getContractAt(
     "AddressManager",
-    addressManagerAddress
+    add.address
   );
-  await addressManager.setRoleManager(roleManagerAddress, {gasLimit: "200000"});
   await addressManager.setParameterManager(pm.address, {
     gasLimit: "200000",
   });
-  await addressManager.setReactionNftContract(reaction.address, {
+  await addressManager.setReactionNftContract(ReactionNft1155.address, {
     gasLimit: "200000",
   });
-  await addressManager.setDefaultCuratorVault(curator.address, {
+  await addressManager.setDefaultCuratorVault(scv.address, {
+    gasLimit: "200000",
+  });
+  await addressManager.setLikeTokenFactory(factory.address, {
     gasLimit: "200000",
   });
 
-  console.log("\n\nUpdating parameters in the protocol");
+  console.log("\n\nUpdating ParameterManager");
   const parameterManager = await ethers.getContractAt(
     "ParameterManager",
     pm.address
@@ -122,7 +238,10 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   });
   // nativeWrappedTokenAddress
   await parameterManager.setNativeWrappedToken(
-    config.nativeWrappedTokenAddress
+    config.nativeWrappedTokenAddress,
+    {
+      gasLimit: "200000",
+    }
   );
   // freeReactionLimit
   await parameterManager.setFreeReactionLimit(config.freeReactionLimit, {
@@ -133,7 +252,34 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
     gasLimit: "200000",
   });
 
-  console.log("Done.");
+  // Remove the temporary permissions for the deploy account not that params are updated
+  console.log("\n\nRevoking temp permissions for deployer");
+  await roleManager.revokeRole(
+    await roleManager.ADDRESS_MANAGER_ADMIN(),
+    deployer,
+    {gasLimit: "200000"}
+  );
+  console.log("Revoked ADDRESS_MANAGER_ADMIN to " + deployer);
+  await roleManager.revokeRole(
+    await roleManager.PARAMETER_MANAGER_ADMIN(),
+    deployer,
+    {gasLimit: "200000"}
+  );
+  console.log("Revoked PARAMETER_MANAGER_ADMIN to " + deployer);
+  await roleManager.revokeRole(
+    await roleManager.REACTION_NFT_ADMIN(),
+    deployer,
+    {gasLimit: "200000"}
+  );
+  console.log("Revoked REACTION_NFT_ADMIN to " + deployer);
+  await roleManager.revokeRole(
+    await roleManager.CURATOR_TOKEN_ADMIN(),
+    deployer,
+    {gasLimit: "200000"}
+  );
+  console.log("Revoked CURATOR_TOKEN_ADMIN to " + deployer);
+
+  console.log("\n\nDone.");
 };
 
 module.exports.tags = ["mumbai-upgrade-v1-1"];

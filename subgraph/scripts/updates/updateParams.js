@@ -1,7 +1,7 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
+const deployConfig = require("../../../v2_test_upgrade/hardhat_contracts.json");
 
 const chainId = "80001";
 
@@ -24,9 +24,9 @@ async function main() {
     deployConfig[chainId][0].contracts.RoleManager.abi,
     wallet
   );
-  const role = await RoleManager.PARAMETER_MANAGER_ADMIN();
-  await RoleManager.grantRole(role, wallet.address);
-  console.log("role set");
+  // const role = await RoleManager.PARAMETER_MANAGER_ADMIN();
+  // await RoleManager.grantRole(role, wallet.address);
+  // console.log("role set");
 
   //
   // Set Parameters
@@ -38,27 +38,30 @@ async function main() {
   );
 
   // update params
-  await ParameterManager.setSaleReferrerBasisPoints(50); //50
-  await ParameterManager.setSaleCuratorLiabilityBasisPoints(9500); //9500
-  await ParameterManager.setSpendReferrerBasisPoints(55); //55
-  await ParameterManager.setSpendTakerBasisPoints(525); //525
+  // await ParameterManager.setSaleReferrerBasisPoints(50); //50
+  // await ParameterManager.setSaleCuratorLiabilityBasisPoints(9500); //9500
+  // await ParameterManager.setSpendReferrerBasisPoints(55); //55
+  // await ParameterManager.setSpendTakerBasisPoints(525); //525
+
+  // const tx = await ParameterManager.setReactionPrice("1000000000000000000"); //1000000000000000000
+  // await tx.wait();
 
   const reactionPrice = await ParameterManager.reactionPrice();
-  const saleCuratorLiabilityBasisPoints =
-    await ParameterManager.saleCuratorLiabilityBasisPoints();
-  const saleReferrerBasisPoints =
-    await ParameterManager.saleReferrerBasisPoints();
-  const spendTakerBasisPoints = await ParameterManager.spendTakerBasisPoints();
-  const spendReferrerBasisPoints =
-    await ParameterManager.spendReferrerBasisPoints();
+  // const saleCuratorLiabilityBasisPoints =
+  //   await ParameterManager.saleCuratorLiabilityBasisPoints();
+  // const saleReferrerBasisPoints =
+  //   await ParameterManager.saleReferrerBasisPoints();
+  // const spendTakerBasisPoints = await ParameterManager.spendTakerBasisPoints();
+  // const spendReferrerBasisPoints =
+  //   await ParameterManager.spendReferrerBasisPoints();
 
   // check owner
   console.log({
-    reactionPrice: reactionPrice.toNumber(),
-    saleCuratorLiabilityBasisPoints: saleCuratorLiabilityBasisPoints.toNumber(),
-    saleReferrerBasisPoints: saleReferrerBasisPoints.toNumber(),
-    spendTakerBasisPoints: spendTakerBasisPoints.toNumber(),
-    spendReferrerBasisPoints: spendReferrerBasisPoints.toNumber(),
+    reactionPrice: reactionPrice.toString(),
+    // saleCuratorLiabilityBasisPoints: saleCuratorLiabilityBasisPoints.toNumber(),
+    // saleReferrerBasisPoints: saleReferrerBasisPoints.toNumber(),
+    // spendTakerBasisPoints: spendTakerBasisPoints.toNumber(),
+    // spendReferrerBasisPoints: spendReferrerBasisPoints.toNumber(),
   });
 }
 

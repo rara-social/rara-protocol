@@ -3,7 +3,7 @@ import {ethers} from "hardhat";
 import {deploySystem} from "../Scripts/setup";
 import {ONLY_DEPLOYER} from "../Scripts/errors";
 
-describe.only("Child Registrar", function () {
+describe("Child Registrar", function () {
   it("Should validate only deployer can update", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
     const {childRegistrar} = await deploySystem(OWNER);
