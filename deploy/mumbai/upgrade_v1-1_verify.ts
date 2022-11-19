@@ -107,20 +107,20 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   const a = await CuratorVault.a();
   const b = await CuratorVault.b();
   const c = await CuratorVault.c();
-  const oneMatic = await CuratorVault.calculateTokensBoughtFromPayment(
-    a,
-    b,
-    c,
-    0,
-    0,
-    "1000000000000000000"
-  );
+  // const oneMatic = await CuratorVault.calculateTokensBoughtFromPayment(
+  //   a,
+  //   b,
+  //   c,
+  //   0,
+  //   0,
+  //   "1000000000000000000"
+  // );
   console.log({
     name: "CuratorVault",
     a,
     b,
     c,
-    oneMatic,
+    // oneMatic,
   });
 };
 

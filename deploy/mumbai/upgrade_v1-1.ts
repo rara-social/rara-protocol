@@ -164,7 +164,9 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
     config.likeTokenNftUri,
   ]);
 
+  //
   // Temporarily grant roles to the deploying account
+  //
   console.log("\n\nGranting temp permissions");
   const roleManager = await ethers.getContractAt(
     "RoleManager",
@@ -195,20 +197,9 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   );
   console.log("Granted CURATOR_TOKEN_ADMIN to " + deployer);
 
-  // NFT contract URI's
-  console.log("\n\nSetting NFT contract URI's");
-  const ReactionNft1155Contract = await ethers.getContractAt(
-    "ReactionNft1155",
-    ReactionNft1155.address
-  );
-  await ReactionNft1155Contract.setContractUri(config.reactionContractUri);
-  const CuratorToken1155 = await ethers.getContractAt(
-    "CuratorToken1155",
-    ct.address
-  );
-  await CuratorToken1155.setContractUri(config.curatorTokenContractUri);
-
-  // Set addresses in address manager for the protocol
+  //
+  // Updating AddressManager
+  //
   console.log("\n\nUpdating AddressManager");
   const addressManager = await ethers.getContractAt(
     "AddressManager",
@@ -227,6 +218,9 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
     gasLimit: "200000",
   });
 
+  //
+  // Updating ParameterManager
+  //
   console.log("\n\nUpdating ParameterManager");
   const parameterManager = await ethers.getContractAt(
     "ParameterManager",
@@ -252,7 +246,24 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
     gasLimit: "200000",
   });
 
-  // Remove the temporary permissions for the deploy account not that params are updated
+  //
+  // Set NFT contract URI's
+  //
+  console.log("\n\nSetting NFT contract URI's");
+  const ReactionNft1155Contract = await ethers.getContractAt(
+    "ReactionNft1155",
+    ReactionNft1155.address
+  );
+  await ReactionNft1155Contract.setContractUri(config.reactionContractUri);
+  const CuratorToken1155 = await ethers.getContractAt(
+    "CuratorToken1155",
+    ct.address
+  );
+  await CuratorToken1155.setContractUri(config.curatorTokenContractUri);
+
+  //
+  // Remove the temporary permissions for the deploy account
+  //
   console.log("\n\nRevoking temp permissions for deployer");
   await roleManager.revokeRole(
     await roleManager.ADDRESS_MANAGER_ADMIN(),
