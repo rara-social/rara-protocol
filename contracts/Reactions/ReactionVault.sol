@@ -855,7 +855,20 @@ contract ReactionVault is
             );
         }
 
-        // Emit the event for the overall reaction spend
+        // calc payment parameter version
+        uint256 parameterVersion = deriveParameterVersion(
+            addressManager.parameterManager()
+        );
+
+        // Emit ReactionsPurchased & ReactionsSpent for consistency with paid reaction path
+        emit ReactionsPurchased(
+            transformId,
+            reactionQuantity,
+            msg.sender,
+            address(0),
+            reactionId,
+            parameterVersion
+        );
         emit ReactionsSpent(
             takerNftChainId,
             takerNftAddress,

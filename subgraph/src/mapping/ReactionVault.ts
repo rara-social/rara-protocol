@@ -95,25 +95,6 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   // uint256 takerTokenAmount
 
   //
-  // Reaction
-  //
-  let reaction = Reaction.load(event.params.reactionId.toString());
-  if (reaction == null) {
-    reaction = new Reaction(event.params.reactionId.toString());
-    reaction.reactionId = event.params.reactionId;
-    reaction.createdAt = event.block.timestamp;
-    reaction.updatedAt = event.block.timestamp;
-    reaction.blockNumber = event.block.number;
-
-    // these are not available for free reactions; they will be set if the reaction is ever purchased
-    reaction.transform = "";
-    reaction.parameterVersion = new BigInt(0);
-    reaction.totalSold = new BigInt(0);
-
-    reaction.save();
-  }
-
-  //
   // User Reaction
   //
   let userReactionKey =
