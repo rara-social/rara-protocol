@@ -31,21 +31,26 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   //
   // Reaction
   //
-  let reaction = Reaction.load(event.params.reactionId.toHexString());
+  let reaction = Reaction.load(event.params.reactionId.toString());
   if (reaction == null) {
-    reaction = new Reaction(event.params.reactionId.toHexString());
+    reaction = new Reaction(event.params.reactionId.toString());
+    reaction.createdAt = event.block.timestamp;
   }
+
   reaction.reactionId = event.params.reactionId;
-  reaction.transform = event.params.transformId.toHexString();
+  reaction.transform = event.params.transformId.toString();
   reaction.parameterVersion = event.params.parameterVersion;
   reaction.totalSold = reaction.totalSold.plus(event.params.quantity);
+
+  reaction.updatedAt = event.block.timestamp;
+  reaction.blockNumber = event.block.number;
   reaction.save();
 
   //
   // User Reaction
   //
   let userReactionKey =
-    event.params.reactionId.toHexString() +
+    event.params.reactionId.toString() +
     "-" +
     event.transaction.from.toHexString();
   let userReaction = UserReaction.load(userReactionKey);
@@ -53,6 +58,7 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
     userReaction = new UserReaction(userReactionKey);
     userReaction.user = event.transaction.from;
     userReaction.reaction = reaction.id;
+    userReaction.createdAt = event.block.timestamp;
   }
   userReaction.currentBalance = userReaction.currentBalance.plus(
     event.params.quantity
@@ -60,6 +66,9 @@ export function handleReactionsPurchased(event: ReactionsPurchased): void {
   userReaction.totalPurchased = userReaction.totalPurchased.plus(
     event.params.quantity
   );
+
+  userReaction.updatedAt = event.block.timestamp;
+  userReaction.blockNumber = event.block.number;
   userReaction.save();
 }
 
@@ -82,7 +91,7 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   // User Reaction
   //
   let userReactionKey =
-    event.params.reactionId.toHexString() +
+    event.params.reactionId.toString() +
     "-" +
     event.transaction.from.toHexString();
   let userReaction = UserReaction.load(userReactionKey);
@@ -90,6 +99,10 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
     userReaction.currentBalance = userReaction.currentBalance.minus(
       event.params.quantity
     );
+
+    userReaction.updatedAt = event.block.timestamp;
+    userReaction.createdAt = event.block.timestamp;
+    userReaction.blockNumber = event.block.number;
     userReaction.save();
   }
 
@@ -100,7 +113,7 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
     event.transaction.hash.toHex() + "-" + event.logIndex.toString();
   let userSpend = new UserSpend(userSpendKey);
   userSpend.user = event.transaction.from;
-  userSpend.reaction = event.params.reactionId.toHexString();
+  userSpend.reaction = event.params.reactionId.toString();
   userSpend.reactionQuantity = event.params.quantity;
 
   // IPFS
@@ -121,14 +134,18 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
     }
   }
 
-  userSpend.curatorVaultToken = event.params.curatorTokenId.toHexString();
+  userSpend.curatorVaultToken = event.params.curatorTokenId.toString();
   userSpend.curatorTokensPurchased = event.params.curatorTokenAmount;
+
+  userSpend.createdAt = event.block.timestamp;
+  userSpend.updatedAt = event.block.timestamp;
+  userSpend.blockNumber = event.block.number;
   userSpend.save();
 
   //
   // CuratorVaultToken: increase curatorVaultToken.takerTokensAvailable
   //
-  let curatorVaultTokenKey = event.params.curatorTokenId.toHexString();
+  let curatorVaultTokenKey = event.params.curatorTokenId.toString();
   let curatorVaultToken = CuratorVaultToken.load(curatorVaultTokenKey);
   if (curatorVaultToken == null) {
     curatorVaultToken = new CuratorVaultToken(curatorVaultTokenKey);
@@ -138,9 +155,13 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
     curatorVaultToken.paymentToken = event.params.paymentToken;
     curatorVaultToken.curatorVaultAddress = event.params.curatorVaultAddress;
     curatorVaultToken.curatorTokenId = event.params.curatorTokenId;
+    curatorVaultToken.createdAt = event.block.timestamp;
   }
   curatorVaultToken.takerTokensBalance =
     curatorVaultToken.takerTokensBalance.plus(event.params.takerTokenAmount);
+
+  curatorVaultToken.updatedAt = event.block.timestamp;
+  curatorVaultToken.blockNumber = event.block.number;
   curatorVaultToken.save();
 
   //
@@ -149,12 +170,13 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   let userPositionKey =
     event.transaction.from.toHexString() +
     "-" +
-    event.params.curatorTokenId.toHexString();
+    event.params.curatorTokenId.toString();
   let userPosition = UserPosition.load(userPositionKey);
   if (userPosition == null) {
     userPosition = new UserPosition(userPositionKey);
     userPosition.user = event.transaction.from;
-    userPosition.curatorVaultToken = event.params.curatorTokenId.toHexString();
+    userPosition.curatorVaultToken = event.params.curatorTokenId.toString();
+    userPosition.createdAt = event.block.timestamp;
   }
   userPosition.currentTokenBalance = userPosition.currentTokenBalance.plus(
     event.params.curatorTokenAmount
@@ -162,6 +184,9 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   userPosition.totalTokenPurchased = userPosition.totalTokenPurchased.plus(
     event.params.curatorTokenAmount
   );
+
+  userPosition.updatedAt = event.block.timestamp;
+  userPosition.blockNumber = event.block.number;
   userPosition.save();
 }
 
@@ -186,6 +211,7 @@ export function handleCreatorRewardsGranted(
     userEarning = new UserEarning(userEarningKey);
     userEarning.paymentToken = event.params.paymentToken;
     userEarning.user = event.params.creator;
+    userEarning.createdAt = event.block.timestamp;
   }
 
   // increase creator rewards
@@ -196,19 +222,24 @@ export function handleCreatorRewardsGranted(
     event.params.amount.toBigDecimal()
   );
 
+  userEarning.updatedAt = event.block.timestamp;
+  userEarning.blockNumber = event.block.number;
   userEarning.save();
 
   //
   // Reaction
   //
-  let reaction = Reaction.load(event.params.reactionId.toHexString());
+  let reaction = Reaction.load(event.params.reactionId.toString());
   if (reaction == null) {
-    reaction = new Reaction(event.params.reactionId.toHexString());
+    reaction = new Reaction(event.params.reactionId.toString());
+    reaction.createdAt = event.block.timestamp;
   }
   reaction.totalCreatorFees = reaction.totalCreatorFees.plus(
     event.params.amount.toBigDecimal()
   );
 
+  reaction.updatedAt = event.block.timestamp;
+  reaction.blockNumber = event.block.number;
   reaction.save();
 }
 
@@ -233,6 +264,7 @@ export function handleReferrerRewardsGranted(
     userEarning = new UserEarning(userEarningKey);
     userEarning.paymentToken = event.params.paymentToken;
     userEarning.user = event.params.referrer;
+    userEarning.createdAt = event.block.timestamp;
   }
 
   // increase creator rewards
@@ -243,19 +275,24 @@ export function handleReferrerRewardsGranted(
     event.params.amount.toBigDecimal()
   );
 
+  userEarning.updatedAt = event.block.timestamp;
+  userEarning.blockNumber = event.block.number;
   userEarning.save();
 
   //
   // Reaction
   //
-  let reaction = Reaction.load(event.params.reactionId.toHexString());
+  let reaction = Reaction.load(event.params.reactionId.toString());
   if (reaction == null) {
-    reaction = new Reaction(event.params.reactionId.toHexString());
+    reaction = new Reaction(event.params.reactionId.toString());
+    reaction.createdAt = event.block.timestamp;
   }
   reaction.totalReferrerFees = reaction.totalReferrerFees.plus(
     event.params.amount.toBigDecimal()
   );
 
+  reaction.updatedAt = event.block.timestamp;
+  reaction.blockNumber = event.block.number;
   reaction.save();
 }
 
@@ -278,6 +315,7 @@ export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
     userEarning = new UserEarning(userEarningKey);
     userEarning.paymentToken = event.params.paymentToken;
     userEarning.user = event.params.maker;
+    userEarning.createdAt = event.block.timestamp;
   }
 
   // increase creator rewards
@@ -288,19 +326,24 @@ export function handleMakerRewardsGranted(event: MakerRewardsGranted): void {
     event.params.amount.toBigDecimal()
   );
 
+  userEarning.updatedAt = event.block.timestamp;
+  userEarning.blockNumber = event.block.number;
   userEarning.save();
 
   //
   // Reaction
   //
-  let reaction = Reaction.load(event.params.reactionId.toHexString());
+  let reaction = Reaction.load(event.params.reactionId.toString());
   if (reaction == null) {
-    reaction = new Reaction(event.params.reactionId.toHexString());
+    reaction = new Reaction(event.params.reactionId.toString());
+    reaction.createdAt = event.block.timestamp;
   }
   reaction.totalMakerFees = reaction.totalMakerFees.plus(
     event.params.amount.toBigDecimal()
   );
 
+  reaction.updatedAt = event.block.timestamp;
+  reaction.blockNumber = event.block.number;
   reaction.save();
 }
 
@@ -329,6 +372,8 @@ export function handleERC20RewardsClaimed(event: ERC20RewardsClaimed): void {
       event.params.amount.toBigDecimal()
     );
 
+    userEarning.updatedAt = event.block.timestamp;
+    userEarning.blockNumber = event.block.number;
     userEarning.save();
   }
 }
@@ -343,7 +388,7 @@ export function handleTakerWithdraw(event: TakerWithdraw): void {
   //
   // CuratorVaultToken: increase curatorVaultToken.takerTokensAvailable
   //
-  let curatorVaultTokenKey = event.params.curatorTokenId.toHexString();
+  let curatorVaultTokenKey = event.params.curatorTokenId.toString();
   let curatorVaultToken = CuratorVaultToken.load(curatorVaultTokenKey);
   if (curatorVaultToken !== null) {
     curatorVaultToken.takerTokensBalance =
@@ -357,7 +402,8 @@ export function handleTakerWithdraw(event: TakerWithdraw): void {
       curatorVaultToken.takerCreatorRefunded.plus(
         event.params.paymentTokenTaker
       );
-
+    curatorVaultToken.updatedAt = event.block.timestamp;
+    curatorVaultToken.blockNumber = event.block.number;
     curatorVaultToken.save();
   }
 }

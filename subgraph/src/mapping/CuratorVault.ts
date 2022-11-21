@@ -1,6 +1,10 @@
 import {BigInt, Address, log} from "@graphprotocol/graph-ts";
 
-import {CuratorVaultToken, UserPosition} from "../../generated/schema";
+import {
+  CuratorVaultToken,
+  UserPosition,
+  UserSell,
+} from "../../generated/schema";
 
 import {
   CuratorTokensBought,
@@ -22,7 +26,7 @@ export function handleCuratorTokensBought(event: CuratorTokensBought): void {
   // CuratorVaultToken
   //
   // load CuratorVaultToken
-  let curatorVaultTokenKey = event.params.curatorTokenId.toHexString();
+  let curatorVaultTokenKey = event.params.curatorTokenId.toString();
   let curatorVaultToken = CuratorVaultToken.load(curatorVaultTokenKey);
   if (curatorVaultToken == null) {
     curatorVaultToken = new CuratorVaultToken(curatorVaultTokenKey);
@@ -32,6 +36,7 @@ export function handleCuratorTokensBought(event: CuratorTokensBought): void {
     curatorVaultToken.nftContractAddress = event.params.nftAddress;
     curatorVaultToken.nftId = event.params.nftId;
     curatorVaultToken.paymentToken = event.params.paymentToken;
+    curatorVaultToken.createdAt = event.block.timestamp;
   }
 
   // increase current balances
@@ -52,6 +57,8 @@ export function handleCuratorTokensBought(event: CuratorTokensBought): void {
     event.params.paymentTokenPaid.toBigDecimal()
   );
 
+  curatorVaultToken.updatedAt = event.block.timestamp;
+  curatorVaultToken.blockNumber = event.block.number;
   curatorVaultToken.save();
 }
 
@@ -66,10 +73,11 @@ export function handleCuratorTokensSold(event: CuratorTokensSold): void {
   //
 
   // load CuratorVaultToken
-  let curatorVaultTokenKey = event.params.curatorTokenId.toHexString();
+  let curatorVaultTokenKey = event.params.curatorTokenId.toString();
   let curatorVaultToken = CuratorVaultToken.load(curatorVaultTokenKey);
   if (curatorVaultToken == null) {
     curatorVaultToken = new CuratorVaultToken(curatorVaultTokenKey);
+    curatorVaultToken.createdAt = event.block.timestamp;
   }
 
   // decrease current balances
@@ -82,23 +90,54 @@ export function handleCuratorTokensSold(event: CuratorTokensSold): void {
       event.params.paymentTokenRefunded.toBigDecimal()
     );
 
+  curatorVaultToken.updatedAt = event.block.timestamp;
+  curatorVaultToken.blockNumber = event.block.number;
   curatorVaultToken.save();
 
   //
-  // UserPosition: decrease userPosition.tokensAvailable & userPosition.tokensTotal
+  // UserPosition
   //
   let userPositionKey =
     event.transaction.from.toHexString() +
     "-" +
-    event.params.curatorTokenId.toHexString();
+    event.params.curatorTokenId.toString();
   let userPosition = UserPosition.load(userPositionKey);
   if (userPosition == null) {
     userPosition = new UserPosition(userPositionKey);
     userPosition.user = event.transaction.from;
-    userPosition.curatorVaultToken = event.params.curatorTokenId.toHexString();
+    userPosition.curatorVaultToken = event.params.curatorTokenId.toString();
+    userPosition.createdAt = event.block.timestamp;
   }
+
+  // decrease token balance
   userPosition.currentTokenBalance = userPosition.currentTokenBalance.minus(
     event.params.curatorTokensSold
   );
+
+  // increase refund balance
+  userPosition.totalRefunded = userPosition.totalRefunded.plus(
+    event.params.paymentTokenRefunded.toBigDecimal()
+  );
+
+  userPosition.updatedAt = event.block.timestamp;
+  userPosition.blockNumber = event.block.number;
   userPosition.save();
+
+  //
+  // UserSell
+  //
+
+  let userSellKey =
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString();
+  let userSell = new UserSell(userSellKey);
+  userSell.user = event.transaction.from;
+
+  userSell.curatorVaultToken = event.params.curatorTokenId.toString();
+  userSell.paymentTokenRefunded = event.params.paymentTokenRefunded;
+  userSell.curatorTokensSold = event.params.curatorTokensSold;
+
+  userSell.createdAt = event.block.timestamp;
+  userSell.updatedAt = event.block.timestamp;
+  userSell.blockNumber = event.block.number;
+  userSell.save();
 }
