@@ -4,7 +4,7 @@ const ethers = require("ethers");
 const deployConfig = require("../../../v2_test_upgrade/hardhat_contracts.json");
 const {getWallet, chainId} = require("../helpers/utils");
 
-const nftId = "105";
+const nftId = "104";
 const nftContractAddress =
   deployConfig[chainId][0].contracts.TestErc721.address;
 

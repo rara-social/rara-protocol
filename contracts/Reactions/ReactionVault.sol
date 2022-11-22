@@ -826,11 +826,9 @@ contract ReactionVault is
         string memory ipfsMetadataHash
     ) internal {
         // Verify quantity
-        uint256 freeReactionLimit = addressManager
-            .parameterManager()
-            .freeReactionLimit();
         require(
-            reactionQuantity <= freeReactionLimit,
+            reactionQuantity <=
+                addressManager.parameterManager().freeReactionLimit(),
             "Reaction quantity above limit"
         );
 
@@ -855,9 +853,15 @@ contract ReactionVault is
             );
         }
 
-        // calc payment parameter version
-        uint256 parameterVersion = deriveParameterVersion(
-            addressManager.parameterManager()
+        uint256 curatorTokenId = uint256(
+            keccak256(
+                abi.encode(
+                    takerNftChainId,
+                    takerNftAddress,
+                    takerNftId,
+                    addressManager.parameterManager().paymentToken()
+                )
+            )
         );
 
         // Emit ReactionsPurchased & ReactionsSpent for consistency with paid reaction path
@@ -867,19 +871,20 @@ contract ReactionVault is
             msg.sender,
             address(0),
             reactionId,
-            parameterVersion
+            deriveParameterVersion(addressManager.parameterManager())
         );
+
         emit ReactionsSpent(
             takerNftChainId,
             takerNftAddress,
             takerNftId,
             reactionId,
-            address(0), // payment token
+            address(addressManager.parameterManager().paymentToken()),
             reactionQuantity,
             ipfsMetadataHash,
             address(0), //referrer
-            address(0), // curator vault
-            0, // curatorTokenId
+            address(addressManager.defaultCuratorVault()),
+            curatorTokenId,
             0, // spenderCuratorTokens
             0 // takerCuratorTokens
         );

@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0x7c4181393192AF9788386D36a07c7F3e7e7F8742"
       abi: MakerRegistrar
-      startBlock: 29173000
+      startBlock: 29281856
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -31,7 +31,7 @@ dataSources:
     source:
       address: "0x0ee289e14bE317904E851cFDD4319C4Df8F2B42D"
       abi: SigmoidCuratorVault
-      startBlock: 29173000
+      startBlock: 29281856
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -54,7 +54,7 @@ dataSources:
     source:
       address: "0x6265fc3591AAb193C55eE2987B73738F3C31A3d9"
       abi: ReactionVault
-      startBlock: 29173000
+      startBlock: 29281856
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
