@@ -4,7 +4,7 @@ import {ethers} from "hardhat";
 import {deployProxyContract} from "../../deploy_config/protocol";
 import config from "../../deploy_config/mumbai";
 
-// const deployConfig = require("../../v2_test_fresh/hardhat_contracts.json");
+const deployConfig = require("../../deploy_data/hardhat_contracts.json");
 
 // Deploy the protocol on the L2
 // For Mumbai testnet, we will deploy test token contracts as well as the full protocol contracts
