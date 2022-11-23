@@ -4,6 +4,7 @@ coverage
 coverage.json
 typechain
 .vscode
+.DS_Store
 
 #Hardhat files
 cache

@@ -85,3 +85,23 @@ dataSources:
         - event: TakerWithdraw(indexed uint256,uint256,uint256,uint256)
           handler: handleTakerWithdraw
       file: ./src/mapping/ReactionVault.ts
+  - kind: ethereum/contract
+    name: LikeTokenFactory
+    network: "{{network}}"
+    source:
+      address: "{{LikeTokenFactoryAddress}}"
+      abi: LikeTokenFactory
+      startBlock: {{StartBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - LikeTokenContract
+      abis:
+        - name: LikeTokenFactory
+          file: ../artifacts/contracts/Likes/LikeTokenFactory.sol/LikeTokenFactory.json
+      eventHandlers:
+        - event: TokenDeployed(uint256,address,uint256,address)
+          handler: handleTokenDeployed
+      file: ./src/mapping/LikeTokenFactory.ts

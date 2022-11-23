@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: MakerRegistrar
-    network: "matic"
+    network: "localhost"
     source:
-      address: "0x47CD3266FA94E40613B37a88D98196325Cd28412"
+      address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0"
       abi: MakerRegistrar
-      startBlock: 28479000
+      startBlock: 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -27,11 +27,11 @@ dataSources:
       file: ./src/mapping/MakerRegistrar.ts
   - kind: ethereum/contract
     name: CuratorVault
-    network: "matic"
+    network: "localhost"
     source:
-      address: "0x7D278Aa2d95ABa7C969c9F316be6f0cFE0D18A50"
+      address: "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1"
       abi: SigmoidCuratorVault
-      startBlock: 28479000
+      startBlock: 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -50,11 +50,11 @@ dataSources:
       file: ./src/mapping/CuratorVault.ts
   - kind: ethereum/contract
     name: ReactionVault
-    network: "matic"
+    network: "localhost"
     source:
-      address: "0xE5BA5c73378BC8Da94738CB04490680ae3eab88C"
+      address: "0x9A676e781A523b5d0C0e43731313A708CB607508"
       abi: ReactionVault
-      startBlock: 28479000
+      startBlock: 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -85,3 +85,23 @@ dataSources:
         - event: TakerWithdraw(indexed uint256,uint256,uint256,uint256)
           handler: handleTakerWithdraw
       file: ./src/mapping/ReactionVault.ts
+  - kind: ethereum/contract
+    name: LikeTokenFactory
+    network: "localhost"
+    source:
+      address: "0xA374674F97885BD378059708e97f7117CB74683d"
+      abi: LikeTokenFactory
+      startBlock: 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - LikeTokenContract
+      abis:
+        - name: LikeTokenFactory
+          file: ../artifacts/contracts/Likes/LikeTokenFactory.sol/LikeTokenFactory.json
+      eventHandlers:
+        - event: TokenDeployed(uint256,address,uint256,address)
+          handler: handleTokenDeployed
+      file: ./src/mapping/LikeTokenFactory.ts

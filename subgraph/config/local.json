@@ -5,5 +5,6 @@
   "SigmoidCuratorVaultAddress": "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1",
   "SigmoidCuratorVaultStartBlock": 0,
   "ReactionVaultAddress": "0x9A676e781A523b5d0C0e43731313A708CB607508",
-  "ReactionVaultStartBlock": 0
+  "ReactionVaultStartBlock": 0,
+  "LikeTokenFactoryAddress": "0xA374674F97885BD378059708e97f7117CB74683d"
 }

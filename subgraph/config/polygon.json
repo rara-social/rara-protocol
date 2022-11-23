@@ -3,5 +3,6 @@
   "StartBlock": 28479000,
   "MakerRegistrarAddress": "0x47CD3266FA94E40613B37a88D98196325Cd28412",
   "SigmoidCuratorVaultAddress": "0x7D278Aa2d95ABa7C969c9F316be6f0cFE0D18A50",
-  "ReactionVaultAddress": "0xE5BA5c73378BC8Da94738CB04490680ae3eab88C"
+  "ReactionVaultAddress": "0xE5BA5c73378BC8Da94738CB04490680ae3eab88C",
+  "LikeTokenFactoryAddress": "0xA374674F97885BD378059708e97f7117CB74683d"
 }
