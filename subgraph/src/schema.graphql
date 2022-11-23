@@ -170,3 +170,15 @@ type UserSell @entity {
   updatedAt: BigInt!
   blockNumber: BigInt!
 }
+
+type LikeTokenContract @entity {
+  id: ID! # deployedContract
+  takerNftChainId: BigInt!
+  takerNftAddress: Bytes!
+  takerNftId: BigInt!
+  deployedContract: Bytes!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  blockNumber: BigInt!
+}
