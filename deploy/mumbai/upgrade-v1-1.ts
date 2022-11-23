@@ -4,12 +4,12 @@ import {ethers} from "hardhat";
 import {deployProxyContract} from "../../deploy_config/protocol";
 import config from "../../deploy_config/mumbai";
 
-// const deployConfig = require("../../v2_test_fresh/hardhat_contracts.json");
+const deployConfig = require("../../deploy_data/hardhat_contracts.json");
 
 // Deploy the protocol on the L2
 // For Mumbai testnet, we will deploy test token contracts as well as the full protocol contracts
 // You must set DEPLOY_PRIVATE_KEY which is shared in RaRa 1Password
-// Run: npx hardhat deploy --network mumbai --tags mumbai-upgrade-v1-1 --export-all ./v2_test_upgrade/hardhat_contracts.json
+// Run: npx hardhat deploy --network mumbai --tags mumbai-upgrade-v1-1 --export-all ./deploy_data/hardhat_contracts.json
 module.exports = async (hre: HardhatRuntimeEnvironment) => {
   const {getNamedAccounts} = hre;
   const {deployer} = await getNamedAccounts();

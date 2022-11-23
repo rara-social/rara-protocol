@@ -2,7 +2,7 @@ import {HardhatRuntimeEnvironment} from "hardhat/types";
 import {ethers} from "hardhat";
 import {BigNumber} from "ethers";
 
-// const deployConfig = require("../../v2_test_upgrade/hardhat_contracts.json");
+const deployConfig = require("../../deploy_data/hardhat_contracts.json");
 
 // Verify Parameters
 // Run: npx hardhat deploy --network mumbai --tags mumbai-upgrade-v1-1-verify
