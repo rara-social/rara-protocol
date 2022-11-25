@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: MakerRegistrar
-    network: "localhost"
+    network: "mumbai"
     source:
-      address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0"
+      address: "0x06493B0362b3892EEc7C63023e8bC0C0c64646eb"
       abi: MakerRegistrar
-      startBlock:
+      startBlock: 26642329
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -27,11 +27,11 @@ dataSources:
       file: ./src/mapping/MakerRegistrar.ts
   - kind: ethereum/contract
     name: CuratorVault
-    network: "localhost"
+    network: "mumbai"
     source:
-      address: "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1"
+      address: "0xff63B24Ce497d1e0ea7F45a08bF2C93631B017C1"
       abi: SigmoidCuratorVault
-      startBlock:
+      startBlock: 26642329
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -49,12 +49,35 @@ dataSources:
           handler: handleCuratorTokensSold
       file: ./src/mapping/CuratorVault.ts
   - kind: ethereum/contract
-    name: ReactionVault
-    network: "localhost"
+    name: CuratorVault2
+    network: "mumbai"
     source:
-      address: "0x9A676e781A523b5d0C0e43731313A708CB607508"
+      address: "0x52379B83f6857546632166369cF8567e159dB2F3"
+      abi: SigmoidCuratorVault2
+      startBlock: 26642329
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CuratorVaultToken
+        - UserPosition
+      abis:
+        - name: SigmoidCuratorVault2
+          file: ../artifacts/contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol/SigmoidCuratorVault2.json
+      eventHandlers:
+        - event: CuratorTokensBought(indexed uint256,uint256,address,uint256,address,uint256,uint256,bool)
+          handler: handleCuratorTokensBought
+        - event: CuratorTokensSold(indexed uint256,uint256,uint256)
+          handler: handleCuratorTokensSold
+      file: ./src/mapping/CuratorVault.ts
+  - kind: ethereum/contract
+    name: ReactionVault
+    network: "mumbai"
+    source:
+      address: "0xA374674F97885BD378059708e97f7117CB74683d"
       abi: ReactionVault
-      startBlock:
+      startBlock: 26642329
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -87,11 +110,11 @@ dataSources:
       file: ./src/mapping/ReactionVault.ts
   - kind: ethereum/contract
     name: LikeTokenFactory
-    network: "localhost"
+    network: "mumbai"
     source:
-      address: "0xA374674F97885BD378059708e97f7117CB74683d"
+      address: "0x3E7634A070a18D2648731315a8Ad2ab736508D30"
       abi: LikeTokenFactory
-      startBlock:
+      startBlock: 26642329
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
