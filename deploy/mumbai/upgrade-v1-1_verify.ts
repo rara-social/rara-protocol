@@ -88,39 +88,61 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
 
   const LikeToken1155 = await ethers.getContractAt(
     "LikeTokenFactory",
-    deployConfig[chainId][0].contracts.LikeTokenFactory_Implementation.address
+    deployConfig[chainId][0].contracts.LikeTokenFactory.address
   );
   const baseTokenUri = await LikeToken1155.baseTokenUri();
   console.log({
-    name: "LikeToken1155",
+    name: "LikeTokenFactory",
     baseTokenUri,
   });
 
-  //
-  // CuratorVault
-  //
-  console.log("\n\nVerifying Curator Params");
-  const CuratorVault = await ethers.getContractAt(
-    "SigmoidCuratorVault",
-    deployConfig[chainId][0].contracts.SigmoidCuratorVault.address
-  );
-  const a = await CuratorVault.a();
-  const b = await CuratorVault.b();
-  const c = await CuratorVault.c();
-  // const oneMatic = await CuratorVault.calculateTokensBoughtFromPayment(
+  // //
+  // // CuratorVault
+  // //
+  // console.log("\n\nVerifying Curator Params");
+  // const CuratorVault = await ethers.getContractAt(
+  //   "SigmoidCuratorVault2",
+  //   deployConfig[chainId][0].contracts.SigmoidCuratorVault2.address
+  // );
+  // const a = await CuratorVault.a();
+  // const b = await CuratorVault.b();
+  // const c = await CuratorVault.c();
+  // // const oneMatic = await CuratorVault.calculateTokensBoughtFromPayment(
+  // //   a,
+  // //   b,
+  // //   c,
+  // //   0,
+  // //   0,
+  // //   "1000000000000000000"
+  // // );
+  // console.log({
+  //   name: "SigmoidCuratorVault2",
   //   a,
   //   b,
   //   c,
-  //   0,
-  //   0,
-  //   "1000000000000000000"
-  // );
+  //   // oneMatic,
+  // });
+
+  //
+  // CuratorVault Proxies
+  //
+  const DefaultProxyAdmin = new ethers.Contract(
+    deployConfig[chainId][0].contracts.DefaultProxyAdmin.address,
+    deployConfig[chainId][0].contracts.DefaultProxyAdmin.abi,
+    wallet
+  );
+
+  // set old curator vault to old implementation
+  const oldProxy = "0xff63B24Ce497d1e0ea7F45a08bF2C93631B017C1";
+  const oldImplementation = "0x6Ed0B9932529E79204Aaee1E423944ac06b02d03";
+  let txn = await DefaultProxyAdmin.upgrade(oldProxy, oldImplementation);
+  await txn.wait();
+  let implementation = await DefaultProxyAdmin.getProxyImplementation(oldProxy);
   console.log({
-    name: "CuratorVault",
-    a,
-    b,
-    c,
-    // oneMatic,
+    name: "SigmoidCuratorVault",
+    address: oldProxy,
+    imp: oldImplementation,
+    proxy_imp: implementation,
   });
 };
 

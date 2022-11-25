@@ -10,7 +10,7 @@ import "../../Config/IAddressManager.sol";
 import "../../Token/IWMATIC.sol";
 
 import "./SigmoidCuratorVaultStorage.sol";
-import "./Curve/Sigmoid.sol";
+import "./Curve/Sigmoid2.sol";
 
 /// @title SigmoidCuratorVault
 /// @dev This contract tracks tokens in a sigmoid bonding curve per Taker NFT.
@@ -26,7 +26,7 @@ import "./Curve/Sigmoid.sol";
 /// See the public documentation website for more details.
 contract SigmoidCuratorVault2 is
     ReentrancyGuardUpgradeable,
-    Sigmoid,
+    Sigmoid2,
     SigmoidCuratorVaultStorageV1
 {
     /// @dev Use the safe methods when interacting with transfers with outside ERC20s

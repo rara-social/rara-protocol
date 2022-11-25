@@ -10,10 +10,10 @@ import {
 } from "../Scripts/errors";
 import {BigNumber} from "ethers";
 
-describe("Sigmoid Curator Vault", function () {
+describe("Sigmoid Curator Vault 2", function () {
   it("Should check address on init", async function () {
     const SigmoidCuratorVaultFactory = await ethers.getContractFactory(
-      "SigmoidCuratorVault"
+      "SigmoidCuratorVault2"
     );
     const [OWNER] = await ethers.getSigners();
     await expect(
@@ -366,5 +366,37 @@ describe("Sigmoid Curator Vault", function () {
       priceAmount
     );
     expect(BigNumber.from(7_360_625)).to.be.equal(tokensPurchased);
+  });
+
+  it("Should sweep contract of ETH", async function () {
+    const [OWNER, ALICE] = await ethers.getSigners();
+    const {curatorVault2} = await deploySystem(OWNER);
+
+    const amount = ethers.utils.parseEther("1.0");
+
+    // Send 1 ETH into contract
+    await OWNER.sendTransaction({
+      to: curatorVault2.address,
+      value: amount,
+    });
+
+    // Should verify non owner can't sweep
+    await expect(curatorVault2.connect(ALICE).sweep()).to.be.revertedWith(
+      NOT_ADMIN
+    );
+
+    // Capture balance before call
+    const originalBalance = await OWNER.getBalance();
+
+    // Verify owner can get it out
+    const tx = await curatorVault2.connect(OWNER).sweep();
+    let receipt = await tx.wait();
+    let gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice);
+
+    // Calculate the new balance has the sweep value
+    let balance = await OWNER.getBalance();
+    expect(balance.toString()).to.be.equal(
+      originalBalance.add(amount).sub(gasUsedInEth)
+    );
   });
 });

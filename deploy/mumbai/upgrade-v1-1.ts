@@ -119,28 +119,18 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
     proxy_imp: implementation,
   });
 
-  // SigmoidCuratorVault
-  const scv = await deployProxyContract(hre, "SigmoidCuratorVault", [
+  //
+  // Deploy new contracts
+  //
+  console.log("\n\nDeploying new contracts");
+
+  const scv = await deployProxyContract(hre, "SigmoidCuratorVault2", [
     addressManagerAddress,
     ct.address,
     config.bondingCurveA,
     config.bondingCurveB,
     config.bondingCurveC,
   ]);
-  txn = await DefaultProxyAdmin.upgrade(scv.address, scv.implementation);
-  await txn.wait();
-  implementation = await DefaultProxyAdmin.getProxyImplementation(scv.address);
-  console.log({
-    name: "SigmoidCuratorVault",
-    address: scv.address,
-    imp: scv.implementation,
-    proxy_imp: implementation,
-  });
-
-  //
-  // Deploy new contracts
-  //
-  console.log("\n\nDeploying new contracts");
 
   // LikeTokenImplementation
   const LikeTokenFactory = await ethers.getContractFactory("LikeToken1155");
