@@ -24405,6 +24405,19 @@
                   "type": "address"
                 }
               ],
+              "name": "LikeTokenFactoryAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
               "name": "MakerRegistrarAddressUpdated",
               "type": "event"
             },
@@ -24501,6 +24514,19 @@
             },
             {
               "inputs": [],
+              "name": "likeTokenFactory",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
               "name": "makerRegistrar",
               "outputs": [
                 {
@@ -24586,6 +24612,19 @@
                 }
               ],
               "name": "setDefaultCuratorVault",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "_likeTokenFactory",
+                  "type": "address"
+                }
+              ],
+              "name": "setLikeTokenFactory",
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
@@ -24679,7 +24718,7 @@
           ]
         },
         "AddressManager_Implementation": {
-          "address": "0x493C71d7B6b42781af4122Dfa849e13811F650Ba",
+          "address": "0x6a64e7E4a2248657d50D10f5bEe9c4D7Cb1E88ba",
           "abi": [
             {
               "anonymous": false,
@@ -24705,6 +24744,19 @@
                 }
               ],
               "name": "DefaultCuratorVaultAddressUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAddress",
+                  "type": "address"
+                }
+              ],
+              "name": "LikeTokenFactoryAddressUpdated",
               "type": "event"
             },
             {
@@ -24813,6 +24865,19 @@
             },
             {
               "inputs": [],
+              "name": "likeTokenFactory",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
               "name": "makerRegistrar",
               "outputs": [
                 {
@@ -24898,6 +24963,19 @@
                 }
               ],
               "name": "setDefaultCuratorVault",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "_likeTokenFactory",
+                  "type": "address"
+                }
+              ],
+              "name": "setLikeTokenFactory",
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
@@ -25570,7 +25648,7 @@
             },
             {
               "inputs": [],
-              "name": "contractUri",
+              "name": "contractURI",
               "outputs": [
                 {
                   "internalType": "string",
@@ -25821,7 +25899,7 @@
           ]
         },
         "CuratorToken1155_Implementation": {
-          "address": "0xc552eb248197bf84798cdf82c97a31772022aa12",
+          "address": "0xC73A37EE81E26008eC11688C45c07406fF8EdDF8",
           "abi": [
             {
               "anonymous": false,
@@ -26027,7 +26105,7 @@
             },
             {
               "inputs": [],
-              "name": "contractUri",
+              "name": "contractURI",
               "outputs": [
                 {
                   "internalType": "string",
@@ -26554,6 +26632,563 @@
               "outputs": [],
               "stateMutability": "payable",
               "type": "function"
+            }
+          ]
+        },
+        "LikeTokenFactory": {
+          "address": "0x3E7634A070a18D2648731315a8Ad2ab736508D30",
+          "abi": [
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "previousAdmin",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAdmin",
+                  "type": "address"
+                }
+              ],
+              "name": "AdminChanged",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "implementation",
+                  "type": "address"
+                }
+              ],
+              "name": "Upgraded",
+              "type": "event"
+            },
+            {
+              "stateMutability": "payable",
+              "type": "fallback"
+            },
+            {
+              "inputs": [],
+              "name": "admin",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "newAdmin",
+                  "type": "address"
+                }
+              ],
+              "name": "changeAdmin",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "implementation",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "newImplementation",
+                  "type": "address"
+                }
+              ],
+              "name": "upgradeTo",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "newImplementation",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bytes",
+                  "name": "data",
+                  "type": "bytes"
+                }
+              ],
+              "name": "upgradeToAndCall",
+              "outputs": [],
+              "stateMutability": "payable",
+              "type": "function"
+            },
+            {
+              "stateMutability": "payable",
+              "type": "receive"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "takerNftChainId",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "takerNftAddress",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "takerNftId",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "deployedContract",
+                  "type": "address"
+                }
+              ],
+              "name": "TokenDeployed",
+              "type": "event"
+            },
+            {
+              "inputs": [],
+              "name": "addressManager",
+              "outputs": [
+                {
+                  "internalType": "contract IAddressManager",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "baseTokenUri",
+              "outputs": [
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "contract IAddressManager",
+                  "name": "_addressManager",
+                  "type": "address"
+                },
+                {
+                  "internalType": "address",
+                  "name": "_tokenImplementation",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_baseTokenUri",
+                  "type": "string"
+                }
+              ],
+              "name": "initialize",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "targetAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "takerNftChainId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "takerNftAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "takerNftId",
+                  "type": "uint256"
+                }
+              ],
+              "name": "issueLikeToken",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "name": "likeTokens",
+              "outputs": [
+                {
+                  "internalType": "contract ILikeToken1155",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "tokenImplementation",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "initialLogic",
+                  "type": "address"
+                },
+                {
+                  "internalType": "address",
+                  "name": "initialAdmin",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bytes",
+                  "name": "_data",
+                  "type": "bytes"
+                }
+              ],
+              "stateMutability": "payable",
+              "type": "constructor"
+            }
+          ]
+        },
+        "LikeTokenFactory_Implementation": {
+          "address": "0xc62025fC2d139bCdeBede944CAf0D53254c7Df8e",
+          "abi": [
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "takerNftChainId",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "takerNftAddress",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "takerNftId",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "deployedContract",
+                  "type": "address"
+                }
+              ],
+              "name": "TokenDeployed",
+              "type": "event"
+            },
+            {
+              "inputs": [],
+              "name": "addressManager",
+              "outputs": [
+                {
+                  "internalType": "contract IAddressManager",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "baseTokenUri",
+              "outputs": [
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "contract IAddressManager",
+                  "name": "_addressManager",
+                  "type": "address"
+                },
+                {
+                  "internalType": "address",
+                  "name": "_tokenImplementation",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_baseTokenUri",
+                  "type": "string"
+                }
+              ],
+              "name": "initialize",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "targetAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "takerNftChainId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "takerNftAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "takerNftId",
+                  "type": "uint256"
+                }
+              ],
+              "name": "issueLikeToken",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "name": "likeTokens",
+              "outputs": [
+                {
+                  "internalType": "contract ILikeToken1155",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "tokenImplementation",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            }
+          ]
+        },
+        "LikeTokenFactory_Proxy": {
+          "address": "0x3E7634A070a18D2648731315a8Ad2ab736508D30",
+          "abi": [
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "initialLogic",
+                  "type": "address"
+                },
+                {
+                  "internalType": "address",
+                  "name": "initialAdmin",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bytes",
+                  "name": "_data",
+                  "type": "bytes"
+                }
+              ],
+              "stateMutability": "payable",
+              "type": "constructor"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "previousAdmin",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAdmin",
+                  "type": "address"
+                }
+              ],
+              "name": "AdminChanged",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "implementation",
+                  "type": "address"
+                }
+              ],
+              "name": "Upgraded",
+              "type": "event"
+            },
+            {
+              "stateMutability": "payable",
+              "type": "fallback"
+            },
+            {
+              "inputs": [],
+              "name": "admin",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "newAdmin",
+                  "type": "address"
+                }
+              ],
+              "name": "changeAdmin",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "implementation",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "newImplementation",
+                  "type": "address"
+                }
+              ],
+              "name": "upgradeTo",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "newImplementation",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bytes",
+                  "name": "data",
+                  "type": "bytes"
+                }
+              ],
+              "name": "upgradeToAndCall",
+              "outputs": [],
+              "stateMutability": "payable",
+              "type": "function"
+            },
+            {
+              "stateMutability": "payable",
+              "type": "receive"
             }
           ]
         },
@@ -27805,7 +28440,33 @@
               "inputs": [
                 {
                   "indexed": false,
+                  "internalType": "uint256",
+                  "name": "reactionLimit",
+                  "type": "uint256"
+                }
+              ],
+              "name": "FreeReactionLimitUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
                   "internalType": "contract IERC20Upgradeable",
+                  "name": "newValue",
+                  "type": "address"
+                }
+              ],
+              "name": "NativeWrappedTokenUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "contract IWMATIC",
                   "name": "newValue",
                   "type": "address"
                 }
@@ -27911,6 +28572,19 @@
               "type": "function"
             },
             {
+              "inputs": [],
+              "name": "freeReactionLimit",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
               "inputs": [
                 {
                   "internalType": "contract IAddressManager",
@@ -27925,10 +28599,23 @@
             },
             {
               "inputs": [],
-              "name": "paymentToken",
+              "name": "nativeWrappedToken",
               "outputs": [
                 {
                   "internalType": "contract IERC20Upgradeable",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "paymentToken",
+              "outputs": [
+                {
+                  "internalType": "contract IWMATIC",
                   "name": "",
                   "type": "address"
                 }
@@ -27996,7 +28683,33 @@
             {
               "inputs": [
                 {
+                  "internalType": "uint256",
+                  "name": "_reactionLimit",
+                  "type": "uint256"
+                }
+              ],
+              "name": "setFreeReactionLimit",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
                   "internalType": "contract IERC20Upgradeable",
+                  "name": "_nativeWrappedToken",
+                  "type": "address"
+                }
+              ],
+              "name": "setNativeWrappedToken",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "contract IWMATIC",
                   "name": "_paymentToken",
                   "type": "address"
                 }
@@ -28121,7 +28834,7 @@
           ]
         },
         "ParameterManager_Implementation": {
-          "address": "0xdC61ACA7E0494cD9116c49C658994663ea09570c",
+          "address": "0x967ff1Fa8C06eB6511c54F8C7A6e6475c360cB55",
           "abi": [
             {
               "anonymous": false,
@@ -28147,7 +28860,33 @@
               "inputs": [
                 {
                   "indexed": false,
+                  "internalType": "uint256",
+                  "name": "reactionLimit",
+                  "type": "uint256"
+                }
+              ],
+              "name": "FreeReactionLimitUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
                   "internalType": "contract IERC20Upgradeable",
+                  "name": "newValue",
+                  "type": "address"
+                }
+              ],
+              "name": "NativeWrappedTokenUpdated",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "contract IWMATIC",
                   "name": "newValue",
                   "type": "address"
                 }
@@ -28253,6 +28992,19 @@
               "type": "function"
             },
             {
+              "inputs": [],
+              "name": "freeReactionLimit",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
               "inputs": [
                 {
                   "internalType": "contract IAddressManager",
@@ -28267,10 +29019,23 @@
             },
             {
               "inputs": [],
-              "name": "paymentToken",
+              "name": "nativeWrappedToken",
               "outputs": [
                 {
                   "internalType": "contract IERC20Upgradeable",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "paymentToken",
+              "outputs": [
+                {
+                  "internalType": "contract IWMATIC",
                   "name": "",
                   "type": "address"
                 }
@@ -28338,7 +29103,33 @@
             {
               "inputs": [
                 {
+                  "internalType": "uint256",
+                  "name": "_reactionLimit",
+                  "type": "uint256"
+                }
+              ],
+              "name": "setFreeReactionLimit",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
                   "internalType": "contract IERC20Upgradeable",
+                  "name": "_nativeWrappedToken",
+                  "type": "address"
+                }
+              ],
+              "name": "setNativeWrappedToken",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "contract IWMATIC",
                   "name": "_paymentToken",
                   "type": "address"
                 }
@@ -28894,7 +29685,7 @@
             },
             {
               "inputs": [],
-              "name": "contractUri",
+              "name": "contractURI",
               "outputs": [
                 {
                   "internalType": "string",
@@ -29145,7 +29936,7 @@
           ]
         },
         "ReactionNft1155_Implementation": {
-          "address": "0x09EE981c679E30dE96A0BCcD7321Ba714139788f",
+          "address": "0x4224D6818Ec1cbDF619847895422170AdD0a6092",
           "abi": [
             {
               "anonymous": false,
@@ -29351,7 +30142,7 @@
             },
             {
               "inputs": [],
-              "name": "contractUri",
+              "name": "contractURI",
               "outputs": [
                 {
                   "internalType": "string",
@@ -29840,7 +30631,7 @@
                 },
                 {
                   "indexed": false,
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -29896,7 +30687,7 @@
                 },
                 {
                   "indexed": false,
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -30049,7 +30840,7 @@
                 },
                 {
                   "indexed": false,
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -30140,59 +30931,6 @@
                 },
                 {
                   "internalType": "address",
-                  "name": "referrer",
-                  "type": "address"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "optionBits",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "takerNftChainId",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "address",
-                  "name": "takerNftAddress",
-                  "type": "address"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "takerNftId",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "address",
-                  "name": "curatorVaultOverride",
-                  "type": "address"
-                },
-                {
-                  "internalType": "string",
-                  "name": "ipfsMetadataHash",
-                  "type": "string"
-                }
-              ],
-              "name": "buyAndSpendReaction",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "transformId",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "quantity",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "address",
                   "name": "destinationWallet",
                   "type": "address"
                 },
@@ -30209,7 +30947,7 @@
               ],
               "name": "buyReaction",
               "outputs": [],
-              "stateMutability": "nonpayable",
+              "stateMutability": "payable",
               "type": "function"
             },
             {
@@ -30398,6 +31136,59 @@
               "inputs": [
                 {
                   "internalType": "uint256",
+                  "name": "transformId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "quantity",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "referrer",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "optionBits",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "takerNftChainId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "takerNftAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "takerNftId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "curatorVaultOverride",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "ipfsMetadataHash",
+                  "type": "string"
+                }
+              ],
+              "name": "react",
+              "outputs": [],
+              "stateMutability": "payable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
                   "name": "",
                   "type": "uint256"
                 }
@@ -30405,7 +31196,7 @@
               "name": "reactionPriceDetailsMapping",
               "outputs": [
                 {
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -30491,9 +31282,16 @@
               "type": "function"
             },
             {
+              "inputs": [],
+              "name": "sweep",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
               "inputs": [
                 {
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "token",
                   "type": "address"
                 }
@@ -30527,7 +31325,7 @@
                   "type": "uint256"
                 },
                 {
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -30587,7 +31385,7 @@
           ]
         },
         "ReactionVault_Implementation": {
-          "address": "0x936cab89f80C0C5D47b1D1DD74B4959F9a0Dc669",
+          "address": "0x902007053662085336218b3128b016A7A7C0788c",
           "abi": [
             {
               "anonymous": false,
@@ -30600,7 +31398,7 @@
                 },
                 {
                   "indexed": false,
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -30656,7 +31454,7 @@
                 },
                 {
                   "indexed": false,
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -30809,7 +31607,7 @@
                 },
                 {
                   "indexed": false,
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -30900,59 +31698,6 @@
                 },
                 {
                   "internalType": "address",
-                  "name": "referrer",
-                  "type": "address"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "optionBits",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "takerNftChainId",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "address",
-                  "name": "takerNftAddress",
-                  "type": "address"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "takerNftId",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "address",
-                  "name": "curatorVaultOverride",
-                  "type": "address"
-                },
-                {
-                  "internalType": "string",
-                  "name": "ipfsMetadataHash",
-                  "type": "string"
-                }
-              ],
-              "name": "buyAndSpendReaction",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "transformId",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "quantity",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "address",
                   "name": "destinationWallet",
                   "type": "address"
                 },
@@ -30969,7 +31714,7 @@
               ],
               "name": "buyReaction",
               "outputs": [],
-              "stateMutability": "nonpayable",
+              "stateMutability": "payable",
               "type": "function"
             },
             {
@@ -31158,6 +31903,59 @@
               "inputs": [
                 {
                   "internalType": "uint256",
+                  "name": "transformId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "quantity",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "referrer",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "optionBits",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "takerNftChainId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "takerNftAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "takerNftId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "curatorVaultOverride",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "ipfsMetadataHash",
+                  "type": "string"
+                }
+              ],
+              "name": "react",
+              "outputs": [],
+              "stateMutability": "payable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
                   "name": "",
                   "type": "uint256"
                 }
@@ -31165,7 +31963,7 @@
               "name": "reactionPriceDetailsMapping",
               "outputs": [
                 {
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -31251,9 +32049,16 @@
               "type": "function"
             },
             {
+              "inputs": [],
+              "name": "sweep",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
               "inputs": [
                 {
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "token",
                   "type": "address"
                 }
@@ -31287,7 +32092,7 @@
                   "type": "uint256"
                 },
                 {
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -31322,6 +32127,10 @@
               ],
               "stateMutability": "nonpayable",
               "type": "function"
+            },
+            {
+              "stateMutability": "payable",
+              "type": "receive"
             }
           ]
         },
@@ -32780,7 +33589,7 @@
                   "type": "uint256"
                 },
                 {
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -32962,7 +33771,7 @@
                   "type": "uint256"
                 },
                 {
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 }
@@ -33048,7 +33857,7 @@
                   "type": "uint256"
                 },
                 {
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -33071,6 +33880,13 @@
                   "type": "uint256"
                 }
               ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "sweep",
+              "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
             },
@@ -33098,7 +33914,7 @@
           ]
         },
         "SigmoidCuratorVault_Implementation": {
-          "address": "0x6Ed0B9932529E79204Aaee1E423944ac06b02d03",
+          "address": "0x556d64Ab12B526506DcaFCE311034D536E2259ff",
           "abi": [
             {
               "anonymous": false,
@@ -33237,7 +34053,7 @@
                   "type": "uint256"
                 },
                 {
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -33419,7 +34235,7 @@
                   "type": "uint256"
                 },
                 {
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 }
@@ -33505,7 +34321,7 @@
                   "type": "uint256"
                 },
                 {
-                  "internalType": "contract IERC20Upgradeable",
+                  "internalType": "contract IWMATIC",
                   "name": "paymentToken",
                   "type": "address"
                 },
@@ -33530,6 +34346,17 @@
               ],
               "stateMutability": "nonpayable",
               "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "sweep",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "stateMutability": "payable",
+              "type": "receive"
             }
           ]
         },

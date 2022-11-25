@@ -1,8 +1,8 @@
 //SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.9;
 
-import "../Config/IAddressManager.sol";
-import "../CuratorVault/ICuratorVault.sol";
+import "../../Config/IAddressManager.sol";
+import "./ICuratorVault.sol";
 
 /// @title SigmoidCuratorVaultStorage
 /// @dev This contract will hold all local variables for the SigmoidCuratorVault Contract

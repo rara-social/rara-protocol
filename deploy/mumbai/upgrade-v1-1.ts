@@ -145,17 +145,6 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   // LikeTokenImplementation
   const LikeTokenFactory = await ethers.getContractFactory("LikeToken1155");
   const likeTokenImpl = await LikeTokenFactory.deploy();
-  try {
-    txn = await likeTokenImpl.initialize(
-      config.likeTokenNftUri,
-      addressManagerAddress,
-      config.likeTokenContractUri,
-      {gasLimit: "200000"}
-    );
-    await txn.wait();
-  } catch (error) {
-    console.log("(error on likeTokenImpl init)");
-  }
 
   // LikeTokenFactory
   let factory = await deployProxyContract(hre, "LikeTokenFactory", [
