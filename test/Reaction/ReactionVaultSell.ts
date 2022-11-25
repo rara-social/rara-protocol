@@ -74,7 +74,7 @@ describe("ReactionVault Sell", function () {
       makerRegistrar,
       roleManager,
       paymentTokenErc20,
-      curatorVault,
+      curatorVault2,
       curatorToken,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
@@ -116,7 +116,7 @@ describe("ReactionVault Sell", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
 
     // Derive the reaction meta ID
@@ -150,7 +150,7 @@ describe("ReactionVault Sell", function () {
     // Calculate expected amounts
     const expectedTakerCuratorTokens = BigNumber.from("25000010678907");
     const expectedSpenderCuratorTokens = BigNumber.from("25000000000000");
-    const curatorTokensId = await curatorVault.getTokenId(
+    const curatorTokensId = await curatorVault2.getTokenId(
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
@@ -181,7 +181,7 @@ describe("ReactionVault Sell", function () {
       chainId,
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
-      curatorVault.address,
+      curatorVault2.address,
       curatorTokensId
     );
 
@@ -239,7 +239,7 @@ describe("ReactionVault Sell", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
 
     // Derive the reaction meta ID
@@ -336,7 +336,7 @@ describe("ReactionVault Sell", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
 
     // Derive the reaction meta ID
@@ -406,12 +406,15 @@ describe("ReactionVault Sell", function () {
         "29000000000000",
       ]
     );
-    const curatorVault = CuratorVaultFactory.attach(
+    const curatorVault2 = CuratorVaultFactory.attach(
       deployedCuratorVault.address
     );
 
     // Add the custom curator vault to the parameter manager
-    await parameterManager.setApprovedCuratorVaults(curatorVault.address, true);
+    await parameterManager.setApprovedCuratorVaults(
+      curatorVault2.address,
+      true
+    );
 
     // Now register an NFT and get the Meta ID
     // Mint an NFT to Alice
@@ -450,7 +453,7 @@ describe("ReactionVault Sell", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
 
     // Derive the reaction meta ID
@@ -474,7 +477,7 @@ describe("ReactionVault Sell", function () {
       REACTION_ID,
       REACTION_AMOUNT,
       ZERO_ADDRESS,
-      curatorVault.address, // Custom curator vault
+      curatorVault2.address, // Custom curator vault
       "0"
     );
     const receipt = await transaction.wait();
@@ -482,7 +485,7 @@ describe("ReactionVault Sell", function () {
     // Calculate expected amounts
     const expectedTakerCuratorTokens = BigNumber.from("25000010678907");
     const expectedSpenderCuratorTokens = BigNumber.from("25000000000000");
-    const curatorTokensId = await curatorVault.getTokenId(
+    const curatorTokensId = await curatorVault2.getTokenId(
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
@@ -511,7 +514,7 @@ describe("ReactionVault Sell", function () {
       chainId,
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
-      curatorVault.address,
+      curatorVault2.address,
       curatorTokensId
     );
 

@@ -119,43 +119,22 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
     proxy_imp: implementation,
   });
 
-  // SigmoidCuratorVault
-  const scv = await deployProxyContract(hre, "SigmoidCuratorVault", [
+  //
+  // Deploy new contracts
+  //
+  console.log("\n\nDeploying new contracts");
+
+  const scv = await deployProxyContract(hre, "SigmoidCuratorVault2", [
     addressManagerAddress,
     ct.address,
     config.bondingCurveA,
     config.bondingCurveB,
     config.bondingCurveC,
   ]);
-  txn = await DefaultProxyAdmin.upgrade(scv.address, scv.implementation);
-  await txn.wait();
-  implementation = await DefaultProxyAdmin.getProxyImplementation(scv.address);
-  console.log({
-    name: "SigmoidCuratorVault",
-    address: scv.address,
-    imp: scv.implementation,
-    proxy_imp: implementation,
-  });
-
-  //
-  // Deploy new contracts
-  //
-  console.log("\n\nDeploying new contracts");
 
   // LikeTokenImplementation
   const LikeTokenFactory = await ethers.getContractFactory("LikeToken1155");
   const likeTokenImpl = await LikeTokenFactory.deploy();
-  try {
-    txn = await likeTokenImpl.initialize(
-      config.likeTokenNftUri,
-      addressManagerAddress,
-      config.likeTokenContractUri,
-      {gasLimit: "200000"}
-    );
-    await txn.wait();
-  } catch (error) {
-    console.log("(error on likeTokenImpl init)");
-  }
 
   // LikeTokenFactory
   let factory = await deployProxyContract(hre, "LikeTokenFactory", [

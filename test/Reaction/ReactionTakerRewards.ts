@@ -1,7 +1,7 @@
-import { expect } from "chai";
-import { BigNumber } from "ethers";
-import { ethers, upgrades } from "hardhat";
-import { ZERO_ADDRESS } from "../Scripts/constants";
+import {expect} from "chai";
+import {BigNumber} from "ethers";
+import {ethers, upgrades} from "hardhat";
+import {ZERO_ADDRESS} from "../Scripts/constants";
 import {
   deploySystem,
   TEST_REACTION_PRICE,
@@ -29,7 +29,7 @@ describe("ReactionVault Taker Rewards", function () {
       testingStandard1155,
       roleManager,
       paymentTokenErc20,
-      curatorVault,
+      curatorVault2,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -47,7 +47,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           NFT_ID,
           paymentTokenErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           NFT_ID,
           "20",
           ALICE.address
@@ -63,7 +63,7 @@ describe("ReactionVault Taker Rewards", function () {
       makerRegistrar,
       roleManager,
       paymentTokenErc20,
-      curatorVault,
+      curatorVault2,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -104,7 +104,7 @@ describe("ReactionVault Taker Rewards", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
 
     // Derive the reaction meta ID
@@ -135,7 +135,7 @@ describe("ReactionVault Taker Rewards", function () {
     );
 
     // Get the expected curator token token ID
-    const curatorTokenId = await curatorVault.getTokenId(
+    const curatorTokenId = await curatorVault2.getTokenId(
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
@@ -151,7 +151,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           TAKER_NFT_ID,
           paymentTokenErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           curatorTokenId,
           "0",
           ALICE.address
@@ -187,7 +187,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           TAKER_NFT_ID,
           paymentTokenErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           curatorTokenId,
           "0",
           ALICE.address
@@ -215,7 +215,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           TAKER_NFT_ID,
           paymentTokenErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           curatorTokenId,
           "20",
           ALICE.address
@@ -226,13 +226,13 @@ describe("ReactionVault Taker Rewards", function () {
       chainId,
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
-      curatorVault.address,
+      curatorVault2.address,
       curatorTokenId
     );
     const expectedTokens = await reactionVault.nftOwnerRewards(rewardsIndex);
     const expectedPayment = "250000106789080000";
 
-    const originalBalance = await TAKER.getBalance()
+    const originalBalance = await TAKER.getBalance();
 
     // Now have the Taker claim - should be successful
     const tx = await reactionVault
@@ -242,16 +242,16 @@ describe("ReactionVault Taker Rewards", function () {
         testingStandard1155.address,
         TAKER_NFT_ID,
         paymentTokenErc20.address,
-        curatorVault.address,
+        curatorVault2.address,
         curatorTokenId,
         expectedTokens,
         TAKER.address
-      )
-    let receipt = await tx.wait()
-    let gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice)
+      );
+    let receipt = await tx.wait();
+    let gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice);
 
     // Verify the payment got sent
-    let balance = await TAKER.getBalance()
+    let balance = await TAKER.getBalance();
     expect(balance).to.be.equal(
       originalBalance.add(expectedPayment).sub(gasUsedInEth)
     );
@@ -267,20 +267,15 @@ describe("ReactionVault Taker Rewards", function () {
       reactionVault,
       testingStandard1155,
       makerRegistrar,
-      curatorVault,
-      parameterManager
+      curatorVault2,
+      parameterManager,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Change Payment token to ERC20
-    const ERC20Factory = await ethers.getContractFactory(
-      "TestErc20"
-    );
-    const testErc20 = await upgrades.deployProxy(ERC20Factory, [
-      "TEST",
-      "TST",
-    ])
-    await parameterManager.setPaymentToken(testErc20.address)
+    const ERC20Factory = await ethers.getContractFactory("TestErc20");
+    const testErc20 = await upgrades.deployProxy(ERC20Factory, ["TEST", "TST"]);
+    await parameterManager.setPaymentToken(testErc20.address);
 
     // Now register an NFT and get the Meta ID
     // Mint an NFT to Alice
@@ -355,7 +350,7 @@ describe("ReactionVault Taker Rewards", function () {
     );
 
     // Get the expected curator token token ID
-    const curatorTokenId = await curatorVault.getTokenId(
+    const curatorTokenId = await curatorVault2.getTokenId(
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
@@ -371,7 +366,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           TAKER_NFT_ID,
           testErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           curatorTokenId,
           "0",
           ALICE.address
@@ -407,7 +402,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           TAKER_NFT_ID,
           testErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           curatorTokenId,
           "0",
           ALICE.address
@@ -435,7 +430,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           TAKER_NFT_ID,
           testErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           curatorTokenId,
           "20",
           ALICE.address
@@ -446,7 +441,7 @@ describe("ReactionVault Taker Rewards", function () {
       chainId,
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
-      curatorVault.address,
+      curatorVault2.address,
       curatorTokenId
     );
     const expectedTokens = await reactionVault.nftOwnerRewards(rewardsIndex);
@@ -460,11 +455,11 @@ describe("ReactionVault Taker Rewards", function () {
         testingStandard1155.address,
         TAKER_NFT_ID,
         testErc20.address,
-        curatorVault.address,
+        curatorVault2.address,
         curatorTokenId,
         expectedTokens,
         TAKER.address
-      )
+      );
 
     // Verify the payment got sent
     expect(await testErc20.balanceOf(TAKER.address)).to.be.equal(
@@ -484,7 +479,7 @@ describe("ReactionVault Taker Rewards", function () {
       makerRegistrar,
       roleManager,
       paymentTokenErc20,
-      curatorVault,
+      curatorVault2,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -525,7 +520,7 @@ describe("ReactionVault Taker Rewards", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
 
     // Derive the reaction meta ID
@@ -556,7 +551,7 @@ describe("ReactionVault Taker Rewards", function () {
     );
 
     // Get the expected curator token token ID
-    const curatorTokenId = await curatorVault.getTokenId(
+    const curatorTokenId = await curatorVault2.getTokenId(
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
@@ -572,7 +567,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           TAKER_NFT_ID,
           paymentTokenErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           curatorTokenId,
           "0",
           ALICE.address
@@ -608,7 +603,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           TAKER_NFT_ID,
           paymentTokenErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           curatorTokenId,
           "0",
           ALICE.address
@@ -636,7 +631,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           TAKER_NFT_ID,
           paymentTokenErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           curatorTokenId,
           "20",
           ALICE.address
@@ -648,7 +643,7 @@ describe("ReactionVault Taker Rewards", function () {
       chainId,
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
-      curatorVault.address,
+      curatorVault2.address,
       curatorTokenId
     );
     const startingRewards = await reactionVault.nftOwnerRewards(rewardsIndex);
@@ -664,7 +659,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           TAKER_NFT_ID,
           paymentTokenErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           curatorTokenId,
           Math.floor(startingRewards.toNumber() * 2),
           ALICE.address
@@ -677,7 +672,7 @@ describe("ReactionVault Taker Rewards", function () {
     const tokensToBurn = Math.floor(startingRewards.toNumber() / 2); // withdraw half
     const expectedPayment = "125000053394540000";
 
-    let originalBalance = await TAKER.getBalance()
+    let originalBalance = await TAKER.getBalance();
 
     // Now have the Taker claim - should be successful
     const tx = await reactionVault
@@ -687,17 +682,16 @@ describe("ReactionVault Taker Rewards", function () {
         testingStandard1155.address,
         TAKER_NFT_ID,
         paymentTokenErc20.address,
-        curatorVault.address,
+        curatorVault2.address,
         curatorTokenId,
         tokensToBurn,
         TAKER.address
-      )
-    let receipt = await tx.wait()
-    let gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice)
-
+      );
+    let receipt = await tx.wait();
+    let gasUsedInEth = receipt.gasUsed.mul(receipt.effectiveGasPrice);
 
     // Verify the payment got sent
-    let balance = await TAKER.getBalance()
+    let balance = await TAKER.getBalance();
     expect(balance).to.be.equal(
       originalBalance.add(expectedPayment).sub(gasUsedInEth)
     );
@@ -717,7 +711,7 @@ describe("ReactionVault Taker Rewards", function () {
       makerRegistrar,
       roleManager,
       paymentTokenErc20,
-      curatorVault,
+      curatorVault2,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -758,7 +752,7 @@ describe("ReactionVault Taker Rewards", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
 
     // Derive the reaction meta ID
@@ -788,7 +782,7 @@ describe("ReactionVault Taker Rewards", function () {
     );
 
     // Get the expected curator Token token ID
-    const curatorTokenId = await curatorVault.getTokenId(
+    const curatorTokenId = await curatorVault2.getTokenId(
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
@@ -812,7 +806,7 @@ describe("ReactionVault Taker Rewards", function () {
       chainId,
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
-      curatorVault.address,
+      curatorVault2.address,
       curatorTokenId
     );
     const expectedTokens = await reactionVault.nftOwnerRewards(rewardsIndex);
@@ -827,7 +821,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           TAKER_NFT_ID,
           paymentTokenErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           curatorTokenId,
           expectedTokens,
           TAKER.address
@@ -844,14 +838,15 @@ describe("ReactionVault Taker Rewards", function () {
   });
 
   it("Should spend reaction and let 2 creators get all rewards withdraw", async function () {
-    const [OWNER, ALICE, CREATOR, REFERRER, TAKER, CREATOR2] = await ethers.getSigners();
+    const [OWNER, ALICE, CREATOR, REFERRER, TAKER, CREATOR2] =
+      await ethers.getSigners();
     const {
       reactionVault,
       testingStandard1155,
       makerRegistrar,
       addressManager,
       paymentTokenErc20,
-      curatorVault,
+      curatorVault2,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
@@ -899,7 +894,7 @@ describe("ReactionVault Taker Rewards", function () {
       OWNER.address, // Where reactions should end up
       REFERRER.address, // Referrer
       BigNumber.from(0),
-      { value: TEST_REACTION_PRICE }
+      {value: TEST_REACTION_PRICE}
     );
 
     // Derive the reaction meta ID
@@ -929,7 +924,7 @@ describe("ReactionVault Taker Rewards", function () {
     );
 
     // Get the expected curator Token token ID
-    const curatorTokenId = await curatorVault.getTokenId(
+    const curatorTokenId = await curatorVault2.getTokenId(
       chainId,
       testingStandard1155.address,
       TAKER_NFT_ID,
@@ -940,7 +935,10 @@ describe("ReactionVault Taker Rewards", function () {
     testingStandard1155.mint(TAKER.address, TAKER_NFT_ID, "1", [0]);
 
     // Set both creator addresses to get rewards - 10k rewards basis points = 100%
-    await royaltyRegistry.setRoyalties([CREATOR2.address, CREATOR.address], ["5000", "5000"]);
+    await royaltyRegistry.setRoyalties(
+      [CREATOR2.address, CREATOR.address],
+      ["5000", "5000"]
+    );
 
     // Register it
     await makerRegistrar.connect(TAKER).registerNft(
@@ -956,7 +954,7 @@ describe("ReactionVault Taker Rewards", function () {
       chainId,
       testingStandard1155.address,
       BigNumber.from(TAKER_NFT_ID),
-      curatorVault.address,
+      curatorVault2.address,
       curatorTokenId
     );
     const expectedTokens = await reactionVault.nftOwnerRewards(rewardsIndex);
@@ -971,7 +969,7 @@ describe("ReactionVault Taker Rewards", function () {
           testingStandard1155.address,
           TAKER_NFT_ID,
           paymentTokenErc20.address,
-          curatorVault.address,
+          curatorVault2.address,
           curatorTokenId,
           expectedTokens,
           TAKER.address

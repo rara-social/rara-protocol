@@ -41,7 +41,30 @@ dataSources:
         - UserPosition
       abis:
         - name: SigmoidCuratorVault
-          file: ../artifacts/contracts/SigmoidCuratorVault/SigmoidCuratorVault.sol/SigmoidCuratorVault.json
+          file: ../artifacts/contracts/CuratorVault/SigmoidCuratorVault/SigmoidCuratorVault.sol/SigmoidCuratorVault.json
+      eventHandlers:
+        - event: CuratorTokensBought(indexed uint256,uint256,address,uint256,address,uint256,uint256,bool)
+          handler: handleCuratorTokensBought
+        - event: CuratorTokensSold(indexed uint256,uint256,uint256)
+          handler: handleCuratorTokensSold
+      file: ./src/mapping/CuratorVault.ts
+  - kind: ethereum/contract
+    name: CuratorVault2
+    network: "{{network}}"
+    source:
+      address: "{{SigmoidCuratorVaultAddress2}}"
+      abi: SigmoidCuratorVault2
+      startBlock: {{StartBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - CuratorVaultToken
+        - UserPosition
+      abis:
+        - name: SigmoidCuratorVault2
+          file: ../artifacts/contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol/SigmoidCuratorVault2.json
       eventHandlers:
         - event: CuratorTokensBought(indexed uint256,uint256,address,uint256,address,uint256,uint256,bool)
           handler: handleCuratorTokensBought

@@ -125,6 +125,24 @@ const deploySystem = async (owner: SignerWithAddress) => {
   ]);
   const curatorVault = CuratorVaultFactory.attach(deployedCuratorVault.address);
 
+  // Deploy the Default Curator Vault #2
+  const CuratorVaultFactory2 = await ethers.getContractFactory(
+    "SigmoidCuratorVault2"
+  );
+  const deployedCuratorVault2 = await upgrades.deployProxy(
+    CuratorVaultFactory2,
+    [
+      addressManager.address,
+      curatorToken.address,
+      "5000",
+      "10000000",
+      "29000000000000",
+    ]
+  );
+  const curatorVault2 = CuratorVaultFactory2.attach(
+    deployedCuratorVault2.address
+  );
+
   // Deploy the Child Registrar on the current chain.
   // Note that this is not a proxy contract.
   const ChildRegistrarFactory = await ethers.getContractFactory(
@@ -182,13 +200,18 @@ const deploySystem = async (owner: SignerWithAddress) => {
     await roleManager.CURATOR_TOKEN_ADMIN(),
     curatorVault.address
   );
+  // Curator Vault can mint/burn curator token
+  await roleManager.grantRole(
+    await roleManager.CURATOR_TOKEN_ADMIN(),
+    curatorVault2.address
+  );
 
   // Update address manager
   await addressManager.setRoleManager(roleManager.address);
   await addressManager.setParameterManager(parameterManager.address);
   await addressManager.setMakerRegistrar(makerRegistrar.address);
   await addressManager.setReactionNftContract(reactionNFT1155.address);
-  await addressManager.setDefaultCuratorVault(curatorVault.address);
+  await addressManager.setDefaultCuratorVault(curatorVault2.address);
   await addressManager.setChildRegistrar(childRegistrar.address);
   await addressManager.setLikeTokenFactory(likeTokenFactory.address);
 
@@ -220,6 +243,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
     roleManager,
     testingStandard1155,
     testingStandard721,
+    curatorVault2,
   };
 };
 

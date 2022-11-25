@@ -4,11 +4,13 @@ pragma solidity 0.8.9;
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts/utils/math/SafeCast.sol";
-import "../Token/IStandard1155.sol";
-import "../Config/IAddressManager.sol";
+
+import "../../Token/IStandard1155.sol";
+import "../../Config/IAddressManager.sol";
+import "../../Token/IWMATIC.sol";
+
 import "./SigmoidCuratorVaultStorage.sol";
-import "./Curve/Sigmoid.sol";
-import "../Token/IWMATIC.sol";
+import "./Curve/Sigmoid2.sol";
 
 /// @title SigmoidCuratorVault
 /// @dev This contract tracks tokens in a sigmoid bonding curve per Taker NFT.
@@ -22,9 +24,9 @@ import "../Token/IWMATIC.sol";
 /// be used as the role owner could renounce the role leaving all future actions disabled.  Additionally,
 /// if a malicious account was able to obtain the role, they could use it to set values to malicious values.
 /// See the public documentation website for more details.
-contract SigmoidCuratorVault is
+contract SigmoidCuratorVault2 is
     ReentrancyGuardUpgradeable,
-    Sigmoid,
+    Sigmoid2,
     SigmoidCuratorVaultStorageV1
 {
     /// @dev Use the safe methods when interacting with transfers with outside ERC20s

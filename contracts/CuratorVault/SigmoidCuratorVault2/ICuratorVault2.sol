@@ -1,11 +1,11 @@
 //SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.9;
 
-import "../Token/IStandard1155.sol";
-import "../Token/IWMATIC.sol";
+import "../../Token/IStandard1155.sol";
+import "../../Token/IWMATIC.sol";
 
 /// @dev Interface for the curator vault
-interface ICuratorVault {
+interface ICuratorVault2 {
     function getTokenId(
         uint256 nftChainId,
         address nftAddress,
