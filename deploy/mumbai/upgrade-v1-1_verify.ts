@@ -96,32 +96,32 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
     baseTokenUri,
   });
 
-  // //
-  // // CuratorVault
-  // //
-  // console.log("\n\nVerifying Curator Params");
-  // const CuratorVault = await ethers.getContractAt(
-  //   "SigmoidCuratorVault2",
-  //   deployConfig[chainId][0].contracts.SigmoidCuratorVault2.address
-  // );
-  // const a = await CuratorVault.a();
-  // const b = await CuratorVault.b();
-  // const c = await CuratorVault.c();
-  // // const oneMatic = await CuratorVault.calculateTokensBoughtFromPayment(
-  // //   a,
-  // //   b,
-  // //   c,
-  // //   0,
-  // //   0,
-  // //   "1000000000000000000"
-  // // );
-  // console.log({
-  //   name: "SigmoidCuratorVault2",
+  //
+  // CuratorVault
+  //
+  console.log("\n\nVerifying Curator Params");
+  const CuratorVault = await ethers.getContractAt(
+    "SigmoidCuratorVault2",
+    deployConfig[chainId][0].contracts.SigmoidCuratorVault2.address
+  );
+  const a = await CuratorVault.a();
+  const b = await CuratorVault.b();
+  const c = await CuratorVault.c();
+  // const oneMatic = await CuratorVault.calculateTokensBoughtFromPayment(
   //   a,
   //   b,
   //   c,
-  //   // oneMatic,
-  // });
+  //   0,
+  //   0,
+  //   "1000000000000000000"
+  // );
+  console.log({
+    name: "SigmoidCuratorVault2",
+    a,
+    b,
+    c,
+    // oneMatic,
+  });
 
   //
   // CuratorVault Proxies
