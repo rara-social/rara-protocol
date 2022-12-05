@@ -51,7 +51,9 @@ contract ReactionVault is
         address curatorVaultAddress,
         uint256 curatorTokenId,
         uint256 curatorTokenAmount,
-        uint256 takerTokenAmount
+        uint256 takerTokenAmount,
+        address likeTokenContract,
+        uint256 likeTokenId
     );
 
     /// @dev Event emitted when rewards are granted to a creator
@@ -544,13 +546,18 @@ contract ReactionVault is
 
         // Issue a like token for this spend if the factory is configured
         info.likeTokenFactory = addressManager.likeTokenFactory();
+
+        address likeContractAddress;
+        uint256 likeTokenId;
         if (info.likeTokenFactory != address(0x0)) {
-            ILikeTokenFactory(info.likeTokenFactory).issueLikeToken(
-                msg.sender,
-                takerNftChainId,
-                takerNftAddress,
-                takerNftId
-            );
+            (likeContractAddress, likeTokenId) = ILikeTokenFactory(
+                info.likeTokenFactory
+            ).issueLikeToken(
+                    msg.sender,
+                    takerNftChainId,
+                    takerNftAddress,
+                    takerNftId
+                );
         }
 
         // Emit the event for the overall reaction spend
@@ -566,7 +573,9 @@ contract ReactionVault is
             address(info.curatorVault),
             curatorTokenId,
             info.spenderCuratorTokens,
-            info.takerCuratorTokens
+            info.takerCuratorTokens,
+            likeContractAddress,
+            likeTokenId
         );
     }
 
@@ -844,13 +853,17 @@ contract ReactionVault is
 
         // Issue a like token for this spend if the factory is configured
         address likeTokenFactory = addressManager.likeTokenFactory();
+        address likeContractAddress;
+        uint256 likeTokenId;
         if (likeTokenFactory != address(0x0)) {
-            ILikeTokenFactory(likeTokenFactory).issueLikeToken(
-                msg.sender,
-                takerNftChainId,
-                takerNftAddress,
-                takerNftId
-            );
+            (likeContractAddress, likeTokenId) = ILikeTokenFactory(
+                likeTokenFactory
+            ).issueLikeToken(
+                    msg.sender,
+                    takerNftChainId,
+                    takerNftAddress,
+                    takerNftId
+                );
         }
 
         uint256 curatorTokenId = uint256(
@@ -886,7 +899,9 @@ contract ReactionVault is
             address(addressManager.defaultCuratorVault()),
             curatorTokenId,
             0, // spenderCuratorTokens
-            0 // takerCuratorTokens
+            0, // takerCuratorTokens
+            likeContractAddress,
+            likeTokenId
         );
     }
 }

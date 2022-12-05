@@ -56,7 +56,7 @@ contract LikeTokenFactory is
         uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId
-    ) public onlyReactionNftAdmin {
+    ) public onlyReactionNftAdmin returns (address, uint256) {
         // Get the key from the taker nft details
         uint256 tokenIndex = uint256(
             keccak256(abi.encode(takerNftChainId, takerNftAddress, takerNftId))
@@ -113,6 +113,7 @@ contract LikeTokenFactory is
         }
 
         // Mint the token
-        targetContract.mint(targetAddress);
+        uint256 tokenId = targetContract.mint(targetAddress);
+        return (targetAddress, tokenId);
     }
 }

@@ -9,5 +9,5 @@ interface ILikeTokenFactory {
         uint256 takerNftChainId,
         address takerNftAddress,
         uint256 takerNftId
-    ) external;
+    ) external returns (address, uint256);
 }
