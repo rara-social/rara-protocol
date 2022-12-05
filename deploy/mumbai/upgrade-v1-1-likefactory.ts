@@ -29,21 +29,49 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   const RoleManagerAddress =
     deployConfig[chainId][0].contracts.RoleManager.address;
 
+  const DefaultProxyAdmin = new ethers.Contract(
+    deployConfig[chainId][0].contracts.DefaultProxyAdmin.address,
+    deployConfig[chainId][0].contracts.DefaultProxyAdmin.abi,
+    wallet
+  );
+
+  console.log(deployConfig[chainId][0].contracts.DefaultProxyAdmin.address);
+
   //
   // Deploy new contracts
   //
   console.log("\n\nDeploying new contracts");
 
   // LikeTokenImplementation
-  const LikeTokenFactory = await ethers.getContractFactory("LikeToken1155");
-  const likeTokenImpl = await LikeTokenFactory.deploy();
+  // const LikeTokenFactory = await ethers.getContractFactory("LikeToken1155");
+  // const likeTokenImpl = await LikeTokenFactory.deploy();
 
-  // LikeTokenFactory
-  let factory = await deployProxyContract(hre, "LikeTokenFactory", [
-    AddressManagerAddress,
-    likeTokenImpl.address,
-    config.likeTokenContractUri,
-  ]);
+  // LikeTokenFactory;
+  // let factory = await deployProxyContract(hre, "LikeTokenFactory", [
+  //   AddressManagerAddress,
+  //   likeTokenImpl.address,
+  //   config.likeTokenContractUri,
+  // ]);
+
+  // const txn = await DefaultProxyAdmin.upgrade(
+  //   factory.address,
+  //   factory.implementation,
+  //   {gasLimit: "200000"}
+  // );
+
+  const txn = await DefaultProxyAdmin.upgrade(
+    "0x3E7634A070a18D2648731315a8Ad2ab736508D30",
+    "0x71e52AffE853714aef81253Fd38116f18D5b3264",
+    {gasLimit: "200000"}
+  );
+  await txn.wait();
+  const implementation = await DefaultProxyAdmin.getProxyImplementation(
+    "0x3E7634A070a18D2648731315a8Ad2ab736508D30"
+  );
+  console.log({
+    name: "LikeTokenFactory",
+    proxy_imp: implementation,
+  });
 
   //
   // Temporarily grant roles to the deploying account
@@ -68,9 +96,12 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
     "AddressManager",
     AddressManagerAddress
   );
-  await addressManager.setLikeTokenFactory(factory.address, {
-    gasLimit: "200000",
-  });
+  await addressManager.setLikeTokenFactory(
+    "0x3E7634A070a18D2648731315a8Ad2ab736508D30",
+    {
+      gasLimit: "200000",
+    }
+  );
 
   //
   // Remove the temporary permissions for the deploy account
