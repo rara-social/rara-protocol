@@ -26852,7 +26852,18 @@
                 }
               ],
               "name": "issueLikeToken",
-              "outputs": [],
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
               "stateMutability": "nonpayable",
               "type": "function"
             },
@@ -26912,7 +26923,7 @@
           ]
         },
         "LikeTokenFactory_Implementation": {
-          "address": "0xCC2Eb9920872f1549E8Bc3Fb80A615D93C5BB5f4",
+          "address": "0x71e52AffE853714aef81253Fd38116f18D5b3264",
           "abi": [
             {
               "anonymous": false,
@@ -27018,7 +27029,18 @@
                 }
               ],
               "name": "issueLikeToken",
-              "outputs": [],
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
               "stateMutability": "nonpayable",
               "type": "function"
             },
