@@ -22,13 +22,17 @@ const config: DeployConfig = {
   spendTakerBasisPoints: "525", // 5.25% of curator liability goes to the taker - this is higher because it is a fraction of a fraction
 
   curatorTokenContractUri:
-    "https://protocol-api.rara.social/contract/curatortoken",
+    "https://protocol-api-staging.rara.social/contract/curatortoken",
   curatorTokenNftUri:
-    "https://protocol-api.rara.social/internal/curatortoken/{id}",
-  reactionContractUri: "https://protocol-api.rara.social/contract/reaction",
-  reactionNftUri: "https://protocol-api.rara.social/internal/reaction/{id}",
-  likeTokenContractUri: "https://protocol-api.rara.social/contract/like",
-  likeTokenNftUri: "https://protocol-api.rara.social/internal/like/",
+    "https://protocol-api-staging.rara.social/internal/curatortoken/{id}",
+  reactionContractUri:
+    "https://protocol-api-staging.rara.social/contract/reaction",
+  reactionNftUri:
+    "https://protocol-api-staging.rara.social/internal/reaction/{id}",
+  likeTokenContractUri:
+    "https://protocol-api-staging.rara.social/contract/like",
+  likeTokenNftUri:
+    "https://protocol-api-staging-staging.rara.social/internal/like/",
 };
 
 export default config;
