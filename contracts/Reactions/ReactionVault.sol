@@ -358,6 +358,8 @@ contract ReactionVault is
         uint256 takerCuratorTokens;
         uint256 spenderCuratorTokens;
         address likeTokenFactory;
+        address likeContractAddress;
+        uint256 likeTokenId;
     }
 
     /// @dev Allows a reaction NFT owner to spend (burn) their tokens at a specific target Taker NFT.
@@ -546,11 +548,8 @@ contract ReactionVault is
 
         // Issue a like token for this spend if the factory is configured
         info.likeTokenFactory = addressManager.likeTokenFactory();
-
-        address likeContractAddress;
-        uint256 likeTokenId;
         if (info.likeTokenFactory != address(0x0)) {
-            (likeContractAddress, likeTokenId) = ILikeTokenFactory(
+            (info.likeContractAddress, info.likeTokenId) = ILikeTokenFactory(
                 info.likeTokenFactory
             ).issueLikeToken(
                     msg.sender,
@@ -574,8 +573,8 @@ contract ReactionVault is
             curatorTokenId,
             info.spenderCuratorTokens,
             info.takerCuratorTokens,
-            likeContractAddress,
-            likeTokenId
+            info.likeContractAddress,
+            info.likeTokenId
         );
     }
 
