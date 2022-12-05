@@ -86,6 +86,8 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   // uint256 curatorTokenId,
   // uint256 curatorTokenAmount,
   // uint256 takerTokenAmount
+  // address likeTokenContract,
+  // uint256 likeTokenId
 
   //
   // User Reaction
@@ -136,6 +138,9 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
 
   userSpend.curatorVaultToken = event.params.curatorTokenId.toString();
   userSpend.curatorTokensPurchased = event.params.curatorTokenAmount;
+
+  userSpend.likeContractAddress = event.params.likeTokenContract;
+  userSpend.likeTokenId = event.params.likeTokenId;
 
   userSpend.createdAt = event.block.timestamp;
   userSpend.updatedAt = event.block.timestamp;

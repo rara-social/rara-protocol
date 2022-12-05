@@ -357,6 +357,9 @@ contract ReactionVault is
         ICuratorVault curatorVault;
         uint256 takerCuratorTokens;
         uint256 spenderCuratorTokens;
+    }
+
+    struct LikeTokenInfo {
         address likeTokenFactory;
         address likeContractAddress;
         uint256 likeTokenId;
@@ -547,16 +550,18 @@ contract ReactionVault is
         );
 
         // Issue a like token for this spend if the factory is configured
-        info.likeTokenFactory = addressManager.likeTokenFactory();
-        if (info.likeTokenFactory != address(0x0)) {
-            (info.likeContractAddress, info.likeTokenId) = ILikeTokenFactory(
-                info.likeTokenFactory
-            ).issueLikeToken(
-                    msg.sender,
-                    takerNftChainId,
-                    takerNftAddress,
-                    takerNftId
-                );
+        LikeTokenInfo memory likeInfo;
+        likeInfo.likeTokenFactory = addressManager.likeTokenFactory();
+        if (likeInfo.likeTokenFactory != address(0x0)) {
+            (
+                likeInfo.likeContractAddress,
+                likeInfo.likeTokenId
+            ) = ILikeTokenFactory(likeInfo.likeTokenFactory).issueLikeToken(
+                msg.sender,
+                takerNftChainId,
+                takerNftAddress,
+                takerNftId
+            );
         }
 
         // Emit the event for the overall reaction spend
@@ -573,8 +578,8 @@ contract ReactionVault is
             curatorTokenId,
             info.spenderCuratorTokens,
             info.takerCuratorTokens,
-            info.likeContractAddress,
-            info.likeTokenId
+            likeInfo.likeContractAddress,
+            likeInfo.likeTokenId
         );
     }
 
@@ -851,18 +856,18 @@ contract ReactionVault is
         require(nftDetails.registered, "NFT not registered");
 
         // Issue a like token for this spend if the factory is configured
-        address likeTokenFactory = addressManager.likeTokenFactory();
-        address likeContractAddress;
-        uint256 likeTokenId;
-        if (likeTokenFactory != address(0x0)) {
-            (likeContractAddress, likeTokenId) = ILikeTokenFactory(
-                likeTokenFactory
-            ).issueLikeToken(
-                    msg.sender,
-                    takerNftChainId,
-                    takerNftAddress,
-                    takerNftId
-                );
+        LikeTokenInfo memory likeInfo;
+        likeInfo.likeTokenFactory = addressManager.likeTokenFactory();
+        if (likeInfo.likeTokenFactory != address(0x0)) {
+            (
+                likeInfo.likeContractAddress,
+                likeInfo.likeTokenId
+            ) = ILikeTokenFactory(likeInfo.likeTokenFactory).issueLikeToken(
+                msg.sender,
+                takerNftChainId,
+                takerNftAddress,
+                takerNftId
+            );
         }
 
         uint256 curatorTokenId = uint256(
@@ -899,8 +904,8 @@ contract ReactionVault is
             curatorTokenId,
             0, // spenderCuratorTokens
             0, // takerCuratorTokens
-            likeContractAddress,
-            likeTokenId
+            likeInfo.likeContractAddress,
+            likeInfo.likeTokenId
         );
     }
 }

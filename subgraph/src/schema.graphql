@@ -83,6 +83,9 @@ type UserSpend @entity {
   curatorVaultToken: CuratorVaultToken!
   curatorTokensPurchased: BigInt!
 
+  likeContractAddress: Bytes
+  likeTokenId: BigInt
+
   createdAt: BigInt!
   updatedAt: BigInt!
   blockNumber: BigInt!
