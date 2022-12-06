@@ -25,6 +25,8 @@ contract LikeTokenFactory is
         address deployedContract
     );
 
+    event TokenMinted(address tokenContract, uint256 tokenId);
+
     /// @dev verifies that the calling account has a role to enable minting tokens
     modifier onlyReactionNftAdmin() {
         IRoleManager roleManager = IRoleManager(addressManager.roleManager());
@@ -113,6 +115,8 @@ contract LikeTokenFactory is
         }
 
         // Mint the token
-        targetContract.mint(targetAddress);
+        uint256 tokenId = targetContract.mint(targetAddress);
+
+        emit TokenMinted(address(targetContract), tokenId);
     }
 }
