@@ -112,7 +112,7 @@ dataSources:
     name: LikeTokenFactory
     network: "mumbai"
     source:
-      address: "0x3E7634A070a18D2648731315a8Ad2ab736508D30"
+      address: "0x57a64d457F178226c4F526dbeb72269ca609AA3e"
       abi: LikeTokenFactory
       startBlock: 26642329
     mapping:
@@ -127,4 +127,6 @@ dataSources:
       eventHandlers:
         - event: TokenDeployed(uint256,address,uint256,address)
           handler: handleTokenDeployed
+        - event: TokenMinted(address,uint256)
+          handler: handleTokenMinted
       file: ./src/mapping/LikeTokenFactory.ts

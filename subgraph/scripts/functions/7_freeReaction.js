@@ -11,9 +11,9 @@ const takerNftId = "44";
 
 // reaction params
 const transformId =
-  "58227297481882140196799232403984963877480287746494144327792850647264513109368";
+  "82906877086007806389758105920343200187619257115962312059692578222235975208499";
 const optionBits = 1;
-const ipfsMetadataHash = "QmSBE5W5tyz8M7ve4n7Tw3sJgdHqak7k6whsorM7dDKsDL";
+const ipfsMetadataHash = "QmUKKf2PMZdAaa4xuc9fByNVnMHERM9J23CjFt3V4ARcWZ";
 
 async function main() {
   const reactor = await getWallet("reactor");
@@ -53,6 +53,7 @@ async function main() {
     }
   );
   const receipt = await spendReactionTxn.wait();
+  console.log(receipt);
   console.log("done. transactionHash:", receipt.transactionHash);
 }
 

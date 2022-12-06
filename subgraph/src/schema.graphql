@@ -73,15 +73,18 @@ type UserSpend @entity {
   user: Bytes!
 
   # spend
-  reaction: Reaction!
-  reactionQuantity: BigInt!
+  reaction: Reaction
+  reactionQuantity: BigInt
   ipfsHash: String
   comment: String
   tags: [String!]
 
   # result
-  curatorVaultToken: CuratorVaultToken!
-  curatorTokensPurchased: BigInt!
+  curatorVaultToken: CuratorVaultToken
+  curatorTokensPurchased: BigInt
+
+  likeContractAddress: Bytes
+  likeTokenId: BigInt
 
   createdAt: BigInt!
   updatedAt: BigInt!

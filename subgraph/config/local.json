@@ -1,10 +1,9 @@
 {
-  "network": "localhost",
-  "MakerRegistrarAddress": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
-  "MakerRegistrarStartBlock": 0,
-  "SigmoidCuratorVaultAddress": "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1",
-  "SigmoidCuratorVaultStartBlock": 0,
-  "ReactionVaultAddress": "0x9A676e781A523b5d0C0e43731313A708CB607508",
-  "ReactionVaultStartBlock": 0,
-  "LikeTokenFactoryAddress": "0xA374674F97885BD378059708e97f7117CB74683d"
+  "network": "mumbai",
+  "StartBlock": 26642329,
+  "MakerRegistrarAddress": "0x06493B0362b3892EEc7C63023e8bC0C0c64646eb",
+  "SigmoidCuratorVaultAddress": "0xff63B24Ce497d1e0ea7F45a08bF2C93631B017C1",
+  "SigmoidCuratorVaultAddress2": "0x52379B83f6857546632166369cF8567e159dB2F3",
+  "ReactionVaultAddress": "0xA374674F97885BD378059708e97f7117CB74683d",
+  "LikeTokenFactoryAddress": "0x57a64d457F178226c4F526dbeb72269ca609AA3e"
 }

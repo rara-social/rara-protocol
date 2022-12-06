@@ -127,4 +127,6 @@ dataSources:
       eventHandlers:
         - event: TokenDeployed(uint256,address,uint256,address)
           handler: handleTokenDeployed
+        - event: TokenMinted(address,uint256)
+          handler: handleTokenMinted
       file: ./src/mapping/LikeTokenFactory.ts
