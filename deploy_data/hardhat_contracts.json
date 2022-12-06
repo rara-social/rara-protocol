@@ -26636,7 +26636,7 @@
           ]
         },
         "LikeTokenFactory": {
-          "address": "0x57a64d457F178226c4F526dbeb72269ca609AA3e",
+          "address": "0x63f7B4bB1154d3DFBC509a52b659719af1f66AdB",
           "abi": [
             {
               "anonymous": false,
@@ -26931,7 +26931,7 @@
           ]
         },
         "LikeTokenFactory_Implementation": {
-          "address": "0x34B3D6b225A12f3005c4a5810A017b717AeE4971",
+          "address": "0xC8Ee4411d958ebBFCC3E2D28bAbd34851c0CcCCc",
           "abi": [
             {
               "anonymous": false,
@@ -27095,7 +27095,7 @@
           ]
         },
         "LikeTokenFactory_Proxy": {
-          "address": "0x57a64d457F178226c4F526dbeb72269ca609AA3e",
+          "address": "0x63f7B4bB1154d3DFBC509a52b659719af1f66AdB",
           "abi": [
             {
               "inputs": [

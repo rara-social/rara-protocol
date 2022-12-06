@@ -90,7 +90,7 @@ contract LikeTokenFactory is
                 address(addressManager),
                 string(
                     abi.encodePacked(
-                        string.concat(bytes(baseTokenUri), "/contract/"),
+                        string.concat(bytes(baseTokenUri), "contract/"),
                         StringsUpgradeable.toHexString(
                             uint256(uint160(newlyDeployed)),
                             20
