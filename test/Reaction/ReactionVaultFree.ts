@@ -10,7 +10,7 @@ import {
   REACTION_QUANTITY_TOO_HIGH,
 } from "../Scripts/errors";
 
-describe.only("ReactionVault Free Reaction", function () {
+describe("ReactionVault Free Reaction", function () {
   it("Should reject unknown transform", async function () {
     const [OWNER] = await ethers.getSigners();
     const {reactionVault} = await deploySystem(OWNER);
