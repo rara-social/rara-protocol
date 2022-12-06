@@ -24,6 +24,10 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   wallet = wallet.connect(provider);
   console.log({chainId, rpc: chainRPC, wallet: wallet.address});
 
+  const data = await provider.getFeeData();
+  const nonce = await provider.getTransactionCount(wallet.address, "pending");
+  console.log({data, nonce});
+
   const addressManagerAddress =
     deployConfig[chainId][0].contracts.AddressManager.address;
   const roleManagerAddress =
@@ -36,13 +40,22 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
 
   // LikeTokenImplementation
   const LikeToken = await ethers.getContractFactory("LikeToken1155");
-  const likeTokenImpl = await LikeToken.deploy({});
+  const likeTokenImpl = await LikeToken.deploy({
+    maxFeePerGas: 20125816348,
+    maxPriorityFeePerGas: 7500000000,
+    nonce: nonce + 10,
+  });
 
   // LikeTokenFactory
   let factory = await deployProxyContract(hre, "LikeTokenFactory", [
     addressManagerAddress,
     likeTokenImpl.address,
     config.likeTokenContractUri,
+    {
+      maxFeePerGas: 20125816348,
+      maxPriorityFeePerGas: 7500000000,
+      nonce: nonce + 12,
+    },
   ]);
 
   //

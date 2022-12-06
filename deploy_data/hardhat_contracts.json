@@ -26780,6 +26780,25 @@
               "type": "event"
             },
             {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "tokenContract",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "tokenId",
+                  "type": "uint256"
+                }
+              ],
+              "name": "TokenMinted",
+              "type": "event"
+            },
+            {
               "inputs": [],
               "name": "addressManager",
               "outputs": [
@@ -26912,7 +26931,7 @@
           ]
         },
         "LikeTokenFactory_Implementation": {
-          "address": "0xCC2Eb9920872f1549E8Bc3Fb80A615D93C5BB5f4",
+          "address": "0x96cbB28A29774BAF429320020387e1583BaDddb8",
           "abi": [
             {
               "anonymous": false,
@@ -26943,6 +26962,25 @@
                 }
               ],
               "name": "TokenDeployed",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "tokenContract",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "tokenId",
+                  "type": "uint256"
+                }
+              ],
+              "name": "TokenMinted",
               "type": "event"
             },
             {
