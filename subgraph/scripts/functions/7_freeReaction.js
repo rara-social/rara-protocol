@@ -1,7 +1,7 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../../v2_test_upgrade/hardhat_contracts.json");
+const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 const {getWallet, chainId} = require("../helpers/utils");
 
 // taker params
@@ -11,7 +11,7 @@ const takerNftId = "44";
 
 // reaction params
 const transformId =
-  "82422974008605986100164926026435778462042571413439638208706175089232148510666";
+  "58227297481882140196799232403984963877480287746494144327792850647264513109368";
 const optionBits = 1;
 const ipfsMetadataHash = "QmSBE5W5tyz8M7ve4n7Tw3sJgdHqak7k6whsorM7dDKsDL";
 

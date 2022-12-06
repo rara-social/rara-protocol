@@ -33,30 +33,28 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   const roleManagerAddress =
     deployConfig[chainId][0].contracts.RoleManager.address;
 
-  //
-  // Deploy new contracts
-  //
-  console.log("\n\nDeploying new contracts");
-
   // LikeTokenImplementation
-  const LikeToken = await ethers.getContractFactory("LikeToken1155");
-  const likeTokenImpl = await LikeToken.deploy({
-    maxFeePerGas: 20125816348,
-    maxPriorityFeePerGas: 7500000000,
-    nonce: nonce + 10,
-  });
+  // const LikeToken = await ethers.getContractFactory("LikeToken1155");
+  // const likeTokenImpl = await LikeToken.deploy({
+  //   maxFeePerGas: 20125816348,
+  //   maxPriorityFeePerGas: 7500000000,
+  //   nonce: nonce + 10,
+  // });
 
   // LikeTokenFactory
-  let factory = await deployProxyContract(hre, "LikeTokenFactory", [
-    addressManagerAddress,
-    likeTokenImpl.address,
-    config.likeTokenContractUri,
+  console.log("deploying factory...");
+  const likeTokenImp = "0x5caaaeac2241c513720788d156c94394466fd14a";
+  let factory = await deployProxyContract(
+    hre,
+    "LikeTokenFactory",
+    [addressManagerAddress, likeTokenImp, config.likeTokenContractUri],
     {
       maxFeePerGas: 20125816348,
       maxPriorityFeePerGas: 7500000000,
       nonce: nonce + 12,
-    },
-  ]);
+    }
+  );
+  console.log("finished deploying factory... " + factory.address);
 
   //
   // Temporarily grant roles to the deploying account

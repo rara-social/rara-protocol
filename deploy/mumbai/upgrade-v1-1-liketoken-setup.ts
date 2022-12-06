@@ -9,7 +9,7 @@ const deployConfig = require("../../deploy_data/hardhat_contracts.json");
 // Deploy the protocol on the L2
 // For Mumbai testnet, we will deploy test token contracts as well as the full protocol contracts
 // You must set DEPLOY_PRIVATE_KEY which is shared in RaRa 1Password
-// Run: npx hardhat deploy --network mumbai --tags mumbai-upgrade-v1-1-like-proxy --export-all ./deploy_data/hardhat_contracts.json
+// Run: npx hardhat deploy --network mumbai --tags mumbai-upgrade-v1-1-like-proxy-setup --export-all ./deploy_data/hardhat_contracts.json
 module.exports = async (hre: HardhatRuntimeEnvironment) => {
   const {getNamedAccounts} = hre;
   const {deployer} = await getNamedAccounts();
@@ -29,6 +29,9 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   const LikeTokenImp =
     deployConfig[chainId][0].contracts.LikeTokenFactory_Implementation.address;
 
+  const addressManagerAddress =
+    deployConfig[chainId][0].contracts.AddressManager.address;
+
   console.log({LikeTokenFactory, LikeTokenImp});
 
   //
@@ -36,28 +39,18 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   //
   console.log("\n\nUpgrading DefaultProxyAdmin...");
 
+  const addressManager = await ethers.getContractAt(
+    "AddressManager",
+    deployConfig[chainId][0].contracts.AddressManager.address
+  );
+  const likeFactory = await addressManager.likeTokenFactory();
+
+  // cehck proxy manager
   const DefaultProxyAdmin = new ethers.Contract(
     deployConfig[chainId][0].contracts.DefaultProxyAdmin.address,
     deployConfig[chainId][0].contracts.DefaultProxyAdmin.abi,
     wallet
   );
-
-  // const data = await provider.getFeeData();
-  // const nonce = await provider.getTransactionCount(wallet.address, "pending");
-  // const options = {
-  //   maxFeePerGas: data?.maxFeePerGas?.mul("10"),
-  //   maxPriorityFeePerGas: data?.maxPriorityFeePerGas?.mul("10"),
-  //   nonce: nonce + 100,
-  // };
-
-  // let txn = await DefaultProxyAdmin.upgrade(
-  //   LikeTokenFactory,
-  //   LikeTokenImp,
-  //   options
-  // );
-  // console.log(txn);
-  // await txn.wait();
-
   let implementation = await DefaultProxyAdmin.getProxyImplementation(
     LikeTokenFactory
   );
@@ -66,9 +59,10 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
     address: LikeTokenFactory,
     imp: LikeTokenImp,
     proxy_imp: implementation,
+    AddressMgrLikeFactory: likeFactory,
   });
 
   console.log("\n\nDone.");
 };
 
-module.exports.tags = ["mumbai-upgrade-v1-1-like-proxy"];
+module.exports.tags = ["mumbai-upgrade-v1-1-like-proxy-setup"];
