@@ -2,7 +2,7 @@ import {HardhatRuntimeEnvironment} from "hardhat/types";
 import {ethers} from "hardhat";
 
 import {deployProxyContract} from "../../deploy_config/protocol";
-import config from "../../deploy_config/mumbai";
+import config from "../../deploy_config/polygon";
 
 const deployConfig = require("../../deploy_data/hardhat_contracts.json");
 
