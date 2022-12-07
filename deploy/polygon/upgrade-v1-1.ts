@@ -37,7 +37,6 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   // Address Manager
   const roleManagerAddress =
     deployConfig[chainId][0].contracts.RoleManager.address;
-  // console.log({roleManagerAddress});
   let add = await deployProxyContract(hre, "AddressManager", [
     roleManagerAddress,
   ]);
