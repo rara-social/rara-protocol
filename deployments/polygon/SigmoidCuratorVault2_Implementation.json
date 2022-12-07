@@ -1,0 +1,687 @@
+{
+  "address": "0x731EC7B76E528669aE1D81C1ddC131B8dB34fF35",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "curatorTokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "nftChainId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "nftAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "nftId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "contract IERC20Upgradeable",
+          "name": "paymentToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "paymentTokenPaid",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "curatorTokensBought",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isTakerPosition",
+          "type": "bool"
+        }
+      ],
+      "name": "CuratorTokensBought",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "curatorTokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "paymentTokenRefunded",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "curatorTokensSold",
+          "type": "uint256"
+        }
+      ],
+      "name": "CuratorTokensSold",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "a",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "addressManager",
+      "outputs": [
+        {
+          "internalType": "contract IAddressManager",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "b",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "nftChainId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "nftAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "nftId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "contract IWMATIC",
+          "name": "paymentToken",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "paymentAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "mintToAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "isTakerPosition",
+          "type": "bool"
+        }
+      ],
+      "name": "buyCuratorTokens",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "c",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "int256",
+          "name": "a",
+          "type": "int256"
+        },
+        {
+          "internalType": "int256",
+          "name": "b",
+          "type": "int256"
+        },
+        {
+          "internalType": "int256",
+          "name": "c",
+          "type": "int256"
+        },
+        {
+          "internalType": "int256",
+          "name": "currentTokenSupply",
+          "type": "int256"
+        },
+        {
+          "internalType": "int256",
+          "name": "paymentReserves",
+          "type": "int256"
+        },
+        {
+          "internalType": "int256",
+          "name": "tokensToSell",
+          "type": "int256"
+        }
+      ],
+      "name": "calculatePaymentReturnedFromTokens",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "int256",
+          "name": "a",
+          "type": "int256"
+        },
+        {
+          "internalType": "int256",
+          "name": "b",
+          "type": "int256"
+        },
+        {
+          "internalType": "int256",
+          "name": "c",
+          "type": "int256"
+        },
+        {
+          "internalType": "int256",
+          "name": "currentTokensSupply",
+          "type": "int256"
+        },
+        {
+          "internalType": "int256",
+          "name": "paymentReserves",
+          "type": "int256"
+        },
+        {
+          "internalType": "int256",
+          "name": "paymentToSpend",
+          "type": "int256"
+        }
+      ],
+      "name": "calculateTokensBoughtFromPayment",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "curatorTokenSupply",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "curatorTokens",
+      "outputs": [
+        {
+          "internalType": "contract IStandard1155",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "nftChainId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "nftAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "nftId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "contract IWMATIC",
+          "name": "paymentToken",
+          "type": "address"
+        }
+      ],
+      "name": "getTokenId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_addressManager",
+          "type": "address"
+        },
+        {
+          "internalType": "contract IStandard1155",
+          "name": "_curatorTokens",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_a",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_b",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_c",
+          "type": "uint256"
+        }
+      ],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "reserves",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "nftChainId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "nftAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "nftId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "contract IWMATIC",
+          "name": "paymentToken",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tokensToBurn",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "refundToAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sellCuratorTokens",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "sweep",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "transactionHash": "0x8296db20ccdb744f4a44c30f58e4fa2a7aad3bfe384fcf4c495747a819ed25a3",
+  "receipt": {
+    "to": null,
+    "from": "0xa43C0ad9B1B867AdE1FCF0A88b779b2A3642d1b3",
+    "contractAddress": "0x731EC7B76E528669aE1D81C1ddC131B8dB34fF35",
+    "transactionIndex": 9,
+    "gasUsed": "1409620",
+    "logsBloom": "0x00000000000000800000000004000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000800000000000000000000100000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000200200000000000000000000000000000000000000000000000000000000000004000000000000000000001000000000000080000000000000000100000000000000000000000000000000000000000000000000000000004000000000000100020",
+    "blockHash": "0xf615315de0c55dd0aa3c18e701dcb85f25dbdba40f45d9db2b264878ee1b47c0",
+    "transactionHash": "0x8296db20ccdb744f4a44c30f58e4fa2a7aad3bfe384fcf4c495747a819ed25a3",
+    "logs": [
+      {
+        "transactionIndex": 9,
+        "blockNumber": 36548080,
+        "transactionHash": "0x8296db20ccdb744f4a44c30f58e4fa2a7aad3bfe384fcf4c495747a819ed25a3",
+        "address": "0x0000000000000000000000000000000000001010",
+        "topics": [
+          "0x4dfe1bbbcf077ddc3e01291eea2d5c70c2b422b415d95645b9adcfd678cb1d63",
+          "0x0000000000000000000000000000000000000000000000000000000000001010",
+          "0x000000000000000000000000a43c0ad9b1b867ade1fcf0a88b779b2a3642d1b3",
+          "0x000000000000000000000000127685d6dd6683085da4b6a041efcef1681e5c9c"
+        ],
+        "data": "0x00000000000000000000000000000000000000000000000000fc6ad35886847000000000000000000000000000000000000000000000006179972567a7570bec0000000000000000000000000000000000000000000003816cd12e14ad92773d000000000000000000000000000000000000000000000061789aba944ed0877c0000000000000000000000000000000000000000000003816dcd98e80618fbad",
+        "logIndex": 53,
+        "blockHash": "0xf615315de0c55dd0aa3c18e701dcb85f25dbdba40f45d9db2b264878ee1b47c0"
+      }
+    ],
+    "blockNumber": 36548080,
+    "cumulativeGasUsed": "2960092",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "77b0914e74bdf27924e25b415b8d4909",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"curatorTokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nftChainId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nftId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"contract IERC20Upgradeable\",\"name\":\"paymentToken\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"paymentTokenPaid\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"curatorTokensBought\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"isTakerPosition\",\"type\":\"bool\"}],\"name\":\"CuratorTokensBought\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"curatorTokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"paymentTokenRefunded\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"curatorTokensSold\",\"type\":\"uint256\"}],\"name\":\"CuratorTokensSold\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"a\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"addressManager\",\"outputs\":[{\"internalType\":\"contract IAddressManager\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"b\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"nftChainId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nftId\",\"type\":\"uint256\"},{\"internalType\":\"contract IWMATIC\",\"name\":\"paymentToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"paymentAmount\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"mintToAddress\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isTakerPosition\",\"type\":\"bool\"}],\"name\":\"buyCuratorTokens\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"c\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"int256\",\"name\":\"a\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"b\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"c\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"currentTokenSupply\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"paymentReserves\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"tokensToSell\",\"type\":\"int256\"}],\"name\":\"calculatePaymentReturnedFromTokens\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"int256\",\"name\":\"a\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"b\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"c\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"currentTokensSupply\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"paymentReserves\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"paymentToSpend\",\"type\":\"int256\"}],\"name\":\"calculateTokensBoughtFromPayment\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"curatorTokenSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"curatorTokens\",\"outputs\":[{\"internalType\":\"contract IStandard1155\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"nftChainId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nftId\",\"type\":\"uint256\"},{\"internalType\":\"contract IWMATIC\",\"name\":\"paymentToken\",\"type\":\"address\"}],\"name\":\"getTokenId\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_addressManager\",\"type\":\"address\"},{\"internalType\":\"contract IStandard1155\",\"name\":\"_curatorTokens\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_a\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_b\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_c\",\"type\":\"uint256\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"reserves\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"nftChainId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"nftAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nftId\",\"type\":\"uint256\"},{\"internalType\":\"contract IWMATIC\",\"name\":\"paymentToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"tokensToBurn\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"refundToAddress\",\"type\":\"address\"}],\"name\":\"sellCuratorTokens\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"sweep\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"details\":\"This contract tracks tokens in a sigmoid bonding curve per Taker NFT. When users spend reactions against a Taker NFT, it will use the Curator Liability to buy curator tokens against that Taker NFT and allocate to various parties. The curator tokens will be priced via the sigmoid curve.  The params that control the shape of the sigmoid are set in the parameter manager. At any point in time the owners of the curator tokens can sell them back to the bonding curve. Note: This contract is protected via a permissioned account set in the role manager.  Caution should be used as the role owner could renounce the role leaving all future actions disabled.  Additionally, if a malicious account was able to obtain the role, they could use it to set values to malicious values. See the public documentation website for more details.\",\"events\":{\"CuratorTokensBought(uint256,uint256,address,uint256,address,uint256,uint256,bool)\":{\"details\":\"Event triggered when curator tokens are purchased\"},\"CuratorTokensSold(uint256,uint256,uint256)\":{\"details\":\"Event triggered when curator tokens are sold\"}},\"kind\":\"dev\",\"methods\":{\"buyCuratorTokens(uint256,address,uint256,address,uint256,address,bool)\":{\"details\":\"Buy curator Tokens when reactions are spent. The reaction vault is the only account allowed to call this.\",\"returns\":{\"_0\":\"Returns the amount of curator tokens purchased.\"}},\"calculatePaymentReturnedFromTokens(int256,int256,int256,int256,int256,int256)\":{\"details\":\"Selling Tokens into the curve will return payment tokens to be refunded\",\"params\":{\"a\":\"maxPrice of the curve / 2\",\"b\":\"inflectionPoint of the curve\",\"c\":\"slope steepness of the curve\",\"currentTokenSupply\":\"current amount of Tokens in the curve\",\"paymentReserves\":\"current mount of payment reserves in the curve\",\"tokensToSell\":\"amount the of Tokens the user wants to sell\"}},\"calculateTokensBoughtFromPayment(int256,int256,int256,int256,int256,int256)\":{\"details\":\"Buying into the curve with payment tokens will return Tokens amount to be bought\",\"params\":{\"a\":\"maxPrice of the curve / 2\",\"b\":\"inflectionPoint of the curve\",\"c\":\"slope steepness of the curve\",\"currentTokensSupply\":\"current amount of Tokens in the curve\",\"paymentReserves\":\"current mount of payment reserves in the curve\",\"paymentToSpend\":\"amount the of payment tokens to buy Tokens with\"}},\"getTokenId(uint256,address,uint256,address)\":{\"details\":\"get a unique token ID for a given nft address and nft ID\"},\"initialize(address,address,uint256,uint256,uint256)\":{\"details\":\"can only be called once\",\"params\":{\"_a\":\"- bonding curve param a\",\"_addressManager\":\"- address manager in the protocol\",\"_b\":\"- bonding curve param b\",\"_c\":\"- bonding curve param c\",\"_curatorTokens\":\"- curator token contract address\"}},\"sellCuratorTokens(uint256,address,uint256,address,uint256,address)\":{\"details\":\"Sell curator tokens back into the bonding curve. Any holder who owns tokens can sell them back\",\"returns\":{\"_0\":\"Returns the amount of payment tokens received for the curator tokens.\"}},\"sweep()\":{\"details\":\"Allows the admin account to sweep any MATIC that was accidentally sent\"}},\"title\":\"SigmoidCuratorVault\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"initialize(address,address,uint256,uint256,uint256)\":{\"notice\":\"initializer to call after deployment,\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol\":\"SigmoidCuratorVault2\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":100},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.5.0) (proxy/utils/Initializable.sol)\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"../../utils/AddressUpgradeable.sol\\\";\\n\\n/**\\n * @dev This is a base contract to aid in writing upgradeable contracts, or any kind of contract that will be deployed\\n * behind a proxy. Since proxied contracts do not make use of a constructor, it's common to move constructor logic to an\\n * external initializer function, usually called `initialize`. It then becomes necessary to protect this initializer\\n * function so it can only be called once. The {initializer} modifier provided by this contract will have this effect.\\n *\\n * TIP: To avoid leaving the proxy in an uninitialized state, the initializer function should be called as early as\\n * possible by providing the encoded function call as the `_data` argument to {ERC1967Proxy-constructor}.\\n *\\n * CAUTION: When used with inheritance, manual care must be taken to not invoke a parent initializer twice, or to ensure\\n * that all initializers are idempotent. This is not verified automatically as constructors are by Solidity.\\n *\\n * [CAUTION]\\n * ====\\n * Avoid leaving a contract uninitialized.\\n *\\n * An uninitialized contract can be taken over by an attacker. This applies to both a proxy and its implementation\\n * contract, which may impact the proxy. To initialize the implementation contract, you can either invoke the\\n * initializer manually, or you can include a constructor to automatically mark it as initialized when it is deployed:\\n *\\n * [.hljs-theme-light.nopadding]\\n * ```\\n * /// @custom:oz-upgrades-unsafe-allow constructor\\n * constructor() initializer {}\\n * ```\\n * ====\\n */\\nabstract contract Initializable {\\n    /**\\n     * @dev Indicates that the contract has been initialized.\\n     */\\n    bool private _initialized;\\n\\n    /**\\n     * @dev Indicates that the contract is in the process of being initialized.\\n     */\\n    bool private _initializing;\\n\\n    /**\\n     * @dev Modifier to protect an initializer function from being invoked twice.\\n     */\\n    modifier initializer() {\\n        // If the contract is initializing we ignore whether _initialized is set in order to support multiple\\n        // inheritance patterns, but we only do this in the context of a constructor, because in other contexts the\\n        // contract may have been reentered.\\n        require(_initializing ? _isConstructor() : !_initialized, \\\"Initializable: contract is already initialized\\\");\\n\\n        bool isTopLevelCall = !_initializing;\\n        if (isTopLevelCall) {\\n            _initializing = true;\\n            _initialized = true;\\n        }\\n\\n        _;\\n\\n        if (isTopLevelCall) {\\n            _initializing = false;\\n        }\\n    }\\n\\n    /**\\n     * @dev Modifier to protect an initialization function so that it can only be invoked by functions with the\\n     * {initializer} modifier, directly or indirectly.\\n     */\\n    modifier onlyInitializing() {\\n        require(_initializing, \\\"Initializable: contract is not initializing\\\");\\n        _;\\n    }\\n\\n    function _isConstructor() private view returns (bool) {\\n        return !AddressUpgradeable.isContract(address(this));\\n    }\\n}\\n\",\"keccak256\":\"0x372b0bc04e3b4c074559bbbfb1317afddb56de5504158ca25a7f9cd403980445\",\"license\":\"MIT\"},\"@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (security/ReentrancyGuard.sol)\\n\\npragma solidity ^0.8.0;\\nimport \\\"../proxy/utils/Initializable.sol\\\";\\n\\n/**\\n * @dev Contract module that helps prevent reentrant calls to a function.\\n *\\n * Inheriting from `ReentrancyGuard` will make the {nonReentrant} modifier\\n * available, which can be applied to functions to make sure there are no nested\\n * (reentrant) calls to them.\\n *\\n * Note that because there is a single `nonReentrant` guard, functions marked as\\n * `nonReentrant` may not call one another. This can be worked around by making\\n * those functions `private`, and then adding `external` `nonReentrant` entry\\n * points to them.\\n *\\n * TIP: If you would like to learn more about reentrancy and alternative ways\\n * to protect against it, check out our blog post\\n * https://blog.openzeppelin.com/reentrancy-after-istanbul/[Reentrancy After Istanbul].\\n */\\nabstract contract ReentrancyGuardUpgradeable is Initializable {\\n    // Booleans are more expensive than uint256 or any type that takes up a full\\n    // word because each write operation emits an extra SLOAD to first read the\\n    // slot's contents, replace the bits taken up by the boolean, and then write\\n    // back. This is the compiler's defense against contract upgrades and\\n    // pointer aliasing, and it cannot be disabled.\\n\\n    // The values being non-zero value makes deployment a bit more expensive,\\n    // but in exchange the refund on every call to nonReentrant will be lower in\\n    // amount. Since refunds are capped to a percentage of the total\\n    // transaction's gas, it is best to keep them low in cases like this one, to\\n    // increase the likelihood of the full refund coming into effect.\\n    uint256 private constant _NOT_ENTERED = 1;\\n    uint256 private constant _ENTERED = 2;\\n\\n    uint256 private _status;\\n\\n    function __ReentrancyGuard_init() internal onlyInitializing {\\n        __ReentrancyGuard_init_unchained();\\n    }\\n\\n    function __ReentrancyGuard_init_unchained() internal onlyInitializing {\\n        _status = _NOT_ENTERED;\\n    }\\n\\n    /**\\n     * @dev Prevents a contract from calling itself, directly or indirectly.\\n     * Calling a `nonReentrant` function from another `nonReentrant`\\n     * function is not supported. It is possible to prevent this from happening\\n     * by making the `nonReentrant` function external, and making it call a\\n     * `private` function that does the actual work.\\n     */\\n    modifier nonReentrant() {\\n        // On the first call to nonReentrant, _notEntered will be true\\n        require(_status != _ENTERED, \\\"ReentrancyGuard: reentrant call\\\");\\n\\n        // Any calls to nonReentrant after this point will fail\\n        _status = _ENTERED;\\n\\n        _;\\n\\n        // By storing the original value once again, a refund is triggered (see\\n        // https://eips.ethereum.org/EIPS/eip-2200)\\n        _status = _NOT_ENTERED;\\n    }\\n\\n    /**\\n     * @dev This empty reserved space is put in place to allow future versions to add new\\n     * variables without shifting down storage in the inheritance chain.\\n     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps\\n     */\\n    uint256[49] private __gap;\\n}\\n\",\"keccak256\":\"0x8cc03c5ac17e8a7396e487cda41fc1f1dfdb91db7d528e6da84bee3b6dd7e167\",\"license\":\"MIT\"},\"@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.5.0) (token/ERC20/IERC20.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Interface of the ERC20 standard as defined in the EIP.\\n */\\ninterface IERC20Upgradeable {\\n    /**\\n     * @dev Returns the amount of tokens in existence.\\n     */\\n    function totalSupply() external view returns (uint256);\\n\\n    /**\\n     * @dev Returns the amount of tokens owned by `account`.\\n     */\\n    function balanceOf(address account) external view returns (uint256);\\n\\n    /**\\n     * @dev Moves `amount` tokens from the caller's account to `to`.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transfer(address to, uint256 amount) external returns (bool);\\n\\n    /**\\n     * @dev Returns the remaining number of tokens that `spender` will be\\n     * allowed to spend on behalf of `owner` through {transferFrom}. This is\\n     * zero by default.\\n     *\\n     * This value changes when {approve} or {transferFrom} are called.\\n     */\\n    function allowance(address owner, address spender) external view returns (uint256);\\n\\n    /**\\n     * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * IMPORTANT: Beware that changing an allowance with this method brings the risk\\n     * that someone may use both the old and the new allowance by unfortunate\\n     * transaction ordering. One possible solution to mitigate this race\\n     * condition is to first reduce the spender's allowance to 0 and set the\\n     * desired value afterwards:\\n     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\\n     *\\n     * Emits an {Approval} event.\\n     */\\n    function approve(address spender, uint256 amount) external returns (bool);\\n\\n    /**\\n     * @dev Moves `amount` tokens from `from` to `to` using the\\n     * allowance mechanism. `amount` is then deducted from the caller's\\n     * allowance.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transferFrom(\\n        address from,\\n        address to,\\n        uint256 amount\\n    ) external returns (bool);\\n\\n    /**\\n     * @dev Emitted when `value` tokens are moved from one account (`from`) to\\n     * another (`to`).\\n     *\\n     * Note that `value` may be zero.\\n     */\\n    event Transfer(address indexed from, address indexed to, uint256 value);\\n\\n    /**\\n     * @dev Emitted when the allowance of a `spender` for an `owner` is set by\\n     * a call to {approve}. `value` is the new allowance.\\n     */\\n    event Approval(address indexed owner, address indexed spender, uint256 value);\\n}\\n\",\"keccak256\":\"0x6777f3fccb5dab95a9088ef62c41bee0198fd92e50d7c94f0e3733788af4079e\",\"license\":\"MIT\"},\"@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (token/ERC20/utils/SafeERC20.sol)\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"../IERC20Upgradeable.sol\\\";\\nimport \\\"../../../utils/AddressUpgradeable.sol\\\";\\n\\n/**\\n * @title SafeERC20\\n * @dev Wrappers around ERC20 operations that throw on failure (when the token\\n * contract returns false). Tokens that return no value (and instead revert or\\n * throw on failure) are also supported, non-reverting calls are assumed to be\\n * successful.\\n * To use this library you can add a `using SafeERC20 for IERC20;` statement to your contract,\\n * which allows you to call the safe operations as `token.safeTransfer(...)`, etc.\\n */\\nlibrary SafeERC20Upgradeable {\\n    using AddressUpgradeable for address;\\n\\n    function safeTransfer(\\n        IERC20Upgradeable token,\\n        address to,\\n        uint256 value\\n    ) internal {\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.transfer.selector, to, value));\\n    }\\n\\n    function safeTransferFrom(\\n        IERC20Upgradeable token,\\n        address from,\\n        address to,\\n        uint256 value\\n    ) internal {\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));\\n    }\\n\\n    /**\\n     * @dev Deprecated. This function has issues similar to the ones found in\\n     * {IERC20-approve}, and its usage is discouraged.\\n     *\\n     * Whenever possible, use {safeIncreaseAllowance} and\\n     * {safeDecreaseAllowance} instead.\\n     */\\n    function safeApprove(\\n        IERC20Upgradeable token,\\n        address spender,\\n        uint256 value\\n    ) internal {\\n        // safeApprove should only be called when setting an initial allowance,\\n        // or when resetting it to zero. To increase and decrease it, use\\n        // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'\\n        require(\\n            (value == 0) || (token.allowance(address(this), spender) == 0),\\n            \\\"SafeERC20: approve from non-zero to non-zero allowance\\\"\\n        );\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\\n    }\\n\\n    function safeIncreaseAllowance(\\n        IERC20Upgradeable token,\\n        address spender,\\n        uint256 value\\n    ) internal {\\n        uint256 newAllowance = token.allowance(address(this), spender) + value;\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));\\n    }\\n\\n    function safeDecreaseAllowance(\\n        IERC20Upgradeable token,\\n        address spender,\\n        uint256 value\\n    ) internal {\\n        unchecked {\\n            uint256 oldAllowance = token.allowance(address(this), spender);\\n            require(oldAllowance >= value, \\\"SafeERC20: decreased allowance below zero\\\");\\n            uint256 newAllowance = oldAllowance - value;\\n            _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));\\n        }\\n    }\\n\\n    /**\\n     * @dev Imitates a Solidity high-level call (i.e. a regular function call to a contract), relaxing the requirement\\n     * on the return value: the return value is optional (but if data is returned, it must not be false).\\n     * @param token The token targeted by the call.\\n     * @param data The call data (encoded using abi.encode or one of its variants).\\n     */\\n    function _callOptionalReturn(IERC20Upgradeable token, bytes memory data) private {\\n        // We need to perform a low level call here, to bypass Solidity's return data size checking mechanism, since\\n        // we're implementing it ourselves. We use {Address.functionCall} to perform this call, which verifies that\\n        // the target address contains contract code and also asserts for success in the low-level call.\\n\\n        bytes memory returndata = address(token).functionCall(data, \\\"SafeERC20: low-level call failed\\\");\\n        if (returndata.length > 0) {\\n            // Return data is optional\\n            require(abi.decode(returndata, (bool)), \\\"SafeERC20: ERC20 operation did not succeed\\\");\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0x3e26a49d2fa5ef8338b8a9467c91e54f417cb07e849b1cc0f4ebc4d2a147938e\",\"license\":\"MIT\"},\"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.5.0) (utils/Address.sol)\\n\\npragma solidity ^0.8.1;\\n\\n/**\\n * @dev Collection of functions related to the address type\\n */\\nlibrary AddressUpgradeable {\\n    /**\\n     * @dev Returns true if `account` is a contract.\\n     *\\n     * [IMPORTANT]\\n     * ====\\n     * It is unsafe to assume that an address for which this function returns\\n     * false is an externally-owned account (EOA) and not a contract.\\n     *\\n     * Among others, `isContract` will return false for the following\\n     * types of addresses:\\n     *\\n     *  - an externally-owned account\\n     *  - a contract in construction\\n     *  - an address where a contract will be created\\n     *  - an address where a contract lived, but was destroyed\\n     * ====\\n     *\\n     * [IMPORTANT]\\n     * ====\\n     * You shouldn't rely on `isContract` to protect against flash loan attacks!\\n     *\\n     * Preventing calls from contracts is highly discouraged. It breaks composability, breaks support for smart wallets\\n     * like Gnosis Safe, and does not provide security since it can be circumvented by calling from a contract\\n     * constructor.\\n     * ====\\n     */\\n    function isContract(address account) internal view returns (bool) {\\n        // This method relies on extcodesize/address.code.length, which returns 0\\n        // for contracts in construction, since the code is only stored at the end\\n        // of the constructor execution.\\n\\n        return account.code.length > 0;\\n    }\\n\\n    /**\\n     * @dev Replacement for Solidity's `transfer`: sends `amount` wei to\\n     * `recipient`, forwarding all available gas and reverting on errors.\\n     *\\n     * https://eips.ethereum.org/EIPS/eip-1884[EIP1884] increases the gas cost\\n     * of certain opcodes, possibly making contracts go over the 2300 gas limit\\n     * imposed by `transfer`, making them unable to receive funds via\\n     * `transfer`. {sendValue} removes this limitation.\\n     *\\n     * https://diligence.consensys.net/posts/2019/09/stop-using-soliditys-transfer-now/[Learn more].\\n     *\\n     * IMPORTANT: because control is transferred to `recipient`, care must be\\n     * taken to not create reentrancy vulnerabilities. Consider using\\n     * {ReentrancyGuard} or the\\n     * https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].\\n     */\\n    function sendValue(address payable recipient, uint256 amount) internal {\\n        require(address(this).balance >= amount, \\\"Address: insufficient balance\\\");\\n\\n        (bool success, ) = recipient.call{value: amount}(\\\"\\\");\\n        require(success, \\\"Address: unable to send value, recipient may have reverted\\\");\\n    }\\n\\n    /**\\n     * @dev Performs a Solidity function call using a low level `call`. A\\n     * plain `call` is an unsafe replacement for a function call: use this\\n     * function instead.\\n     *\\n     * If `target` reverts with a revert reason, it is bubbled up by this\\n     * function (like regular Solidity function calls).\\n     *\\n     * Returns the raw returned data. To convert to the expected return value,\\n     * use https://solidity.readthedocs.io/en/latest/units-and-global-variables.html?highlight=abi.decode#abi-encoding-and-decoding-functions[`abi.decode`].\\n     *\\n     * Requirements:\\n     *\\n     * - `target` must be a contract.\\n     * - calling `target` with `data` must not revert.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCall(address target, bytes memory data) internal returns (bytes memory) {\\n        return functionCall(target, data, \\\"Address: low-level call failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`], but with\\n     * `errorMessage` as a fallback revert reason when `target` reverts.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCall(\\n        address target,\\n        bytes memory data,\\n        string memory errorMessage\\n    ) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, 0, errorMessage);\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],\\n     * but also transferring `value` wei to `target`.\\n     *\\n     * Requirements:\\n     *\\n     * - the calling contract must have an ETH balance of at least `value`.\\n     * - the called Solidity function must be `payable`.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCallWithValue(\\n        address target,\\n        bytes memory data,\\n        uint256 value\\n    ) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, value, \\\"Address: low-level call with value failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCallWithValue-address-bytes-uint256-}[`functionCallWithValue`], but\\n     * with `errorMessage` as a fallback revert reason when `target` reverts.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCallWithValue(\\n        address target,\\n        bytes memory data,\\n        uint256 value,\\n        string memory errorMessage\\n    ) internal returns (bytes memory) {\\n        require(address(this).balance >= value, \\\"Address: insufficient balance for call\\\");\\n        require(isContract(target), \\\"Address: call to non-contract\\\");\\n\\n        (bool success, bytes memory returndata) = target.call{value: value}(data);\\n        return verifyCallResult(success, returndata, errorMessage);\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],\\n     * but performing a static call.\\n     *\\n     * _Available since v3.3._\\n     */\\n    function functionStaticCall(address target, bytes memory data) internal view returns (bytes memory) {\\n        return functionStaticCall(target, data, \\\"Address: low-level static call failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-string-}[`functionCall`],\\n     * but performing a static call.\\n     *\\n     * _Available since v3.3._\\n     */\\n    function functionStaticCall(\\n        address target,\\n        bytes memory data,\\n        string memory errorMessage\\n    ) internal view returns (bytes memory) {\\n        require(isContract(target), \\\"Address: static call to non-contract\\\");\\n\\n        (bool success, bytes memory returndata) = target.staticcall(data);\\n        return verifyCallResult(success, returndata, errorMessage);\\n    }\\n\\n    /**\\n     * @dev Tool to verifies that a low level call was successful, and revert if it wasn't, either by bubbling the\\n     * revert reason using the provided one.\\n     *\\n     * _Available since v4.3._\\n     */\\n    function verifyCallResult(\\n        bool success,\\n        bytes memory returndata,\\n        string memory errorMessage\\n    ) internal pure returns (bytes memory) {\\n        if (success) {\\n            return returndata;\\n        } else {\\n            // Look for revert reason and bubble it up if present\\n            if (returndata.length > 0) {\\n                // The easiest way to bubble the revert reason is using memory via assembly\\n\\n                assembly {\\n                    let returndata_size := mload(returndata)\\n                    revert(add(32, returndata), returndata_size)\\n                }\\n            } else {\\n                revert(errorMessage);\\n            }\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0x55cf2bd9fc76704ddcdc19834cd288b7de00fc0f298a40ea16a954ae8991db2d\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/math/SafeCast.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (utils/math/SafeCast.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Wrappers over Solidity's uintXX/intXX casting operators with added overflow\\n * checks.\\n *\\n * Downcasting from uint256/int256 in Solidity does not revert on overflow. This can\\n * easily result in undesired exploitation or bugs, since developers usually\\n * assume that overflows raise errors. `SafeCast` restores this intuition by\\n * reverting the transaction when such an operation overflows.\\n *\\n * Using this library instead of the unchecked operations eliminates an entire\\n * class of bugs, so it's recommended to use it always.\\n *\\n * Can be combined with {SafeMath} and {SignedSafeMath} to extend it to smaller types, by performing\\n * all math on `uint256` and `int256` and then downcasting.\\n */\\nlibrary SafeCast {\\n    /**\\n     * @dev Returns the downcasted uint224 from uint256, reverting on\\n     * overflow (when the input is greater than largest uint224).\\n     *\\n     * Counterpart to Solidity's `uint224` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - input must fit into 224 bits\\n     */\\n    function toUint224(uint256 value) internal pure returns (uint224) {\\n        require(value <= type(uint224).max, \\\"SafeCast: value doesn't fit in 224 bits\\\");\\n        return uint224(value);\\n    }\\n\\n    /**\\n     * @dev Returns the downcasted uint128 from uint256, reverting on\\n     * overflow (when the input is greater than largest uint128).\\n     *\\n     * Counterpart to Solidity's `uint128` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - input must fit into 128 bits\\n     */\\n    function toUint128(uint256 value) internal pure returns (uint128) {\\n        require(value <= type(uint128).max, \\\"SafeCast: value doesn't fit in 128 bits\\\");\\n        return uint128(value);\\n    }\\n\\n    /**\\n     * @dev Returns the downcasted uint96 from uint256, reverting on\\n     * overflow (when the input is greater than largest uint96).\\n     *\\n     * Counterpart to Solidity's `uint96` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - input must fit into 96 bits\\n     */\\n    function toUint96(uint256 value) internal pure returns (uint96) {\\n        require(value <= type(uint96).max, \\\"SafeCast: value doesn't fit in 96 bits\\\");\\n        return uint96(value);\\n    }\\n\\n    /**\\n     * @dev Returns the downcasted uint64 from uint256, reverting on\\n     * overflow (when the input is greater than largest uint64).\\n     *\\n     * Counterpart to Solidity's `uint64` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - input must fit into 64 bits\\n     */\\n    function toUint64(uint256 value) internal pure returns (uint64) {\\n        require(value <= type(uint64).max, \\\"SafeCast: value doesn't fit in 64 bits\\\");\\n        return uint64(value);\\n    }\\n\\n    /**\\n     * @dev Returns the downcasted uint32 from uint256, reverting on\\n     * overflow (when the input is greater than largest uint32).\\n     *\\n     * Counterpart to Solidity's `uint32` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - input must fit into 32 bits\\n     */\\n    function toUint32(uint256 value) internal pure returns (uint32) {\\n        require(value <= type(uint32).max, \\\"SafeCast: value doesn't fit in 32 bits\\\");\\n        return uint32(value);\\n    }\\n\\n    /**\\n     * @dev Returns the downcasted uint16 from uint256, reverting on\\n     * overflow (when the input is greater than largest uint16).\\n     *\\n     * Counterpart to Solidity's `uint16` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - input must fit into 16 bits\\n     */\\n    function toUint16(uint256 value) internal pure returns (uint16) {\\n        require(value <= type(uint16).max, \\\"SafeCast: value doesn't fit in 16 bits\\\");\\n        return uint16(value);\\n    }\\n\\n    /**\\n     * @dev Returns the downcasted uint8 from uint256, reverting on\\n     * overflow (when the input is greater than largest uint8).\\n     *\\n     * Counterpart to Solidity's `uint8` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - input must fit into 8 bits.\\n     */\\n    function toUint8(uint256 value) internal pure returns (uint8) {\\n        require(value <= type(uint8).max, \\\"SafeCast: value doesn't fit in 8 bits\\\");\\n        return uint8(value);\\n    }\\n\\n    /**\\n     * @dev Converts a signed int256 into an unsigned uint256.\\n     *\\n     * Requirements:\\n     *\\n     * - input must be greater than or equal to 0.\\n     */\\n    function toUint256(int256 value) internal pure returns (uint256) {\\n        require(value >= 0, \\\"SafeCast: value must be positive\\\");\\n        return uint256(value);\\n    }\\n\\n    /**\\n     * @dev Returns the downcasted int128 from int256, reverting on\\n     * overflow (when the input is less than smallest int128 or\\n     * greater than largest int128).\\n     *\\n     * Counterpart to Solidity's `int128` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - input must fit into 128 bits\\n     *\\n     * _Available since v3.1._\\n     */\\n    function toInt128(int256 value) internal pure returns (int128) {\\n        require(value >= type(int128).min && value <= type(int128).max, \\\"SafeCast: value doesn't fit in 128 bits\\\");\\n        return int128(value);\\n    }\\n\\n    /**\\n     * @dev Returns the downcasted int64 from int256, reverting on\\n     * overflow (when the input is less than smallest int64 or\\n     * greater than largest int64).\\n     *\\n     * Counterpart to Solidity's `int64` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - input must fit into 64 bits\\n     *\\n     * _Available since v3.1._\\n     */\\n    function toInt64(int256 value) internal pure returns (int64) {\\n        require(value >= type(int64).min && value <= type(int64).max, \\\"SafeCast: value doesn't fit in 64 bits\\\");\\n        return int64(value);\\n    }\\n\\n    /**\\n     * @dev Returns the downcasted int32 from int256, reverting on\\n     * overflow (when the input is less than smallest int32 or\\n     * greater than largest int32).\\n     *\\n     * Counterpart to Solidity's `int32` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - input must fit into 32 bits\\n     *\\n     * _Available since v3.1._\\n     */\\n    function toInt32(int256 value) internal pure returns (int32) {\\n        require(value >= type(int32).min && value <= type(int32).max, \\\"SafeCast: value doesn't fit in 32 bits\\\");\\n        return int32(value);\\n    }\\n\\n    /**\\n     * @dev Returns the downcasted int16 from int256, reverting on\\n     * overflow (when the input is less than smallest int16 or\\n     * greater than largest int16).\\n     *\\n     * Counterpart to Solidity's `int16` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - input must fit into 16 bits\\n     *\\n     * _Available since v3.1._\\n     */\\n    function toInt16(int256 value) internal pure returns (int16) {\\n        require(value >= type(int16).min && value <= type(int16).max, \\\"SafeCast: value doesn't fit in 16 bits\\\");\\n        return int16(value);\\n    }\\n\\n    /**\\n     * @dev Returns the downcasted int8 from int256, reverting on\\n     * overflow (when the input is less than smallest int8 or\\n     * greater than largest int8).\\n     *\\n     * Counterpart to Solidity's `int8` operator.\\n     *\\n     * Requirements:\\n     *\\n     * - input must fit into 8 bits.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function toInt8(int256 value) internal pure returns (int8) {\\n        require(value >= type(int8).min && value <= type(int8).max, \\\"SafeCast: value doesn't fit in 8 bits\\\");\\n        return int8(value);\\n    }\\n\\n    /**\\n     * @dev Converts an unsigned uint256 into a signed int256.\\n     *\\n     * Requirements:\\n     *\\n     * - input must be less than or equal to maxInt256.\\n     */\\n    function toInt256(uint256 value) internal pure returns (int256) {\\n        // Note: Unsafe cast below is okay because `type(int256).max` is guaranteed to be positive\\n        require(value <= uint256(type(int256).max), \\\"SafeCast: value doesn't fit in an int256\\\");\\n        return int256(value);\\n    }\\n}\\n\",\"keccak256\":\"0x5c6caab697d302ad7eb59c234a4d2dbc965c1bae87709bd2850060b7695b28c7\",\"license\":\"MIT\"},\"contracts/Config/IAddressManager.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"../Permissions/IRoleManager.sol\\\";\\nimport \\\"../Parameters/IParameterManager.sol\\\";\\nimport \\\"../Maker/IMakerRegistrar.sol\\\";\\nimport \\\"../Token/IStandard1155.sol\\\";\\nimport \\\"../Reactions/IReactionVault.sol\\\";\\nimport \\\"../CuratorVault/SigmoidCuratorVault/ICuratorVault.sol\\\";\\n\\ninterface IAddressManager {\\n    /// @dev Getter for the role manager address\\n    function roleManager() external returns (IRoleManager);\\n\\n    /// @dev Setter for the role manager address\\n    function setRoleManager(IRoleManager _roleManager) external;\\n\\n    /// @dev Getter for the role manager address\\n    function parameterManager() external returns (IParameterManager);\\n\\n    /// @dev Setter for the role manager address\\n    function setParameterManager(IParameterManager _parameterManager) external;\\n\\n    /// @dev Getter for the maker registrar address\\n    function makerRegistrar() external returns (IMakerRegistrar);\\n\\n    /// @dev Setter for the maker registrar address\\n    function setMakerRegistrar(IMakerRegistrar _makerRegistrar) external;\\n\\n    /// @dev Getter for the reaction NFT contract address\\n    function reactionNftContract() external returns (IStandard1155);\\n\\n    /// @dev Setter for the reaction NFT contract address\\n    function setReactionNftContract(IStandard1155 _reactionNftContract)\\n        external;\\n\\n    /// @dev Getter for the default Curator Vault contract address\\n    function defaultCuratorVault() external returns (ICuratorVault);\\n\\n    /// @dev Setter for the default Curator Vault contract address\\n    function setDefaultCuratorVault(ICuratorVault _defaultCuratorVault)\\n        external;\\n\\n    /// @dev Getter for the L2 bridge registrar\\n    function childRegistrar() external returns (address);\\n\\n    /// @dev Setter for the L2 bridge registrar\\n    function setChildRegistrar(address _childRegistrar) external;\\n\\n    /// @dev Getter for the address of the royalty registry\\n    function royaltyRegistry() external returns (address);\\n\\n    /// @dev Setter for the address of the royalty registry\\n    function setRoyaltyRegistry(address _royaltyRegistry) external;\\n\\n    /// @dev Getter for the address of the Like Token Factory\\n    function likeTokenFactory() external returns (address);\\n\\n    /// @dev Setter for the address of the Like Token Factory\\n    function setLikeTokenFactory(address _likeTokenFactory) external;\\n}\\n\",\"keccak256\":\"0x9fc0369919645ae39e271e02ced9e27ede2ad724fdff4361cf50f3170f60c736\",\"license\":\"GPL-3.0\"},\"contracts/CuratorVault/SigmoidCuratorVault/ICuratorVault.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"../../Token/IStandard1155.sol\\\";\\nimport \\\"@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol\\\";\\n\\n/// @dev Interface for the curator vault\\ninterface ICuratorVault {\\n    function getTokenId(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IERC20Upgradeable paymentToken\\n    ) external returns (uint256);\\n\\n    function buyCuratorTokens(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IERC20Upgradeable paymentToken,\\n        uint256 paymentAmount,\\n        address mintToAddress,\\n        bool isTakerPosition\\n    ) external returns (uint256);\\n\\n    function sellCuratorTokens(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IERC20Upgradeable paymentToken,\\n        uint256 tokensToBurn,\\n        address refundToAddress\\n    ) external returns (uint256);\\n\\n    function curatorTokens() external returns (IStandard1155);\\n}\\n\",\"keccak256\":\"0x4c69f5f3d4f76dcbceb716ed541680e3bc17154f158f41dd4c7723719478e17d\",\"license\":\"GPL-3.0\"},\"contracts/CuratorVault/SigmoidCuratorVault2/Curve/ExtendedMath.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\n/// @dev ^2, ^3, and sqrt functions\\n/// Solidity 0.8+ should catch any overflows on multiplications\\nlibrary ExtendedMath {\\n    /**\\n     * @return The given number raised to the power of 2\\n     */\\n    function pow2(int256 a) internal pure returns (int256) {\\n        return a * a;\\n    }\\n\\n    function pow3(int256 a) internal pure returns (int256) {\\n        return a * a * a;\\n    }\\n\\n    /**\\n     * @return z The square root of the given positive number\\n     */\\n    function sqrt(int256 y) internal pure returns (int256 z) {\\n        require(y >= 0, \\\"Negative sqrt\\\");\\n        if (y > 3) {\\n            z = y;\\n            int256 x = y / 2 + 1;\\n            while (x < z) {\\n                z = x;\\n                x = (y / x + x) / 2;\\n            }\\n        } else if (y != 0) {\\n            z = 1;\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0x9006775d9cea1255d86d239306c5122453c3081216e9bd01b4d0f6371f7052ff\",\"license\":\"GPL-3.0\"},\"contracts/CuratorVault/SigmoidCuratorVault2/Curve/Sigmoid2.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"./ExtendedMath.sol\\\";\\nimport \\\"@openzeppelin/contracts/utils/math/SafeCast.sol\\\";\\n\\n/// @dev This is a sigmoid bonding curve implementation to calculate buying and selling amounts\\n/// Formulas are inspired from https://medium.com/molecule-blog/designing-different-fundraising-scenarios-with-sigmoidal-token-bonding-curves-ceafc734ed97\\ncontract Sigmoid2 {\\n    using ExtendedMath for int256;\\n\\n    function n1(\\n        int256 a,\\n        int256 b,\\n        int256 c,\\n        int256 newReserves\\n    ) internal pure returns (int256) {\\n        return 2 * a.pow2() * b * newReserves * (b.pow2() + c).sqrt();\\n    }\\n\\n    function n2(\\n        int256 a,\\n        int256 b,\\n        int256,\\n        int256 newReserves\\n    ) internal pure returns (int256) {\\n        return 2 * a.pow2() * b.pow2() * newReserves;\\n    }\\n\\n    function n3(\\n        int256 a,\\n        int256,\\n        int256 c,\\n        int256 newReserves\\n    ) internal pure returns (int256) {\\n        return 2 * a.pow2() * c * newReserves;\\n    }\\n\\n    function n4(\\n        int256 a,\\n        int256 b,\\n        int256 c,\\n        int256 newReserves\\n    ) internal pure returns (int256) {\\n        return a * newReserves.pow2() * (b.pow2() + c).sqrt();\\n    }\\n\\n    function n5(\\n        int256 a,\\n        int256 b,\\n        int256,\\n        int256 newReserves\\n    ) internal pure returns (int256) {\\n        return 1 * a * b * newReserves.pow2();\\n    }\\n\\n    function n6(\\n        int256,\\n        int256,\\n        int256,\\n        int256 newReserves\\n    ) internal pure returns (int256) {\\n        return newReserves.pow3();\\n    }\\n\\n    function d1(\\n        int256 a,\\n        int256 b,\\n        int256 c,\\n        int256 newReserves\\n    ) internal pure returns (int256) {\\n        return\\n            a *\\n            (-2 *\\n                a.pow2() *\\n                c -\\n                4 *\\n                a *\\n                b *\\n                newReserves +\\n                2 *\\n                newReserves.pow2());\\n    }\\n\\n    /// @dev Buying into the curve with payment tokens will return Tokens amount to be bought\\n    /// @param a maxPrice of the curve / 2\\n    /// @param b inflectionPoint of the curve\\n    /// @param c slope steepness of the curve\\n    /// @param currentTokensSupply current amount of Tokens in the curve\\n    /// @param paymentReserves current mount of payment reserves in the curve\\n    /// @param paymentToSpend amount the of payment tokens to buy Tokens with\\n    function calculateTokensBoughtFromPayment(\\n        int256 a,\\n        int256 b,\\n        int256 c,\\n        int256 currentTokensSupply,\\n        int256 paymentReserves,\\n        int256 paymentToSpend\\n    ) public pure returns (uint256) {\\n        // The amount of reserves after payment is made\\n        int256 newReserves = paymentReserves + paymentToSpend;\\n\\n        // Calculations cause \\\"stack too deep\\\" so are broken into individual numerator and denominator functions\\n        int256 newSupply = (n6(a, b, c, newReserves) +\\n            n4(a, b, c, newReserves) -\\n            n1(a, b, c, newReserves) -\\n            n2(a, b, c, newReserves) -\\n            n3(a, b, c, newReserves) -\\n            n5(a, b, c, newReserves)) / (d1(a, b, c, newReserves));\\n\\n        // Return the difference\\n        return SafeCast.toUint256(newSupply - currentTokensSupply);\\n    }\\n\\n    /// @dev Selling Tokens into the curve will return payment tokens to be refunded\\n    /// @param a maxPrice of the curve / 2\\n    /// @param b inflectionPoint of the curve\\n    /// @param c slope steepness of the curve\\n    /// @param currentTokenSupply current amount of Tokens in the curve\\n    /// @param paymentReserves current mount of payment reserves in the curve\\n    /// @param tokensToSell amount the of Tokens the user wants to sell\\n    function calculatePaymentReturnedFromTokens(\\n        int256 a,\\n        int256 b,\\n        int256 c,\\n        int256 currentTokenSupply,\\n        int256 paymentReserves,\\n        int256 tokensToSell\\n    ) public pure returns (uint256) {\\n        // Supply after Tokens are sold\\n        int256 newSupply = currentTokenSupply - tokensToSell;\\n\\n        // Calc the constant at supply = 0\\n        int256 constantVal = a * ((b.pow2() + c).sqrt());\\n\\n        // Calculate the new reserve amount\\n        int256 newReserves = (a *\\n            (((b - newSupply).pow2() + c).sqrt() + newSupply)) - constantVal;\\n\\n        // Return the difference\\n        return SafeCast.toUint256(paymentReserves - newReserves);\\n    }\\n}\\n\",\"keccak256\":\"0xce155f169debbf553ce10a0189d588261ff06f862f46ae478a4801c84d2ea894\",\"license\":\"GPL-3.0\"},\"contracts/CuratorVault/SigmoidCuratorVault2/ICuratorVault2.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"../../Token/IStandard1155.sol\\\";\\nimport \\\"../../Token/IWMATIC.sol\\\";\\n\\n/// @dev Interface for the curator vault\\ninterface ICuratorVault2 {\\n    function getTokenId(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IWMATIC paymentToken\\n    ) external returns (uint256);\\n\\n    function buyCuratorTokens(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IWMATIC paymentToken,\\n        uint256 paymentAmount,\\n        address mintToAddress,\\n        bool isTakerPosition\\n    ) external returns (uint256);\\n\\n    function sellCuratorTokens(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IWMATIC paymentToken,\\n        uint256 tokensToBurn,\\n        address refundToAddress\\n    ) external returns (uint256);\\n\\n    function curatorTokens() external returns (IStandard1155);\\n}\\n\",\"keccak256\":\"0xf9bfe0889470fdbddf806dc960e6e2d8ea70d22882818ed452ccf756db3eb8f3\",\"license\":\"GPL-3.0\"},\"contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol\\\";\\nimport \\\"@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol\\\";\\nimport \\\"@openzeppelin/contracts/utils/math/SafeCast.sol\\\";\\n\\nimport \\\"../../Token/IStandard1155.sol\\\";\\nimport \\\"../../Config/IAddressManager.sol\\\";\\nimport \\\"../../Token/IWMATIC.sol\\\";\\n\\nimport \\\"./SigmoidCuratorVaultStorage.sol\\\";\\nimport \\\"./Curve/Sigmoid2.sol\\\";\\n\\n/// @title SigmoidCuratorVault\\n/// @dev This contract tracks tokens in a sigmoid bonding curve per Taker NFT.\\n/// When users spend reactions against a Taker NFT, it will use the Curator Liability\\n/// to buy curator tokens against that Taker NFT and allocate to various parties.\\n/// The curator tokens will be priced via the sigmoid curve.  The params that control\\n/// the shape of the sigmoid are set in the parameter manager.\\n/// At any point in time the owners of the curator tokens can sell them back to the\\n/// bonding curve.\\n/// Note: This contract is protected via a permissioned account set in the role manager.  Caution should\\n/// be used as the role owner could renounce the role leaving all future actions disabled.  Additionally,\\n/// if a malicious account was able to obtain the role, they could use it to set values to malicious values.\\n/// See the public documentation website for more details.\\ncontract SigmoidCuratorVault2 is\\n    ReentrancyGuardUpgradeable,\\n    Sigmoid2,\\n    SigmoidCuratorVaultStorageV1\\n{\\n    /// @dev Use the safe methods when interacting with transfers with outside ERC20s\\n    using SafeERC20Upgradeable for IWMATIC;\\n\\n    /// @dev verifies that the calling address is the reaction vault\\n    modifier onlyCuratorVaultPurchaser() {\\n        require(\\n            addressManager.roleManager().isCuratorVaultPurchaser(msg.sender),\\n            \\\"Not Admin\\\"\\n        );\\n        _;\\n    }\\n\\n    /// @dev Event triggered when curator tokens are purchased\\n    event CuratorTokensBought(\\n        uint256 indexed curatorTokenId,\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IERC20Upgradeable paymentToken,\\n        uint256 paymentTokenPaid,\\n        uint256 curatorTokensBought,\\n        bool isTakerPosition\\n    );\\n\\n    /// @dev Event triggered when curator tokens are sold\\n    event CuratorTokensSold(\\n        uint256 indexed curatorTokenId,\\n        uint256 paymentTokenRefunded,\\n        uint256 curatorTokensSold\\n    );\\n\\n    /// @notice initializer to call after deployment,\\n    /// @dev can only be called once\\n    /// @param _addressManager - address manager in the protocol\\n    /// @param _curatorTokens - curator token contract address\\n    /// @param _a - bonding curve param a\\n    /// @param _b - bonding curve param b\\n    /// @param _c - bonding curve param c\\n    function initialize(\\n        address _addressManager,\\n        IStandard1155 _curatorTokens,\\n        uint256 _a,\\n        uint256 _b,\\n        uint256 _c\\n    ) public initializer {\\n        require(address(_addressManager) != address(0x0), ZERO_INPUT);\\n        require(address(_curatorTokens) != address(0x0), ZERO_INPUT);\\n\\n        // Save the address manager\\n        addressManager = IAddressManager(_addressManager);\\n\\n        // Save the curator token contract\\n        curatorTokens = _curatorTokens;\\n\\n        // Save the curve parameters\\n        a = _a;\\n        b = _b;\\n        c = _c;\\n    }\\n\\n    /// @dev get a unique token ID for a given nft address and nft ID\\n    function getTokenId(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IWMATIC paymentToken\\n    ) external pure returns (uint256) {\\n        return _getTokenId(nftChainId, nftAddress, nftId, paymentToken);\\n    }\\n\\n    function _getTokenId(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IERC20Upgradeable paymentToken\\n    ) internal pure returns (uint256) {\\n        return\\n            uint256(\\n                keccak256(\\n                    abi.encode(nftChainId, nftAddress, nftId, paymentToken)\\n                )\\n            );\\n    }\\n\\n    /// @dev Buy curator Tokens when reactions are spent.\\n    /// The reaction vault is the only account allowed to call this.\\n    /// @return Returns the amount of curator tokens purchased.\\n    function buyCuratorTokens(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IWMATIC paymentToken,\\n        uint256 paymentAmount,\\n        address mintToAddress,\\n        bool isTakerPosition\\n    ) external onlyCuratorVaultPurchaser returns (uint256) {\\n        // Get the curator token token ID\\n        uint256 curatorTokenId = _getTokenId(\\n            nftChainId,\\n            nftAddress,\\n            nftId,\\n            paymentToken\\n        );\\n\\n        // Calculate the amount of tokens that will be minted based on the price\\n        uint256 curatorTokenAmount = calculateTokensBoughtFromPayment(\\n            SafeCast.toInt256(a),\\n            SafeCast.toInt256(b),\\n            SafeCast.toInt256(c),\\n            SafeCast.toInt256(curatorTokenSupply[curatorTokenId]),\\n            SafeCast.toInt256(reserves[curatorTokenId]),\\n            SafeCast.toInt256(paymentAmount)\\n        );\\n\\n        // Update the amounts\\n        reserves[curatorTokenId] += paymentAmount;\\n        curatorTokenSupply[curatorTokenId] += curatorTokenAmount;\\n\\n        //\\n        // Pull value from ReactionVault as payment - will always be wrapped as ERC20 in the reaction vault\\n        //\\n        paymentToken.safeTransferFrom(msg.sender, address(this), paymentAmount);\\n\\n        // Mint the tokens\\n        curatorTokens.mint(\\n            mintToAddress,\\n            curatorTokenId,\\n            curatorTokenAmount,\\n            new bytes(0)\\n        );\\n\\n        // Emit the event\\n        emit CuratorTokensBought(\\n            curatorTokenId,\\n            nftChainId,\\n            nftAddress,\\n            nftId,\\n            paymentToken,\\n            paymentAmount,\\n            curatorTokenAmount,\\n            isTakerPosition\\n        );\\n\\n        return curatorTokenAmount;\\n    }\\n\\n    /// @dev Sell curator tokens back into the bonding curve.\\n    /// Any holder who owns tokens can sell them back\\n    /// @return Returns the amount of payment tokens received for the curator tokens.\\n    function sellCuratorTokens(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IWMATIC paymentToken,\\n        uint256 tokensToBurn,\\n        address refundToAddress\\n    ) external nonReentrant returns (uint256) {\\n        require(tokensToBurn > 0, \\\"Invalid 0 input\\\");\\n\\n        // Get the curator token token ID\\n        uint256 curatorTokenId = _getTokenId(\\n            nftChainId,\\n            nftAddress,\\n            nftId,\\n            paymentToken\\n        );\\n\\n        // Burn the curator tokens\\n        curatorTokens.burn(msg.sender, curatorTokenId, tokensToBurn);\\n\\n        // Calculate the amount of tokens that will be minted based on the price\\n        uint256 refundAmount = calculatePaymentReturnedFromTokens(\\n            SafeCast.toInt256(a),\\n            SafeCast.toInt256(b),\\n            SafeCast.toInt256(c),\\n            SafeCast.toInt256(curatorTokenSupply[curatorTokenId]),\\n            SafeCast.toInt256(reserves[curatorTokenId]),\\n            SafeCast.toInt256(tokensToBurn)\\n        );\\n\\n        // Update the amounts\\n        reserves[curatorTokenId] -= refundAmount;\\n        curatorTokenSupply[curatorTokenId] -= tokensToBurn;\\n\\n        // Determine whether to send back ERC20 or native asset\\n        if (\\n            address(paymentToken) ==\\n            address(addressManager.parameterManager().nativeWrappedToken())\\n        ) {\\n            // First, unwrap the sale amount into this address\\n            paymentToken.withdraw(refundAmount);\\n\\n            // Send the unwrapped payment token back (native MATIC)\\n            payable(refundToAddress).transfer(refundAmount);\\n        } else {\\n            // Send payment token back\\n            paymentToken.safeTransfer(refundToAddress, refundAmount);\\n        }\\n\\n        // Emit the event\\n        emit CuratorTokensSold(curatorTokenId, refundAmount, tokensToBurn);\\n\\n        return refundAmount;\\n    }\\n\\n    /// @dev Allows WMATIC to be unwrapped to this address\\n    receive() external payable {}\\n\\n    /// @dev Allows the admin account to sweep any MATIC that was accidentally sent\\n    function sweep() external {\\n        require(addressManager.roleManager().isAdmin(msg.sender), \\\"Not Admin\\\");\\n        payable(msg.sender).transfer(address(this).balance);\\n    }\\n}\\n\",\"keccak256\":\"0xad5189ac21240c2bde6581d2b0a7b2718eb32803328b8b446e611f03a89fadcc\",\"license\":\"GPL-3.0\"},\"contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVaultStorage.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"../../Config/IAddressManager.sol\\\";\\nimport \\\"./ICuratorVault2.sol\\\";\\n\\n/// @title SigmoidCuratorVaultStorage\\n/// @dev This contract will hold all local variables for the SigmoidCuratorVault Contract\\n/// When upgrading the protocol, inherit from this contract on the V2 version and change the\\n/// CuratorVault to inherit from the later version.  This ensures there are no storage layout\\n/// corruptions when upgrading.\\nabstract contract SigmoidCuratorVaultStorageV1 is ICuratorVault2 {\\n    /// @dev Input error for 0 value param\\n    string internal constant ZERO_INPUT = \\\"Invalid 0 input\\\";\\n\\n    /// @dev local reference to the address manager contract\\n    IAddressManager public addressManager;\\n\\n    /// @dev tracks the total supply for each curator Token token ID\\n    mapping(uint256 => uint256) public curatorTokenSupply;\\n\\n    /// @dev tracks the total payment amount held for each curator Token token ID\\n    mapping(uint256 => uint256) public reserves;\\n\\n    /// @dev the 1155 contract to track curator Tokens\\n    IStandard1155 public curatorTokens;\\n\\n    /// @dev Curve parameters\\n    uint256 public a;\\n    uint256 public b;\\n    uint256 public c;\\n}\\n\\n/// On the next version of the protocol, if new variables are added, put them in the below\\n/// contract and use this as the inheritance chain.\\n/**\\ncontract SigmoidCuratorVaultStorageV2 is SigmoidCuratorVaultStorageV1 {\\n  address newVariable;\\n}\\n */\\n\",\"keccak256\":\"0x5ab1ccc298da4b6a54a37d765978a4678eea559e55941003526639342e32cc6d\",\"license\":\"GPL-3.0\"},\"contracts/Maker/IMakerRegistrar.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\n/// @dev Interface for the maker registrar that supports registering and de-registering NFTs\\ninterface IMakerRegistrar {\\n    /// @dev struct for storing details about a registered NFT\\n    struct NftDetails {\\n        bool registered;\\n        address owner;\\n        address[] creators;\\n        uint256[] creatorSaleBasisPoints;\\n    }\\n\\n    function transformToSourceLookup(uint256 metaId) external returns (uint256);\\n\\n    function deriveSourceId(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId\\n    ) external returns (uint256);\\n\\n    /// @dev lookup for NftDetails from source ID\\n    function sourceToDetailsLookup(uint256)\\n        external\\n        returns (NftDetails memory);\\n\\n    function verifyOwnership(\\n        address nftContractAddress,\\n        uint256 nftId,\\n        address potentialOwner\\n    ) external returns (bool);\\n\\n    function registerNftFromBridge(\\n        address owner,\\n        uint256 chainId,\\n        address nftContractAddress,\\n        uint256 nftId,\\n        address[] memory nftCreatorAddresses,\\n        uint256[] memory creatorSaleBasisPoints,\\n        uint256 optionBits,\\n        string memory ipfsMetadataHash\\n    ) external;\\n\\n    function deRegisterNftFromBridge(\\n        address owner,\\n        uint256 chainId,\\n        address nftContractAddress,\\n        uint256 nftId\\n    ) external;\\n}\\n\",\"keccak256\":\"0xcba279f4966ad3a5d506b0661c847b6593805c2e25fbebb3792d33e71769656f\",\"license\":\"GPL-3.0\"},\"contracts/Parameters/IParameterManager.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"../Permissions/IRoleManager.sol\\\";\\nimport \\\"../Token/IWMATIC.sol\\\";\\n\\ninterface IParameterManager {\\n    /// @dev Getter for the payment token\\n    function paymentToken() external returns (IWMATIC);\\n\\n    /// @dev Setter for the payment token\\n    function setPaymentToken(IWMATIC _paymentToken) external;\\n\\n    /// @dev Getter for the reaction price\\n    function reactionPrice() external returns (uint256);\\n\\n    /// @dev Setter for the reaction price\\n    function setReactionPrice(uint256 _reactionPrice) external;\\n\\n    /// @dev Getter for the cut of purchase price going to the curator liability\\n    function saleCuratorLiabilityBasisPoints() external returns (uint256);\\n\\n    /// @dev Setter for the cut of purchase price going to the curator liability\\n    function setSaleCuratorLiabilityBasisPoints(\\n        uint256 _saleCuratorLiabilityBasisPoints\\n    ) external;\\n\\n    /// @dev Getter for the cut of purchase price going to the referrer\\n    function saleReferrerBasisPoints() external returns (uint256);\\n\\n    /// @dev Setter for the cut of purchase price going to the referrer\\n    function setSaleReferrerBasisPoints(uint256 _saleReferrerBasisPoints)\\n        external;\\n\\n    /// @dev Getter for the cut of spend curator liability going to the taker\\n    function spendTakerBasisPoints() external returns (uint256);\\n\\n    /// @dev Setter for the cut of spend curator liability going to the taker\\n    function setSpendTakerBasisPoints(uint256 _spendTakerBasisPoints) external;\\n\\n    /// @dev Getter for the cut of spend curator liability going to the taker\\n    function spendReferrerBasisPoints() external returns (uint256);\\n\\n    /// @dev Setter for the cut of spend curator liability going to the referrer\\n    function setSpendReferrerBasisPoints(uint256 _spendReferrerBasisPoints)\\n        external;\\n\\n    /// @dev Getter for the check to see if a curator vault is allowed to be used\\n    function approvedCuratorVaults(address potentialVault)\\n        external\\n        returns (bool);\\n\\n    /// @dev Setter for the list of curator vaults allowed to be used\\n    function setApprovedCuratorVaults(address vault, bool approved) external;\\n\\n    /// @dev Getter for the native wrapped ERC20 token (e.g. WMATIC)\\n    function nativeWrappedToken() external returns (IERC20Upgradeable);\\n\\n    /// @dev Setter for the native wrapped ERC20 token (e.g. WMATIC)\\n    function setNativeWrappedToken(IERC20Upgradeable _nativeWrappedToken)\\n        external;\\n\\n    /// @dev Setter for free reaction limit\\n    function freeReactionLimit() external returns (uint256);\\n\\n    /// @dev Setter for free reaction limit\\n    function setFreeReactionLimit(uint256 limit) external;\\n}\\n\",\"keccak256\":\"0x091430591a4f7b0d4ac989f9bc08a26c91ae3a01cc4eedc5d4a4cf839c524e04\",\"license\":\"GPL-3.0\"},\"contracts/Permissions/IRoleManager.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\ninterface IRoleManager {\\n    /// @dev Determines if the specified address has capability to mint and burn reaction NFTs\\n    /// @param potentialAddress Address to check\\n    function isAdmin(address potentialAddress) external view returns (bool);\\n\\n    /// @dev Determines if the specified address has permission to udpate addresses in the protocol\\n    /// @param potentialAddress Address to check\\n    function isAddressManagerAdmin(address potentialAddress)\\n        external\\n        view\\n        returns (bool);\\n\\n    /// @dev Determines if the specified address has permission to update parameters in the protocol\\n    /// @param potentialAddress Address to check\\n    function isParameterManagerAdmin(address potentialAddress)\\n        external\\n        view\\n        returns (bool);\\n\\n    /// @dev Determines if the specified address has permission to to mint and burn reaction NFTs\\n    /// @param potentialAddress Address to check\\n    function isReactionNftAdmin(address potentialAddress)\\n        external\\n        view\\n        returns (bool);\\n\\n    /// @dev Determines if the specified address has permission to purchase curator vault tokens\\n    /// @param potentialAddress Address to check\\n    function isCuratorVaultPurchaser(address potentialAddress)\\n        external\\n        view\\n        returns (bool);\\n\\n    /// @dev Determines if the specified address has permission to mint and burn curator tokens\\n    /// @param potentialAddress Address to check\\n    function isCuratorTokenAdmin(address potentialAddress)\\n        external\\n        view\\n        returns (bool);\\n}\\n\",\"keccak256\":\"0x335b249b073e02dd1ca255772734a1f21909694cf774e8c00f04c8095bf9eb30\",\"license\":\"GPL-3.0\"},\"contracts/Reactions/IReactionVault.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\nimport \\\"../Token/IWMATIC.sol\\\";\\n\\n/// @dev Interface for the ReactionVault that supports buying and spending reactions\\ninterface IReactionVault {\\n    struct ReactionPriceDetails {\\n        IWMATIC paymentToken;\\n        uint256 reactionPrice;\\n        uint256 saleCuratorLiabilityBasisPoints;\\n    }\\n}\\n\",\"keccak256\":\"0x686da314820d3b0a9eaa7409a6885bf49021f2906430167f610cdb047b46dc1b\",\"license\":\"GPL-3.0\"},\"contracts/Token/IStandard1155.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\n/// @dev Interface for the Standard1155 toke contract.\\ninterface IStandard1155 {\\n    /// @dev Allows a priviledged account to mint tokens to the specified address\\n    function mint(\\n        address to,\\n        uint256 id,\\n        uint256 amount,\\n        bytes memory data\\n    ) external;\\n\\n    function burn(\\n        address from,\\n        uint256 id,\\n        uint256 amount\\n    ) external;\\n}\\n\",\"keccak256\":\"0x4d68249e8c10bd9aab5ae4dce0c72c88ac899a451b8624c409780cd60e88abc4\",\"license\":\"GPL-3.0\"},\"contracts/Token/IWMATIC.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol\\\";\\n\\n/// @dev Interface for interacting with the wrapped matic token contract\\ninterface IWMATIC is IERC20Upgradeable {\\n    // Send MATIC directly to contract\\n    receive() external payable;\\n\\n    // Call deposit directly\\n    function deposit() external payable;\\n\\n    // Withdraw wrapped tokens into MATIC\\n    function withdraw(uint256 wad) external;\\n}\\n\",\"keccak256\":\"0x24dc1098e5e0ac44ae003cd466dd7d8693b2b5591804cf1f7d9600195b6d7d1c\",\"license\":\"GPL-3.0\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b5061188b806100206000396000f3fe6080604052600436106100c15760003560e01c806367e9dbcb1161006f57806367e9dbcb146101b05780636893baf8146101d05780638334278d146101f0578063c3da42b81461021d578063c9ff430c14610233578063d13f90b414610260578063d6cec5b71461028057600080fd5b80630dbe671f146100cd57806317e1816c146100f65780631f2a8b061461011657806323115b991461013657806335faa416146101635780633ab76e9f1461017a5780634df7e3d01461019a57600080fd5b366100c857005b600080fd5b3480156100d957600080fd5b506100e360375481565b6040519081526020015b60405180910390f35b34801561010257600080fd5b506100e36101113660046113b9565b6102a0565b34801561012257600080fd5b506100e3610131366004611403565b6102b7565b34801561014257600080fd5b50603654610156906001600160a01b031681565b6040516100ed919061146a565b34801561016f57600080fd5b5061017861067a565b005b34801561018657600080fd5b50603354610156906001600160a01b031681565b3480156101a657600080fd5b506100e360385481565b3480156101bc57600080fd5b506100e36101cb36600461148c565b6107c7565b3480156101dc57600080fd5b506100e36101eb366004611507565b610ab5565b3480156101fc57600080fd5b506100e361020b36600461154a565b60356020526000908152604090205481565b34801561022957600080fd5b506100e360395481565b34801561023f57600080fd5b506100e361024e36600461154a565b60346020526000908152604090205481565b34801561026c57600080fd5b5061017861027b366004611563565b610b77565b34801561028c57600080fd5b506100e361029b366004611507565b610d10565b60006102ae85858585610d9e565b95945050505050565b6000600260015414156103115760405162461bcd60e51b815260206004820152601f60248201527f5265656e7472616e637947756172643a207265656e7472616e742063616c6c0060448201526064015b60405180910390fd5b6002600155826103555760405162461bcd60e51b815260206004820152600f60248201526e125b9d985b1a59080c081a5b9c1d5d608a1b6044820152606401610308565b600061036388888888610d9e565b603654604051637a94c56560e11b815233600482015260248101839052604481018790529192506001600160a01b03169063f5298aca90606401600060405180830381600087803b1580156103b757600080fd5b505af11580156103cb573d6000803e3d6000fd5b50505050600061042e6103df603754610de7565b6103ea603854610de7565b6103f5603954610de7565b60008681526034602052604090205461040d90610de7565b60008781526035602052604090205461042590610de7565b61029b8b610de7565b90508060356000848152602001908152602001600020600082825461045391906115ca565b9091555050600082815260346020526040812080548792906104769084906115ca565b90915550506033546040805163b27bcea160e01b815290516001600160a01b039092169163b27bcea1916004808201926020929091908290030181600087803b1580156104c257600080fd5b505af11580156104d6573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104fa91906115e1565b6001600160a01b031663e4301ec56040518163ffffffff1660e01b8152600401602060405180830381600087803b15801561053457600080fd5b505af1158015610548573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061056c91906115e1565b6001600160a01b0316866001600160a01b0316141561061b57604051632e1a7d4d60e01b8152600481018290526001600160a01b03871690632e1a7d4d90602401600060405180830381600087803b1580156105c757600080fd5b505af11580156105db573d6000803e3d6000fd5b50506040516001600160a01b038716925083156108fc02915083906000818181858888f19350505050158015610615573d6000803e3d6000fd5b5061062f565b61062f6001600160a01b0387168583610e55565b604080518281526020810187905283917fdfafe7ef66b19c68e35d3237d07d7c4bf90008019e12ea9e2adb12fdfdeb7917910160405180910390a26001805598975050505050505050565b603360009054906101000a90046001600160a01b03166001600160a01b031662435da56040518163ffffffff1660e01b8152600401602060405180830381600087803b1580156106c957600080fd5b505af11580156106dd573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061070191906115e1565b6001600160a01b03166324d7806c336040518263ffffffff1660e01b815260040161072c919061146a565b60206040518083038186803b15801561074457600080fd5b505afa158015610758573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061077c91906115fe565b6107985760405162461bcd60e51b81526004016103089061161b565b60405133904780156108fc02916000818181858888f193505050501580156107c4573d6000803e3d6000fd5b50565b6033546040805162435da560e01b815290516000926001600160a01b03169162435da591600480830192602092919082900301818787803b15801561080b57600080fd5b505af115801561081f573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061084391906115e1565b6001600160a01b0316638e975b35336040518263ffffffff1660e01b815260040161086e919061146a565b60206040518083038186803b15801561088657600080fd5b505afa15801561089a573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906108be91906115fe565b6108da5760405162461bcd60e51b81526004016103089061161b565b60006108e889898989610d9e565b905060006109496108fa603754610de7565b610905603854610de7565b610910603954610de7565b60008681526034602052604090205461092890610de7565b60008781526035602052604090205461094090610de7565b6101eb8c610de7565b90508560356000848152602001908152602001600020600082825461096e919061163e565b90915550506000828152603460205260408120805483929061099190849061163e565b909155506109ac90506001600160a01b038816333089610ebd565b6036546001600160a01b031663731133e986848460006040519080825280601f01601f1916602001820160405280156109ec576020820181803683370190505b506040518563ffffffff1660e01b8152600401610a0c94939291906116ae565b600060405180830381600087803b158015610a2657600080fd5b505af1158015610a3a573d6000803e3d6000fd5b5050604080518d81526001600160a01b03808e1660208301529181018c9052908a1660608201526080810189905260a0810184905286151560c08201528492507f7ef62f60fd6b2d809eedbc8d39b5707298923d32fa9b56d3446ae566780b8f10915060e00160405180910390a29998505050505050505050565b600080610ac283856116e5565b90506000610ad289898985610efb565b610ade8a8a8a86610f70565b610aea8b8b8b87610f9b565b610af68c8c8c88610fb3565b610b028d8d8d89610fc8565b610b0e8e8e8e8a610ff7565b610b1a8f8f8f8b611019565b610b2491906116e5565b610b2e9190611726565b610b389190611726565b610b429190611726565b610b4c9190611726565b610b569190611765565b9050610b6a610b658783611726565b611024565b9998505050505050505050565b600054610100900460ff16610b925760005460ff1615610b96565b303b155b610bf95760405162461bcd60e51b815260206004820152602e60248201527f496e697469616c697a61626c653a20636f6e747261637420697320616c72656160448201526d191e481a5b9a5d1a585b1a5e995960921b6064820152608401610308565b600054610100900460ff16158015610c1b576000805461ffff19166101011790555b60408051808201909152600f81526e125b9d985b1a59080c081a5b9c1d5d608a1b60208201526001600160a01b038716610c685760405162461bcd60e51b815260040161030891906117a1565b5060408051808201909152600f81526e125b9d985b1a59080c081a5b9c1d5d608a1b60208201526001600160a01b038616610cb65760405162461bcd60e51b815260040161030891906117a1565b50603380546001600160a01b038089166001600160a01b03199283161790925560368054928816929091169190911790556037849055603883905560398290558015610d08576000805461ff00191690555b505050505050565b600080610d1d8386611726565b90506000610d3d87610d2e8a611076565b610d3891906116e5565b611088565b610d47908a6117b4565b905060008183610d638a610d2e610d5e848f611726565b611076565b610d6d91906116e5565b610d77908c6117b4565b610d819190611726565b9050610d90610b658288611726565b9a9950505050505050505050565b604080516020808201969096526001600160a01b0394851681830152606081019390935292166080808301919091528251808303909101815260a0909101909152805191012090565b60006001600160ff1b03821115610e515760405162461bcd60e51b815260206004820152602860248201527f53616665436173743a2076616c756520646f65736e27742066697420696e2061604482015267371034b73a191a9b60c11b6064820152608401610308565b5090565b6040516001600160a01b038316602482015260448101829052610eb890849063a9059cbb60e01b906064015b60408051601f198184030181529190526020810180516001600160e01b03166001600160e01b031990931692909217909152611138565b505050565b6040516001600160a01b0380851660248301528316604482015260648101829052610ef59085906323b872dd60e01b90608401610e81565b50505050565b6000610f0682611076565b610f119060026117b4565b8285610f1e8860046117b4565b610f2891906117b4565b610f3291906117b4565b84610f3c88611076565b610f48906001196117b4565b610f5291906117b4565b610f5c9190611726565b610f6691906116e5565b6102ae90866117b4565b6000610f7b82611076565b84610f878760016117b4565b610f9191906117b4565b6102ae91906117b4565b60008183610fa887611076565b610f879060026117b4565b600081610fbf85611076565b610fa887611076565b6000610fd783610d2e86611076565b8285610fe288611076565b610fed9060026117b4565b610f8791906117b4565b600061100683610d2e86611076565b61100f83611076565b610f9190876117b4565b60006102ae8261120a565b600080821215610e515760405162461bcd60e51b815260206004820181905260248201527f53616665436173743a2076616c7565206d75737420626520706f7369746976656044820152606401610308565b600061108282806117b4565b92915050565b6000808212156110ca5760405162461bcd60e51b815260206004820152600d60248201526c139959d85d1a5d99481cdc5c9d609a1b6044820152606401610308565b600382131561112957508060006110e2600283611765565b6110ed9060016116e5565b90505b81811215611123579050806002816111088186611765565b61111291906116e5565b61111c9190611765565b90506110f0565b50919050565b8115611133575060015b919050565b600061118d826040518060400160405280602081526020017f5361666545524332303a206c6f772d6c6576656c2063616c6c206661696c6564815250856001600160a01b03166112219092919063ffffffff16565b805190915015610eb857808060200190518101906111ab91906115fe565b610eb85760405162461bcd60e51b815260206004820152602a60248201527f5361666545524332303a204552433230206f7065726174696f6e20646964206e6044820152691bdd081cdd58d8d9595960b21b6064820152608401610308565b60008161121781806117b4565b61108291906117b4565b6060611230848460008561123a565b90505b9392505050565b60608247101561129b5760405162461bcd60e51b815260206004820152602660248201527f416464726573733a20696e73756666696369656e742062616c616e636520666f6044820152651c8818d85b1b60d21b6064820152608401610308565b6001600160a01b0385163b6112f25760405162461bcd60e51b815260206004820152601d60248201527f416464726573733a2063616c6c20746f206e6f6e2d636f6e74726163740000006044820152606401610308565b600080866001600160a01b0316858760405161130e9190611839565b60006040518083038185875af1925050503d806000811461134b576040519150601f19603f3d011682016040523d82523d6000602084013e611350565b606091505b509150915061136082828661136b565b979650505050505050565b6060831561137a575081611233565b82511561138a5782518084602001fd5b8160405162461bcd60e51b815260040161030891906117a1565b6001600160a01b03811681146107c457600080fd5b600080600080608085870312156113cf57600080fd5b8435935060208501356113e1816113a4565b92506040850135915060608501356113f8816113a4565b939692955090935050565b60008060008060008060c0878903121561141c57600080fd5b86359550602087013561142e816113a4565b9450604087013593506060870135611445816113a4565b92506080870135915060a087013561145c816113a4565b809150509295509295509295565b6001600160a01b0391909116815260200190565b80151581146107c457600080fd5b600080600080600080600060e0888a0312156114a757600080fd5b8735965060208801356114b9816113a4565b95506040880135945060608801356114d0816113a4565b93506080880135925060a08801356114e7816113a4565b915060c08801356114f78161147e565b8091505092959891949750929550565b60008060008060008060c0878903121561152057600080fd5b505084359660208601359650604086013595606081013595506080810135945060a0013592509050565b60006020828403121561155c57600080fd5b5035919050565b600080600080600060a0868803121561157b57600080fd5b8535611586816113a4565b94506020860135611596816113a4565b94979496505050506040830135926060810135926080909101359150565b634e487b7160e01b600052601160045260246000fd5b6000828210156115dc576115dc6115b4565b500390565b6000602082840312156115f357600080fd5b8151611233816113a4565b60006020828403121561161057600080fd5b81516112338161147e565b6020808252600990820152682737ba1020b236b4b760b91b604082015260600190565b60008219821115611651576116516115b4565b500190565b60005b83811015611671578181015183820152602001611659565b83811115610ef55750506000910152565b6000815180845261169a816020860160208601611656565b601f01601f19169290920160200192915050565b60018060a01b03851681528360208201528260408201526080606082015260006116db6080830184611682565b9695505050505050565b600080821280156001600160ff1b0384900385131615611707576117076115b4565b600160ff1b8390038412811615611720576117206115b4565b50500190565b60008083128015600160ff1b850184121615611744576117446115b4565b6001600160ff1b038401831381161561175f5761175f6115b4565b50500390565b60008261178257634e487b7160e01b600052601260045260246000fd5b600160ff1b82146000198414161561179c5761179c6115b4565b500590565b6020815260006112336020830184611682565b60006001600160ff1b03818413828413808216868404861116156117da576117da6115b4565b600160ff1b60008712828116878305891216156117f9576117f96115b4565b60008712925087820587128484161615611815576118156115b4565b8785058712818416161561182b5761182b6115b4565b505050929093029392505050565b6000825161184b818460208701611656565b919091019291505056fea2646970667358221220b4c1d2aaa74918d1f6f363c69da69d45da4af11f4f11f7ed66d387e455eb19a464736f6c63430008090033",
+  "deployedBytecode": "0x6080604052600436106100c15760003560e01c806367e9dbcb1161006f57806367e9dbcb146101b05780636893baf8146101d05780638334278d146101f0578063c3da42b81461021d578063c9ff430c14610233578063d13f90b414610260578063d6cec5b71461028057600080fd5b80630dbe671f146100cd57806317e1816c146100f65780631f2a8b061461011657806323115b991461013657806335faa416146101635780633ab76e9f1461017a5780634df7e3d01461019a57600080fd5b366100c857005b600080fd5b3480156100d957600080fd5b506100e360375481565b6040519081526020015b60405180910390f35b34801561010257600080fd5b506100e36101113660046113b9565b6102a0565b34801561012257600080fd5b506100e3610131366004611403565b6102b7565b34801561014257600080fd5b50603654610156906001600160a01b031681565b6040516100ed919061146a565b34801561016f57600080fd5b5061017861067a565b005b34801561018657600080fd5b50603354610156906001600160a01b031681565b3480156101a657600080fd5b506100e360385481565b3480156101bc57600080fd5b506100e36101cb36600461148c565b6107c7565b3480156101dc57600080fd5b506100e36101eb366004611507565b610ab5565b3480156101fc57600080fd5b506100e361020b36600461154a565b60356020526000908152604090205481565b34801561022957600080fd5b506100e360395481565b34801561023f57600080fd5b506100e361024e36600461154a565b60346020526000908152604090205481565b34801561026c57600080fd5b5061017861027b366004611563565b610b77565b34801561028c57600080fd5b506100e361029b366004611507565b610d10565b60006102ae85858585610d9e565b95945050505050565b6000600260015414156103115760405162461bcd60e51b815260206004820152601f60248201527f5265656e7472616e637947756172643a207265656e7472616e742063616c6c0060448201526064015b60405180910390fd5b6002600155826103555760405162461bcd60e51b815260206004820152600f60248201526e125b9d985b1a59080c081a5b9c1d5d608a1b6044820152606401610308565b600061036388888888610d9e565b603654604051637a94c56560e11b815233600482015260248101839052604481018790529192506001600160a01b03169063f5298aca90606401600060405180830381600087803b1580156103b757600080fd5b505af11580156103cb573d6000803e3d6000fd5b50505050600061042e6103df603754610de7565b6103ea603854610de7565b6103f5603954610de7565b60008681526034602052604090205461040d90610de7565b60008781526035602052604090205461042590610de7565b61029b8b610de7565b90508060356000848152602001908152602001600020600082825461045391906115ca565b9091555050600082815260346020526040812080548792906104769084906115ca565b90915550506033546040805163b27bcea160e01b815290516001600160a01b039092169163b27bcea1916004808201926020929091908290030181600087803b1580156104c257600080fd5b505af11580156104d6573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104fa91906115e1565b6001600160a01b031663e4301ec56040518163ffffffff1660e01b8152600401602060405180830381600087803b15801561053457600080fd5b505af1158015610548573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061056c91906115e1565b6001600160a01b0316866001600160a01b0316141561061b57604051632e1a7d4d60e01b8152600481018290526001600160a01b03871690632e1a7d4d90602401600060405180830381600087803b1580156105c757600080fd5b505af11580156105db573d6000803e3d6000fd5b50506040516001600160a01b038716925083156108fc02915083906000818181858888f19350505050158015610615573d6000803e3d6000fd5b5061062f565b61062f6001600160a01b0387168583610e55565b604080518281526020810187905283917fdfafe7ef66b19c68e35d3237d07d7c4bf90008019e12ea9e2adb12fdfdeb7917910160405180910390a26001805598975050505050505050565b603360009054906101000a90046001600160a01b03166001600160a01b031662435da56040518163ffffffff1660e01b8152600401602060405180830381600087803b1580156106c957600080fd5b505af11580156106dd573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061070191906115e1565b6001600160a01b03166324d7806c336040518263ffffffff1660e01b815260040161072c919061146a565b60206040518083038186803b15801561074457600080fd5b505afa158015610758573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061077c91906115fe565b6107985760405162461bcd60e51b81526004016103089061161b565b60405133904780156108fc02916000818181858888f193505050501580156107c4573d6000803e3d6000fd5b50565b6033546040805162435da560e01b815290516000926001600160a01b03169162435da591600480830192602092919082900301818787803b15801561080b57600080fd5b505af115801561081f573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061084391906115e1565b6001600160a01b0316638e975b35336040518263ffffffff1660e01b815260040161086e919061146a565b60206040518083038186803b15801561088657600080fd5b505afa15801561089a573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906108be91906115fe565b6108da5760405162461bcd60e51b81526004016103089061161b565b60006108e889898989610d9e565b905060006109496108fa603754610de7565b610905603854610de7565b610910603954610de7565b60008681526034602052604090205461092890610de7565b60008781526035602052604090205461094090610de7565b6101eb8c610de7565b90508560356000848152602001908152602001600020600082825461096e919061163e565b90915550506000828152603460205260408120805483929061099190849061163e565b909155506109ac90506001600160a01b038816333089610ebd565b6036546001600160a01b031663731133e986848460006040519080825280601f01601f1916602001820160405280156109ec576020820181803683370190505b506040518563ffffffff1660e01b8152600401610a0c94939291906116ae565b600060405180830381600087803b158015610a2657600080fd5b505af1158015610a3a573d6000803e3d6000fd5b5050604080518d81526001600160a01b03808e1660208301529181018c9052908a1660608201526080810189905260a0810184905286151560c08201528492507f7ef62f60fd6b2d809eedbc8d39b5707298923d32fa9b56d3446ae566780b8f10915060e00160405180910390a29998505050505050505050565b600080610ac283856116e5565b90506000610ad289898985610efb565b610ade8a8a8a86610f70565b610aea8b8b8b87610f9b565b610af68c8c8c88610fb3565b610b028d8d8d89610fc8565b610b0e8e8e8e8a610ff7565b610b1a8f8f8f8b611019565b610b2491906116e5565b610b2e9190611726565b610b389190611726565b610b429190611726565b610b4c9190611726565b610b569190611765565b9050610b6a610b658783611726565b611024565b9998505050505050505050565b600054610100900460ff16610b925760005460ff1615610b96565b303b155b610bf95760405162461bcd60e51b815260206004820152602e60248201527f496e697469616c697a61626c653a20636f6e747261637420697320616c72656160448201526d191e481a5b9a5d1a585b1a5e995960921b6064820152608401610308565b600054610100900460ff16158015610c1b576000805461ffff19166101011790555b60408051808201909152600f81526e125b9d985b1a59080c081a5b9c1d5d608a1b60208201526001600160a01b038716610c685760405162461bcd60e51b815260040161030891906117a1565b5060408051808201909152600f81526e125b9d985b1a59080c081a5b9c1d5d608a1b60208201526001600160a01b038616610cb65760405162461bcd60e51b815260040161030891906117a1565b50603380546001600160a01b038089166001600160a01b03199283161790925560368054928816929091169190911790556037849055603883905560398290558015610d08576000805461ff00191690555b505050505050565b600080610d1d8386611726565b90506000610d3d87610d2e8a611076565b610d3891906116e5565b611088565b610d47908a6117b4565b905060008183610d638a610d2e610d5e848f611726565b611076565b610d6d91906116e5565b610d77908c6117b4565b610d819190611726565b9050610d90610b658288611726565b9a9950505050505050505050565b604080516020808201969096526001600160a01b0394851681830152606081019390935292166080808301919091528251808303909101815260a0909101909152805191012090565b60006001600160ff1b03821115610e515760405162461bcd60e51b815260206004820152602860248201527f53616665436173743a2076616c756520646f65736e27742066697420696e2061604482015267371034b73a191a9b60c11b6064820152608401610308565b5090565b6040516001600160a01b038316602482015260448101829052610eb890849063a9059cbb60e01b906064015b60408051601f198184030181529190526020810180516001600160e01b03166001600160e01b031990931692909217909152611138565b505050565b6040516001600160a01b0380851660248301528316604482015260648101829052610ef59085906323b872dd60e01b90608401610e81565b50505050565b6000610f0682611076565b610f119060026117b4565b8285610f1e8860046117b4565b610f2891906117b4565b610f3291906117b4565b84610f3c88611076565b610f48906001196117b4565b610f5291906117b4565b610f5c9190611726565b610f6691906116e5565b6102ae90866117b4565b6000610f7b82611076565b84610f878760016117b4565b610f9191906117b4565b6102ae91906117b4565b60008183610fa887611076565b610f879060026117b4565b600081610fbf85611076565b610fa887611076565b6000610fd783610d2e86611076565b8285610fe288611076565b610fed9060026117b4565b610f8791906117b4565b600061100683610d2e86611076565b61100f83611076565b610f9190876117b4565b60006102ae8261120a565b600080821215610e515760405162461bcd60e51b815260206004820181905260248201527f53616665436173743a2076616c7565206d75737420626520706f7369746976656044820152606401610308565b600061108282806117b4565b92915050565b6000808212156110ca5760405162461bcd60e51b815260206004820152600d60248201526c139959d85d1a5d99481cdc5c9d609a1b6044820152606401610308565b600382131561112957508060006110e2600283611765565b6110ed9060016116e5565b90505b81811215611123579050806002816111088186611765565b61111291906116e5565b61111c9190611765565b90506110f0565b50919050565b8115611133575060015b919050565b600061118d826040518060400160405280602081526020017f5361666545524332303a206c6f772d6c6576656c2063616c6c206661696c6564815250856001600160a01b03166112219092919063ffffffff16565b805190915015610eb857808060200190518101906111ab91906115fe565b610eb85760405162461bcd60e51b815260206004820152602a60248201527f5361666545524332303a204552433230206f7065726174696f6e20646964206e6044820152691bdd081cdd58d8d9595960b21b6064820152608401610308565b60008161121781806117b4565b61108291906117b4565b6060611230848460008561123a565b90505b9392505050565b60608247101561129b5760405162461bcd60e51b815260206004820152602660248201527f416464726573733a20696e73756666696369656e742062616c616e636520666f6044820152651c8818d85b1b60d21b6064820152608401610308565b6001600160a01b0385163b6112f25760405162461bcd60e51b815260206004820152601d60248201527f416464726573733a2063616c6c20746f206e6f6e2d636f6e74726163740000006044820152606401610308565b600080866001600160a01b0316858760405161130e9190611839565b60006040518083038185875af1925050503d806000811461134b576040519150601f19603f3d011682016040523d82523d6000602084013e611350565b606091505b509150915061136082828661136b565b979650505050505050565b6060831561137a575081611233565b82511561138a5782518084602001fd5b8160405162461bcd60e51b815260040161030891906117a1565b6001600160a01b03811681146107c457600080fd5b600080600080608085870312156113cf57600080fd5b8435935060208501356113e1816113a4565b92506040850135915060608501356113f8816113a4565b939692955090935050565b60008060008060008060c0878903121561141c57600080fd5b86359550602087013561142e816113a4565b9450604087013593506060870135611445816113a4565b92506080870135915060a087013561145c816113a4565b809150509295509295509295565b6001600160a01b0391909116815260200190565b80151581146107c457600080fd5b600080600080600080600060e0888a0312156114a757600080fd5b8735965060208801356114b9816113a4565b95506040880135945060608801356114d0816113a4565b93506080880135925060a08801356114e7816113a4565b915060c08801356114f78161147e565b8091505092959891949750929550565b60008060008060008060c0878903121561152057600080fd5b505084359660208601359650604086013595606081013595506080810135945060a0013592509050565b60006020828403121561155c57600080fd5b5035919050565b600080600080600060a0868803121561157b57600080fd5b8535611586816113a4565b94506020860135611596816113a4565b94979496505050506040830135926060810135926080909101359150565b634e487b7160e01b600052601160045260246000fd5b6000828210156115dc576115dc6115b4565b500390565b6000602082840312156115f357600080fd5b8151611233816113a4565b60006020828403121561161057600080fd5b81516112338161147e565b6020808252600990820152682737ba1020b236b4b760b91b604082015260600190565b60008219821115611651576116516115b4565b500190565b60005b83811015611671578181015183820152602001611659565b83811115610ef55750506000910152565b6000815180845261169a816020860160208601611656565b601f01601f19169290920160200192915050565b60018060a01b03851681528360208201528260408201526080606082015260006116db6080830184611682565b9695505050505050565b600080821280156001600160ff1b0384900385131615611707576117076115b4565b600160ff1b8390038412811615611720576117206115b4565b50500190565b60008083128015600160ff1b850184121615611744576117446115b4565b6001600160ff1b038401831381161561175f5761175f6115b4565b50500390565b60008261178257634e487b7160e01b600052601260045260246000fd5b600160ff1b82146000198414161561179c5761179c6115b4565b500590565b6020815260006112336020830184611682565b60006001600160ff1b03818413828413808216868404861116156117da576117da6115b4565b600160ff1b60008712828116878305891216156117f9576117f96115b4565b60008712925087820587128484161615611815576118156115b4565b8785058712818416161561182b5761182b6115b4565b505050929093029392505050565b6000825161184b818460208701611656565b919091019291505056fea2646970667358221220b4c1d2aaa74918d1f6f363c69da69d45da4af11f4f11f7ed66d387e455eb19a464736f6c63430008090033",
+  "devdoc": {
+    "details": "This contract tracks tokens in a sigmoid bonding curve per Taker NFT. When users spend reactions against a Taker NFT, it will use the Curator Liability to buy curator tokens against that Taker NFT and allocate to various parties. The curator tokens will be priced via the sigmoid curve.  The params that control the shape of the sigmoid are set in the parameter manager. At any point in time the owners of the curator tokens can sell them back to the bonding curve. Note: This contract is protected via a permissioned account set in the role manager.  Caution should be used as the role owner could renounce the role leaving all future actions disabled.  Additionally, if a malicious account was able to obtain the role, they could use it to set values to malicious values. See the public documentation website for more details.",
+    "events": {
+      "CuratorTokensBought(uint256,uint256,address,uint256,address,uint256,uint256,bool)": {
+        "details": "Event triggered when curator tokens are purchased"
+      },
+      "CuratorTokensSold(uint256,uint256,uint256)": {
+        "details": "Event triggered when curator tokens are sold"
+      }
+    },
+    "kind": "dev",
+    "methods": {
+      "buyCuratorTokens(uint256,address,uint256,address,uint256,address,bool)": {
+        "details": "Buy curator Tokens when reactions are spent. The reaction vault is the only account allowed to call this.",
+        "returns": {
+          "_0": "Returns the amount of curator tokens purchased."
+        }
+      },
+      "calculatePaymentReturnedFromTokens(int256,int256,int256,int256,int256,int256)": {
+        "details": "Selling Tokens into the curve will return payment tokens to be refunded",
+        "params": {
+          "a": "maxPrice of the curve / 2",
+          "b": "inflectionPoint of the curve",
+          "c": "slope steepness of the curve",
+          "currentTokenSupply": "current amount of Tokens in the curve",
+          "paymentReserves": "current mount of payment reserves in the curve",
+          "tokensToSell": "amount the of Tokens the user wants to sell"
+        }
+      },
+      "calculateTokensBoughtFromPayment(int256,int256,int256,int256,int256,int256)": {
+        "details": "Buying into the curve with payment tokens will return Tokens amount to be bought",
+        "params": {
+          "a": "maxPrice of the curve / 2",
+          "b": "inflectionPoint of the curve",
+          "c": "slope steepness of the curve",
+          "currentTokensSupply": "current amount of Tokens in the curve",
+          "paymentReserves": "current mount of payment reserves in the curve",
+          "paymentToSpend": "amount the of payment tokens to buy Tokens with"
+        }
+      },
+      "getTokenId(uint256,address,uint256,address)": {
+        "details": "get a unique token ID for a given nft address and nft ID"
+      },
+      "initialize(address,address,uint256,uint256,uint256)": {
+        "details": "can only be called once",
+        "params": {
+          "_a": "- bonding curve param a",
+          "_addressManager": "- address manager in the protocol",
+          "_b": "- bonding curve param b",
+          "_c": "- bonding curve param c",
+          "_curatorTokens": "- curator token contract address"
+        }
+      },
+      "sellCuratorTokens(uint256,address,uint256,address,uint256,address)": {
+        "details": "Sell curator tokens back into the bonding curve. Any holder who owns tokens can sell them back",
+        "returns": {
+          "_0": "Returns the amount of payment tokens received for the curator tokens."
+        }
+      },
+      "sweep()": {
+        "details": "Allows the admin account to sweep any MATIC that was accidentally sent"
+      }
+    },
+    "title": "SigmoidCuratorVault",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "initialize(address,address,uint256,uint256,uint256)": {
+        "notice": "initializer to call after deployment,"
+      }
+    },
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 2435,
+        "contract": "contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol:SigmoidCuratorVault2",
+        "label": "_initialized",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_bool"
+      },
+      {
+        "astId": 2438,
+        "contract": "contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol:SigmoidCuratorVault2",
+        "label": "_initializing",
+        "offset": 1,
+        "slot": "0",
+        "type": "t_bool"
+      },
+      {
+        "astId": 2516,
+        "contract": "contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol:SigmoidCuratorVault2",
+        "label": "_status",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 2560,
+        "contract": "contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol:SigmoidCuratorVault2",
+        "label": "__gap",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_array(t_uint256)49_storage"
+      },
+      {
+        "astId": 10281,
+        "contract": "contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol:SigmoidCuratorVault2",
+        "label": "addressManager",
+        "offset": 0,
+        "slot": "51",
+        "type": "t_contract(IAddressManager)8328"
+      },
+      {
+        "astId": 10286,
+        "contract": "contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol:SigmoidCuratorVault2",
+        "label": "curatorTokenSupply",
+        "offset": 0,
+        "slot": "52",
+        "type": "t_mapping(t_uint256,t_uint256)"
+      },
+      {
+        "astId": 10291,
+        "contract": "contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol:SigmoidCuratorVault2",
+        "label": "reserves",
+        "offset": 0,
+        "slot": "53",
+        "type": "t_mapping(t_uint256,t_uint256)"
+      },
+      {
+        "astId": 10295,
+        "contract": "contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol:SigmoidCuratorVault2",
+        "label": "curatorTokens",
+        "offset": 0,
+        "slot": "54",
+        "type": "t_contract(IStandard1155)14682"
+      },
+      {
+        "astId": 10298,
+        "contract": "contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol:SigmoidCuratorVault2",
+        "label": "a",
+        "offset": 0,
+        "slot": "55",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 10300,
+        "contract": "contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol:SigmoidCuratorVault2",
+        "label": "b",
+        "offset": 0,
+        "slot": "56",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 10302,
+        "contract": "contracts/CuratorVault/SigmoidCuratorVault2/SigmoidCuratorVault2.sol:SigmoidCuratorVault2",
+        "label": "c",
+        "offset": 0,
+        "slot": "57",
+        "type": "t_uint256"
+      }
+    ],
+    "types": {
+      "t_array(t_uint256)49_storage": {
+        "base": "t_uint256",
+        "encoding": "inplace",
+        "label": "uint256[49]",
+        "numberOfBytes": "1568"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_contract(IAddressManager)8328": {
+        "encoding": "inplace",
+        "label": "contract IAddressManager",
+        "numberOfBytes": "20"
+      },
+      "t_contract(IStandard1155)14682": {
+        "encoding": "inplace",
+        "label": "contract IStandard1155",
+        "numberOfBytes": "20"
+      },
+      "t_mapping(t_uint256,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

@@ -1,23 +1,24 @@
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 
-import { HardhatUserConfig, task } from 'hardhat/config';
-import '@nomiclabs/hardhat-etherscan';
-import '@nomiclabs/hardhat-waffle';
-import '@typechain/hardhat';
+import {HardhatUserConfig, task} from "hardhat/config";
+import "@nomiclabs/hardhat-etherscan";
+import "@nomiclabs/hardhat-waffle";
+import "@typechain/hardhat";
 // import 'hardhat-gas-reporter';
-import 'solidity-coverage';
-import '@openzeppelin/hardhat-upgrades';
-import 'hardhat-contract-sizer';
-import 'hardhat-deploy';
+import "solidity-coverage";
+import "@openzeppelin/hardhat-upgrades";
+import "hardhat-contract-sizer";
+import "hardhat-deploy";
 import "@nomiclabs/hardhat-etherscan";
 
-const NULL_PK = '0000000000000000000000000000000000000000000000000000000000000000' // dummy private key
+const NULL_PK =
+  "0000000000000000000000000000000000000000000000000000000000000000"; // dummy private key
 
 dotenv.config();
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
-task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
+task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners();
 
   for (const account of accounts) {
@@ -30,13 +31,13 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: '0.8.9',
+    version: "0.8.9",
     settings: {
       optimizer: {
         enabled: true,
-        runs: 100
-      }
-    }
+        runs: 100,
+      },
+    },
   },
   // gasReporter: {
   //   currency: 'USD',
@@ -48,32 +49,33 @@ const config: HardhatUserConfig = {
       chainId: 1337,
     },
     localhost: {
-      url: 'http://127.0.0.1:8545',
+      url: "http://127.0.0.1:8545",
     },
     mumbai: {
-      url: 'https://rpc-mumbai.maticvigil.com',
+      url: "https://rpc-mumbai.maticvigil.com",
       accounts: [
-        process.env.DEPLOY_PRIVATE_KEY || NULL_PK // Env should set private key used for deploy
+        process.env.DEPLOY_PRIVATE_KEY || NULL_PK, // Env should set private key used for deploy
       ],
     },
     goerli: {
-      url: process.env.INFURA_RPC_GOERLI || '', // Get infura endpoint from free acct
+      url: process.env.INFURA_RPC_GOERLI || "", // Get infura endpoint from free acct
       accounts: [
-        process.env.DEPLOY_PRIVATE_KEY || NULL_PK // Env should set private key used for deploy
+        process.env.DEPLOY_PRIVATE_KEY || NULL_PK, // Env should set private key used for deploy
       ],
     },
     mainnet: {
-      url: process.env.INFURA_RPC_MAINNET || '', // Get infura endpoint from free acct
+      url: process.env.INFURA_RPC_MAINNET || "", // Get infura endpoint from free acct
       accounts: [
-        process.env.DEPLOY_PRIVATE_KEY || NULL_PK // Env should set private key used for deploy
+        process.env.DEPLOY_PRIVATE_KEY || NULL_PK, // Env should set private key used for deploy
       ],
     },
     polygon: {
-      url: process.env.INFURA_RPC_POLYGON || '', // Get infura endpoint from free acct
+      url: process.env.INFURA_RPC_POLYGON || "", // Get infura endpoint from free acct
       accounts: [
-        process.env.DEPLOY_PRIVATE_KEY || NULL_PK // Env should set private key used for deploy
+        process.env.DEPLOY_PRIVATE_KEY || NULL_PK, // Env should set private key used for deploy
       ],
-    }
+      gasPrice: 52000000000,
+    },
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY, // Get key on etherscan/polygonscan with free account
@@ -86,8 +88,8 @@ const config: HardhatUserConfig = {
     },
   },
   mocha: {
-    timeout: 400000
-  }
+    timeout: 400000,
+  },
 };
 
 export default config;
