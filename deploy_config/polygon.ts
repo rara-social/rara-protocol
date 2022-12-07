@@ -1,29 +1,35 @@
 import DeployConfig from "./types";
 
 const config: DeployConfig = {
-  bondingCurveA: "5000", // 0.5 * 1_000_000 => max price / 2 => 1 is max price of curve
-  bondingCurveB: "10000000", // midpoint is 10m tokens sold
-  bondingCurveC: "29000000000000", // Super flat curve - this is steepness param
-  curatorLiabilityBasisPoints: "9500", // 95% goes to curator liability
-  curatorTokenNftUri:
-    "https://protocol-api.rara.social/internal/curatortoken/{id}",
-  fxChildBridgeAddress: "0x8397259c983751DAf40400790063935a11afa28a", // https://docs.polygon.technology/docs/develop/l1-l2-communication/state-transfer/
+  paymentTokenAddress: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270", // wrapped matic - https://polygonscan.com/address/0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270
+  nativeWrappedTokenAddress: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270", // wrapped matic - https://polygonscan.com/address/0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270
+  reactionPrice: "1000000000000000000", // Base units of payment token with 18 decimals
+  freeReactionLimit: "1",
+
+  bondingCurveA: "3000", // https://docs.google.com/spreadsheets/d/1v2bEkdPGFE-yd0oyfhluhxwykKT_C2fAczIu4brlanc/edit#gid=868493616&range=C2
+  bondingCurveB: "100000", // https://docs.google.com/spreadsheets/d/1v2bEkdPGFE-yd0oyfhluhxwykKT_C2fAczIu4brlanc/edit#gid=868493616&range=C2
+  bondingCurveC: "13800000000", // https://docs.google.com/spreadsheets/d/1v2bEkdPGFE-yd0oyfhluhxwykKT_C2fAczIu4brlanc/edit#gid=868493616&range=C2
+
+  fxChildBridgeAddress: "0x8397259c983751DAf40400790063935a11afa28a",
   fxRootBridgeAddress: "", // Not set for L2
   fxRootCheckPointManager: "", // Not set for L2
-  // paymentTokenAddress: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", // USDC on polygon
-  paymentTokenAddress: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270", // Wrapped Matic on polygon
-  reactionNftUri: "https://protocol-api.rara.social/internal/reaction/{id}",
-  reactionPrice: "1000000", // Base units of payment token with 6 decimals
+
   royaltyRegistry: "0x28EdFcF0Be7E86b07493466e7631a213bDe8eEF2", // deployed royalty registry https://royaltyregistry.xyz/lookup
+
+  curatorLiabilityBasisPoints: "9500", // 95% goes to curator liability
   saleReferrerBasisPoints: "50", // 0.5% goes to the referrer on reaction sale
   spendReferrerBasisPoints: "55", // 0.55% of curator liability goes to the referrer - this is higher because it is a fraction of a fraction
   spendTakerBasisPoints: "525", // 5.25% of curator liability goes to the taker - this is higher because it is a fraction of a fraction
-  curatorTokenContractUri: "",
-  likeTokenNftUri: "",
-  reactionContractUri: "",
-  nativeWrappedTokenAddress: "",
-  freeReactionLimit: "",
-  likeTokenContractUri: "",
+
+  curatorTokenContractUri:
+    "https://protocol-api.rara.social/contract/curatortoken",
+  curatorTokenNftUri:
+    "https://protocol-api.rara.social/internal/curatortoken/{id}",
+  reactionContractUri: "https://protocol-api.rara.social/contract/reaction",
+  reactionNftUri: "https://protocol-api.rara.social/internal/reaction/{id}",
+  likeTokenContractUri:
+    "https://protocol-api.rara.social/internal/contract/like/",
+  likeTokenNftUri: "https://protocol-api.rara.social/internal/like/",
 };
 
 export default config;
