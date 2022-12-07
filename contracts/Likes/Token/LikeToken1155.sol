@@ -48,12 +48,18 @@ contract LikeToken1155 is
     }
 
     /// @dev Allows reaction minter role to mint a like token
-    function mint(address to) external onlyLikeTokenFactory {
+    function mint(address to)
+        external
+        onlyLikeTokenFactory
+        returns (uint256 tokenId)
+    {
         // Increment the id counter
         idCount = idCount + 1;
 
         // Mint the token
         _mint(to, idCount, TOKEN_AMOUNT, new bytes(0));
+
+        return idCount;
     }
 
     /// @dev Allows a like token holder to burn their own token

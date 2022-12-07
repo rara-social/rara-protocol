@@ -11,7 +11,7 @@ interface ILikeToken1155 {
     ) external;
 
     /// @dev Allows a priviledged account to mint a token to the specified address
-    function mint(address to) external;
+    function mint(address to) external returns (uint256);
 
     /// @dev Allows the owner to burn a token to from their address
     function burn(uint256 id) external;

@@ -109,14 +109,17 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   //
   // UserSpend
   //
-  let userSpendKey =
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString();
-  let userSpend = new UserSpend(userSpendKey);
+  let userSpendKey = event.transaction.hash.toHex();
+  let userSpend = UserSpend.load(userSpendKey);
+  if (userSpend == null) {
+    userSpend = new UserSpend(userSpendKey);
+    userSpend.createdAt = event.block.timestamp;
+  }
+
+  // IPFS
   userSpend.user = event.transaction.from;
   userSpend.reaction = event.params.reactionId.toString();
   userSpend.reactionQuantity = event.params.quantity;
-
-  // IPFS
   userSpend.ipfsHash = event.params.ipfsMetadataHash;
   const result = ipfs.cat(event.params.ipfsMetadataHash);
   if (result) {
@@ -137,7 +140,6 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   userSpend.curatorVaultToken = event.params.curatorTokenId.toString();
   userSpend.curatorTokensPurchased = event.params.curatorTokenAmount;
 
-  userSpend.createdAt = event.block.timestamp;
   userSpend.updatedAt = event.block.timestamp;
   userSpend.blockNumber = event.block.number;
   userSpend.save();

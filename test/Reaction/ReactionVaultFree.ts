@@ -232,50 +232,50 @@ describe("ReactionVault Free Reaction", function () {
     // const tokenBalance3 = await likeToken.balanceOf(BOB.address, "3");
     // expect(tokenBalance3).to.equal(1);
   });
-});
 
-it("Should prevent spending more reactions than freeReactionLimit param", async function () {
-  const [OWNER, ALICE, BOB] = await ethers.getSigners();
-  const {reactionVault, testingStandard1155, makerRegistrar, roleManager} =
-    await deploySystem(OWNER);
-  const chainId = (await ethers.provider.getNetwork()).chainId;
+  it("Should prevent spending more reactions than freeReactionLimit param", async function () {
+    const [OWNER, ALICE, BOB] = await ethers.getSigners();
+    const {reactionVault, testingStandard1155, makerRegistrar, roleManager} =
+      await deploySystem(OWNER);
+    const chainId = (await ethers.provider.getNetwork()).chainId;
 
-  // Mint an NFT to Alice
-  const NFT_ID = "1";
-  testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
+    // Mint an NFT to Alice
+    const NFT_ID = "1";
+    testingStandard1155.mint(ALICE.address, NFT_ID, "1", [0]);
 
-  // Register it
-  await makerRegistrar
-    .connect(ALICE)
-    .registerNft(
+    // Register it
+    await makerRegistrar
+      .connect(ALICE)
+      .registerNft(
+        testingStandard1155.address,
+        NFT_ID,
+        ZERO_ADDRESS,
+        "0",
+        "0",
+        ""
+      );
+
+    // Encode the params and hash it to get the meta URI
+    const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
+      chainId,
       testingStandard1155.address,
-      NFT_ID,
-      ZERO_ADDRESS,
-      "0",
-      "0",
-      ""
+      NFT_ID
     );
+    const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-  // Encode the params and hash it to get the meta URI
-  const NFT_SOURCE_ID = await makerRegistrar.deriveSourceId(
-    chainId,
-    testingStandard1155.address,
-    NFT_ID
-  );
-  const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
-
-  // Send two reactions => should reject
-  const tx = await expect(
-    reactionVault.connect(BOB).react(
-      TRANSFORM_ID, // uint256 transformId,
-      2, // uint256 quantity,
-      ZERO_ADDRESS, // address ,
-      0, // uint256 optionBits,
-      chainId, // uint256 takerNftChainId,
-      testingStandard1155.address, // address takerNftAddress,
-      NFT_ID, // uint256 takerNftId,
-      ZERO_ADDRESS, // address curatorVaultOverride,
-      "ipfsMetadataHash" // string memory
-    )
-  ).to.revertedWith(REACTION_QUANTITY_TOO_HIGH);
+    // Send two reactions => should reject
+    const tx = await expect(
+      reactionVault.connect(BOB).react(
+        TRANSFORM_ID, // uint256 transformId,
+        2, // uint256 quantity,
+        ZERO_ADDRESS, // address ,
+        0, // uint256 optionBits,
+        chainId, // uint256 takerNftChainId,
+        testingStandard1155.address, // address takerNftAddress,
+        NFT_ID, // uint256 takerNftId,
+        ZERO_ADDRESS, // address curatorVaultOverride,
+        "ipfsMetadataHash" // string memory
+      )
+    ).to.revertedWith(REACTION_QUANTITY_TOO_HIGH);
+  });
 });

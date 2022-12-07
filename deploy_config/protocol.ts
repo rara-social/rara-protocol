@@ -10,7 +10,8 @@ const DEBUG_LOG = true;
 export const deployProxyContract = async (
   hre: HardhatRuntimeEnvironment,
   name: string,
-  initializeVars: any[]
+  initializeVars: any[],
+  config?: any
 ) => {
   const {deployments, getNamedAccounts} = hre;
   const {deployer} = await getNamedAccounts();
@@ -30,6 +31,7 @@ export const deployProxyContract = async (
       },
     },
     log: DEBUG_LOG,
+    ...config,
   });
 };
 

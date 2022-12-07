@@ -1,8 +1,11 @@
 import {log} from "@graphprotocol/graph-ts";
 
-import {LikeTokenContract} from "../../generated/schema";
+import {LikeTokenContract, UserSpend} from "../../generated/schema";
 
-import {TokenDeployed} from "../../generated/LikeTokenFactory/LikeTokenFactory";
+import {
+  TokenDeployed,
+  TokenMinted,
+} from "../../generated/LikeTokenFactory/LikeTokenFactory";
 
 export function handleTokenDeployed(event: TokenDeployed): void {
   log.log(3, "TokenDeployed");
@@ -28,4 +31,29 @@ export function handleTokenDeployed(event: TokenDeployed): void {
   likeTokenContract.updatedAt = event.block.timestamp;
   likeTokenContract.blockNumber = event.block.number;
   likeTokenContract.save();
+}
+
+export function handleTokenMinted(event: TokenMinted): void {
+  log.log(3, "TokenMinted");
+  // address tokenContract,
+  // uint256 tokenId
+
+  //
+  // UserSpend
+  //
+  // let userSpendKey =
+  //   event.transaction.hash.toHex() + "-" + event.logIndex.toString();
+  let userSpendKey = event.transaction.hash.toHex();
+  let userSpend = UserSpend.load(userSpendKey);
+  if (userSpend == null) {
+    userSpend = new UserSpend(userSpendKey);
+    userSpend.createdAt = event.block.timestamp;
+  }
+
+  userSpend.likeContractAddress = event.params.tokenContract;
+  userSpend.likeTokenId = event.params.tokenId;
+
+  userSpend.updatedAt = event.block.timestamp;
+  userSpend.blockNumber = event.block.number;
+  userSpend.save();
 }

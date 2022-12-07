@@ -1,19 +1,23 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../../v2_test_upgrade/hardhat_contracts.json");
+const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 const {getWallet, chainId} = require("../helpers/utils");
 
 // taker params
-const takerNftChainId = chainId;
-const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
-const takerNftId = "44";
+// const takerNftChainId = chainId;
+// const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
+// const takerNftId = "44";
+
+const takerNftChainId = "80001";
+const takerNftAddress = "0x42213590c2bab33d525ebd9c18518e93b64071ec";
+const takerNftId = "1";
 
 // reaction params
 const transformId =
-  "82422974008605986100164926026435778462042571413439638208706175089232148510666";
+  "51838769411570288691882770256811373976193339503468138957330766858884189282853";
 const optionBits = 1;
-const ipfsMetadataHash = "QmSBE5W5tyz8M7ve4n7Tw3sJgdHqak7k6whsorM7dDKsDL";
+const ipfsMetadataHash = "QmUKKf2PMZdAaa4xuc9fByNVnMHERM9J23CjFt3V4ARcWZ";
 
 async function main() {
   const reactor = await getWallet("reactor");
@@ -53,6 +57,7 @@ async function main() {
     }
   );
   const receipt = await spendReactionTxn.wait();
+  console.log(receipt);
   console.log("done. transactionHash:", receipt.transactionHash);
 }
 

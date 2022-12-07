@@ -140,7 +140,7 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   let factory = await deployProxyContract(hre, "LikeTokenFactory", [
     addressManagerAddress,
     likeTokenImpl.address,
-    config.likeTokenNftUri,
+    config.likeTokenContractUri,
   ]);
 
   //
