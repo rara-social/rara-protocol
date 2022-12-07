@@ -5,13 +5,17 @@ const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 const {getWallet, chainId} = require("../helpers/utils");
 
 // taker params
-const takerNftChainId = chainId;
-const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
-const takerNftId = "44";
+// const takerNftChainId = chainId;
+// const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
+// const takerNftId = "44";
+
+const takerNftChainId = "80001";
+const takerNftAddress = "0x42213590c2bab33d525ebd9c18518e93b64071ec";
+const takerNftId = "1";
 
 // reaction params
 const transformId =
-  "82906877086007806389758105920343200187619257115962312059692578222235975208499";
+  "51838769411570288691882770256811373976193339503468138957330766858884189282853";
 const optionBits = 1;
 const ipfsMetadataHash = "QmUKKf2PMZdAaa4xuc9fByNVnMHERM9J23CjFt3V4ARcWZ";
 

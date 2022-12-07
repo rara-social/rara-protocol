@@ -26635,601 +26635,6 @@
             }
           ]
         },
-        "LikeTokenFactory": {
-          "address": "0x63f7B4bB1154d3DFBC509a52b659719af1f66AdB",
-          "abi": [
-            {
-              "anonymous": false,
-              "inputs": [
-                {
-                  "indexed": false,
-                  "internalType": "address",
-                  "name": "previousAdmin",
-                  "type": "address"
-                },
-                {
-                  "indexed": false,
-                  "internalType": "address",
-                  "name": "newAdmin",
-                  "type": "address"
-                }
-              ],
-              "name": "AdminChanged",
-              "type": "event"
-            },
-            {
-              "anonymous": false,
-              "inputs": [
-                {
-                  "indexed": true,
-                  "internalType": "address",
-                  "name": "implementation",
-                  "type": "address"
-                }
-              ],
-              "name": "Upgraded",
-              "type": "event"
-            },
-            {
-              "stateMutability": "payable",
-              "type": "fallback"
-            },
-            {
-              "inputs": [],
-              "name": "admin",
-              "outputs": [
-                {
-                  "internalType": "address",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "newAdmin",
-                  "type": "address"
-                }
-              ],
-              "name": "changeAdmin",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [],
-              "name": "implementation",
-              "outputs": [
-                {
-                  "internalType": "address",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "newImplementation",
-                  "type": "address"
-                }
-              ],
-              "name": "upgradeTo",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "newImplementation",
-                  "type": "address"
-                },
-                {
-                  "internalType": "bytes",
-                  "name": "data",
-                  "type": "bytes"
-                }
-              ],
-              "name": "upgradeToAndCall",
-              "outputs": [],
-              "stateMutability": "payable",
-              "type": "function"
-            },
-            {
-              "stateMutability": "payable",
-              "type": "receive"
-            },
-            {
-              "anonymous": false,
-              "inputs": [
-                {
-                  "indexed": false,
-                  "internalType": "uint256",
-                  "name": "takerNftChainId",
-                  "type": "uint256"
-                },
-                {
-                  "indexed": false,
-                  "internalType": "address",
-                  "name": "takerNftAddress",
-                  "type": "address"
-                },
-                {
-                  "indexed": false,
-                  "internalType": "uint256",
-                  "name": "takerNftId",
-                  "type": "uint256"
-                },
-                {
-                  "indexed": false,
-                  "internalType": "address",
-                  "name": "deployedContract",
-                  "type": "address"
-                }
-              ],
-              "name": "TokenDeployed",
-              "type": "event"
-            },
-            {
-              "anonymous": false,
-              "inputs": [
-                {
-                  "indexed": false,
-                  "internalType": "address",
-                  "name": "tokenContract",
-                  "type": "address"
-                },
-                {
-                  "indexed": false,
-                  "internalType": "uint256",
-                  "name": "tokenId",
-                  "type": "uint256"
-                }
-              ],
-              "name": "TokenMinted",
-              "type": "event"
-            },
-            {
-              "inputs": [],
-              "name": "addressManager",
-              "outputs": [
-                {
-                  "internalType": "contract IAddressManager",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [],
-              "name": "baseTokenUri",
-              "outputs": [
-                {
-                  "internalType": "string",
-                  "name": "",
-                  "type": "string"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "contract IAddressManager",
-                  "name": "_addressManager",
-                  "type": "address"
-                },
-                {
-                  "internalType": "address",
-                  "name": "_tokenImplementation",
-                  "type": "address"
-                },
-                {
-                  "internalType": "string",
-                  "name": "_baseTokenUri",
-                  "type": "string"
-                }
-              ],
-              "name": "initialize",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "targetAddress",
-                  "type": "address"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "takerNftChainId",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "address",
-                  "name": "takerNftAddress",
-                  "type": "address"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "takerNftId",
-                  "type": "uint256"
-                }
-              ],
-              "name": "issueLikeToken",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "name": "likeTokens",
-              "outputs": [
-                {
-                  "internalType": "contract ILikeToken1155",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [],
-              "name": "tokenImplementation",
-              "outputs": [
-                {
-                  "internalType": "address",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "initialLogic",
-                  "type": "address"
-                },
-                {
-                  "internalType": "address",
-                  "name": "initialAdmin",
-                  "type": "address"
-                },
-                {
-                  "internalType": "bytes",
-                  "name": "_data",
-                  "type": "bytes"
-                }
-              ],
-              "stateMutability": "payable",
-              "type": "constructor"
-            }
-          ]
-        },
-        "LikeTokenFactory_Implementation": {
-          "address": "0xC8Ee4411d958ebBFCC3E2D28bAbd34851c0CcCCc",
-          "abi": [
-            {
-              "anonymous": false,
-              "inputs": [
-                {
-                  "indexed": false,
-                  "internalType": "uint256",
-                  "name": "takerNftChainId",
-                  "type": "uint256"
-                },
-                {
-                  "indexed": false,
-                  "internalType": "address",
-                  "name": "takerNftAddress",
-                  "type": "address"
-                },
-                {
-                  "indexed": false,
-                  "internalType": "uint256",
-                  "name": "takerNftId",
-                  "type": "uint256"
-                },
-                {
-                  "indexed": false,
-                  "internalType": "address",
-                  "name": "deployedContract",
-                  "type": "address"
-                }
-              ],
-              "name": "TokenDeployed",
-              "type": "event"
-            },
-            {
-              "anonymous": false,
-              "inputs": [
-                {
-                  "indexed": false,
-                  "internalType": "address",
-                  "name": "tokenContract",
-                  "type": "address"
-                },
-                {
-                  "indexed": false,
-                  "internalType": "uint256",
-                  "name": "tokenId",
-                  "type": "uint256"
-                }
-              ],
-              "name": "TokenMinted",
-              "type": "event"
-            },
-            {
-              "inputs": [],
-              "name": "addressManager",
-              "outputs": [
-                {
-                  "internalType": "contract IAddressManager",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [],
-              "name": "baseTokenUri",
-              "outputs": [
-                {
-                  "internalType": "string",
-                  "name": "",
-                  "type": "string"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "contract IAddressManager",
-                  "name": "_addressManager",
-                  "type": "address"
-                },
-                {
-                  "internalType": "address",
-                  "name": "_tokenImplementation",
-                  "type": "address"
-                },
-                {
-                  "internalType": "string",
-                  "name": "_baseTokenUri",
-                  "type": "string"
-                }
-              ],
-              "name": "initialize",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "targetAddress",
-                  "type": "address"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "takerNftChainId",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "address",
-                  "name": "takerNftAddress",
-                  "type": "address"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "takerNftId",
-                  "type": "uint256"
-                }
-              ],
-              "name": "issueLikeToken",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "name": "likeTokens",
-              "outputs": [
-                {
-                  "internalType": "contract ILikeToken1155",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            {
-              "inputs": [],
-              "name": "tokenImplementation",
-              "outputs": [
-                {
-                  "internalType": "address",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            }
-          ]
-        },
-        "LikeTokenFactory_Proxy": {
-          "address": "0x63f7B4bB1154d3DFBC509a52b659719af1f66AdB",
-          "abi": [
-            {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "initialLogic",
-                  "type": "address"
-                },
-                {
-                  "internalType": "address",
-                  "name": "initialAdmin",
-                  "type": "address"
-                },
-                {
-                  "internalType": "bytes",
-                  "name": "_data",
-                  "type": "bytes"
-                }
-              ],
-              "stateMutability": "payable",
-              "type": "constructor"
-            },
-            {
-              "anonymous": false,
-              "inputs": [
-                {
-                  "indexed": false,
-                  "internalType": "address",
-                  "name": "previousAdmin",
-                  "type": "address"
-                },
-                {
-                  "indexed": false,
-                  "internalType": "address",
-                  "name": "newAdmin",
-                  "type": "address"
-                }
-              ],
-              "name": "AdminChanged",
-              "type": "event"
-            },
-            {
-              "anonymous": false,
-              "inputs": [
-                {
-                  "indexed": true,
-                  "internalType": "address",
-                  "name": "implementation",
-                  "type": "address"
-                }
-              ],
-              "name": "Upgraded",
-              "type": "event"
-            },
-            {
-              "stateMutability": "payable",
-              "type": "fallback"
-            },
-            {
-              "inputs": [],
-              "name": "admin",
-              "outputs": [
-                {
-                  "internalType": "address",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "newAdmin",
-                  "type": "address"
-                }
-              ],
-              "name": "changeAdmin",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [],
-              "name": "implementation",
-              "outputs": [
-                {
-                  "internalType": "address",
-                  "name": "",
-                  "type": "address"
-                }
-              ],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "newImplementation",
-                  "type": "address"
-                }
-              ],
-              "name": "upgradeTo",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "newImplementation",
-                  "type": "address"
-                },
-                {
-                  "internalType": "bytes",
-                  "name": "data",
-                  "type": "bytes"
-                }
-              ],
-              "name": "upgradeToAndCall",
-              "outputs": [],
-              "stateMutability": "payable",
-              "type": "function"
-            },
-            {
-              "stateMutability": "payable",
-              "type": "receive"
-            }
-          ]
-        },
         "MakerRegistrar": {
           "address": "0x06493B0362b3892EEc7C63023e8bC0C0c64646eb",
           "abi": [
@@ -38677,6 +38082,601 @@
             {
               "stateMutability": "payable",
               "type": "receive"
+            }
+          ]
+        },
+        "LikeTokenFactory_Implementation": {
+          "address": "0x6126c36DD7fd6a8e038F3321127CD4346F5Ea7B2",
+          "abi": [
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "takerNftChainId",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "takerNftAddress",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "takerNftId",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "deployedContract",
+                  "type": "address"
+                }
+              ],
+              "name": "TokenDeployed",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "tokenContract",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "tokenId",
+                  "type": "uint256"
+                }
+              ],
+              "name": "TokenMinted",
+              "type": "event"
+            },
+            {
+              "inputs": [],
+              "name": "addressManager",
+              "outputs": [
+                {
+                  "internalType": "contract IAddressManager",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "baseTokenUri",
+              "outputs": [
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "contract IAddressManager",
+                  "name": "_addressManager",
+                  "type": "address"
+                },
+                {
+                  "internalType": "address",
+                  "name": "_tokenImplementation",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_baseTokenUri",
+                  "type": "string"
+                }
+              ],
+              "name": "initialize",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "targetAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "takerNftChainId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "takerNftAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "takerNftId",
+                  "type": "uint256"
+                }
+              ],
+              "name": "issueLikeToken",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "name": "likeTokens",
+              "outputs": [
+                {
+                  "internalType": "contract ILikeToken1155",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "tokenImplementation",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            }
+          ]
+        },
+        "LikeTokenFactory_Proxy": {
+          "address": "0x11e330594940Ea2DD94886f3FD2E227e10CeAcfA",
+          "abi": [
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "initialLogic",
+                  "type": "address"
+                },
+                {
+                  "internalType": "address",
+                  "name": "initialAdmin",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bytes",
+                  "name": "_data",
+                  "type": "bytes"
+                }
+              ],
+              "stateMutability": "payable",
+              "type": "constructor"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "previousAdmin",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAdmin",
+                  "type": "address"
+                }
+              ],
+              "name": "AdminChanged",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "implementation",
+                  "type": "address"
+                }
+              ],
+              "name": "Upgraded",
+              "type": "event"
+            },
+            {
+              "stateMutability": "payable",
+              "type": "fallback"
+            },
+            {
+              "inputs": [],
+              "name": "admin",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "newAdmin",
+                  "type": "address"
+                }
+              ],
+              "name": "changeAdmin",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "implementation",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "newImplementation",
+                  "type": "address"
+                }
+              ],
+              "name": "upgradeTo",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "newImplementation",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bytes",
+                  "name": "data",
+                  "type": "bytes"
+                }
+              ],
+              "name": "upgradeToAndCall",
+              "outputs": [],
+              "stateMutability": "payable",
+              "type": "function"
+            },
+            {
+              "stateMutability": "payable",
+              "type": "receive"
+            }
+          ]
+        },
+        "LikeTokenFactory": {
+          "address": "0x11e330594940Ea2DD94886f3FD2E227e10CeAcfA",
+          "abi": [
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "previousAdmin",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "newAdmin",
+                  "type": "address"
+                }
+              ],
+              "name": "AdminChanged",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "implementation",
+                  "type": "address"
+                }
+              ],
+              "name": "Upgraded",
+              "type": "event"
+            },
+            {
+              "stateMutability": "payable",
+              "type": "fallback"
+            },
+            {
+              "inputs": [],
+              "name": "admin",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "newAdmin",
+                  "type": "address"
+                }
+              ],
+              "name": "changeAdmin",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "implementation",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "newImplementation",
+                  "type": "address"
+                }
+              ],
+              "name": "upgradeTo",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "newImplementation",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bytes",
+                  "name": "data",
+                  "type": "bytes"
+                }
+              ],
+              "name": "upgradeToAndCall",
+              "outputs": [],
+              "stateMutability": "payable",
+              "type": "function"
+            },
+            {
+              "stateMutability": "payable",
+              "type": "receive"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "takerNftChainId",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "takerNftAddress",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "takerNftId",
+                  "type": "uint256"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "deployedContract",
+                  "type": "address"
+                }
+              ],
+              "name": "TokenDeployed",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "tokenContract",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "uint256",
+                  "name": "tokenId",
+                  "type": "uint256"
+                }
+              ],
+              "name": "TokenMinted",
+              "type": "event"
+            },
+            {
+              "inputs": [],
+              "name": "addressManager",
+              "outputs": [
+                {
+                  "internalType": "contract IAddressManager",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "baseTokenUri",
+              "outputs": [
+                {
+                  "internalType": "string",
+                  "name": "",
+                  "type": "string"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "contract IAddressManager",
+                  "name": "_addressManager",
+                  "type": "address"
+                },
+                {
+                  "internalType": "address",
+                  "name": "_tokenImplementation",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_baseTokenUri",
+                  "type": "string"
+                }
+              ],
+              "name": "initialize",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "targetAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "takerNftChainId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "takerNftAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "takerNftId",
+                  "type": "uint256"
+                }
+              ],
+              "name": "issueLikeToken",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "name": "likeTokens",
+              "outputs": [
+                {
+                  "internalType": "contract ILikeToken1155",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "tokenImplementation",
+              "outputs": [
+                {
+                  "internalType": "address",
+                  "name": "",
+                  "type": "address"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "initialLogic",
+                  "type": "address"
+                },
+                {
+                  "internalType": "address",
+                  "name": "initialAdmin",
+                  "type": "address"
+                },
+                {
+                  "internalType": "bytes",
+                  "name": "_data",
+                  "type": "bytes"
+                }
+              ],
+              "stateMutability": "payable",
+              "type": "constructor"
             }
           ]
         }

@@ -4,7 +4,7 @@ require("dotenv").config();
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 const {getWallet, chainId} = require("../helpers/utils");
 
-const contractAddress = "0x554c91b537e58d3df400e662ee27f9771ddd7051";
+const contractAddress = "0x82a505f671b9a8eea3684976e076901c02e32a32";
 
 async function main() {
   const reactor = await getWallet("reactor");

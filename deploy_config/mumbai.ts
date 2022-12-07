@@ -30,7 +30,7 @@ const config: DeployConfig = {
   reactionNftUri:
     "https://protocol-api-staging.rara.social/internal/reaction/{id}",
   likeTokenContractUri:
-    "https://protocol-api-staging.rara.social/contract/like/",
+    "https://protocol-api-staging.rara.social/internal/contract/like/",
   likeTokenNftUri: "https://protocol-api-staging.rara.social/internal/like/",
 };
 

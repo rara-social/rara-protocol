@@ -112,7 +112,7 @@ dataSources:
     name: LikeTokenFactory
     network: "mumbai"
     source:
-      address: "0x63f7B4bB1154d3DFBC509a52b659719af1f66AdB"
+      address: "0x11e330594940Ea2DD94886f3FD2E227e10CeAcfA"
       abi: LikeTokenFactory
       startBlock: 26642329
     mapping:
