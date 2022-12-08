@@ -17,17 +17,15 @@ const manualGas = {
 
 // curatorVault
 const nftChainId = "1";
-const nftAddress = "0xb6dae651468e9593e4581705a09c10a76ac1e0c8";
-const nftId = "807";
-const paymentToken = "0x2791bca1f2de4661ed88a30c99a7a9449aa84174";
+const nftAddress = "0x7d8d74b44b433ca6f134e43eec1e63b0c43eeafa";
+const nftId = "1";
+
+const paymentToken = "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270";
 const curatorVaultId =
-  "4270157708040711469678672722928712530658549804711490147430589639681293015675";
+  "85318877694048722382284364402992064412681665354072922937830819238283916033300";
 
 async function main() {
-  const reactor = await getWallet("mlovan");
-  const refundToAddress = reactor.address;
-
-  console.log(reactor);
+  const reactor = await getWallet("deployer");
 
   // wallet curatorToken balance
   const CuratorToken1155 = new ethers.Contract(
@@ -35,17 +33,28 @@ async function main() {
     deployConfig[chainId][0].contracts.CuratorToken1155.abi,
     reactor
   );
+
+  console.log({
+    reactor: reactor.address,
+    curatorVaultId,
+    token: deployConfig[chainId][0].contracts.CuratorToken1155.address,
+  });
+
   const contractBalance = await CuratorToken1155.balanceOf(
     reactor.address,
     curatorVaultId
   );
+
   const tokensToBurn = Math.floor(contractBalance * 0.2);
+  const refundToAddress = reactor.address;
+
   console.log({
     contractBalance: contractBalance.toString(),
     tokensToBurn,
   });
 
   if (tokensToBurn == 0) {
+    console.log("no tokens...");
     return;
   }
 

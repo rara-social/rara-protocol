@@ -4,23 +4,29 @@ const ethers = require("ethers");
 const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 const {getWallet, chainId} = require("../helpers/utils");
 
-// taker params
-// const takerNftChainId = chainId;
-// const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
-// const takerNftId = "44";
+const manualGas = {
+  maxFeePerGas: 50000000000,
+  maxPriorityFeePerGas: 50000000000,
+  gasLimit: 2000000,
+};
 
-const takerNftChainId = "80001";
-const takerNftAddress = "0x42213590c2bab33d525ebd9c18518e93b64071ec";
+// taker params
+// https://opensea.io/assets/ethereum/0x7d8d74b44b433ca6f134e43eec1e63b0c43eeafa/1
+const takerNftChainId = "1";
+const takerNftAddress = "0x7d8d74b44b433ca6f134e43eec1e63b0c43eeafa";
 const takerNftId = "1";
 
-// reaction params
+//
+// Reaction params
+//
+// https://res.cloudinary.com/rara-social/image/upload/v1668803582/production-transform/21222597829815043879131890909130725186067670589628458523536587623117932898228.png
 const transformId =
-  "51838769411570288691882770256811373976193339503468138957330766858884189282853";
-const optionBits = 1;
+  "21222597829815043879131890909130725186067670589628458523536587623117932898228";
+const optionBits = 0;
 const ipfsMetadataHash = "QmUKKf2PMZdAaa4xuc9fByNVnMHERM9J23CjFt3V4ARcWZ";
 
 async function main() {
-  const reactor = await getWallet("reactor");
+  const reactor = await getWallet("mlovan");
   const referrer = await getWallet("referrer");
 
   // Check reaction limit
@@ -29,9 +35,8 @@ async function main() {
     deployConfig[chainId][0].contracts.ParameterManager.abi,
     reactor
   );
-
   const reactionLimit = await ParameterManager.freeReactionLimit();
-  console.log({reactionLimit: reactionLimit.toNumber()});
+  // console.log({reactionLimit: reactionLimit.toNumber()});
 
   // use reaction
   const ReactionVault = new ethers.Contract(
@@ -40,11 +45,11 @@ async function main() {
     reactor
   );
   const curatorVaultOverride = ethers.constants.AddressZero;
-  console.log("free react...");
 
+  console.log("Sending txn...");
   const spendReactionTxn = await ReactionVault.react(
     transformId,
-    1,
+    reactionLimit,
     referrer.address,
     optionBits,
     takerNftChainId,
@@ -52,12 +57,10 @@ async function main() {
     takerNftId,
     curatorVaultOverride,
     ipfsMetadataHash,
-    {
-      gasLimit: 1000000,
-    }
+    manualGas
   );
   const receipt = await spendReactionTxn.wait();
-  console.log(receipt);
+  // console.log(receipt);
   console.log("done. transactionHash:", receipt.transactionHash);
 }
 

@@ -1,13 +1,11 @@
 require("dotenv").config();
 const ethers = require("ethers");
 
-const chainId = "80001";
+const chainId = "137";
 
 async function getWallet(name) {
   // create provider
-  const provider = new ethers.providers.JsonRpcProvider(
-    process.env.DATA_TESTING_RPC
-  );
+  const provider = new ethers.providers.JsonRpcProvider(process.env.DEPLOY_RPC);
 
   let privateKey = null;
   switch (name) {
@@ -22,6 +20,12 @@ async function getWallet(name) {
       break;
     case "referrer":
       privateKey = process.env.REFERRER_PRIVATE_KEY;
+      break;
+    case "mlovan":
+      privateKey = process.env.MLOVAN_PRIVATE_KEY;
+      break;
+    case "deployer":
+      privateKey = process.env.DEPLOY_PRIVATE_KEY;
       break;
     default:
       break;

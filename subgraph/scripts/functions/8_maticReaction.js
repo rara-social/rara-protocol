@@ -1,23 +1,33 @@
 // load env
 require("dotenv").config();
 const ethers = require("ethers");
-const deployConfig = require("../../../v2_test_upgrade/hardhat_contracts.json");
+const deployConfig = require("../../../deploy_data/hardhat_contracts.json");
 const {getWallet, chainId} = require("../helpers/utils");
 
-// taker params
-const takerNftChainId = chainId;
-const takerNftAddress = deployConfig[chainId][0].contracts.TestErc721.address;
-const takerNftId = "45";
+const manualGas = {
+  maxFeePerGas: 50000000000,
+  maxPriorityFeePerGas: 50000000000,
+  gasLimit: 2000000,
+};
 
-// reaction params
+// taker params
+// https://opensea.io/assets/ethereum/0x7d8d74b44b433ca6f134e43eec1e63b0c43eeafa/1
+const takerNftChainId = "1";
+const takerNftAddress = "0x7d8d74b44b433ca6f134e43eec1e63b0c43eeafa";
+const takerNftId = "1";
+
+//
+// Reaction params
+//
+// https://res.cloudinary.com/rara-social/image/upload/v1668803582/production-transform/21222597829815043879131890909130725186067670589628458523536587623117932898228.png
 const transformId =
-  "30928197117314826209461326755915633336396878013931804244388344068798455153987";
-const optionBits = 1;
+  "21222597829815043879131890909130725186067670589628458523536587623117932898228";
+const optionBits = 0;
+const ipfsMetadataHash = "QmUKKf2PMZdAaa4xuc9fByNVnMHERM9J23CjFt3V4ARcWZ";
 const reactionQuantity = 1;
-const ipfsMetadataHash = "QmSBE5W5tyz8M7ve4n7Tw3sJgdHqak7k6whsorM7dDKsDL";
 
 async function main() {
-  const reactor = await getWallet("reactor");
+  const reactor = await getWallet("deployer");
   const referrer = await getWallet("referrer");
 
   //
@@ -60,6 +70,7 @@ async function main() {
     ipfsMetadataHash,
     {
       value: reactionPrice.mul(reactionQuantity),
+      ...manualGas,
     }
   );
   const receipt = await spendReactionTxn.wait();
