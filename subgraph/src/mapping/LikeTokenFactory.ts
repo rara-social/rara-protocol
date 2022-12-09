@@ -18,10 +18,11 @@ export function handleTokenDeployed(event: TokenDeployed): void {
   // LikeTokenContract
   //
   // load LikeTokenContract
-  let LikeTokenContractKey = event.params.deployedContract.toString();
+  let LikeTokenContractKey = event.params.deployedContract.toHexString();
   let likeTokenContract = LikeTokenContract.load(LikeTokenContractKey);
   if (likeTokenContract == null) {
     likeTokenContract = new LikeTokenContract(LikeTokenContractKey);
+    likeTokenContract.deployedContract = event.params.deployedContract;
     likeTokenContract.takerNftChainId = event.params.takerNftChainId;
     likeTokenContract.takerNftAddress = event.params.takerNftAddress;
     likeTokenContract.takerNftId = event.params.takerNftId;
