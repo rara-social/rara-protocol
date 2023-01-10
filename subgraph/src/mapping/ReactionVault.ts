@@ -87,6 +87,25 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   // uint256 curatorTokenAmount,
   // uint256 takerTokenAmount
 
+  // decode IPFS
+  let comment: string = "";
+  let tags: string[] = [];
+  const ipfsData = ipfs.cat(event.params.ipfsMetadataHash);
+  if (ipfsData) {
+    const data = json.fromBytes(ipfsData).toObject();
+    let commentData = data.get("comment");
+    if (commentData) {
+      comment = commentData.toString();
+    }
+    let tagsData = data.get("tags");
+    if (tagsData) {
+      let tagArray = tagsData.toArray();
+      if (tagArray.length > 0) {
+        tags = tagArray.map<string>((item) => item.toString());
+      }
+    }
+  }
+
   //
   // User Reaction
   //
@@ -121,21 +140,8 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
   userSpend.reaction = event.params.reactionId.toString();
   userSpend.reactionQuantity = event.params.quantity;
   userSpend.ipfsHash = event.params.ipfsMetadataHash;
-  const result = ipfs.cat(event.params.ipfsMetadataHash);
-  if (result) {
-    const data = json.fromBytes(result).toObject();
-    let comment = data.get("comment");
-    if (comment) {
-      userSpend.comment = comment.toString();
-    }
-    let tags = data.get("tags");
-    if (tags) {
-      let tagArray = tags.toArray();
-      if (tagArray.length > 0) {
-        userSpend.tags = tagArray.map<string>((item) => item.toString());
-      }
-    }
-  }
+  userSpend.comment = comment;
+  userSpend.tags = tags;
 
   userSpend.curatorVaultToken = event.params.curatorTokenId.toString();
   userSpend.curatorTokensPurchased = event.params.curatorTokenAmount;
@@ -159,6 +165,21 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
     curatorVaultToken.curatorTokenId = event.params.curatorTokenId;
     curatorVaultToken.createdAt = event.block.timestamp;
   }
+
+  // // determine if this is the first one for this curator vault...
+  // if (curatorVaultToken.userSpends.length === 0) {
+  //   // is this hit?
+  //   curatorVaultToken.curator = event.transaction.from;
+  //   curatorVaultToken.curator_ipfsHash = event.params.ipfsMetadataHash;
+  //   if (comment.length) {
+  //     curatorVaultToken.curator_comment = comment;
+  //   }
+  //   if (tags.length) {
+  //     curatorVaultToken.curator_tags = tags;
+  //   }
+  // }
+
+  // update each time
   curatorVaultToken.takerTokensBalance =
     curatorVaultToken.takerTokensBalance.plus(event.params.takerTokenAmount);
 

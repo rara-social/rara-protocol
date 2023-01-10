@@ -25,7 +25,6 @@ export function handleCuratorTokensBought(event: CuratorTokensBought): void {
   //
   // CuratorVaultToken
   //
-  // load CuratorVaultToken
   let curatorVaultTokenKey = event.params.curatorTokenId.toString();
   let curatorVaultToken = CuratorVaultToken.load(curatorVaultTokenKey);
   if (curatorVaultToken == null) {
