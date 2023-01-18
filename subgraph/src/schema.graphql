@@ -141,6 +141,7 @@ type CuratorVaultToken @entity {
   takerRefunded: BigInt!
   takerCreatorRefunded: BigInt!
 
+  transactionHash: Bytes!
   createdAt: BigInt!
   updatedAt: BigInt!
   blockNumber: BigInt!

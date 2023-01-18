@@ -1,0 +1,9 @@
+{
+  "network": "matic",
+  "StartBlock": 28479000,
+  "MakerRegistrarAddress": "0x47CD3266FA94E40613B37a88D98196325Cd28412",
+  "SigmoidCuratorVaultAddress": "0x7D278Aa2d95ABa7C969c9F316be6f0cFE0D18A50",
+  "SigmoidCuratorVaultAddress2": "0x0De3FF886d5296A474117E7C4C287416dd4460bE",
+  "ReactionVaultAddress": "0xE5BA5c73378BC8Da94738CB04490680ae3eab88C",
+  "LikeTokenFactoryAddress": "0x2154E3fE0a01764784690f60cF2d4Ed4A7F4Ba15"
+}

@@ -164,20 +164,21 @@ export function handleReactionsSpent(event: ReactionsSpent): void {
     curatorVaultToken.curatorVaultAddress = event.params.curatorVaultAddress;
     curatorVaultToken.curatorTokenId = event.params.curatorTokenId;
     curatorVaultToken.createdAt = event.block.timestamp;
+    curatorVaultToken.transactionHash = event.transaction.hash;
   }
-
   // // determine if this is the first one for this curator vault...
-  // if (curatorVaultToken.userSpends.length === 0) {
-  //   // is this hit?
-  //   curatorVaultToken.curator = event.transaction.from;
-  //   curatorVaultToken.curator_ipfsHash = event.params.ipfsMetadataHash;
-  //   if (comment.length) {
-  //     curatorVaultToken.curator_comment = comment;
-  //   }
-  //   if (tags.length) {
-  //     curatorVaultToken.curator_tags = tags;
-  //   }
-  // }
+  if (curatorVaultToken.transactionHash == event.transaction.hash) {
+    // is this hit?
+    curatorVaultToken.curator = event.transaction.from;
+
+    curatorVaultToken.curator_ipfsHash = event.params.ipfsMetadataHash;
+    if (comment.length) {
+      curatorVaultToken.curator_comment = comment;
+    }
+    if (tags.length) {
+      curatorVaultToken.curator_tags = tags;
+    }
+  }
 
   // update each time
   curatorVaultToken.takerTokensBalance =

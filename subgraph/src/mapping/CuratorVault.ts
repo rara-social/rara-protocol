@@ -36,6 +36,7 @@ export function handleCuratorTokensBought(event: CuratorTokensBought): void {
     curatorVaultToken.nftId = event.params.nftId;
     curatorVaultToken.paymentToken = event.params.paymentToken;
     curatorVaultToken.createdAt = event.block.timestamp;
+    curatorVaultToken.transactionHash = event.transaction.hash;
   }
 
   // increase current balances
@@ -76,6 +77,7 @@ export function handleCuratorTokensSold(event: CuratorTokensSold): void {
   let curatorVaultToken = CuratorVaultToken.load(curatorVaultTokenKey);
   if (curatorVaultToken == null) {
     curatorVaultToken = new CuratorVaultToken(curatorVaultTokenKey);
+    curatorVaultToken.transactionHash = event.transaction.hash;
     curatorVaultToken.createdAt = event.block.timestamp;
   }
 
