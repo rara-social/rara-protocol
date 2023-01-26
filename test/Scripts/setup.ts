@@ -247,4 +247,19 @@ const deploySystem = async (owner: SignerWithAddress) => {
   };
 };
 
-export {deploySystem};
+const deploySystemGasless = async (owner: SignerWithAddress) => {
+  const result = await deploySystem(owner);
+
+  const RaraGaslessFactory = await ethers.getContractFactory("RaraGasless");
+  const deployedRaraGasless = await upgrades.deployProxy(RaraGaslessFactory, [
+    result.reactionVault.address,
+  ]);
+  const raraGasless = RaraGaslessFactory.attach(deployedRaraGasless.address);
+
+  return {
+    raraGasless,
+    ...result,
+  };
+};
+
+export {deploySystem, deploySystemGasless};
