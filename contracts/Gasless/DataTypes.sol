@@ -30,16 +30,16 @@ library DataTypes {
     /// @param ipfsMetadataHash Optional hash of any metadata being associated with spend action
     /// @param sig The EIP712Signature struct containing the follower's signature.
     struct ReactWithSigData {
-        address reactor,
-        uint256 transformId,
-        uint256 quantity,
-        address referrer,
-        uint256 optionBits,
-        uint256 takerNftChainId,
-        address takerNftAddress,
-        uint256 takerNftId,
-        address curatorVaultOverride,
-        string memory ipfsMetadataHash
+        address reactor;
+        uint256 transformId;
+        uint256 quantity;
+        address referrer;
+        uint256 optionBits;
+        uint256 takerNftChainId;
+        address takerNftAddress;
+        uint256 takerNftId;
+        address curatorVaultOverride;
+        string ipfsMetadataHash;
         EIP712Signature sig;
     }
 }
