@@ -2,17 +2,18 @@
 pragma solidity 0.8.9;
 
 import {DataTypes} from "./DataTypes.sol";
+import {RaraGaslessStorageV1} from "./RaraGaslessStorage.sol";
 import {ReactionVault} from "../Reactions/ReactionVault.sol";
 import {IAddressManager} from "../Config/IAddressManager.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract RaraGasless {
+contract RaraGasless is Initializable, RaraGaslessStorageV1 {
     string public constant NAME = "RaraGasless";
     bytes32 internal constant EIP712_REVISION_HASH = keccak256("1");
     bytes32 internal constant EIP712_DOMAIN_TYPEHASH =
         keccak256(
             "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
         );
-    // TODO: Should this exist separately in an abstract storage contract?
     bytes32 internal constant REACT_WITH_SIG_TYPEHASH =
         keccak256(
             "ReactWithSig(address reactor,uint256 transformId,uint256 quantity,uint256 optionBits,uint256 takerNftChainId,address takerNftAddress,uint256 takerNftId,string ipfsMetadataHash)"
@@ -21,16 +22,19 @@ contract RaraGasless {
     // Signature Errors
     error SignatureInvalid();
     error SignatureExpired();
-    error OnlySupportsFreeReaction();
 
-    ReactionVault public immutable VAULT;
-    IAddressManager public immutable ADDRESS_MANAGER;
-
+    // Nonce mapping
     mapping(address => uint256) public sigNonces;
 
-    constructor(ReactionVault vault, IAddressManager addressManager) {
-        VAULT = vault;
-        ADDRESS_MANAGER = addressManager;
+    /**
+     * @dev initializer to call after deployment
+     */
+    function initialize(
+        ReactionVault _reactionVault,
+        IAddressManager _addressManager
+    ) public initializer {
+        reactionVault = _reactionVault;
+        addressManager = _addressManager;
     }
 
     /**
@@ -63,11 +67,11 @@ contract RaraGasless {
         }
 
         // calc payment parameter version
-        uint256 parameterVersion = VAULT.deriveParameterVersion(
-            ADDRESS_MANAGER.parameterManager()
+        uint256 parameterVersion = reactionVault.deriveParameterVersion(
+            addressManager.parameterManager()
         );
         // Build reaction ID
-        uint256 reactionId = VAULT.deriveReactionId(
+        uint256 reactionId = reactionVault.deriveReactionId(
             vars.transformId,
             vars.optionBits,
             parameterVersion
@@ -75,7 +79,7 @@ contract RaraGasless {
 
         // TODO: Call external free reaction
         return;
-        // VAULT._freeReaction(
+        // reactionVault._freeReaction(
         //     vars.transformId,
         //     vars.takerNftChainId,
         //     vars.takerNftAddress,

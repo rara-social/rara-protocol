@@ -1,7 +1,12 @@
 import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/signers";
 import {BigNumber} from "ethers";
 import {ethers, upgrades} from "hardhat";
-import {TEST_LIKE_NFT_URI, TEST_NFT_URI, TEST_CONTRACT_URI} from "./constants";
+import {
+  TEST_LIKE_NFT_URI,
+  TEST_NFT_URI,
+  TEST_CONTRACT_URI,
+  ZERO_ADDRESS,
+} from "./constants";
 
 export const TEST_REACTION_PRICE = BigNumber.from(10).pow(18); // Reactions cost 1 Token (token has 18 decimal places)
 export const TEST_SALE_CURATOR_LIABILITY_BP = 5_000; // 50% goes to curator liability
@@ -52,6 +57,14 @@ const deploySystem = async (owner: SignerWithAddress) => {
   const reactionVault = ReactionVaultFactory.attach(
     deployedReactionVault.address
   );
+
+  // Deploy Rara Gasless contract
+  const RaraGaslessFactory = await ethers.getContractFactory("RaraGasless");
+  const deployedRaraGasless = await upgrades.deployProxy(RaraGaslessFactory, [
+    reactionVault.address,
+    addressManager.address,
+  ]);
+  const raraGasless = RaraGaslessFactory.attach(deployedRaraGasless.address);
 
   // Deploy Testing NFT Token 1155
   // NOTE: We are not granting any default permissions for minting in the role manager to the owner
@@ -239,6 +252,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
     parameterManager,
     paymentTokenErc20,
     reactionNFT1155,
+    raraGasless,
     reactionVault,
     roleManager,
     testingStandard1155,
@@ -247,23 +261,4 @@ const deploySystem = async (owner: SignerWithAddress) => {
   };
 };
 
-const deploySystemGasless = async (owner: SignerWithAddress) => {
-  const result = await deploySystem(owner);
-  const {reactionVault, addressManager} = result;
-
-  // Deploy Rara Gasless contract
-  const RaraGaslessFactory = await ethers.getContractFactory("RaraGasless");
-  const deployedRaraGasless = await upgrades.deployProxy(RaraGaslessFactory, [
-    reactionVault.address,
-    addressManager.address,
-  ]);
-  const raraGasless = RaraGaslessFactory.attach(deployedRaraGasless.address);
-
-  // Return objects for tests to use
-  return {
-    raraGasless,
-    ...result,
-  };
-};
-
-export {deploySystem, deploySystemGasless};
+export {deploySystem};
