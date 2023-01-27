@@ -17,28 +17,24 @@ library DataTypes {
     }
 
     /// @notice A struct containing the parameters required for the `reactWithSig()` function.
-    ///         Parameters are the same as the regular `react()` function, with the reactor's (signer) address and an EIP712Signature added.
+    ///         Parameters are almost the same as the regular `react()` function, with the reactor's (signer) address and an EIP712Signature added.
     /// @param reactor The reactor which is the message signer.
     /// @param transformId Internal id used to derive the reaction token id.
     /// @param quantity How many reactions to spend.
-    /// @param referrer Optional param to specify an address where referrer rewards are allocated
     /// @param optionBits Optional param to specify options how the user wants transform reaction
     /// @param takerNftChainId Chain ID where the NFT lives
     /// @param takerNftAddress Target contract where the reaction is targeting
     /// @param takerNftId Target NFT ID in the contract
-    /// @param curatorVaultOverride Optional address of non-default curator vault
     /// @param ipfsMetadataHash Optional hash of any metadata being associated with spend action
     /// @param sig The EIP712Signature struct containing the follower's signature.
     struct ReactWithSigData {
         address reactor;
         uint256 transformId;
         uint256 quantity;
-        address referrer;
         uint256 optionBits;
         uint256 takerNftChainId;
         address takerNftAddress;
         uint256 takerNftId;
-        address curatorVaultOverride;
         string ipfsMetadataHash;
         EIP712Signature sig;
     }
