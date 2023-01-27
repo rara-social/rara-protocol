@@ -253,6 +253,7 @@ const deploySystemGasless = async (owner: SignerWithAddress) => {
   const RaraGaslessFactory = await ethers.getContractFactory("RaraGasless");
   const deployedRaraGasless = await upgrades.deployProxy(RaraGaslessFactory, [
     result.reactionVault.address,
+    result.addressManager.address,
   ]);
   const raraGasless = RaraGaslessFactory.attach(deployedRaraGasless.address);
 

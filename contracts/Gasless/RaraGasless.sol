@@ -2,7 +2,8 @@
 pragma solidity 0.8.9;
 
 import {DataTypes} from "./DataTypes.sol";
-import {IReactionVault} from "../Reactions/IReactionVault.sol";
+import {ReactionVault} from "../Reactions/ReactionVault.sol";
+import {IAddressManager} from "../Config/IAddressManager.sol";
 
 contract RaraGasless {
     string public constant NAME = "RaraGasless";
@@ -11,29 +12,78 @@ contract RaraGasless {
         keccak256(
             "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
         );
+    // TODO: Should this exist separately in an abstract storage contract?
+    bytes32 internal constant REACT_WITH_SIG_TYPEHASH =
+        keccak256(
+            "ReactWithSig(address reactor,uint256 transformId,uint256 quantity,uint256 optionBits,uint256 takerNftChainId,address takerNftAddress,uint256 takerNftId,string ipfsMetadataHash)"
+        );
 
     // Signature Errors
     error SignatureInvalid();
     error SignatureExpired();
+    error OnlySupportsFreeReaction();
 
-    IReactionVault public immutable VAULT;
+    ReactionVault public immutable VAULT;
+    IAddressManager public immutable ADDRESS_MANAGER;
 
     mapping(address => uint256) public sigNonces;
 
-    constructor(IReactionVault vault) {
+    constructor(ReactionVault vault, IAddressManager addressManager) {
         VAULT = vault;
+        ADDRESS_MANAGER = addressManager;
     }
 
     /**
-     * @dev Allows a user to react to content & receive a like token.
-     *
+     * @dev Allows a user to react to content & receive a like token without sending any value.
+     * This function will allow the user to record their reaction on-chain and collect a "like" token but not purchase any curator tokens.
      */
-    function reactWithSig(DataTypes.ReactWithSigData calldata vars)
-        external
-        payable
-    {
-        // TODO: Unpack sig and call react
-        // VAULT.react()
+    function reactWithSig(DataTypes.ReactWithSigData calldata vars) external {
+        unchecked {
+            _validateRecoveredAddress(
+                _calculateDigest(
+                    keccak256(
+                        abi.encode(
+                            REACT_WITH_SIG_TYPEHASH,
+                            vars.reactor,
+                            vars.transformId,
+                            vars.quantity,
+                            vars.optionBits,
+                            vars.takerNftChainId,
+                            vars.takerNftAddress,
+                            vars.takerNftId,
+                            vars.ipfsMetadataHash,
+                            sigNonces[vars.reactor]++,
+                            vars.sig.deadline
+                        )
+                    )
+                ),
+                vars.reactor,
+                vars.sig
+            );
+        }
+
+        // calc payment parameter version
+        uint256 parameterVersion = VAULT.deriveParameterVersion(
+            ADDRESS_MANAGER.parameterManager()
+        );
+        // Build reaction ID
+        uint256 reactionId = VAULT.deriveReactionId(
+            vars.transformId,
+            vars.optionBits,
+            parameterVersion
+        );
+
+        // TODO: Call external free reaction
+        return;
+        // VAULT._freeReaction(
+        //     vars.transformId,
+        //     vars.takerNftChainId,
+        //     vars.takerNftAddress,
+        //     vars.takerNftId,
+        //     reactionId,
+        //     vars.quantity,
+        //     vars.ipfsMetadataHash
+        // );
     }
 
     /**
