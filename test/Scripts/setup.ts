@@ -249,14 +249,17 @@ const deploySystem = async (owner: SignerWithAddress) => {
 
 const deploySystemGasless = async (owner: SignerWithAddress) => {
   const result = await deploySystem(owner);
+  const {reactionVault, addressManager} = result;
 
+  // Deploy Rara Gasless contract
   const RaraGaslessFactory = await ethers.getContractFactory("RaraGasless");
   const deployedRaraGasless = await upgrades.deployProxy(RaraGaslessFactory, [
-    result.reactionVault.address,
-    result.addressManager.address,
+    reactionVault.address,
+    addressManager.address,
   ]);
   const raraGasless = RaraGaslessFactory.attach(deployedRaraGasless.address);
 
+  // Return objects for tests to use
   return {
     raraGasless,
     ...result,
