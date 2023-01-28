@@ -20,6 +20,8 @@ const REWARDS_LT_BURN = "Rewards balance < tokensToBurn";
 const TRANSFER_NOT_ALLOWED = "ERC20: insufficient allowance";
 const UNKNOWN_NFT = "Unknown NFT";
 const REACTION_QUANTITY_TOO_HIGH = "Reaction quantity above limit";
+const SIGNATURE_INVALID = "SignatureInvalid()";
+const SIGNATURE_EXPIRED = "SignatureExpired()";
 
 export {
   ALREADY_REGISTERED,
@@ -44,4 +46,6 @@ export {
   TRANSFER_NOT_ALLOWED,
   UNKNOWN_NFT,
   REACTION_QUANTITY_TOO_HIGH,
+  SIGNATURE_INVALID,
+  SIGNATURE_EXPIRED,
 };

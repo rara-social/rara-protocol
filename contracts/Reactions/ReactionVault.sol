@@ -8,6 +8,8 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeab
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/utils/ERC1155HolderUpgradeable.sol";
 import "../Permissions/IRoleManager.sol";
+import "../WithSig/DataTypes.sol";
+import "../WithSig/WithSigEnabled.sol";
 import "./IReactionVault.sol";
 import "./ReactionVaultStorage.sol";
 import "../Maker/IMakerRegistrar.sol";
@@ -19,11 +21,12 @@ import "../Token/IWMATIC.sol";
 /// @title ReactionVault
 /// @dev This contract buying and spending reactions
 contract ReactionVault is
+    WithSigEnabled,
     IReactionVault,
     Initializable,
     ReentrancyGuardUpgradeable,
     ERC1155HolderUpgradeable,
-    ReactionVaultStorageV1
+    ReactionVaultStorageV2
 {
     /// @dev Use the safe methods when interacting with transfers with outside ERC20s
     using SafeERC20Upgradeable for IWMATIC;
@@ -625,6 +628,55 @@ contract ReactionVault is
         );
     }
 
+    /// @dev Allows a user to react to content & receive a like token without sending any value.
+    /// This function will allow the user to record their reaction on-chain and collect a "like" token but not purchase any curator tokens.
+    function reactWithSig(DataTypes.ReactWithSigData calldata vars) external {
+        unchecked {
+            _validateRecoveredAddress(
+                _calculateDigest(
+                    keccak256(
+                        abi.encode(
+                            REACT_WITH_SIG_TYPEHASH,
+                            vars.reactor,
+                            vars.transformId,
+                            vars.quantity,
+                            vars.optionBits,
+                            vars.takerNftChainId,
+                            vars.takerNftAddress,
+                            vars.takerNftId,
+                            keccak256(bytes(vars.ipfsMetadataHash)),
+                            sigNonces[vars.reactor]++,
+                            vars.sig.deadline
+                        )
+                    )
+                ),
+                vars.reactor,
+                vars.sig
+            );
+        }
+        // calc payment parameter version
+        uint256 parameterVersion = deriveParameterVersion(
+            addressManager.parameterManager()
+        );
+        // Build reaction ID
+        uint256 reactionId = deriveReactionId(
+            vars.transformId,
+            vars.optionBits,
+            parameterVersion
+        );
+        // Proceed with free reaction
+        _freeReactionForSpecifiedAddress(
+            vars.reactor,
+            vars.transformId,
+            vars.takerNftChainId,
+            vars.takerNftAddress,
+            vars.takerNftId,
+            reactionId,
+            vars.quantity,
+            vars.ipfsMetadataHash
+        );
+    }
+
     /// @dev Allows an account that has been allocated rewards to withdraw (Maker, creator, referrer)
     /// @param token ERC20 token that rewards are valued in
     function withdrawErc20Rewards(IWMATIC token)
@@ -869,6 +921,83 @@ contract ReactionVault is
             transformId,
             reactionQuantity,
             msg.sender,
+            address(0),
+            reactionId,
+            deriveParameterVersion(addressManager.parameterManager())
+        );
+
+        emit ReactionsSpent(
+            takerNftChainId,
+            takerNftAddress,
+            takerNftId,
+            reactionId,
+            address(addressManager.parameterManager().paymentToken()),
+            reactionQuantity,
+            ipfsMetadataHash,
+            address(0), //referrer
+            address(addressManager.defaultCuratorVault()),
+            curatorTokenId,
+            0, // spenderCuratorTokens
+            0 // takerCuratorTokens
+        );
+    }
+
+    /// @dev Identical to _freeReaction() only msg.sender is replaced with the argument "reactor".
+    // Reactor address is passed in as an argument in order to support gasless reactions.
+    function _freeReactionForSpecifiedAddress(
+        address reactor, // the specified address
+        uint256 transformId,
+        uint256 takerNftChainId,
+        address takerNftAddress,
+        uint256 takerNftId,
+        uint256 reactionId,
+        uint256 reactionQuantity,
+        string memory ipfsMetadataHash
+    ) internal {
+        // Verify quantity
+        require(
+            reactionQuantity <=
+                addressManager.parameterManager().freeReactionLimit(),
+            "Reaction quantity above limit"
+        );
+
+        // Get the NFT Source ID from the maker registrar
+        IMakerRegistrar makerRegistrar = addressManager.makerRegistrar();
+        uint256 sourceId = makerRegistrar.transformToSourceLookup(transformId);
+        require(sourceId != 0, "Unknown NFT");
+
+        // Verify it is registered
+        IMakerRegistrar.NftDetails memory nftDetails = makerRegistrar
+            .sourceToDetailsLookup(sourceId);
+        require(nftDetails.registered, "NFT not registered");
+
+        // Issue a like token for this spend if the factory is configured
+        address likeTokenFactory = addressManager.likeTokenFactory();
+        if (likeTokenFactory != address(0x0)) {
+            ILikeTokenFactory(likeTokenFactory).issueLikeToken(
+                reactor,
+                takerNftChainId,
+                takerNftAddress,
+                takerNftId
+            );
+        }
+
+        uint256 curatorTokenId = uint256(
+            keccak256(
+                abi.encode(
+                    takerNftChainId,
+                    takerNftAddress,
+                    takerNftId,
+                    addressManager.parameterManager().paymentToken()
+                )
+            )
+        );
+
+        // Emit ReactionsPurchased & ReactionsSpent for consistency with paid reaction path
+        emit ReactionsPurchased(
+            transformId,
+            reactionQuantity,
+            reactor,
             address(0),
             reactionId,
             deriveParameterVersion(addressManager.parameterManager())

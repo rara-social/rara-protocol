@@ -32,10 +32,21 @@ contract ReactionVaultStorageV1 is IReactionVault {
     mapping(uint256 => uint256) public nftOwnerRewards;
 }
 
+contract ReactionVaultStorageV2 is ReactionVaultStorageV1 {
+    // Nonce mapping for withSig methods
+    mapping(address => uint256) public sigNonces;
+
+    // Typehash for the reactWithSig method
+    bytes32 internal constant REACT_WITH_SIG_TYPEHASH =
+        keccak256(
+            "ReactWithSig(address reactor,uint256 transformId,uint256 quantity,uint256 optionBits,uint256 takerNftChainId,address takerNftAddress,uint256 takerNftId,string ipfsMetadataHash,uint256 nonce,uint256 deadline)"
+        );
+}
+
 /// On the next version of the protocol, if new variables are added, put them in the below
 /// contract and use this as the inheritance chain.
 /**
-contract ReactionVaultStorageV2 is ReactionVaultStorageV1 {
+contract ReactionVaultStorageV3 is ReactionVaultStorageV2 {
   address newVariable;
 }
  */

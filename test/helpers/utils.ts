@@ -4,11 +4,10 @@ import hre from "hardhat";
 import {BigNumberish, Bytes, utils} from "ethers";
 
 export const HARDHAT_CHAINID = 31337;
-export const RARA_PROTCOL_SIG_DOMAIN_NAME = "Rara Protocol";
+export const SIG_DOMAIN_NAME = "Rara Protocol";
 
 const buildReactWithSigParams = (
   verifyingContract: string,
-  // Function args below
   reactor: string,
   transformId: BigNumberish,
   quantity: BigNumberish,
@@ -17,7 +16,6 @@ const buildReactWithSigParams = (
   takerNftAddress: string,
   takerNftId: BigNumberish,
   ipfsMetadataHash: string,
-  // Sig args below
   nonce: number,
   deadline: string
 ) => ({
@@ -111,7 +109,7 @@ function domain(verifyingContract: string): {
   verifyingContract: string;
 } {
   return {
-    name: RARA_PROTCOL_SIG_DOMAIN_NAME,
+    name: SIG_DOMAIN_NAME,
     version: "1",
     chainId: getChainId(),
     verifyingContract: verifyingContract,
