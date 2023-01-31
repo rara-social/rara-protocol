@@ -630,7 +630,10 @@ contract ReactionVault is
 
     /// @dev Allows a user to react to content & receive a like token without sending any value.
     /// This function will allow the user to record their reaction on-chain and collect a "like" token but not purchase any curator tokens.
-    function reactWithSig(DataTypes.ReactWithSigData calldata vars) external {
+    function reactWithSig(DataTypes.ReactWithSigData calldata vars)
+        external
+        nonReentrant
+    {
         unchecked {
             _validateRecoveredAddress(
                 _calculateDigest(
