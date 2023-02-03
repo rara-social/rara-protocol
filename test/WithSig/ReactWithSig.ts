@@ -35,7 +35,7 @@ describe("ReactionVault ReactWithSig", function () {
     const ipfsMetadataHash = "ipfsMetadataHash";
 
     // Sig validation vars
-    const nonce = (await reactionVault.sigNonces(ALICE.address)).toNumber();
+    const nonce = (await reactionVault.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     // Produce a signature that can be passed to reactWithSig()
@@ -124,7 +124,7 @@ describe("ReactionVault ReactWithSig", function () {
     const ipfsMetadataHash = "ipfsMetadataHash";
 
     // Sig validation vars
-    const nonce = (await reactionVault.sigNonces(ALICE.address)).toNumber();
+    const nonce = (await reactionVault.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     // Produce a signature that can be passed to reactWithSig()
@@ -204,7 +204,7 @@ describe("ReactionVault ReactWithSig", function () {
     const takerNftId = NFT_ID;
     const ipfsMetadataHash = "ipfsMetadataHash";
     // Sig validation vars
-    const nonce = (await reactionVault.sigNonces(ALICE.address)).toNumber();
+    const nonce = (await reactionVault.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     // Produce a signature that can be passed to reactWithSig()
@@ -284,7 +284,7 @@ describe("ReactionVault ReactWithSig", function () {
     const takerNftId = NFT_ID;
     const ipfsMetadataHash = "ipfsMetadataHash";
     // Sig validation vars
-    const nonce = (await reactionVault.sigNonces(ALICE.address)).toNumber();
+    const nonce = (await reactionVault.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     // Produce a signature that can be passed to reactWithSig()
@@ -368,7 +368,7 @@ describe("ReactionVault ReactWithSig", function () {
     const takerNftId = NFT_ID;
     const ipfsMetadataHash = "ipfsMetadataHash";
     // Sig validation vars
-    const nonce = (await reactionVault.sigNonces(ALICE.address)).toNumber();
+    const nonce = (await reactionVault.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     // Produce a signature that can be passed to reactWithSig()
@@ -469,7 +469,7 @@ describe("ReactionVault ReactWithSig", function () {
     const takerNftId = NFT_ID;
     const ipfsMetadataHash = "ipfsMetadataHash";
     // Sig validation vars
-    const nonce = (await reactionVault.sigNonces(ALICE.address)).toNumber();
+    const nonce = (await reactionVault.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     // Produce a signature that can be passed to reactWithSig()
