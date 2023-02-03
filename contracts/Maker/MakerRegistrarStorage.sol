@@ -23,10 +23,21 @@ abstract contract MakerRegistrarStorageV1 is IMakerRegistrar {
     mapping(uint256 => IMakerRegistrar.NftDetails) public sourceToDetails;
 }
 
+abstract contract MakerRegistrarStorageV2 is MakerRegistrarStorageV1 {
+    // Nonce mapping for withSig methods
+    mapping(address => uint256) public sigNonces;
+
+    // Typehash for the registerNftWithSig method
+    bytes32 internal constant REGISTER_NFT_WITH_SIG_TYPEHASH =
+        keccak256(
+            "RegisterNftWithSig(address registrant,address nftContractAddress,uint256 nftId,address creatorAddress,uint256 creatorSaleBasisPoints,uint256 optionBits,string ipfsMetadataHash,uint256 nonce,uint256 deadline)"
+        );
+}
+
 /// On the next version of the protocol, if new variables are added, put them in the below
 /// contract and use this as the inheritance chain.
 /**
-contract MakerRegistrarStorageV2 is MakerRegistrarStorageV1 {
+contract MakerRegistrarStorageV3 is MakerRegistrarStorageV2 {
   address newVariable;
 }
  */

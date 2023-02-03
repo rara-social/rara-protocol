@@ -4,6 +4,8 @@ pragma solidity 0.8.9;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155Upgradeable.sol";
 import "../Permissions/IRoleManager.sol";
+import "../WithSig/DataTypes.sol";
+import "../WithSig/WithSigEnabled.sol";
 import "./IMakerRegistrar.sol";
 import "./MakerRegistrarStorage.sol";
 import "./NftOwnership.sol";
@@ -15,7 +17,11 @@ import "../Royalties/Royalties.sol";
 /// Also, for the mappings, it is assumed the protocol will always look up the current owner of
 /// an NFT when running logic (which is why the owner address is not stored).  If desired, an
 /// off-chain indexer like The Graph can index registration addresses to NFTs.
-contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
+contract MakerRegistrar is
+    WithSigEnabled,
+    Initializable,
+    MakerRegistrarStorageV2
+{
     /// @dev Event triggered when an NFT is registered in the system
     event Registered(
         uint256 nftChainId,
@@ -112,6 +118,67 @@ contract MakerRegistrar is Initializable, MakerRegistrarStorageV1 {
             creatorBasisPointsArray,
             optionBits,
             ipfsMetadataHash
+        );
+    }
+
+    /// @dev Allows a NFT owner to register the NFT in the protocol so that reactions can be sold.
+    /// Owner registering must own the NFT in the wallet calling function.
+    function registerNftWithSig(DataTypes.RegisterNftWithSigData calldata vars)
+        external
+    {
+        unchecked {
+            _validateRecoveredAddress(
+                _calculateDigest(
+                    keccak256(
+                        abi.encode(
+                            REGISTER_NFT_WITH_SIG_TYPEHASH,
+                            vars.registrant,
+                            vars.nftContractAddress,
+                            vars.nftId,
+                            vars.creatorAddress,
+                            vars.creatorSaleBasisPoints,
+                            vars.optionBits,
+                            keccak256(bytes(vars.ipfsMetadataHash)),
+                            sigNonces[vars.registrant]++,
+                            vars.sig.deadline
+                        )
+                    )
+                ),
+                vars.registrant,
+                vars.sig
+            );
+        }
+        // Verify ownership
+        require(
+            verifyOwnership(
+                vars.nftContractAddress,
+                vars.nftId,
+                vars.registrant
+            ),
+            "NFT not owned"
+        );
+
+        // Get the royalties for the creator addresses - use fallback if none set on chain
+        (
+            address[] memory addressesArray,
+            uint256[] memory creatorBasisPointsArray
+        ) = Royalties._getRoyaltyOverride(
+                addressManager.royaltyRegistry(),
+                vars.nftContractAddress,
+                vars.nftId,
+                vars.creatorAddress,
+                vars.creatorSaleBasisPoints
+            );
+
+        _registerForOwner(
+            vars.registrant,
+            block.chainid, // Use current chain ID
+            vars.nftContractAddress,
+            vars.nftId,
+            addressesArray,
+            creatorBasisPointsArray,
+            vars.optionBits,
+            vars.ipfsMetadataHash
         );
     }
 

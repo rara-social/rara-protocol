@@ -38,4 +38,15 @@ library DataTypes {
         string ipfsMetadataHash;
         EIP712Signature sig;
     }
+
+    struct RegisterNftWithSigData {
+        address registrant;
+        address nftContractAddress;
+        uint256 nftId;
+        address creatorAddress;
+        uint256 creatorSaleBasisPoints;
+        uint256 optionBits;
+        string ipfsMetadataHash;
+        EIP712Signature sig;
+    }
 }
