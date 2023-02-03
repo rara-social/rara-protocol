@@ -82,6 +82,77 @@ export async function getReactWithSigParts(
   return await getSig(signer, msgParams);
 }
 
+const buildRegisterNftWithSigParams = (
+  verifyingContract: string,
+  registrant: string,
+  nftContractAddress: string,
+  nftId: BigNumberish,
+  creatorAddress: string,
+  creatorSaleBasisPoints: BigNumberish,
+  optionBits: BigNumberish,
+  ipfsMetadataHash: string,
+  nonce: number,
+  deadline: string
+) => ({
+  types: {
+    RegisterNftWithSig: [
+      // Function ABI parts
+      {name: "registrant", type: "address"},
+      {name: "nftContractAddress", type: "address"},
+      {name: "nftId", type: "uint256"},
+      {name: "creatorAddress", type: "address"},
+      {name: "creatorSaleBasisPoints", type: "uint256"},
+      {name: "optionBits", type: "uint256"},
+      {name: "ipfsMetadataHash", type: "string"},
+      // Sig ABI parts
+      {name: "nonce", type: "uint256"},
+      {name: "deadline", type: "uint256"},
+    ],
+  },
+  domain: domain(verifyingContract),
+  value: {
+    registrant: registrant,
+    nftContractAddress: nftContractAddress,
+    nftId: nftId,
+    creatorAddress: creatorAddress,
+    creatorSaleBasisPoints: creatorSaleBasisPoints,
+    optionBits: optionBits,
+    ipfsMetadataHash: ipfsMetadataHash,
+    nonce: nonce,
+    deadline: deadline,
+  },
+});
+
+export async function getRegisterNftWithSigParts(
+  // signer
+  signer: SignerWithAddress,
+  // builder args
+  verifyingContract: string,
+  registrant: string,
+  nftContractAddress: string,
+  nftId: BigNumberish,
+  creatorAddress: string,
+  creatorSaleBasisPoints: BigNumberish,
+  optionBits: BigNumberish,
+  ipfsMetadataHash: string,
+  nonce: number,
+  deadline: string
+): Promise<{v: number; r: string; s: string}> {
+  const msgParams = buildRegisterNftWithSigParams(
+    verifyingContract,
+    registrant,
+    nftContractAddress,
+    nftId,
+    creatorAddress,
+    creatorSaleBasisPoints,
+    optionBits,
+    ipfsMetadataHash,
+    nonce,
+    deadline
+  );
+  return await getSig(signer, msgParams);
+}
+
 async function getSig(
   signer: SignerWithAddress,
   msgParams: {
