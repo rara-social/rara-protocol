@@ -21,12 +21,12 @@ const takerNftId = "1";
 //
 // https://res.cloudinary.com/rara-social/image/upload/v1668803582/production-transform/21222597829815043879131890909130725186067670589628458523536587623117932898228.png
 const transformId =
-  "21222597829815043879131890909130725186067670589628458523536587623117932898228";
+  "51838769411570288691882770256811373976193339503468138957330766858884189282853";
 const optionBits = 0;
 const ipfsMetadataHash = "QmUKKf2PMZdAaa4xuc9fByNVnMHERM9J23CjFt3V4ARcWZ";
 
 async function main() {
-  const reactor = await getWallet("mlovan");
+  const reactor = await getWallet("reactor");
   const referrer = await getWallet("referrer");
 
   // Check reaction limit
@@ -60,7 +60,7 @@ async function main() {
     manualGas
   );
   const receipt = await spendReactionTxn.wait();
-  // console.log(receipt);
+  console.log(receipt);
   console.log("done. transactionHash:", receipt.transactionHash);
 }
 

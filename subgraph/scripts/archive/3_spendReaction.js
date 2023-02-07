@@ -52,6 +52,7 @@ async function main() {
     }
   );
   const receipt = await spendReactionTxn.wait();
+  console.log(receipt);
   console.log("done. transactionHash:", receipt.transactionHash);
 }
 

@@ -21,13 +21,13 @@ const takerNftId = "1";
 //
 // https://res.cloudinary.com/rara-social/image/upload/v1668803582/production-transform/21222597829815043879131890909130725186067670589628458523536587623117932898228.png
 const transformId =
-  "21222597829815043879131890909130725186067670589628458523536587623117932898228";
+  "51838769411570288691882770256811373976193339503468138957330766858884189282853";
 const optionBits = 0;
 const ipfsMetadataHash = "QmUKKf2PMZdAaa4xuc9fByNVnMHERM9J23CjFt3V4ARcWZ";
 const reactionQuantity = 1;
 
 async function main() {
-  const reactor = await getWallet("deployer");
+  const reactor = await getWallet("creator");
   const referrer = await getWallet("referrer");
 
   //
@@ -74,6 +74,7 @@ async function main() {
     }
   );
   const receipt = await spendReactionTxn.wait();
+  console.log(receipt.events);
   console.log("done. transactionHash:", receipt.transactionHash);
 }
 

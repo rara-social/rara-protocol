@@ -133,17 +133,17 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   );
 
   // set old curator vault to old implementation
-  const oldProxy = "0xff63B24Ce497d1e0ea7F45a08bF2C93631B017C1";
-  const oldImplementation = "0x6Ed0B9932529E79204Aaee1E423944ac06b02d03";
-  let txn = await DefaultProxyAdmin.upgrade(oldProxy, oldImplementation);
-  await txn.wait();
-  let implementation = await DefaultProxyAdmin.getProxyImplementation(oldProxy);
-  console.log({
-    name: "SigmoidCuratorVault",
-    address: oldProxy,
-    imp: oldImplementation,
-    proxy_imp: implementation,
-  });
+  // const oldProxy = "0xff63B24Ce497d1e0ea7F45a08bF2C93631B017C1";
+  // const oldImplementation = "0x6Ed0B9932529E79204Aaee1E423944ac06b02d03";
+  // let txn = await DefaultProxyAdmin.upgrade(oldProxy, oldImplementation);
+  // await txn.wait();
+  // let implementation = await DefaultProxyAdmin.getProxyImplementation(oldProxy);
+  // console.log({
+  //   name: "SigmoidCuratorVault",
+  //   address: oldProxy,
+  //   imp: oldImplementation,
+  //   proxy_imp: implementation,
+  // });
 };
 
 module.exports.tags = ["mumbai-upgrade-v1-1-verify"];

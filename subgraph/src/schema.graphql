@@ -114,6 +114,15 @@ type CuratorVaultToken @entity {
   curatorTokenId: BigInt!
   paymentToken: Bytes!
 
+  # UserSpends
+  userSpends: [UserSpend!]! @derivedFrom(field: "curatorVaultToken")
+
+  # original curator
+  curator: Bytes
+  curator_comment: String
+  curator_tags: [String!]
+  curator_ipfsHash: String
+
   # taker media
   nftChainId: BigInt!
   nftContractAddress: Bytes!
@@ -132,6 +141,7 @@ type CuratorVaultToken @entity {
   takerRefunded: BigInt!
   takerCreatorRefunded: BigInt!
 
+  transactionHash: Bytes!
   createdAt: BigInt!
   updatedAt: BigInt!
   blockNumber: BigInt!
