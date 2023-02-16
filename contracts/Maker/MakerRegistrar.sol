@@ -139,7 +139,9 @@ contract MakerRegistrar is
                             vars.creatorSaleBasisPoints,
                             vars.optionBits,
                             keccak256(bytes(vars.ipfsMetadataHash)),
-                            sigNonces[vars.registrant]++,
+                            addressManager.parameterManager().incSigNonceFor(
+                                vars.registrant
+                            ),
                             vars.sig.deadline
                         )
                     )

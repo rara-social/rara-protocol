@@ -24,9 +24,6 @@ abstract contract MakerRegistrarStorageV1 is IMakerRegistrar {
 }
 
 abstract contract MakerRegistrarStorageV2 is MakerRegistrarStorageV1 {
-    // Nonce mapping for withSig methods
-    mapping(address => uint256) public sigNonces;
-
     // Typehash for the registerNftWithSig method
     bytes32 internal constant REGISTER_NFT_WITH_SIG_TYPEHASH =
         keccak256(

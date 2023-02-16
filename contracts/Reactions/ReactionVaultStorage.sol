@@ -33,9 +33,6 @@ contract ReactionVaultStorageV1 is IReactionVault {
 }
 
 contract ReactionVaultStorageV2 is ReactionVaultStorageV1 {
-    // Nonce mapping for withSig methods
-    mapping(address => uint256) public sigNonces;
-
     // Typehash for the reactWithSig method
     bytes32 internal constant REACT_WITH_SIG_TYPEHASH =
         keccak256(

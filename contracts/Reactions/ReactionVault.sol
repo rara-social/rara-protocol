@@ -648,7 +648,9 @@ contract ReactionVault is
                             vars.takerNftAddress,
                             vars.takerNftId,
                             keccak256(bytes(vars.ipfsMetadataHash)),
-                            sigNonces[vars.reactor]++,
+                            addressManager.parameterManager().incSigNonceFor(
+                                vars.reactor
+                            ),
                             vars.sig.deadline
                         )
                     )

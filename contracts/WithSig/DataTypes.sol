@@ -49,4 +49,18 @@ library DataTypes {
         string ipfsMetadataHash;
         EIP712Signature sig;
     }
+
+    /**
+     * @notice A struct containing the parameters required for the `addDispatcherWithSig()` function. Parameters are the same
+     * as the regular `addDispatcher()` function, with an added EIP712Signature.
+     *
+     * @param profileOwner The address of the profile to set the dispatcher for.
+     * @param newDispatcher The new dispatcher address to add for the profile.
+     * @param sig The EIP712Signature struct containing the profile owner's signature.
+     */
+    struct AddDispatcherWithSigData {
+        address profileOwner;
+        address dispatcher;
+        EIP712Signature sig;
+    }
 }
