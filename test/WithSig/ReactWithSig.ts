@@ -18,8 +18,8 @@ import {getReactWithSigParts} from "../helpers/utils";
 
 describe("ReactionVault ReactWithSig", function () {
   it("Should reject unknown transform", async function () {
-    const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const {reactionVault} = await deploySystem(OWNER);
+    const [OWNER, , BOB] = await ethers.getSigners();
+    const {reactionVault, parameterManager} = await deploySystem(OWNER);
 
     // Sig retrieval vars
     const verifyingContract = reactionVault.address;
@@ -35,7 +35,7 @@ describe("ReactionVault ReactWithSig", function () {
     const ipfsMetadataHash = "ipfsMetadataHash";
 
     // Sig validation vars
-    const nonce = (await reactionVault.sigNonces(signer.address)).toNumber();
+    const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     // Produce a signature that can be passed to reactWithSig()
@@ -75,8 +75,12 @@ describe("ReactionVault ReactWithSig", function () {
   });
   it("Should reject unregistered transform", async function () {
     const [OWNER, ALICE] = await ethers.getSigners();
-    const {reactionVault, testingStandard1155, makerRegistrar, roleManager} =
-      await deploySystem(OWNER);
+    const {
+      reactionVault,
+      testingStandard1155,
+      makerRegistrar,
+      parameterManager,
+    } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Now register and unregister an NFT and get the Meta ID
@@ -124,7 +128,7 @@ describe("ReactionVault ReactWithSig", function () {
     const ipfsMetadataHash = "ipfsMetadataHash";
 
     // Sig validation vars
-    const nonce = (await reactionVault.sigNonces(signer.address)).toNumber();
+    const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     // Produce a signature that can be passed to reactWithSig()
@@ -164,8 +168,12 @@ describe("ReactionVault ReactWithSig", function () {
   });
   it("Should fail on sig with invalid deadline", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const {reactionVault, testingStandard1155, makerRegistrar} =
-      await deploySystem(OWNER);
+    const {
+      reactionVault,
+      testingStandard1155,
+      makerRegistrar,
+      parameterManager,
+    } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
     // Mint an NFT to Alice
     const NFT_ID = "1";
@@ -204,7 +212,7 @@ describe("ReactionVault ReactWithSig", function () {
     const takerNftId = NFT_ID;
     const ipfsMetadataHash = "ipfsMetadataHash";
     // Sig validation vars
-    const nonce = (await reactionVault.sigNonces(signer.address)).toNumber();
+    const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     // Produce a signature that can be passed to reactWithSig()
@@ -244,8 +252,12 @@ describe("ReactionVault ReactWithSig", function () {
   });
   it("Should fail on sig with invalid nonce", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const {reactionVault, testingStandard1155, makerRegistrar} =
-      await deploySystem(OWNER);
+    const {
+      reactionVault,
+      testingStandard1155,
+      makerRegistrar,
+      parameterManager,
+    } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
     // Mint an NFT to Alice
     const NFT_ID = "1";
@@ -284,7 +296,7 @@ describe("ReactionVault ReactWithSig", function () {
     const takerNftId = NFT_ID;
     const ipfsMetadataHash = "ipfsMetadataHash";
     // Sig validation vars
-    const nonce = (await reactionVault.sigNonces(signer.address)).toNumber();
+    const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     // Produce a signature that can be passed to reactWithSig()
@@ -329,6 +341,7 @@ describe("ReactionVault ReactWithSig", function () {
       likeTokenFactory,
       testingStandard1155,
       makerRegistrar,
+      parameterManager,
     } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
     // Mint an NFT to Alice
@@ -368,7 +381,7 @@ describe("ReactionVault ReactWithSig", function () {
     const takerNftId = NFT_ID;
     const ipfsMetadataHash = "ipfsMetadataHash";
     // Sig validation vars
-    const nonce = (await reactionVault.sigNonces(signer.address)).toNumber();
+    const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     // Produce a signature that can be passed to reactWithSig()
@@ -426,8 +439,12 @@ describe("ReactionVault ReactWithSig", function () {
 
   it("Should prevent spending more reactions than freeReactionLimit param", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const {reactionVault, testingStandard1155, makerRegistrar, roleManager} =
-      await deploySystem(OWNER);
+    const {
+      reactionVault,
+      testingStandard1155,
+      makerRegistrar,
+      parameterManager,
+    } = await deploySystem(OWNER);
     const chainId = (await ethers.provider.getNetwork()).chainId;
 
     // Mint an NFT to Alice
@@ -469,7 +486,7 @@ describe("ReactionVault ReactWithSig", function () {
     const takerNftId = NFT_ID;
     const ipfsMetadataHash = "ipfsMetadataHash";
     // Sig validation vars
-    const nonce = (await reactionVault.sigNonces(signer.address)).toNumber();
+    const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     // Produce a signature that can be passed to reactWithSig()

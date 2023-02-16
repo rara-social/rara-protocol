@@ -1,21 +1,15 @@
 import {expect} from "chai";
-import {BigNumber} from "ethers";
 import {ethers} from "hardhat";
-import {MAX_UINT256, ZERO_ADDRESS} from "../Scripts/constants";
+import {MAX_UINT256} from "../Scripts/constants";
 import {deploySystem, TEST_SALE_CREATOR_BP} from "../Scripts/setup";
-import {deriveTransformId} from "../Scripts/derivedParams";
-import {
-  ALREADY_REGISTERED,
-  INVALID_BP,
-  NFT_NOT_OWNED,
-  NFT_NOT_REGISTERED,
-} from "../Scripts/errors";
+import {NFT_NOT_OWNED} from "../Scripts/errors";
 import {getRegisterNftWithSigParts} from "../helpers/utils";
 
 describe("MakerRegistrar RegisterNftWithSig", function () {
   it("Should allow 721 NFT registration ", async function () {
     const [OWNER, ALICE, BOB] = await ethers.getSigners();
-    const {makerRegistrar, testingStandard721} = await deploySystem(OWNER);
+    const {makerRegistrar, testingStandard721, parameterManager} =
+      await deploySystem(OWNER);
 
     // Sig retrieval vars
     const verifyingContract = makerRegistrar.address;
@@ -31,7 +25,7 @@ describe("MakerRegistrar RegisterNftWithSig", function () {
     const ipfsMetadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Sig validation vars
-    const nonce = (await makerRegistrar.sigNonces(signer.address)).toNumber();
+    const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
     const signature = await getRegisterNftWithSigParts(
