@@ -130,6 +130,9 @@ contract MakerRegistrar is
         uint256 optionBits,
         string calldata ipfsMetadataHash
     ) external {
+        // Reentrancy guard
+        require(msg.sender == tx.origin, "ReentrancyGuard: reentrant call");
+
         // Verify registrant is account holder or dispatcher
         require(
             addressManager
