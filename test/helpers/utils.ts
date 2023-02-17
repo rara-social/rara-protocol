@@ -6,6 +6,98 @@ import {BigNumberish, Bytes, utils} from "ethers";
 export const HARDHAT_CHAINID = 31337;
 export const SIG_DOMAIN_NAME = "Rara Protocol";
 
+const buildAddDispatcherWithSigParams = (
+  verifyingContract: string,
+  account: string,
+  dispatcher: string,
+  nonce: number,
+  deadline: string
+) => ({
+  types: {
+    AddDispatcherWithSig: [
+      // Function ABI parts
+      {name: "account", type: "address"},
+      {name: "dispatcher", type: "address"},
+      // Sig ABI parts
+      {name: "nonce", type: "uint256"},
+      {name: "deadline", type: "uint256"},
+    ],
+  },
+  domain: domain(verifyingContract),
+  value: {
+    account,
+    dispatcher,
+    nonce,
+    deadline,
+  },
+});
+
+export async function getAddDispatcherWithSigParts(
+  // signer
+  signer: SignerWithAddress,
+  // builder args
+  verifyingContract: string,
+  account: string,
+  dispatcher: string,
+  nonce: number,
+  deadline: string
+): Promise<{v: number; r: string; s: string}> {
+  const msgParams = buildAddDispatcherWithSigParams(
+    verifyingContract,
+    account,
+    dispatcher,
+    nonce,
+    deadline
+  );
+  return await getSig(signer, msgParams);
+}
+
+const buildRemoveDispatcherWithSigParams = (
+  verifyingContract: string,
+  account: string,
+  dispatcher: string,
+  nonce: number,
+  deadline: string
+) => ({
+  types: {
+    RemoveDispatcherWithSig: [
+      // Function ABI parts
+      {name: "account", type: "address"},
+      {name: "dispatcher", type: "address"},
+      // Sig ABI parts
+      {name: "nonce", type: "uint256"},
+      {name: "deadline", type: "uint256"},
+    ],
+  },
+  domain: domain(verifyingContract),
+  value: {
+    account,
+    dispatcher,
+    nonce,
+    deadline,
+  },
+});
+
+export async function getRemoveDispatcherWithSigParts(
+  // signer
+  signer: SignerWithAddress,
+  // builder args
+  verifyingContract: string,
+  account: string,
+  dispatcher: string,
+  nonce: number,
+  deadline: string
+): Promise<{v: number; r: string; s: string}> {
+  const msgParams = buildRemoveDispatcherWithSigParams(
+    verifyingContract,
+    account,
+    dispatcher,
+    nonce,
+    deadline
+  );
+  return await getSig(signer, msgParams);
+}
+
 const buildFreeReactWithSigParams = (
   verifyingContract: string,
   reactor: string,
