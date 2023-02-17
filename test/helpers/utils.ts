@@ -6,7 +6,7 @@ import {BigNumberish, Bytes, utils} from "ethers";
 export const HARDHAT_CHAINID = 31337;
 export const SIG_DOMAIN_NAME = "Rara Protocol";
 
-const buildReactWithSigParams = (
+const buildFreeReactWithSigParams = (
   verifyingContract: string,
   reactor: string,
   transformId: BigNumberish,
@@ -20,7 +20,7 @@ const buildReactWithSigParams = (
   deadline: string
 ) => ({
   types: {
-    ReactWithSig: [
+    FreeReactWithSig: [
       // Function ABI parts
       {name: "reactor", type: "address"},
       {name: "transformId", type: "uint256"},
@@ -50,7 +50,7 @@ const buildReactWithSigParams = (
   },
 });
 
-export async function getReactWithSigParts(
+export async function getFreeReactWithSigParts(
   // signer
   signer: SignerWithAddress,
   // builder args
@@ -66,7 +66,7 @@ export async function getReactWithSigParts(
   nonce: number,
   deadline: string
 ): Promise<{v: number; r: string; s: string}> {
-  const msgParams = buildReactWithSigParams(
+  const msgParams = buildFreeReactWithSigParams(
     verifyingContract,
     reactor,
     transformId,

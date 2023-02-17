@@ -16,7 +16,7 @@ library DataTypes {
         uint256 deadline;
     }
 
-    /// @notice A struct containing the parameters required for the `reactWithSig()` function.
+    /// @notice A struct containing the parameters required for the `freeReactWithSig()` function.
     ///         Parameters are almost the same as the regular `react()` function, with the reactor's (signer) address and an EIP712Signature added.
     /// @param reactor The reactor which is the message signer.
     /// @param transformId Internal id used to derive the reaction token id.
@@ -27,7 +27,7 @@ library DataTypes {
     /// @param takerNftId Target NFT ID in the contract
     /// @param ipfsMetadataHash Optional hash of any metadata being associated with spend action
     /// @param sig The EIP712Signature struct containing the follower's signature.
-    struct ReactWithSigData {
+    struct FreeReactWithSigData {
         address reactor;
         uint256 transformId;
         uint256 quantity;
@@ -51,15 +51,27 @@ library DataTypes {
     }
 
     /**
-     * @notice A struct containing the parameters required for the `addDispatcherWithSig()` function. Parameters are the same
-     * as the regular `addDispatcher()` function, with an added EIP712Signature.
+     * @notice A struct containing the parameters required for the `addDispatcherWithSig()` function.
      *
-     * @param profileOwner The address of the profile to set the dispatcher for.
-     * @param newDispatcher The new dispatcher address to add for the profile.
-     * @param sig The EIP712Signature struct containing the profile owner's signature.
+     * @param account The address of the account adding the dispatcher.
+     * @param dispatcher The dispatcher address to add for the account.
+     * @param sig The EIP712Signature struct containing the account's signature.
      */
     struct AddDispatcherWithSigData {
-        address profileOwner;
+        address account;
+        address dispatcher;
+        EIP712Signature sig;
+    }
+
+    /**
+     * @notice A struct containing the parameters required for the `removeDispatcherWithSig()` function.
+     *
+     * @param account The address of the account removing the dispatcher.
+     * @param dispatcher The dispatcher address to remove from the account.
+     * @param sig The EIP712Signature struct containing the account's signature.
+     */
+    struct RemoveDispatcherWithSigData {
+        address account;
         address dispatcher;
         EIP712Signature sig;
     }

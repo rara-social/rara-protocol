@@ -121,6 +121,53 @@ contract MakerRegistrar is
         );
     }
 
+    function registerNftAsDispatcher(
+        address registrant,
+        address nftContractAddress,
+        uint256 nftId,
+        address creatorAddress,
+        uint256 creatorSaleBasisPoints,
+        uint256 optionBits,
+        string calldata ipfsMetadataHash
+    ) external {
+        // Verify registrant is account holder or dispatcher
+        require(
+            addressManager
+                .dispatcherManager()
+                .callerIsAccountHolderOrDispatcher(registrant),
+            "Not account holder or dispatcher"
+        );
+
+        // Verify ownership
+        require(
+            verifyOwnership(nftContractAddress, nftId, registrant),
+            "NFT not owned"
+        );
+
+        // Get the royalties for the creator addresses - use fallback if none set on chain
+        (
+            address[] memory addressesArray,
+            uint256[] memory creatorBasisPointsArray
+        ) = Royalties._getRoyaltyOverride(
+                addressManager.royaltyRegistry(),
+                nftContractAddress,
+                nftId,
+                creatorAddress,
+                creatorSaleBasisPoints
+            );
+
+        _registerForOwner(
+            registrant,
+            block.chainid, // Use current chain ID
+            nftContractAddress,
+            nftId,
+            addressesArray,
+            creatorBasisPointsArray,
+            optionBits,
+            ipfsMetadataHash
+        );
+    }
+
     /// @dev Allows a NFT owner to register the NFT in the protocol so that reactions can be sold.
     /// Owner registering must own the NFT in the wallet calling function.
     function registerNftWithSig(DataTypes.RegisterNftWithSigData calldata vars)

@@ -628,9 +628,85 @@ contract ReactionVault is
         );
     }
 
+    /// @dev External method identical to _freeReaction()
+    function freeReact(
+        uint256 transformId,
+        uint256 optionBits,
+        uint256 takerNftChainId,
+        address takerNftAddress,
+        uint256 takerNftId,
+        uint256 reactionQuantity,
+        string memory ipfsMetadataHash
+    ) external nonReentrant {
+        // calc payment parameter version
+        uint256 parameterVersion = deriveParameterVersion(
+            addressManager.parameterManager()
+        );
+        // Build reaction ID
+        uint256 reactionId = deriveReactionId(
+            transformId,
+            optionBits,
+            parameterVersion
+        );
+
+        // Proceed with free reaction
+        _freeReactionForSpecifiedAddress(
+            msg.sender,
+            transformId,
+            takerNftChainId,
+            takerNftAddress,
+            takerNftId,
+            reactionId,
+            reactionQuantity,
+            ipfsMetadataHash
+        );
+    }
+
+    function freeReactAsDispatcher(
+        address reactor,
+        uint256 transformId,
+        uint256 optionBits,
+        uint256 takerNftChainId,
+        address takerNftAddress,
+        uint256 takerNftId,
+        uint256 reactionQuantity,
+        string memory ipfsMetadataHash
+    ) external nonReentrant {
+        // Verify reactor is account holder or dispatcher
+        require(
+            addressManager
+                .dispatcherManager()
+                .callerIsAccountHolderOrDispatcher(reactor),
+            "Not account holder or dispatcher"
+        );
+
+        // calc payment parameter version
+        uint256 parameterVersion = deriveParameterVersion(
+            addressManager.parameterManager()
+        );
+        // Build reaction ID
+        uint256 reactionId = deriveReactionId(
+            transformId,
+            optionBits,
+            parameterVersion
+        );
+
+        // Proceed with free reaction
+        _freeReactionForSpecifiedAddress(
+            reactor,
+            transformId,
+            takerNftChainId,
+            takerNftAddress,
+            takerNftId,
+            reactionId,
+            reactionQuantity,
+            ipfsMetadataHash
+        );
+    }
+
     /// @dev Allows a user to react to content & receive a like token without sending any value.
     /// This function will allow the user to record their reaction on-chain and collect a "like" token but not purchase any curator tokens.
-    function reactWithSig(DataTypes.ReactWithSigData calldata vars)
+    function freeReactWithSig(DataTypes.FreeReactWithSigData calldata vars)
         external
         nonReentrant
     {

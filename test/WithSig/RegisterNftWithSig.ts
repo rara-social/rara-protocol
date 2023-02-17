@@ -15,7 +15,7 @@ describe("MakerRegistrar RegisterNftWithSig", function () {
     const verifyingContract = makerRegistrar.address;
     const signer = ALICE;
     // Args for registerNftWithSig
-    // Args for reactWithSig
+    // Args for freeReactWithSig
     const registrant = ALICE.address;
     const nftContractAddress = testingStandard721.address;
     const nftId = "1";

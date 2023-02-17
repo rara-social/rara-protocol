@@ -33,10 +33,10 @@ contract ReactionVaultStorageV1 is IReactionVault {
 }
 
 contract ReactionVaultStorageV2 is ReactionVaultStorageV1 {
-    // Typehash for the reactWithSig method
+    // Typehash for the freeReactWithSig method
     bytes32 internal constant REACT_WITH_SIG_TYPEHASH =
         keccak256(
-            "ReactWithSig(address reactor,uint256 transformId,uint256 quantity,uint256 optionBits,uint256 takerNftChainId,address takerNftAddress,uint256 takerNftId,string ipfsMetadataHash,uint256 nonce,uint256 deadline)"
+            "FreeReactWithSig(address reactor,uint256 transformId,uint256 quantity,uint256 optionBits,uint256 takerNftChainId,address takerNftAddress,uint256 takerNftId,string ipfsMetadataHash,uint256 nonce,uint256 deadline)"
         );
 }
 

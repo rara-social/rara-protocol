@@ -14,9 +14,9 @@ import {
   SIGNATURE_EXPIRED,
   SIGNATURE_INVALID,
 } from "../Scripts/errors";
-import {getReactWithSigParts} from "../helpers/utils";
+import {getFreeReactWithSigParts} from "../helpers/utils";
 
-describe("ReactionVault ReactWithSig", function () {
+describe("ReactionVault FreeReactWithSig", function () {
   it("Should reject unknown transform", async function () {
     const [OWNER, , BOB] = await ethers.getSigners();
     const {reactionVault, parameterManager} = await deploySystem(OWNER);
@@ -24,7 +24,7 @@ describe("ReactionVault ReactWithSig", function () {
     // Sig retrieval vars
     const verifyingContract = reactionVault.address;
     const signer = BOB;
-    // Args for reactWithSig
+    // Args for freeReactWithSig
     const reactor = BOB.address;
     const transformId = 123456;
     const quantity = 1;
@@ -38,8 +38,8 @@ describe("ReactionVault ReactWithSig", function () {
     const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
-    // Produce a signature that can be passed to reactWithSig()
-    const signature = await getReactWithSigParts(
+    // Produce a signature that can be passed to freeReactWithSig()
+    const signature = await getFreeReactWithSigParts(
       signer,
       verifyingContract,
       reactor,
@@ -55,7 +55,7 @@ describe("ReactionVault ReactWithSig", function () {
     );
 
     await expect(
-      reactionVault.connect(OWNER).reactWithSig({
+      reactionVault.connect(OWNER).freeReactWithSig({
         reactor,
         transformId,
         quantity,
@@ -117,7 +117,7 @@ describe("ReactionVault ReactWithSig", function () {
     // Sig retrieval vars
     const verifyingContract = reactionVault.address;
     const signer = ALICE;
-    // Args for reactWithSig
+    // Args for freeReactWithSig
     const reactor = ALICE.address;
     const transformId = TRANSFORM_ID;
     const quantity = 1;
@@ -131,8 +131,8 @@ describe("ReactionVault ReactWithSig", function () {
     const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
-    // Produce a signature that can be passed to reactWithSig()
-    const signature = await getReactWithSigParts(
+    // Produce a signature that can be passed to freeReactWithSig()
+    const signature = await getFreeReactWithSigParts(
       signer,
       verifyingContract,
       reactor,
@@ -148,7 +148,7 @@ describe("ReactionVault ReactWithSig", function () {
     );
 
     await expect(
-      reactionVault.connect(OWNER).reactWithSig({
+      reactionVault.connect(OWNER).freeReactWithSig({
         reactor,
         transformId,
         quantity,
@@ -197,12 +197,12 @@ describe("ReactionVault ReactWithSig", function () {
     // Encode the params and hash it to get the meta URI
     const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Define variables neeeded for a reactWithSig call on Bob's behalf
+    // Define variables neeeded for a freeReactWithSig call on Bob's behalf
     // ----------------------------------------------------------------
     // Sig retrieval vars
     const verifyingContract = reactionVault.address;
     const signer = BOB;
-    // Args for reactWithSig
+    // Args for freeReactWithSig
     const reactor = BOB.address;
     const transformId = TRANSFORM_ID;
     const quantity = 1;
@@ -215,8 +215,8 @@ describe("ReactionVault ReactWithSig", function () {
     const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
-    // Produce a signature that can be passed to reactWithSig()
-    const signature = await getReactWithSigParts(
+    // Produce a signature that can be passed to freeReactWithSig()
+    const signature = await getFreeReactWithSigParts(
       signer,
       verifyingContract,
       reactor,
@@ -232,7 +232,7 @@ describe("ReactionVault ReactWithSig", function () {
     );
 
     await expect(
-      reactionVault.connect(OWNER).reactWithSig({
+      reactionVault.connect(OWNER).freeReactWithSig({
         reactor,
         transformId,
         quantity,
@@ -281,12 +281,12 @@ describe("ReactionVault ReactWithSig", function () {
     // Encode the params and hash it to get the meta URI
     const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Define variables neeeded for a reactWithSig call on Bob's behalf
+    // Define variables neeeded for a freeReactWithSig call on Bob's behalf
     // ----------------------------------------------------------------
     // Sig retrieval vars
     const verifyingContract = reactionVault.address;
     const signer = BOB;
-    // Args for reactWithSig
+    // Args for freeReactWithSig
     const reactor = BOB.address;
     const transformId = TRANSFORM_ID;
     const quantity = 1;
@@ -299,8 +299,8 @@ describe("ReactionVault ReactWithSig", function () {
     const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
-    // Produce a signature that can be passed to reactWithSig()
-    const signature = await getReactWithSigParts(
+    // Produce a signature that can be passed to freeReactWithSig()
+    const signature = await getFreeReactWithSigParts(
       signer,
       verifyingContract,
       reactor,
@@ -316,7 +316,7 @@ describe("ReactionVault ReactWithSig", function () {
     );
 
     await expect(
-      reactionVault.connect(OWNER).reactWithSig({
+      reactionVault.connect(OWNER).freeReactWithSig({
         reactor,
         transformId,
         quantity,
@@ -366,12 +366,12 @@ describe("ReactionVault ReactWithSig", function () {
     // Encode the params and hash it to get the meta URI
     const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Define variables neeeded for a reactWithSig call on Bob's behalf
+    // Define variables neeeded for a freeReactWithSig call on Bob's behalf
     // ----------------------------------------------------------------
     // Sig retrieval vars
     const verifyingContract = reactionVault.address;
     const signer = BOB;
-    // Args for reactWithSig
+    // Args for freeReactWithSig
     const reactor = BOB.address;
     const transformId = TRANSFORM_ID;
     const quantity = 1;
@@ -384,8 +384,8 @@ describe("ReactionVault ReactWithSig", function () {
     const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
-    // Produce a signature that can be passed to reactWithSig()
-    const signature = await getReactWithSigParts(
+    // Produce a signature that can be passed to freeReactWithSig()
+    const signature = await getFreeReactWithSigParts(
       signer,
       verifyingContract,
       reactor,
@@ -400,7 +400,7 @@ describe("ReactionVault ReactWithSig", function () {
       deadline
     );
 
-    const tx = await reactionVault.connect(OWNER).reactWithSig({
+    const tx = await reactionVault.connect(OWNER).freeReactWithSig({
       reactor,
       transformId,
       quantity,
@@ -471,12 +471,12 @@ describe("ReactionVault ReactWithSig", function () {
     );
     const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Define variables neeeded for a reactWithSig call on Bob's behalf
+    // Define variables neeeded for a freeReactWithSig call on Bob's behalf
     // ----------------------------------------------------------------
     // Sig retrieval vars
     const verifyingContract = reactionVault.address;
     const signer = BOB;
-    // Args for reactWithSig
+    // Args for freeReactWithSig
     const reactor = BOB.address;
     const transformId = TRANSFORM_ID;
     const quantity = 2; // invalid quantity
@@ -489,8 +489,8 @@ describe("ReactionVault ReactWithSig", function () {
     const nonce = (await parameterManager.sigNonces(signer.address)).toNumber();
     const deadline = MAX_UINT256;
 
-    // Produce a signature that can be passed to reactWithSig()
-    const signature = await getReactWithSigParts(
+    // Produce a signature that can be passed to freeReactWithSig()
+    const signature = await getFreeReactWithSigParts(
       signer,
       verifyingContract,
       reactor,
@@ -506,7 +506,7 @@ describe("ReactionVault ReactWithSig", function () {
     );
 
     await expect(
-      reactionVault.connect(OWNER).reactWithSig({
+      reactionVault.connect(OWNER).freeReactWithSig({
         reactor,
         transformId,
         quantity,
