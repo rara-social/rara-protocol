@@ -9,7 +9,7 @@ import {
 import {ZERO_ADDRESS} from "../Scripts/constants";
 
 describe("ReactionVault FreeReactAsDispatcher", function () {
-  it("Should emit registration event and verify mappings", async function () {
+  it("Should issue a like token", async function () {
     const [OWNER, ALICE, BOB, DISPATCHER] = await ethers.getSigners();
     const {
       reactionVault,
