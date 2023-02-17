@@ -96,6 +96,18 @@ const deploySystem = async (owner: SignerWithAddress) => {
     deployedParameterManager.address
   );
 
+  // Deploy the Dispatcher Manager
+  const DispatcherManagerFactory = await ethers.getContractFactory(
+    "DispatcherManager"
+  );
+  const deployedDispatcherManager = await upgrades.deployProxy(
+    DispatcherManagerFactory,
+    [addressManager.address]
+  );
+  const dispatcherManager = DispatcherManagerFactory.attach(
+    deployedDispatcherManager.address
+  );
+
   // Deploy test Wrapped Matic
   const WMaticFactory = await ethers.getContractFactory("WMATIC");
   const paymentTokenErc20 = await WMaticFactory.deploy();
@@ -209,6 +221,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
   // Update address manager
   await addressManager.setRoleManager(roleManager.address);
   await addressManager.setParameterManager(parameterManager.address);
+  await addressManager.setDispatcherManager(dispatcherManager.address);
   await addressManager.setMakerRegistrar(makerRegistrar.address);
   await addressManager.setReactionNftContract(reactionNFT1155.address);
   await addressManager.setDefaultCuratorVault(curatorVault2.address);
@@ -233,6 +246,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
     childRegistrar,
     curatorToken,
     curatorVault,
+    dispatcherManager,
     likeTokenFactory,
     likeTokenImpl,
     makerRegistrar,

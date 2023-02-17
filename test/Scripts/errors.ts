@@ -1,4 +1,6 @@
 const ALREADY_REGISTERED = "Already registered";
+const DISPATCHER_ALREADY_ASSIGNED = "Dispatcher already assigned";
+const DISPATCHER_ALREADY_UNASSIGNED = "Dispatcher already unassigned";
 const INVALID_BP = "Invalid bp";
 const INVALID_CURATOR_VAULT = "Err CuratorVault";
 const INVALID_PAYMENT = "Invalid payment";
@@ -25,6 +27,8 @@ const SIGNATURE_EXPIRED = "SignatureExpired()";
 
 export {
   ALREADY_REGISTERED,
+  DISPATCHER_ALREADY_ASSIGNED,
+  DISPATCHER_ALREADY_UNASSIGNED,
   INVALID_BP,
   INVALID_CURATOR_VAULT,
   INVALID_PAYMENT,
