@@ -2,7 +2,7 @@ import {HardhatRuntimeEnvironment} from "hardhat/types";
 import {ethers, upgrades} from "hardhat";
 
 import {deployProxyContract} from "../../deploy_config/protocol";
-import config from "../../deploy_config/mumbai";
+import {DeployResult} from "hardhat-deploy/types";
 
 const deployConfig = require("../../deploy_data/hardhat_contracts.json");
 
@@ -34,19 +34,32 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
     wallet
   );
 
+  // Update implementation for RoleManager
+  const rm = await deployProxyContract(hre, "RoleManager", [wallet.address]);
+  let txn = await DefaultProxyAdmin.upgrade(rm.address, rm.implementation);
+  await txn.wait();
+  let implementation = await DefaultProxyAdmin.getProxyImplementation(
+    rm.address
+  );
+  console.log({
+    name: "RoleManager",
+    address: rm.address,
+    imp: rm.implementation,
+    proxy_imp: implementation,
+  });
+
   // Update implementation for AddressManager
-  const roleManagerAddress =
-    deployConfig[chainId][0].contracts.RoleManager.address;
-  // console.log({roleManagerAddress});
-  let addressManager = await deployProxyContract(hre, "AddressManager", [
-    roleManagerAddress,
-  ]);
-  let txn = await DefaultProxyAdmin.upgrade(
+  let addressManager: DeployResult = await deployProxyContract(
+    hre,
+    "AddressManager",
+    [rm.address]
+  );
+  txn = await DefaultProxyAdmin.upgrade(
     addressManager.address,
     addressManager.implementation
   );
   await txn.wait();
-  let implementation = await DefaultProxyAdmin.getProxyImplementation(
+  implementation = await DefaultProxyAdmin.getProxyImplementation(
     addressManager.address
   );
   console.log({
@@ -120,16 +133,29 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   // Temporarily grant roles to the deploying account
   //
   console.log("\n\nGranting temp permissions");
-  const roleManager = await ethers.getContractAt(
-    "RoleManager",
-    roleManagerAddress
-  );
+  const roleManager = await ethers.getContractAt("RoleManager", rm.address);
   await roleManager.grantRole(
     await roleManager.ADDRESS_MANAGER_ADMIN(),
     deployer,
     {gasLimit: "200000"}
   );
   console.log("Granted ADDRESS_MANAGER_ADMIN to " + deployer);
+
+  //
+  // Permanently grant roles to the sig nonce updaters
+  //
+  // Allow reaction vault to update sig nonces
+  await roleManager.grantRole(
+    await roleManager.SIG_NONCE_UPDATER(),
+    rv.address,
+    {gasLimit: "200000"}
+  );
+  // Allow maker registrar to update sig nonces
+  await roleManager.grantRole(
+    await roleManager.SIG_NONCE_UPDATER(),
+    mr.address,
+    {gasLimit: "200000"}
+  );
 
   //
   // Updating AddressManager
