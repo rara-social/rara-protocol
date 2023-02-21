@@ -278,4 +278,12 @@ describe("ParameterManager", function () {
       parameterManager.connect(ALICE).setFreeReactionLimit(100)
     ).to.be.revertedWith(NOT_ADMIN);
   });
+  it("Should not allow an uncredentialed address to increment sigNonces", async () => {
+    const [OWNER, ALICE] = await ethers.getSigners();
+    const {parameterManager} = await deploySystem(OWNER);
+
+    await expect(
+      parameterManager.connect(OWNER).incSigNonceFor(ALICE.address)
+    ).to.be.revertedWith("Not signature nonce updater");
+  });
 });
