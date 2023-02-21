@@ -1,4 +1,6 @@
 const ALREADY_REGISTERED = "Already registered";
+const DISPATCHER_ALREADY_ASSIGNED = "Dispatcher already assigned";
+const DISPATCHER_ALREADY_UNASSIGNED = "Dispatcher already unassigned";
 const INVALID_BP = "Invalid bp";
 const INVALID_CURATOR_VAULT = "Err CuratorVault";
 const INVALID_PAYMENT = "Invalid payment";
@@ -7,6 +9,7 @@ const INVALID_ZERO_PARAM = "Invalid 0 input";
 const LIKE_TRANSFER_RESTRICTED = "Like transfer restricted";
 const NFT_NOT_OWNED = "NFT not owned";
 const NFT_NOT_REGISTERED = "NFT not registered";
+const NOT_ACCOUNT_HOLDER_OR_DISPATCHER = "Not account holder or dispatcher";
 const NOT_ADMIN = "Not Admin";
 const NOT_BRIDGE = "Not Bridge";
 const NOT_NFT_ADMIN = "Not NFT Admin";
@@ -20,9 +23,13 @@ const REWARDS_LT_BURN = "Rewards balance < tokensToBurn";
 const TRANSFER_NOT_ALLOWED = "ERC20: insufficient allowance";
 const UNKNOWN_NFT = "Unknown NFT";
 const REACTION_QUANTITY_TOO_HIGH = "Reaction quantity above limit";
+const SIGNATURE_INVALID = "SignatureInvalid()";
+const SIGNATURE_EXPIRED = "SignatureExpired()";
 
 export {
   ALREADY_REGISTERED,
+  DISPATCHER_ALREADY_ASSIGNED,
+  DISPATCHER_ALREADY_UNASSIGNED,
   INVALID_BP,
   INVALID_CURATOR_VAULT,
   INVALID_PAYMENT,
@@ -31,6 +38,7 @@ export {
   LIKE_TRANSFER_RESTRICTED,
   NFT_NOT_OWNED,
   NFT_NOT_REGISTERED,
+  NOT_ACCOUNT_HOLDER_OR_DISPATCHER,
   NOT_ADMIN,
   NOT_BRIDGE,
   NOT_NFT_ADMIN,
@@ -44,4 +52,6 @@ export {
   TRANSFER_NOT_ALLOWED,
   UNKNOWN_NFT,
   REACTION_QUANTITY_TOO_HIGH,
+  SIGNATURE_INVALID,
+  SIGNATURE_EXPIRED,
 };

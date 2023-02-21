@@ -9,7 +9,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 /// be used as the role owner could renounce the role leaving all future actions disabled.  Additionally,
 /// if a malicious account was able to obtain the role, they could use it to set values to malicious addresses.
 /// See the public documentation website for more details.
-contract AddressManager is Initializable, AddressManagerStorageV2 {
+contract AddressManager is Initializable, AddressManagerStorageV3 {
     /// @dev Verifies with the role manager that the calling address has ADMIN role
     modifier onlyAdmin() {
         require(roleManager.isAddressManagerAdmin(msg.sender), "Not Admin");
@@ -25,6 +25,7 @@ contract AddressManager is Initializable, AddressManagerStorageV2 {
     event ChildRegistrarAddressUpdated(address newAddress);
     event RoyaltyRegistryAddressUpdated(address newAddress);
     event LikeTokenFactoryAddressUpdated(address newAddress);
+    event DispatcherManagerUpdated(address newAddress);
 
     /// @dev initializer to call after deployment, can only be called once
     function initialize(IRoleManager _roleManager) public initializer {
@@ -47,7 +48,7 @@ contract AddressManager is Initializable, AddressManagerStorageV2 {
         emit RoleManagerAddressUpdated(address(_roleManager));
     }
 
-    /// @dev Setter for the role manager address
+    /// @dev Setter for the parameter manager address
     function setParameterManager(IParameterManager _parameterManager)
         external
         onlyAdmin
@@ -67,7 +68,7 @@ contract AddressManager is Initializable, AddressManagerStorageV2 {
         emit MakerRegistrarAddressUpdated(address(_makerRegistrar));
     }
 
-    /// @dev Setter for the maker registrar address
+    /// @dev Setter for the reaction nft token address
     function setReactionNftContract(IStandard1155 _reactionNftContract)
         external
         onlyAdmin
@@ -106,5 +107,15 @@ contract AddressManager is Initializable, AddressManagerStorageV2 {
         // We DO allow the Like Token Factory to be set to 0x0 as this disables the functionality
         likeTokenFactory = _likeTokenFactory;
         emit LikeTokenFactoryAddressUpdated(likeTokenFactory);
+    }
+
+    /// @dev Setter for the dispatcher manager address
+    function setDispatcherManager(IDispatcherManager _dispatcherManager)
+        external
+        onlyAdmin
+    {
+        require(address(_dispatcherManager) != address(0x0), ZERO_INPUT);
+        dispatcherManager = _dispatcherManager;
+        emit DispatcherManagerUpdated(address(dispatcherManager));
     }
 }

@@ -56,10 +56,15 @@ abstract contract ParameterManagerStorageV2 is ParameterManagerStorageV1 {
     uint256 public freeReactionLimit;
 }
 
+abstract contract ParameterManagerStorageV3 is ParameterManagerStorageV2 {
+    /// @dev Mapping to track the nonces of accounts sending tx's via EIP-712 sigs
+    mapping(address => uint256) public sigNonces;
+}
+
 /// On the next version of the protocol, if new variables are added, put them in the below
 /// contract and use this as the inheritance chain.
 /**
-contract ParameterManagerStorageV3 is ParameterManagerStorageV2 {
+contract ParameterManagerStorageV4 is ParameterManagerStorageV3 {
   address newVariable;
 }
  */

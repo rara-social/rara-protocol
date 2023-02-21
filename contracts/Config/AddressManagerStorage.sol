@@ -5,6 +5,7 @@ import "../Permissions/IRoleManager.sol";
 import "../Parameters/IParameterManager.sol";
 import "../Maker/IMakerRegistrar.sol";
 import "../Token/IStandard1155.sol";
+import "../DispatcherManager/IDispatcherManager.sol";
 import "./IAddressManager.sol";
 
 /// @title AddressManagerStorage
@@ -45,10 +46,15 @@ abstract contract AddressManagerStorageV2 is AddressManagerStorageV1 {
     address public likeTokenFactory;
 }
 
+abstract contract AddressManagerStorageV3 is AddressManagerStorageV2 {
+    /// @dev Local reference to the dispatcher manager
+    IDispatcherManager public dispatcherManager;
+}
+
 /// On the next version of the protocol, if new variables are added, put them in the below
 /// contract and use this as the inheritance chain.
 /**
-contract AddressManagerStorageV3 is AddressManagerStorageV2 {
+contract AddressManagerStorageV4 is AddressManagerStorageV3 {
   address newVariable;
 }
  */

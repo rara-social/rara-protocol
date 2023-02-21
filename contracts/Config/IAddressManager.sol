@@ -7,6 +7,7 @@ import "../Maker/IMakerRegistrar.sol";
 import "../Token/IStandard1155.sol";
 import "../Reactions/IReactionVault.sol";
 import "../CuratorVault/SigmoidCuratorVault/ICuratorVault.sol";
+import "../DispatcherManager/IDispatcherManager.sol";
 
 interface IAddressManager {
     /// @dev Getter for the role manager address
@@ -58,4 +59,11 @@ interface IAddressManager {
 
     /// @dev Setter for the address of the Like Token Factory
     function setLikeTokenFactory(address _likeTokenFactory) external;
+
+    /// @dev Getter for the address of the DispatcherManager
+    function dispatcherManager() external returns (IDispatcherManager);
+
+    /// @dev Setter for the address of the DispatcherManager;
+    function setDispatcherManager(IDispatcherManager _dispatcherManager)
+        external;
 }

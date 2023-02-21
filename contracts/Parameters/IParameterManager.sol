@@ -60,9 +60,15 @@ interface IParameterManager {
     function setNativeWrappedToken(IERC20Upgradeable _nativeWrappedToken)
         external;
 
-    /// @dev Setter for free reaction limit
+    /// @dev Getter for free reaction limit
     function freeReactionLimit() external returns (uint256);
 
     /// @dev Setter for free reaction limit
     function setFreeReactionLimit(uint256 limit) external;
+
+    /// @dev Getter for an account's current EIP-712 signature nonce
+    function sigNonces(address signer) external returns (uint256);
+
+    /// @dev Incrementer for an account's current EIP-712 signature nonce
+    function incSigNonceFor(address signer) external returns (uint256);
 }
