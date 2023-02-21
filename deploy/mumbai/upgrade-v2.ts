@@ -156,6 +156,12 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
     mr.address,
     {gasLimit: "200000"}
   );
+  // Allow dispatcher manager to update sig nonces
+  await roleManager.grantRole(
+    await roleManager.SIG_NONCE_UPDATER(),
+    dispatcherManager.address,
+    {gasLimit: "200000"}
+  );
 
   //
   // Updating AddressManager
