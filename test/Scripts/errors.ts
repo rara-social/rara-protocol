@@ -9,6 +9,7 @@ const INVALID_ZERO_PARAM = "Invalid 0 input";
 const LIKE_TRANSFER_RESTRICTED = "Like transfer restricted";
 const NFT_NOT_OWNED = "NFT not owned";
 const NFT_NOT_REGISTERED = "NFT not registered";
+const NOT_ACCOUNT_HOLDER_OR_DISPATCHER = "Not account holder or dispatcher";
 const NOT_ADMIN = "Not Admin";
 const NOT_BRIDGE = "Not Bridge";
 const NOT_NFT_ADMIN = "Not NFT Admin";
@@ -37,6 +38,7 @@ export {
   LIKE_TRANSFER_RESTRICTED,
   NFT_NOT_OWNED,
   NFT_NOT_REGISTERED,
+  NOT_ACCOUNT_HOLDER_OR_DISPATCHER,
   NOT_ADMIN,
   NOT_BRIDGE,
   NOT_NFT_ADMIN,
