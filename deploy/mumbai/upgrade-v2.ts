@@ -121,8 +121,10 @@ module.exports = async (hre: HardhatRuntimeEnvironment) => {
   const DispatcherManagerFactory = await ethers.getContractFactory(
     "DispatcherManager"
   );
-  const deployedDispatcherManager = await upgrades.deployProxy(
-    DispatcherManagerFactory,
+
+  const deployedDispatcherManager = await deployProxyContract(
+    hre,
+    "DispatcherManager",
     [addressManagerAddress]
   );
   const dispatcherManager = DispatcherManagerFactory.attach(
