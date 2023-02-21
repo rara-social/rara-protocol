@@ -79,31 +79,4 @@ describe("DispatcherManager AddDispatcher", function () {
     );
     expect(isDispatcherAfter).eq(true);
   });
-
-  it("Correctly determines if caller is account holder or dispatcher", async () => {
-    const [OWNER, ACCOUNT, DISPATCHER] = await ethers.getSigners();
-    const {dispatcherManager} = await deploySystem(OWNER);
-
-    const isAccountHolderBefore = await dispatcherManager
-      .connect(ACCOUNT)
-      .callerIsAccountHolderOrDispatcher(ACCOUNT.address);
-    expect(isAccountHolderBefore).eq(true);
-
-    const isDispatcherBefore = await dispatcherManager
-      .connect(DISPATCHER)
-      .callerIsAccountHolderOrDispatcher(ACCOUNT.address);
-    expect(isDispatcherBefore).eq(false);
-
-    await dispatcherManager.connect(ACCOUNT).addDispatcher(DISPATCHER.address);
-
-    const isAccountHolderAfter = await dispatcherManager
-      .connect(ACCOUNT)
-      .callerIsAccountHolderOrDispatcher(ACCOUNT.address);
-    expect(isAccountHolderAfter).eq(true);
-
-    const isDispatcherAfter = await dispatcherManager
-      .connect(DISPATCHER)
-      .callerIsAccountHolderOrDispatcher(ACCOUNT.address);
-    expect(isDispatcherAfter).eq(true);
-  });
 });

@@ -21,7 +21,7 @@ interface IDispatcherManager {
     ) external;
 
     /// @dev
-    function callerIsAccountHolderOrDispatcher(address _account)
+    function isDispatcherFor(address _account, address _maybeDispatcher)
         external
         view
         returns (bool);

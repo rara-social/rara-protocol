@@ -45,17 +45,13 @@ contract DispatcherManager is
         emit DispatcherRemoved(_account, _dispatcher);
     }
 
-    // !!! WARNING !!!
-    // ONLY CALL THIS FUNCTION INSIDE A CONTRACT METHOD
-    // THAT HAS BEEN GUARDED AGAINST REEENTRY
-    // ie, require(msg.sender == tx.origin, "ReentrancyGuard: reentrant call")
-    function callerIsAccountHolderOrDispatcher(address _account)
+    // Getter for dispatchers by account
+    function isDispatcherFor(address _account, address _maybeDispatcher)
         external
         view
         returns (bool)
     {
-        return (_account == tx.origin || // is account holder
-            dispatchersByAccount[_account][tx.origin]); // is account dispatcher
+        return dispatchersByAccount[_account][_maybeDispatcher];
     }
 
     function addDispatcher(address _dispatcher) external nonReentrant {

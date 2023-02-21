@@ -674,9 +674,11 @@ contract ReactionVault is
     ) external nonReentrant {
         // Verify reactor is account holder or dispatcher
         require(
-            addressManager
-                .dispatcherManager()
-                .callerIsAccountHolderOrDispatcher(reactor),
+            msg.sender == reactor ||
+                addressManager.dispatcherManager().isDispatcherFor(
+                    reactor,
+                    msg.sender
+                ),
             "Not account holder or dispatcher"
         );
 
