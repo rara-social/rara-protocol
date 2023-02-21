@@ -40,4 +40,11 @@ interface IRoleManager {
         external
         view
         returns (bool);
+
+    /// @dev Determines if the specified address has permission to update sigNonces
+    /// @param potentialAddress Address to check
+    function isSigNonceUpdater(address potentialAddress)
+        external
+        view
+        returns (bool);
 }

@@ -14,7 +14,7 @@ import "./RoleManagerStorage.sol";
 contract RoleManager is
     IRoleManager,
     AccessControlUpgradeable,
-    RoleManagerStorageV1
+    RoleManagerStorageV2
 {
     /// @dev initializer to call after deployment, can only be called once
     function initialize(address protocolAdmin) public initializer {
@@ -77,5 +77,15 @@ contract RoleManager is
         returns (bool)
     {
         return hasRole(CURATOR_TOKEN_ADMIN, potentialAddress);
+    }
+
+    /// @dev Determines if the specified address has permission to update sigNonces
+    /// @param potentialAddress Address to check
+    function isSigNonceUpdater(address potentialAddress)
+        external
+        view
+        returns (bool)
+    {
+        return hasRole(SIG_NONCE_UPDATER, potentialAddress);
     }
 }
