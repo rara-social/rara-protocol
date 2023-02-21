@@ -227,7 +227,7 @@ const deploySystem = async (owner: SignerWithAddress) => {
     await roleManager.SIG_NONCE_UPDATER(),
     makerRegistrar.address
   );
-  // Maker Registrar can update sigNonces
+  // Dispatcher Manager can update sigNonces
   await roleManager.grantRole(
     await roleManager.SIG_NONCE_UPDATER(),
     dispatcherManager.address
