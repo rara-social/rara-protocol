@@ -575,7 +575,7 @@ contract ReactionVault is
 
     /// @dev Allows a user to react to content & receive a like token.
     /// If value is sent into this function then the user will purchase curation tokens.
-    function react(
+    function reactLegacy(
         uint256 transformId,
         uint256 quantity,
         address referrer,
@@ -629,7 +629,7 @@ contract ReactionVault is
     }
 
     /// @dev External method identical to _freeReaction()
-    function freeReact(
+    function react(
         uint256 transformId,
         uint256 optionBits,
         uint256 takerNftChainId,
@@ -662,7 +662,7 @@ contract ReactionVault is
         );
     }
 
-    function freeReactAsDispatcher(
+    function reactAsDispatcher(
         address reactor,
         uint256 transformId,
         uint256 optionBits,
@@ -708,7 +708,7 @@ contract ReactionVault is
 
     /// @dev Allows a user to react to content & receive a like token without sending any value.
     /// This function will allow the user to record their reaction on-chain and collect a "like" token but not purchase any curator tokens.
-    function freeReactWithSig(DataTypes.FreeReactWithSigData calldata vars)
+    function reactWithSig(DataTypes.ReactWithSigData calldata vars)
         external
         nonReentrant
     {

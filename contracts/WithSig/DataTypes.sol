@@ -16,7 +16,7 @@ library DataTypes {
         uint256 deadline;
     }
 
-    /// @notice A struct containing the parameters required for the `freeReactWithSig()` function.
+    /// @notice A struct containing the parameters required for the `reactWithSig()` function.
     ///         Parameters are almost the same as the regular `react()` function, with the reactor's (signer) address and an EIP712Signature added.
     /// @param reactor The reactor which is the message signer.
     /// @param transformId Internal id used to derive the reaction token id.
@@ -27,7 +27,7 @@ library DataTypes {
     /// @param takerNftId Target NFT ID in the contract
     /// @param ipfsMetadataHash Optional hash of any metadata being associated with spend action
     /// @param sig The EIP712Signature struct containing the follower's signature.
-    struct FreeReactWithSigData {
+    struct ReactWithSigData {
         address reactor;
         uint256 transformId;
         uint256 quantity;

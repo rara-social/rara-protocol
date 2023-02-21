@@ -55,7 +55,7 @@ describe("ReactionVault Buy And Spend", function () {
     const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Buy and spend the reaction
-    const transaction = await reactionVault.react(
+    const transaction = await reactionVault.reactLegacy(
       REACTION_ID,
       REACTION_AMOUNT,
       REFERRER.address, // Referrer
@@ -137,7 +137,7 @@ describe("ReactionVault Buy And Spend", function () {
     const metadataHash = "QmV288zHttJJwPBZAW3L922dBypWqukFNWzekT6chxW4Cu";
 
     // Buy and spend the reaction
-    const transaction = await reactionVault.react(
+    const transaction = await reactionVault.reactLegacy(
       REACTION_ID,
       REACTION_AMOUNT,
       REFERRER.address, // Referrer
