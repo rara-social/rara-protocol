@@ -9,7 +9,7 @@ import {
 import {ZERO_ADDRESS} from "../Scripts/constants";
 import {NOT_ACCOUNT_HOLDER_OR_DISPATCHER} from "../Scripts/errors";
 
-describe("ReactionVault FreeReactAsDispatcher", function () {
+describe("ReactionVault ReactAsDispatcher", function () {
   it("Should issue a like token", async function () {
     const [OWNER, ALICE, BOB, DISPATCHER] = await ethers.getSigners();
     const {
@@ -46,7 +46,7 @@ describe("ReactionVault FreeReactAsDispatcher", function () {
     // Encode the params and hash it to get the meta URI
     const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Args for freeReactAsDispatcher
+    // Args for reactAsDispatcher
     const reactor = BOB.address;
     const transformId = TRANSFORM_ID;
     const quantity = 1;
@@ -59,7 +59,7 @@ describe("ReactionVault FreeReactAsDispatcher", function () {
     // From Bob's dispatcher, register a free reaction
     const tx = await reactionVault
       .connect(DISPATCHER)
-      .freeReactAsDispatcher(
+      .reactAsDispatcher(
         reactor,
         transformId,
         optionBits,
@@ -122,7 +122,7 @@ describe("ReactionVault FreeReactAsDispatcher", function () {
     // Encode the params and hash it to get the meta URI
     const TRANSFORM_ID = deriveTransformId(NFT_SOURCE_ID, BigNumber.from(0));
 
-    // Args for freeReactAsDispatcher
+    // Args for reactAsDispatcher
     const reactor = BOB.address;
     const transformId = TRANSFORM_ID;
     const quantity = 1;
@@ -136,7 +136,7 @@ describe("ReactionVault FreeReactAsDispatcher", function () {
     await expect(
       reactionVault
         .connect(NON_DISPATCHER)
-        .freeReactAsDispatcher(
+        .reactAsDispatcher(
           reactor,
           transformId,
           optionBits,

@@ -98,7 +98,7 @@ export async function getRemoveDispatcherWithSigParts(
   return await getSig(signer, msgParams);
 }
 
-const buildFreeReactWithSigParams = (
+const buildReactWithSigParams = (
   verifyingContract: string,
   reactor: string,
   transformId: BigNumberish,
@@ -112,7 +112,7 @@ const buildFreeReactWithSigParams = (
   deadline: string
 ) => ({
   types: {
-    FreeReactWithSig: [
+    ReactWithSig: [
       // Function ABI parts
       {name: "reactor", type: "address"},
       {name: "transformId", type: "uint256"},
@@ -142,7 +142,7 @@ const buildFreeReactWithSigParams = (
   },
 });
 
-export async function getFreeReactWithSigParts(
+export async function getReactWithSigParts(
   // signer
   signer: SignerWithAddress,
   // builder args
@@ -158,7 +158,7 @@ export async function getFreeReactWithSigParts(
   nonce: number,
   deadline: string
 ): Promise<{v: number; r: string; s: string}> {
-  const msgParams = buildFreeReactWithSigParams(
+  const msgParams = buildReactWithSigParams(
     verifyingContract,
     reactor,
     transformId,
