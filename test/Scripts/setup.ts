@@ -207,6 +207,11 @@ const deploySystem = async (owner: SignerWithAddress) => {
     await roleManager.CURATOR_VAULT_PURCHASER(),
     reactionVault.address
   );
+  // Reaction Vault can update sigNonces
+  await roleManager.grantRole(
+    await roleManager.SIG_NONCE_UPDATER(),
+    reactionVault.address
+  );
   // Curator Vault can mint/burn curator token
   await roleManager.grantRole(
     await roleManager.CURATOR_TOKEN_ADMIN(),
@@ -216,6 +221,11 @@ const deploySystem = async (owner: SignerWithAddress) => {
   await roleManager.grantRole(
     await roleManager.CURATOR_TOKEN_ADMIN(),
     curatorVault2.address
+  );
+  // Maker Registrar can update sigNonces
+  await roleManager.grantRole(
+    await roleManager.SIG_NONCE_UPDATER(),
+    makerRegistrar.address
   );
 
   // Update address manager

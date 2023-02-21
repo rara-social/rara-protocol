@@ -21,6 +21,15 @@ contract ParameterManager is Initializable, ParameterManagerStorageV3 {
         _;
     }
 
+    /// @dev Verifies with the role manager that the calling address has NONCE_UPDATER role
+    modifier onlySigNonceUpdater() {
+        require(
+            addressManager.roleManager().isSigNonceUpdater(msg.sender),
+            "Not signature nonce updater"
+        );
+        _;
+    }
+
     /// @dev Events emitted on updates
     event PaymentTokenUpdated(IWMATIC newValue);
     event ReactionPriceUpdated(uint256 newValue);
@@ -126,7 +135,11 @@ contract ParameterManager is Initializable, ParameterManagerStorageV3 {
     }
 
     /// @dev Incrementer for an account's current EIP-712 signature nonce
-    function incSigNonceFor(address signer) external returns (uint256 nonce) {
+    function incSigNonceFor(address signer)
+        external
+        onlySigNonceUpdater
+        returns (uint256 nonce)
+    {
         // Returns the original nonce
         nonce = sigNonces[signer];
         uint256 incrementedNonce = nonce + 1;

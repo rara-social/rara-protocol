@@ -30,8 +30,14 @@ contract RoleManagerStorageV1 {
 
 /// On the next version of the protocol, if new variables are added, put them in the below
 /// contract and use this as the inheritance chain.
-/**
 contract RoleManagerStorageV2 is RoleManagerStorageV1 {
+    bytes32 public constant SIG_NONCE_UPDATER = keccak256("SIG_NONCE_UPDATER");
+}
+
+/// On the next version of the protocol, if new variables are added, put them in the below
+/// contract and use this as the inheritance chain.
+/**
+contract RoleManagerStorageV3 is RoleManagerStorageV2 {
   address newVariable;
 }
  */
