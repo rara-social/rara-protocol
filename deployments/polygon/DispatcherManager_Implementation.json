@@ -1,0 +1,442 @@
+{
+  "address": "0x155359ac7a608CfFA802a1859AD7d1196b5709Fd",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "SignatureExpired",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "SignatureInvalid",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "addedDispatcher",
+          "type": "address"
+        }
+      ],
+      "name": "DispatcherAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "removedDispatcher",
+          "type": "address"
+        }
+      ],
+      "name": "DispatcherRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "version",
+          "type": "uint8"
+        }
+      ],
+      "name": "Initialized",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "SIG_DOMAIN_NAME",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_dispatcher",
+          "type": "address"
+        }
+      ],
+      "name": "addDispatcher",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "dispatcher",
+              "type": "address"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint8",
+                  "name": "v",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "bytes32",
+                  "name": "r",
+                  "type": "bytes32"
+                },
+                {
+                  "internalType": "bytes32",
+                  "name": "s",
+                  "type": "bytes32"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "deadline",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct DataTypes.EIP712Signature",
+              "name": "sig",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct DataTypes.AddDispatcherWithSigData",
+          "name": "vars",
+          "type": "tuple"
+        }
+      ],
+      "name": "addDispatcherWithSig",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "addressManager",
+      "outputs": [
+        {
+          "internalType": "contract IAddressManager",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "dispatchersByAccount",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract IAddressManager",
+          "name": "_addressManager",
+          "type": "address"
+        }
+      ],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_account",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_maybeDispatcher",
+          "type": "address"
+        }
+      ],
+      "name": "isDispatcherFor",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_dispatcher",
+          "type": "address"
+        }
+      ],
+      "name": "removeDispatcher",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "dispatcher",
+              "type": "address"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint8",
+                  "name": "v",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "bytes32",
+                  "name": "r",
+                  "type": "bytes32"
+                },
+                {
+                  "internalType": "bytes32",
+                  "name": "s",
+                  "type": "bytes32"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "deadline",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct DataTypes.EIP712Signature",
+              "name": "sig",
+              "type": "tuple"
+            }
+          ],
+          "internalType": "struct DataTypes.RemoveDispatcherWithSigData",
+          "name": "vars",
+          "type": "tuple"
+        }
+      ],
+      "name": "removeDispatcherWithSig",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xd17c8e98dc1fa62522f80d223ced5a4ef436aacd5205c94a200bf1b3b5647ff0",
+  "receipt": {
+    "to": null,
+    "from": "0xa43C0ad9B1B867AdE1FCF0A88b779b2A3642d1b3",
+    "contractAddress": "0x155359ac7a608CfFA802a1859AD7d1196b5709Fd",
+    "transactionIndex": 6,
+    "gasUsed": "741242",
+    "logsBloom": "0x00000000000000800000000004000000000000000000000000000000040000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000800000000000000000000100000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000200200000000000000000000000000000000000000000000000000000200000004000000000000000000001000000000000000000000000000000100000000000000000000000000000000000000000000002000000000000000000000000100000",
+    "blockHash": "0xcb5c3f7bf8b25b7770103dc244d5c13d7720ab1e8f8ce51fc5410fabb0a6dfb0",
+    "transactionHash": "0xd17c8e98dc1fa62522f80d223ced5a4ef436aacd5205c94a200bf1b3b5647ff0",
+    "logs": [
+      {
+        "transactionIndex": 6,
+        "blockNumber": 39632100,
+        "transactionHash": "0xd17c8e98dc1fa62522f80d223ced5a4ef436aacd5205c94a200bf1b3b5647ff0",
+        "address": "0x0000000000000000000000000000000000001010",
+        "topics": [
+          "0x4dfe1bbbcf077ddc3e01291eea2d5c70c2b422b415d95645b9adcfd678cb1d63",
+          "0x0000000000000000000000000000000000000000000000000000000000001010",
+          "0x000000000000000000000000a43c0ad9b1b867ade1fcf0a88b779b2a3642d1b3",
+          "0x000000000000000000000000ef46d5fe753c988606e6f703260d816af53b03eb"
+        ],
+        "data": "0x00000000000000000000000000000000000000000000000000ef17f9493a521a00000000000000000000000000000000000000000000006148563f4c99132afa000000000000000000000000000000000000000000004e8ed46d212506d92f23000000000000000000000000000000000000000000000061476727534fd8d8e0000000000000000000000000000000000000000000004e8ed55c391e5013813d",
+        "logIndex": 23,
+        "blockHash": "0xcb5c3f7bf8b25b7770103dc244d5c13d7720ab1e8f8ce51fc5410fabb0a6dfb0"
+      }
+    ],
+    "blockNumber": 39632100,
+    "cumulativeGasUsed": "1780591",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "b84b00b90490290595acf2b30cb1ae9d",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"SignatureExpired\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SignatureInvalid\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"addedDispatcher\",\"type\":\"address\"}],\"name\":\"DispatcherAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"removedDispatcher\",\"type\":\"address\"}],\"name\":\"DispatcherRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"SIG_DOMAIN_NAME\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_dispatcher\",\"type\":\"address\"}],\"name\":\"addDispatcher\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dispatcher\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"internalType\":\"struct DataTypes.EIP712Signature\",\"name\":\"sig\",\"type\":\"tuple\"}],\"internalType\":\"struct DataTypes.AddDispatcherWithSigData\",\"name\":\"vars\",\"type\":\"tuple\"}],\"name\":\"addDispatcherWithSig\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"addressManager\",\"outputs\":[{\"internalType\":\"contract IAddressManager\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"dispatchersByAccount\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contract IAddressManager\",\"name\":\"_addressManager\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_maybeDispatcher\",\"type\":\"address\"}],\"name\":\"isDispatcherFor\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_dispatcher\",\"type\":\"address\"}],\"name\":\"removeDispatcher\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dispatcher\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"internalType\":\"struct DataTypes.EIP712Signature\",\"name\":\"sig\",\"type\":\"tuple\"}],\"internalType\":\"struct DataTypes.RemoveDispatcherWithSigData\",\"name\":\"vars\",\"type\":\"tuple\"}],\"name\":\"removeDispatcherWithSig\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"events\":{\"DispatcherAdded(address,address)\":{\"details\":\"Event emitted when a dispatcher is added\"},\"DispatcherRemoved(address,address)\":{\"details\":\"Event emitted when a dispatcher is removed\"}},\"kind\":\"dev\",\"methods\":{\"initialize(address)\":{\"details\":\"initializer to call after deployment, can only be called once\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/DispatcherManager/DispatcherManager.sol\":\"DispatcherManager\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":100},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.7.0) (proxy/utils/Initializable.sol)\\n\\npragma solidity ^0.8.2;\\n\\nimport \\\"../../utils/AddressUpgradeable.sol\\\";\\n\\n/**\\n * @dev This is a base contract to aid in writing upgradeable contracts, or any kind of contract that will be deployed\\n * behind a proxy. Since proxied contracts do not make use of a constructor, it's common to move constructor logic to an\\n * external initializer function, usually called `initialize`. It then becomes necessary to protect this initializer\\n * function so it can only be called once. The {initializer} modifier provided by this contract will have this effect.\\n *\\n * The initialization functions use a version number. Once a version number is used, it is consumed and cannot be\\n * reused. This mechanism prevents re-execution of each \\\"step\\\" but allows the creation of new initialization steps in\\n * case an upgrade adds a module that needs to be initialized.\\n *\\n * For example:\\n *\\n * [.hljs-theme-light.nopadding]\\n * ```\\n * contract MyToken is ERC20Upgradeable {\\n *     function initialize() initializer public {\\n *         __ERC20_init(\\\"MyToken\\\", \\\"MTK\\\");\\n *     }\\n * }\\n * contract MyTokenV2 is MyToken, ERC20PermitUpgradeable {\\n *     function initializeV2() reinitializer(2) public {\\n *         __ERC20Permit_init(\\\"MyToken\\\");\\n *     }\\n * }\\n * ```\\n *\\n * TIP: To avoid leaving the proxy in an uninitialized state, the initializer function should be called as early as\\n * possible by providing the encoded function call as the `_data` argument to {ERC1967Proxy-constructor}.\\n *\\n * CAUTION: When used with inheritance, manual care must be taken to not invoke a parent initializer twice, or to ensure\\n * that all initializers are idempotent. This is not verified automatically as constructors are by Solidity.\\n *\\n * [CAUTION]\\n * ====\\n * Avoid leaving a contract uninitialized.\\n *\\n * An uninitialized contract can be taken over by an attacker. This applies to both a proxy and its implementation\\n * contract, which may impact the proxy. To prevent the implementation contract from being used, you should invoke\\n * the {_disableInitializers} function in the constructor to automatically lock it when it is deployed:\\n *\\n * [.hljs-theme-light.nopadding]\\n * ```\\n * /// @custom:oz-upgrades-unsafe-allow constructor\\n * constructor() {\\n *     _disableInitializers();\\n * }\\n * ```\\n * ====\\n */\\nabstract contract Initializable {\\n    /**\\n     * @dev Indicates that the contract has been initialized.\\n     * @custom:oz-retyped-from bool\\n     */\\n    uint8 private _initialized;\\n\\n    /**\\n     * @dev Indicates that the contract is in the process of being initialized.\\n     */\\n    bool private _initializing;\\n\\n    /**\\n     * @dev Triggered when the contract has been initialized or reinitialized.\\n     */\\n    event Initialized(uint8 version);\\n\\n    /**\\n     * @dev A modifier that defines a protected initializer function that can be invoked at most once. In its scope,\\n     * `onlyInitializing` functions can be used to initialize parent contracts. Equivalent to `reinitializer(1)`.\\n     */\\n    modifier initializer() {\\n        bool isTopLevelCall = !_initializing;\\n        require(\\n            (isTopLevelCall && _initialized < 1) || (!AddressUpgradeable.isContract(address(this)) && _initialized == 1),\\n            \\\"Initializable: contract is already initialized\\\"\\n        );\\n        _initialized = 1;\\n        if (isTopLevelCall) {\\n            _initializing = true;\\n        }\\n        _;\\n        if (isTopLevelCall) {\\n            _initializing = false;\\n            emit Initialized(1);\\n        }\\n    }\\n\\n    /**\\n     * @dev A modifier that defines a protected reinitializer function that can be invoked at most once, and only if the\\n     * contract hasn't been initialized to a greater version before. In its scope, `onlyInitializing` functions can be\\n     * used to initialize parent contracts.\\n     *\\n     * `initializer` is equivalent to `reinitializer(1)`, so a reinitializer may be used after the original\\n     * initialization step. This is essential to configure modules that are added through upgrades and that require\\n     * initialization.\\n     *\\n     * Note that versions can jump in increments greater than 1; this implies that if multiple reinitializers coexist in\\n     * a contract, executing them in the right order is up to the developer or operator.\\n     */\\n    modifier reinitializer(uint8 version) {\\n        require(!_initializing && _initialized < version, \\\"Initializable: contract is already initialized\\\");\\n        _initialized = version;\\n        _initializing = true;\\n        _;\\n        _initializing = false;\\n        emit Initialized(version);\\n    }\\n\\n    /**\\n     * @dev Modifier to protect an initialization function so that it can only be invoked by functions with the\\n     * {initializer} and {reinitializer} modifiers, directly or indirectly.\\n     */\\n    modifier onlyInitializing() {\\n        require(_initializing, \\\"Initializable: contract is not initializing\\\");\\n        _;\\n    }\\n\\n    /**\\n     * @dev Locks the contract, preventing any future reinitialization. This cannot be part of an initializer call.\\n     * Calling this in the constructor of a contract will prevent that contract from being initialized or reinitialized\\n     * to any version. It is recommended to use this to lock implementation contracts that are designed to be called\\n     * through proxies.\\n     */\\n    function _disableInitializers() internal virtual {\\n        require(!_initializing, \\\"Initializable: contract is initializing\\\");\\n        if (_initialized < type(uint8).max) {\\n            _initialized = type(uint8).max;\\n            emit Initialized(type(uint8).max);\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0x0203dcadc5737d9ef2c211d6fa15d18ebc3b30dfa51903b64870b01a062b0b4e\",\"license\":\"MIT\"},\"@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (security/ReentrancyGuard.sol)\\n\\npragma solidity ^0.8.0;\\nimport \\\"../proxy/utils/Initializable.sol\\\";\\n\\n/**\\n * @dev Contract module that helps prevent reentrant calls to a function.\\n *\\n * Inheriting from `ReentrancyGuard` will make the {nonReentrant} modifier\\n * available, which can be applied to functions to make sure there are no nested\\n * (reentrant) calls to them.\\n *\\n * Note that because there is a single `nonReentrant` guard, functions marked as\\n * `nonReentrant` may not call one another. This can be worked around by making\\n * those functions `private`, and then adding `external` `nonReentrant` entry\\n * points to them.\\n *\\n * TIP: If you would like to learn more about reentrancy and alternative ways\\n * to protect against it, check out our blog post\\n * https://blog.openzeppelin.com/reentrancy-after-istanbul/[Reentrancy After Istanbul].\\n */\\nabstract contract ReentrancyGuardUpgradeable is Initializable {\\n    // Booleans are more expensive than uint256 or any type that takes up a full\\n    // word because each write operation emits an extra SLOAD to first read the\\n    // slot's contents, replace the bits taken up by the boolean, and then write\\n    // back. This is the compiler's defense against contract upgrades and\\n    // pointer aliasing, and it cannot be disabled.\\n\\n    // The values being non-zero value makes deployment a bit more expensive,\\n    // but in exchange the refund on every call to nonReentrant will be lower in\\n    // amount. Since refunds are capped to a percentage of the total\\n    // transaction's gas, it is best to keep them low in cases like this one, to\\n    // increase the likelihood of the full refund coming into effect.\\n    uint256 private constant _NOT_ENTERED = 1;\\n    uint256 private constant _ENTERED = 2;\\n\\n    uint256 private _status;\\n\\n    function __ReentrancyGuard_init() internal onlyInitializing {\\n        __ReentrancyGuard_init_unchained();\\n    }\\n\\n    function __ReentrancyGuard_init_unchained() internal onlyInitializing {\\n        _status = _NOT_ENTERED;\\n    }\\n\\n    /**\\n     * @dev Prevents a contract from calling itself, directly or indirectly.\\n     * Calling a `nonReentrant` function from another `nonReentrant`\\n     * function is not supported. It is possible to prevent this from happening\\n     * by making the `nonReentrant` function external, and making it call a\\n     * `private` function that does the actual work.\\n     */\\n    modifier nonReentrant() {\\n        // On the first call to nonReentrant, _notEntered will be true\\n        require(_status != _ENTERED, \\\"ReentrancyGuard: reentrant call\\\");\\n\\n        // Any calls to nonReentrant after this point will fail\\n        _status = _ENTERED;\\n\\n        _;\\n\\n        // By storing the original value once again, a refund is triggered (see\\n        // https://eips.ethereum.org/EIPS/eip-2200)\\n        _status = _NOT_ENTERED;\\n    }\\n\\n    /**\\n     * @dev This empty reserved space is put in place to allow future versions to add new\\n     * variables without shifting down storage in the inheritance chain.\\n     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps\\n     */\\n    uint256[49] private __gap;\\n}\\n\",\"keccak256\":\"0x8cc03c5ac17e8a7396e487cda41fc1f1dfdb91db7d528e6da84bee3b6dd7e167\",\"license\":\"MIT\"},\"@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/IERC20.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Interface of the ERC20 standard as defined in the EIP.\\n */\\ninterface IERC20Upgradeable {\\n    /**\\n     * @dev Emitted when `value` tokens are moved from one account (`from`) to\\n     * another (`to`).\\n     *\\n     * Note that `value` may be zero.\\n     */\\n    event Transfer(address indexed from, address indexed to, uint256 value);\\n\\n    /**\\n     * @dev Emitted when the allowance of a `spender` for an `owner` is set by\\n     * a call to {approve}. `value` is the new allowance.\\n     */\\n    event Approval(address indexed owner, address indexed spender, uint256 value);\\n\\n    /**\\n     * @dev Returns the amount of tokens in existence.\\n     */\\n    function totalSupply() external view returns (uint256);\\n\\n    /**\\n     * @dev Returns the amount of tokens owned by `account`.\\n     */\\n    function balanceOf(address account) external view returns (uint256);\\n\\n    /**\\n     * @dev Moves `amount` tokens from the caller's account to `to`.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transfer(address to, uint256 amount) external returns (bool);\\n\\n    /**\\n     * @dev Returns the remaining number of tokens that `spender` will be\\n     * allowed to spend on behalf of `owner` through {transferFrom}. This is\\n     * zero by default.\\n     *\\n     * This value changes when {approve} or {transferFrom} are called.\\n     */\\n    function allowance(address owner, address spender) external view returns (uint256);\\n\\n    /**\\n     * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * IMPORTANT: Beware that changing an allowance with this method brings the risk\\n     * that someone may use both the old and the new allowance by unfortunate\\n     * transaction ordering. One possible solution to mitigate this race\\n     * condition is to first reduce the spender's allowance to 0 and set the\\n     * desired value afterwards:\\n     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\\n     *\\n     * Emits an {Approval} event.\\n     */\\n    function approve(address spender, uint256 amount) external returns (bool);\\n\\n    /**\\n     * @dev Moves `amount` tokens from `from` to `to` using the\\n     * allowance mechanism. `amount` is then deducted from the caller's\\n     * allowance.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transferFrom(\\n        address from,\\n        address to,\\n        uint256 amount\\n    ) external returns (bool);\\n}\\n\",\"keccak256\":\"0x4e733d3164f73f461eaf9d8087a7ad1ea180bdc8ba0d3d61b0e1ae16d8e63dff\",\"license\":\"MIT\"},\"@openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-IERC20PermitUpgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/draft-IERC20Permit.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in\\n * https://eips.ethereum.org/EIPS/eip-2612[EIP-2612].\\n *\\n * Adds the {permit} method, which can be used to change an account's ERC20 allowance (see {IERC20-allowance}) by\\n * presenting a message signed by the account. By not relying on {IERC20-approve}, the token holder account doesn't\\n * need to send a transaction, and thus is not required to hold Ether at all.\\n */\\ninterface IERC20PermitUpgradeable {\\n    /**\\n     * @dev Sets `value` as the allowance of `spender` over ``owner``'s tokens,\\n     * given ``owner``'s signed approval.\\n     *\\n     * IMPORTANT: The same issues {IERC20-approve} has related to transaction\\n     * ordering also apply here.\\n     *\\n     * Emits an {Approval} event.\\n     *\\n     * Requirements:\\n     *\\n     * - `spender` cannot be the zero address.\\n     * - `deadline` must be a timestamp in the future.\\n     * - `v`, `r` and `s` must be a valid `secp256k1` signature from `owner`\\n     * over the EIP712-formatted function arguments.\\n     * - the signature must use ``owner``'s current nonce (see {nonces}).\\n     *\\n     * For more information on the signature format, see the\\n     * https://eips.ethereum.org/EIPS/eip-2612#specification[relevant EIP\\n     * section].\\n     */\\n    function permit(\\n        address owner,\\n        address spender,\\n        uint256 value,\\n        uint256 deadline,\\n        uint8 v,\\n        bytes32 r,\\n        bytes32 s\\n    ) external;\\n\\n    /**\\n     * @dev Returns the current nonce for `owner`. This value must be\\n     * included whenever a signature is generated for {permit}.\\n     *\\n     * Every successful call to {permit} increases ``owner``'s nonce by one. This\\n     * prevents a signature from being used multiple times.\\n     */\\n    function nonces(address owner) external view returns (uint256);\\n\\n    /**\\n     * @dev Returns the domain separator used in the encoding of the signature for {permit}, as defined by {EIP712}.\\n     */\\n    // solhint-disable-next-line func-name-mixedcase\\n    function DOMAIN_SEPARATOR() external view returns (bytes32);\\n}\\n\",\"keccak256\":\"0xcc70d8e2281fb3ff69e8ab242500f10142cd0a7fa8dd9e45882be270d4d09024\",\"license\":\"MIT\"},\"@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.7.0) (token/ERC20/utils/SafeERC20.sol)\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"../IERC20Upgradeable.sol\\\";\\nimport \\\"../extensions/draft-IERC20PermitUpgradeable.sol\\\";\\nimport \\\"../../../utils/AddressUpgradeable.sol\\\";\\n\\n/**\\n * @title SafeERC20\\n * @dev Wrappers around ERC20 operations that throw on failure (when the token\\n * contract returns false). Tokens that return no value (and instead revert or\\n * throw on failure) are also supported, non-reverting calls are assumed to be\\n * successful.\\n * To use this library you can add a `using SafeERC20 for IERC20;` statement to your contract,\\n * which allows you to call the safe operations as `token.safeTransfer(...)`, etc.\\n */\\nlibrary SafeERC20Upgradeable {\\n    using AddressUpgradeable for address;\\n\\n    function safeTransfer(\\n        IERC20Upgradeable token,\\n        address to,\\n        uint256 value\\n    ) internal {\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.transfer.selector, to, value));\\n    }\\n\\n    function safeTransferFrom(\\n        IERC20Upgradeable token,\\n        address from,\\n        address to,\\n        uint256 value\\n    ) internal {\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));\\n    }\\n\\n    /**\\n     * @dev Deprecated. This function has issues similar to the ones found in\\n     * {IERC20-approve}, and its usage is discouraged.\\n     *\\n     * Whenever possible, use {safeIncreaseAllowance} and\\n     * {safeDecreaseAllowance} instead.\\n     */\\n    function safeApprove(\\n        IERC20Upgradeable token,\\n        address spender,\\n        uint256 value\\n    ) internal {\\n        // safeApprove should only be called when setting an initial allowance,\\n        // or when resetting it to zero. To increase and decrease it, use\\n        // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'\\n        require(\\n            (value == 0) || (token.allowance(address(this), spender) == 0),\\n            \\\"SafeERC20: approve from non-zero to non-zero allowance\\\"\\n        );\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));\\n    }\\n\\n    function safeIncreaseAllowance(\\n        IERC20Upgradeable token,\\n        address spender,\\n        uint256 value\\n    ) internal {\\n        uint256 newAllowance = token.allowance(address(this), spender) + value;\\n        _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));\\n    }\\n\\n    function safeDecreaseAllowance(\\n        IERC20Upgradeable token,\\n        address spender,\\n        uint256 value\\n    ) internal {\\n        unchecked {\\n            uint256 oldAllowance = token.allowance(address(this), spender);\\n            require(oldAllowance >= value, \\\"SafeERC20: decreased allowance below zero\\\");\\n            uint256 newAllowance = oldAllowance - value;\\n            _callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));\\n        }\\n    }\\n\\n    function safePermit(\\n        IERC20PermitUpgradeable token,\\n        address owner,\\n        address spender,\\n        uint256 value,\\n        uint256 deadline,\\n        uint8 v,\\n        bytes32 r,\\n        bytes32 s\\n    ) internal {\\n        uint256 nonceBefore = token.nonces(owner);\\n        token.permit(owner, spender, value, deadline, v, r, s);\\n        uint256 nonceAfter = token.nonces(owner);\\n        require(nonceAfter == nonceBefore + 1, \\\"SafeERC20: permit did not succeed\\\");\\n    }\\n\\n    /**\\n     * @dev Imitates a Solidity high-level call (i.e. a regular function call to a contract), relaxing the requirement\\n     * on the return value: the return value is optional (but if data is returned, it must not be false).\\n     * @param token The token targeted by the call.\\n     * @param data The call data (encoded using abi.encode or one of its variants).\\n     */\\n    function _callOptionalReturn(IERC20Upgradeable token, bytes memory data) private {\\n        // We need to perform a low level call here, to bypass Solidity's return data size checking mechanism, since\\n        // we're implementing it ourselves. We use {Address.functionCall} to perform this call, which verifies that\\n        // the target address contains contract code and also asserts for success in the low-level call.\\n\\n        bytes memory returndata = address(token).functionCall(data, \\\"SafeERC20: low-level call failed\\\");\\n        if (returndata.length > 0) {\\n            // Return data is optional\\n            require(abi.decode(returndata, (bool)), \\\"SafeERC20: ERC20 operation did not succeed\\\");\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0xf42efac0d704b136c4d85e970562d4dbc1160d726ee93b5133122eb14fe368df\",\"license\":\"MIT\"},\"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.7.0) (utils/Address.sol)\\n\\npragma solidity ^0.8.1;\\n\\n/**\\n * @dev Collection of functions related to the address type\\n */\\nlibrary AddressUpgradeable {\\n    /**\\n     * @dev Returns true if `account` is a contract.\\n     *\\n     * [IMPORTANT]\\n     * ====\\n     * It is unsafe to assume that an address for which this function returns\\n     * false is an externally-owned account (EOA) and not a contract.\\n     *\\n     * Among others, `isContract` will return false for the following\\n     * types of addresses:\\n     *\\n     *  - an externally-owned account\\n     *  - a contract in construction\\n     *  - an address where a contract will be created\\n     *  - an address where a contract lived, but was destroyed\\n     * ====\\n     *\\n     * [IMPORTANT]\\n     * ====\\n     * You shouldn't rely on `isContract` to protect against flash loan attacks!\\n     *\\n     * Preventing calls from contracts is highly discouraged. It breaks composability, breaks support for smart wallets\\n     * like Gnosis Safe, and does not provide security since it can be circumvented by calling from a contract\\n     * constructor.\\n     * ====\\n     */\\n    function isContract(address account) internal view returns (bool) {\\n        // This method relies on extcodesize/address.code.length, which returns 0\\n        // for contracts in construction, since the code is only stored at the end\\n        // of the constructor execution.\\n\\n        return account.code.length > 0;\\n    }\\n\\n    /**\\n     * @dev Replacement for Solidity's `transfer`: sends `amount` wei to\\n     * `recipient`, forwarding all available gas and reverting on errors.\\n     *\\n     * https://eips.ethereum.org/EIPS/eip-1884[EIP1884] increases the gas cost\\n     * of certain opcodes, possibly making contracts go over the 2300 gas limit\\n     * imposed by `transfer`, making them unable to receive funds via\\n     * `transfer`. {sendValue} removes this limitation.\\n     *\\n     * https://diligence.consensys.net/posts/2019/09/stop-using-soliditys-transfer-now/[Learn more].\\n     *\\n     * IMPORTANT: because control is transferred to `recipient`, care must be\\n     * taken to not create reentrancy vulnerabilities. Consider using\\n     * {ReentrancyGuard} or the\\n     * https://solidity.readthedocs.io/en/v0.5.11/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].\\n     */\\n    function sendValue(address payable recipient, uint256 amount) internal {\\n        require(address(this).balance >= amount, \\\"Address: insufficient balance\\\");\\n\\n        (bool success, ) = recipient.call{value: amount}(\\\"\\\");\\n        require(success, \\\"Address: unable to send value, recipient may have reverted\\\");\\n    }\\n\\n    /**\\n     * @dev Performs a Solidity function call using a low level `call`. A\\n     * plain `call` is an unsafe replacement for a function call: use this\\n     * function instead.\\n     *\\n     * If `target` reverts with a revert reason, it is bubbled up by this\\n     * function (like regular Solidity function calls).\\n     *\\n     * Returns the raw returned data. To convert to the expected return value,\\n     * use https://solidity.readthedocs.io/en/latest/units-and-global-variables.html?highlight=abi.decode#abi-encoding-and-decoding-functions[`abi.decode`].\\n     *\\n     * Requirements:\\n     *\\n     * - `target` must be a contract.\\n     * - calling `target` with `data` must not revert.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCall(address target, bytes memory data) internal returns (bytes memory) {\\n        return functionCall(target, data, \\\"Address: low-level call failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`], but with\\n     * `errorMessage` as a fallback revert reason when `target` reverts.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCall(\\n        address target,\\n        bytes memory data,\\n        string memory errorMessage\\n    ) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, 0, errorMessage);\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],\\n     * but also transferring `value` wei to `target`.\\n     *\\n     * Requirements:\\n     *\\n     * - the calling contract must have an ETH balance of at least `value`.\\n     * - the called Solidity function must be `payable`.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCallWithValue(\\n        address target,\\n        bytes memory data,\\n        uint256 value\\n    ) internal returns (bytes memory) {\\n        return functionCallWithValue(target, data, value, \\\"Address: low-level call with value failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCallWithValue-address-bytes-uint256-}[`functionCallWithValue`], but\\n     * with `errorMessage` as a fallback revert reason when `target` reverts.\\n     *\\n     * _Available since v3.1._\\n     */\\n    function functionCallWithValue(\\n        address target,\\n        bytes memory data,\\n        uint256 value,\\n        string memory errorMessage\\n    ) internal returns (bytes memory) {\\n        require(address(this).balance >= value, \\\"Address: insufficient balance for call\\\");\\n        require(isContract(target), \\\"Address: call to non-contract\\\");\\n\\n        (bool success, bytes memory returndata) = target.call{value: value}(data);\\n        return verifyCallResult(success, returndata, errorMessage);\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],\\n     * but performing a static call.\\n     *\\n     * _Available since v3.3._\\n     */\\n    function functionStaticCall(address target, bytes memory data) internal view returns (bytes memory) {\\n        return functionStaticCall(target, data, \\\"Address: low-level static call failed\\\");\\n    }\\n\\n    /**\\n     * @dev Same as {xref-Address-functionCall-address-bytes-string-}[`functionCall`],\\n     * but performing a static call.\\n     *\\n     * _Available since v3.3._\\n     */\\n    function functionStaticCall(\\n        address target,\\n        bytes memory data,\\n        string memory errorMessage\\n    ) internal view returns (bytes memory) {\\n        require(isContract(target), \\\"Address: static call to non-contract\\\");\\n\\n        (bool success, bytes memory returndata) = target.staticcall(data);\\n        return verifyCallResult(success, returndata, errorMessage);\\n    }\\n\\n    /**\\n     * @dev Tool to verifies that a low level call was successful, and revert if it wasn't, either by bubbling the\\n     * revert reason using the provided one.\\n     *\\n     * _Available since v4.3._\\n     */\\n    function verifyCallResult(\\n        bool success,\\n        bytes memory returndata,\\n        string memory errorMessage\\n    ) internal pure returns (bytes memory) {\\n        if (success) {\\n            return returndata;\\n        } else {\\n            // Look for revert reason and bubble it up if present\\n            if (returndata.length > 0) {\\n                // The easiest way to bubble the revert reason is using memory via assembly\\n                /// @solidity memory-safe-assembly\\n                assembly {\\n                    let returndata_size := mload(returndata)\\n                    revert(add(32, returndata), returndata_size)\\n                }\\n            } else {\\n                revert(errorMessage);\\n            }\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0x611aa3f23e59cfdd1863c536776407b3e33d695152a266fa7cfb34440a29a8a3\",\"license\":\"MIT\"},\"contracts/Config/IAddressManager.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"../Permissions/IRoleManager.sol\\\";\\nimport \\\"../Parameters/IParameterManager.sol\\\";\\nimport \\\"../Maker/IMakerRegistrar.sol\\\";\\nimport \\\"../Token/IStandard1155.sol\\\";\\nimport \\\"../Reactions/IReactionVault.sol\\\";\\nimport \\\"../CuratorVault/SigmoidCuratorVault/ICuratorVault.sol\\\";\\nimport \\\"../DispatcherManager/IDispatcherManager.sol\\\";\\n\\ninterface IAddressManager {\\n    /// @dev Getter for the role manager address\\n    function roleManager() external returns (IRoleManager);\\n\\n    /// @dev Setter for the role manager address\\n    function setRoleManager(IRoleManager _roleManager) external;\\n\\n    /// @dev Getter for the role manager address\\n    function parameterManager() external returns (IParameterManager);\\n\\n    /// @dev Setter for the role manager address\\n    function setParameterManager(IParameterManager _parameterManager) external;\\n\\n    /// @dev Getter for the maker registrar address\\n    function makerRegistrar() external returns (IMakerRegistrar);\\n\\n    /// @dev Setter for the maker registrar address\\n    function setMakerRegistrar(IMakerRegistrar _makerRegistrar) external;\\n\\n    /// @dev Getter for the reaction NFT contract address\\n    function reactionNftContract() external returns (IStandard1155);\\n\\n    /// @dev Setter for the reaction NFT contract address\\n    function setReactionNftContract(IStandard1155 _reactionNftContract)\\n        external;\\n\\n    /// @dev Getter for the default Curator Vault contract address\\n    function defaultCuratorVault() external returns (ICuratorVault);\\n\\n    /// @dev Setter for the default Curator Vault contract address\\n    function setDefaultCuratorVault(ICuratorVault _defaultCuratorVault)\\n        external;\\n\\n    /// @dev Getter for the L2 bridge registrar\\n    function childRegistrar() external returns (address);\\n\\n    /// @dev Setter for the L2 bridge registrar\\n    function setChildRegistrar(address _childRegistrar) external;\\n\\n    /// @dev Getter for the address of the royalty registry\\n    function royaltyRegistry() external returns (address);\\n\\n    /// @dev Setter for the address of the royalty registry\\n    function setRoyaltyRegistry(address _royaltyRegistry) external;\\n\\n    /// @dev Getter for the address of the Like Token Factory\\n    function likeTokenFactory() external returns (address);\\n\\n    /// @dev Setter for the address of the Like Token Factory\\n    function setLikeTokenFactory(address _likeTokenFactory) external;\\n\\n    /// @dev Getter for the address of the DispatcherManager\\n    function dispatcherManager() external returns (IDispatcherManager);\\n\\n    /// @dev Setter for the address of the DispatcherManager;\\n    function setDispatcherManager(IDispatcherManager _dispatcherManager)\\n        external;\\n}\\n\",\"keccak256\":\"0x3f771b21196805238abcad8ff5bd92c06a7c5c4cf9043342a092107ba2168e76\",\"license\":\"GPL-3.0\"},\"contracts/CuratorVault/SigmoidCuratorVault/ICuratorVault.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"../../Token/IStandard1155.sol\\\";\\nimport \\\"@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol\\\";\\n\\n/// @dev Interface for the curator vault\\ninterface ICuratorVault {\\n    function getTokenId(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IERC20Upgradeable paymentToken\\n    ) external returns (uint256);\\n\\n    function buyCuratorTokens(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IERC20Upgradeable paymentToken,\\n        uint256 paymentAmount,\\n        address mintToAddress,\\n        bool isTakerPosition\\n    ) external returns (uint256);\\n\\n    function sellCuratorTokens(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId,\\n        IERC20Upgradeable paymentToken,\\n        uint256 tokensToBurn,\\n        address refundToAddress\\n    ) external returns (uint256);\\n\\n    function curatorTokens() external returns (IStandard1155);\\n}\\n\",\"keccak256\":\"0x4c69f5f3d4f76dcbceb716ed541680e3bc17154f158f41dd4c7723719478e17d\",\"license\":\"GPL-3.0\"},\"contracts/DispatcherManager/DispatcherManager.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport {DataTypes} from \\\"../WithSig/DataTypes.sol\\\";\\nimport {WithSigEnabled} from \\\"../WithSig/WithSigEnabled.sol\\\";\\nimport {IAddressManager} from \\\"../Config/IAddressManager.sol\\\";\\nimport {DispatcherManagerStorageV1} from \\\"./DispatcherManagerStorage.sol\\\";\\nimport {Initializable} from \\\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\\\";\\nimport {ReentrancyGuardUpgradeable} from \\\"@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol\\\";\\n\\ncontract DispatcherManager is\\n    WithSigEnabled,\\n    Initializable,\\n    ReentrancyGuardUpgradeable,\\n    DispatcherManagerStorageV1\\n{\\n    /// @dev Event emitted when a dispatcher is added\\n    event DispatcherAdded(address account, address addedDispatcher);\\n\\n    /// @dev Event emitted when a dispatcher is removed\\n    event DispatcherRemoved(address account, address removedDispatcher);\\n\\n    /// @dev initializer to call after deployment, can only be called once\\n    function initialize(IAddressManager _addressManager) public initializer {\\n        require(address(_addressManager) != address(0x0), ZERO_INPUT);\\n        __ReentrancyGuard_init();\\n        addressManager = _addressManager;\\n    }\\n\\n    function _addDispatcher(address _account, address _dispatcher) internal {\\n        require(\\n            dispatchersByAccount[_account][_dispatcher] == false,\\n            DISPATCHER_ALREADY_ASSIGNED\\n        );\\n        dispatchersByAccount[_account][_dispatcher] = true;\\n        emit DispatcherAdded(_account, _dispatcher);\\n    }\\n\\n    function _removeDispatcher(address _account, address _dispatcher) internal {\\n        require(\\n            dispatchersByAccount[_account][_dispatcher] == true,\\n            DISPATCHER_ALREADY_UNASSIGNED\\n        );\\n        dispatchersByAccount[_account][_dispatcher] = false;\\n        emit DispatcherRemoved(_account, _dispatcher);\\n    }\\n\\n    // Getter for dispatchers by account\\n    function isDispatcherFor(address _account, address _maybeDispatcher)\\n        external\\n        view\\n        returns (bool)\\n    {\\n        return dispatchersByAccount[_account][_maybeDispatcher];\\n    }\\n\\n    function addDispatcher(address _dispatcher) external nonReentrant {\\n        _addDispatcher(msg.sender, _dispatcher);\\n    }\\n\\n    function removeDispatcher(address _dispatcher) external nonReentrant {\\n        _removeDispatcher(msg.sender, _dispatcher);\\n    }\\n\\n    function addDispatcherWithSig(\\n        DataTypes.AddDispatcherWithSigData calldata vars\\n    ) external nonReentrant {\\n        unchecked {\\n            _validateRecoveredAddress(\\n                _calculateDigest(\\n                    keccak256(\\n                        abi.encode(\\n                            ADD_DISPATCHER_WITH_SIG_TYPEHASH,\\n                            vars.account,\\n                            vars.dispatcher,\\n                            addressManager.parameterManager().incSigNonceFor(\\n                                vars.account\\n                            ),\\n                            vars.sig.deadline\\n                        )\\n                    )\\n                ),\\n                vars.account,\\n                vars.sig\\n            );\\n        }\\n        // Proceed with adding the dispatcher\\n        _addDispatcher(vars.account, vars.dispatcher);\\n    }\\n\\n    function removeDispatcherWithSig(\\n        DataTypes.RemoveDispatcherWithSigData calldata vars\\n    ) external nonReentrant {\\n        unchecked {\\n            _validateRecoveredAddress(\\n                _calculateDigest(\\n                    keccak256(\\n                        abi.encode(\\n                            REMOVE_DISPATCHER_WITH_SIG_TYPEHASH,\\n                            vars.account,\\n                            vars.dispatcher,\\n                            addressManager.parameterManager().incSigNonceFor(\\n                                vars.account\\n                            ),\\n                            vars.sig.deadline\\n                        )\\n                    )\\n                ),\\n                vars.account,\\n                vars.sig\\n            );\\n        }\\n        // Proceed with removing the dispatcher\\n        _removeDispatcher(vars.account, vars.dispatcher);\\n    }\\n}\\n\",\"keccak256\":\"0xbb08024d789dda4a6b1d2c12e58d32f2c368b5730feb1b24a9ee323f4d529bae\",\"license\":\"GPL-3.0\"},\"contracts/DispatcherManager/DispatcherManagerStorage.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"../Config/IAddressManager.sol\\\";\\nimport \\\"./IDispatcherManager.sol\\\";\\nimport {DataTypes} from \\\"../WithSig/DataTypes.sol\\\";\\n\\n/// @title DispatcherManagerStorage\\n/// @dev This contract will hold all local variables for the DispatcherManager Contract\\n/// When upgrading the protocol, inherit from this contract on the V2 version and change the\\n/// DispatcherManager to inherit from the later version.  This ensures there are no storage layout\\n/// corruptions when upgrading.\\nabstract contract DispatcherManagerStorageV1 is IDispatcherManager {\\n    /// @dev Input error for 0 value param\\n    string internal constant ZERO_INPUT = \\\"Invalid 0 input\\\";\\n\\n    /// @dev Dispatcher management errors\\n    string internal constant DISPATCHER_ALREADY_ASSIGNED =\\n        \\\"Dispatcher already assigned\\\";\\n    string internal constant DISPATCHER_ALREADY_UNASSIGNED =\\n        \\\"Dispatcher already unassigned\\\";\\n\\n    /// @dev Typehash for the addDispatcherWithSig method\\n    bytes32 internal constant ADD_DISPATCHER_WITH_SIG_TYPEHASH =\\n        keccak256(\\n            \\\"AddDispatcherWithSig(address account,address dispatcher,uint256 nonce,uint256 deadline)\\\"\\n        );\\n\\n    /// @dev Typehash for the removedDispatcherWithSig method\\n    bytes32 internal constant REMOVE_DISPATCHER_WITH_SIG_TYPEHASH =\\n        keccak256(\\n            \\\"RemoveDispatcherWithSig(address account,address dispatcher,uint256 nonce,uint256 deadline)\\\"\\n        );\\n\\n    /// @dev Local reference to the address manager contract\\n    IAddressManager public addressManager;\\n\\n    /// @dev Mapping to track dispatchers assigned to an account\\n    mapping(address => mapping(address => bool)) public dispatchersByAccount;\\n\\n    /**\\n     * @notice A struct containing the parameters required for the `addDispatcherWithSig()` function. Parameters are the same\\n     * as the regular `addDispatcher()` function, with an added EIP712Signature.\\n     *\\n     * @param account The address of the account to set the dispatcher for.\\n     * @param newDispatcher The new dispatcher address to add for the account.\\n     * @param sig The EIP712Signature struct containing the account's signature.\\n     */\\n    struct AddDispatcherWithSigData {\\n        address account;\\n        address dispatcher;\\n        DataTypes.EIP712Signature sig;\\n    }\\n\\n    /**\\n     * @notice A struct containing the parameters required for the `removeDispatcherWithSig()` function. Parameters are the same\\n     * as the regular `removeDispatcher()` function, with an added EIP712Signature.\\n     *\\n     * @param account The address of the account to set the dispatcher for.\\n     * @param newDispatcher The new dispatcher address to add for the account.\\n     * @param sig The EIP712Signature struct containing the account's signature.\\n     */\\n    struct RemoveDispatcherWithSigData {\\n        address account;\\n        address dispatcher;\\n        DataTypes.EIP712Signature sig;\\n    }\\n}\\n\\n/// On the next version of the protocol, if new variables are added, put them in the below\\n/// contract and use this as the inheritance chain.\\n/**\\ncontract DispatcherManagerStorageV2 is DispatcherManagerStorageV1 {\\n  address newVariable;\\n}\\n */\\n\",\"keccak256\":\"0xe049b51fadd6982d2f6a5024d4efeb609f565843084a74f92a9a782190faa446\",\"license\":\"GPL-3.0\"},\"contracts/DispatcherManager/IDispatcherManager.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport {DataTypes} from \\\"../WithSig/DataTypes.sol\\\";\\n\\ninterface IDispatcherManager {\\n    /// @dev\\n    function addDispatcher(address _dispatcher) external;\\n\\n    /// @dev\\n    function removeDispatcher(address _dispatcher) external;\\n\\n    /// @dev\\n    function addDispatcherWithSig(\\n        DataTypes.AddDispatcherWithSigData calldata vars\\n    ) external;\\n\\n    /// @dev\\n    function removeDispatcherWithSig(\\n        DataTypes.RemoveDispatcherWithSigData calldata vars\\n    ) external;\\n\\n    /// @dev\\n    function isDispatcherFor(address _account, address _maybeDispatcher)\\n        external\\n        view\\n        returns (bool);\\n}\\n\",\"keccak256\":\"0x2ca5c22c956decc9b3c8017cf817964de6b3641556b9c12c814f9640ec347d83\",\"license\":\"GPL-3.0\"},\"contracts/Maker/IMakerRegistrar.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\n/// @dev Interface for the maker registrar that supports registering and de-registering NFTs\\ninterface IMakerRegistrar {\\n    /// @dev struct for storing details about a registered NFT\\n    struct NftDetails {\\n        bool registered;\\n        address owner;\\n        address[] creators;\\n        uint256[] creatorSaleBasisPoints;\\n    }\\n\\n    function transformToSourceLookup(uint256 metaId) external returns (uint256);\\n\\n    function deriveSourceId(\\n        uint256 nftChainId,\\n        address nftAddress,\\n        uint256 nftId\\n    ) external returns (uint256);\\n\\n    /// @dev lookup for NftDetails from source ID\\n    function sourceToDetailsLookup(uint256)\\n        external\\n        returns (NftDetails memory);\\n\\n    function verifyOwnership(\\n        address nftContractAddress,\\n        uint256 nftId,\\n        address potentialOwner\\n    ) external returns (bool);\\n\\n    function registerNftFromBridge(\\n        address owner,\\n        uint256 chainId,\\n        address nftContractAddress,\\n        uint256 nftId,\\n        address[] memory nftCreatorAddresses,\\n        uint256[] memory creatorSaleBasisPoints,\\n        uint256 optionBits,\\n        string memory ipfsMetadataHash\\n    ) external;\\n\\n    function deRegisterNftFromBridge(\\n        address owner,\\n        uint256 chainId,\\n        address nftContractAddress,\\n        uint256 nftId\\n    ) external;\\n}\\n\",\"keccak256\":\"0xcba279f4966ad3a5d506b0661c847b6593805c2e25fbebb3792d33e71769656f\",\"license\":\"GPL-3.0\"},\"contracts/Parameters/IParameterManager.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"../Permissions/IRoleManager.sol\\\";\\nimport \\\"../Token/IWMATIC.sol\\\";\\n\\ninterface IParameterManager {\\n    /// @dev Getter for the payment token\\n    function paymentToken() external returns (IWMATIC);\\n\\n    /// @dev Setter for the payment token\\n    function setPaymentToken(IWMATIC _paymentToken) external;\\n\\n    /// @dev Getter for the reaction price\\n    function reactionPrice() external returns (uint256);\\n\\n    /// @dev Setter for the reaction price\\n    function setReactionPrice(uint256 _reactionPrice) external;\\n\\n    /// @dev Getter for the cut of purchase price going to the curator liability\\n    function saleCuratorLiabilityBasisPoints() external returns (uint256);\\n\\n    /// @dev Setter for the cut of purchase price going to the curator liability\\n    function setSaleCuratorLiabilityBasisPoints(\\n        uint256 _saleCuratorLiabilityBasisPoints\\n    ) external;\\n\\n    /// @dev Getter for the cut of purchase price going to the referrer\\n    function saleReferrerBasisPoints() external returns (uint256);\\n\\n    /// @dev Setter for the cut of purchase price going to the referrer\\n    function setSaleReferrerBasisPoints(uint256 _saleReferrerBasisPoints)\\n        external;\\n\\n    /// @dev Getter for the cut of spend curator liability going to the taker\\n    function spendTakerBasisPoints() external returns (uint256);\\n\\n    /// @dev Setter for the cut of spend curator liability going to the taker\\n    function setSpendTakerBasisPoints(uint256 _spendTakerBasisPoints) external;\\n\\n    /// @dev Getter for the cut of spend curator liability going to the taker\\n    function spendReferrerBasisPoints() external returns (uint256);\\n\\n    /// @dev Setter for the cut of spend curator liability going to the referrer\\n    function setSpendReferrerBasisPoints(uint256 _spendReferrerBasisPoints)\\n        external;\\n\\n    /// @dev Getter for the check to see if a curator vault is allowed to be used\\n    function approvedCuratorVaults(address potentialVault)\\n        external\\n        returns (bool);\\n\\n    /// @dev Setter for the list of curator vaults allowed to be used\\n    function setApprovedCuratorVaults(address vault, bool approved) external;\\n\\n    /// @dev Getter for the native wrapped ERC20 token (e.g. WMATIC)\\n    function nativeWrappedToken() external returns (IERC20Upgradeable);\\n\\n    /// @dev Setter for the native wrapped ERC20 token (e.g. WMATIC)\\n    function setNativeWrappedToken(IERC20Upgradeable _nativeWrappedToken)\\n        external;\\n\\n    /// @dev Getter for free reaction limit\\n    function freeReactionLimit() external returns (uint256);\\n\\n    /// @dev Setter for free reaction limit\\n    function setFreeReactionLimit(uint256 limit) external;\\n\\n    /// @dev Getter for an account's current EIP-712 signature nonce\\n    function sigNonces(address signer) external returns (uint256);\\n\\n    /// @dev Incrementer for an account's current EIP-712 signature nonce\\n    function incSigNonceFor(address signer) external returns (uint256);\\n}\\n\",\"keccak256\":\"0x366a920d3ccc94f60090a03667c0ed6bfb6d2e8cd09df3031267d14e0d9f2355\",\"license\":\"GPL-3.0\"},\"contracts/Permissions/IRoleManager.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\ninterface IRoleManager {\\n    /// @dev Determines if the specified address has capability to mint and burn reaction NFTs\\n    /// @param potentialAddress Address to check\\n    function isAdmin(address potentialAddress) external view returns (bool);\\n\\n    /// @dev Determines if the specified address has permission to udpate addresses in the protocol\\n    /// @param potentialAddress Address to check\\n    function isAddressManagerAdmin(address potentialAddress)\\n        external\\n        view\\n        returns (bool);\\n\\n    /// @dev Determines if the specified address has permission to update parameters in the protocol\\n    /// @param potentialAddress Address to check\\n    function isParameterManagerAdmin(address potentialAddress)\\n        external\\n        view\\n        returns (bool);\\n\\n    /// @dev Determines if the specified address has permission to to mint and burn reaction NFTs\\n    /// @param potentialAddress Address to check\\n    function isReactionNftAdmin(address potentialAddress)\\n        external\\n        view\\n        returns (bool);\\n\\n    /// @dev Determines if the specified address has permission to purchase curator vault tokens\\n    /// @param potentialAddress Address to check\\n    function isCuratorVaultPurchaser(address potentialAddress)\\n        external\\n        view\\n        returns (bool);\\n\\n    /// @dev Determines if the specified address has permission to mint and burn curator tokens\\n    /// @param potentialAddress Address to check\\n    function isCuratorTokenAdmin(address potentialAddress)\\n        external\\n        view\\n        returns (bool);\\n\\n    /// @dev Determines if the specified address has permission to update sigNonces\\n    /// @param potentialAddress Address to check\\n    function isSigNonceUpdater(address potentialAddress)\\n        external\\n        view\\n        returns (bool);\\n}\\n\",\"keccak256\":\"0x752f9e11049dbc026b0c092e8af4b03c33d884e67915be570b6ee767a8c03633\",\"license\":\"GPL-3.0\"},\"contracts/Reactions/IReactionVault.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\nimport \\\"../Token/IWMATIC.sol\\\";\\n\\n/// @dev Interface for the ReactionVault that supports buying and spending reactions\\ninterface IReactionVault {\\n    struct ReactionPriceDetails {\\n        IWMATIC paymentToken;\\n        uint256 reactionPrice;\\n        uint256 saleCuratorLiabilityBasisPoints;\\n    }\\n}\\n\",\"keccak256\":\"0x686da314820d3b0a9eaa7409a6885bf49021f2906430167f610cdb047b46dc1b\",\"license\":\"GPL-3.0\"},\"contracts/Token/IStandard1155.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\n/// @dev Interface for the Standard1155 toke contract.\\ninterface IStandard1155 {\\n    /// @dev Allows a priviledged account to mint tokens to the specified address\\n    function mint(\\n        address to,\\n        uint256 id,\\n        uint256 amount,\\n        bytes memory data\\n    ) external;\\n\\n    function burn(\\n        address from,\\n        uint256 id,\\n        uint256 amount\\n    ) external;\\n}\\n\",\"keccak256\":\"0x4d68249e8c10bd9aab5ae4dce0c72c88ac899a451b8624c409780cd60e88abc4\",\"license\":\"GPL-3.0\"},\"contracts/Token/IWMATIC.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport \\\"@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol\\\";\\n\\n/// @dev Interface for interacting with the wrapped matic token contract\\ninterface IWMATIC is IERC20Upgradeable {\\n    // Send MATIC directly to contract\\n    receive() external payable;\\n\\n    // Call deposit directly\\n    function deposit() external payable;\\n\\n    // Withdraw wrapped tokens into MATIC\\n    function withdraw(uint256 wad) external;\\n}\\n\",\"keccak256\":\"0x24dc1098e5e0ac44ae003cd466dd7d8693b2b5591804cf1f7d9600195b6d7d1c\",\"license\":\"GPL-3.0\"},\"contracts/WithSig/DataTypes.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\n/// @title DataTypes\\n/// @dev A standard library of data types used throughout the Rara Protocol\\nlibrary DataTypes {\\n    /// @notice A struct containing the necessary information to reconstruct an EIP-712 typed data signature.\\n    /// @param v The signature's recovery parameter.\\n    /// @param r The signature's r parameter.\\n    /// @param s The signature's s parameter\\n    /// @param deadline The signature's deadline\\n    struct EIP712Signature {\\n        uint8 v;\\n        bytes32 r;\\n        bytes32 s;\\n        uint256 deadline;\\n    }\\n\\n    /// @notice A struct containing the parameters required for the `reactWithSig()` function.\\n    ///         Parameters are almost the same as the regular `react()` function, with the reactor's (signer) address and an EIP712Signature added.\\n    /// @param reactor The reactor which is the message signer.\\n    /// @param transformId Internal id used to derive the reaction token id.\\n    /// @param quantity How many reactions to spend.\\n    /// @param optionBits Optional param to specify options how the user wants transform reaction\\n    /// @param takerNftChainId Chain ID where the NFT lives\\n    /// @param takerNftAddress Target contract where the reaction is targeting\\n    /// @param takerNftId Target NFT ID in the contract\\n    /// @param ipfsMetadataHash Optional hash of any metadata being associated with spend action\\n    /// @param sig The EIP712Signature struct containing the follower's signature.\\n    struct ReactWithSigData {\\n        address reactor;\\n        uint256 transformId;\\n        uint256 quantity;\\n        uint256 optionBits;\\n        uint256 takerNftChainId;\\n        address takerNftAddress;\\n        uint256 takerNftId;\\n        string ipfsMetadataHash;\\n        EIP712Signature sig;\\n    }\\n\\n    struct RegisterNftWithSigData {\\n        address registrant;\\n        address nftContractAddress;\\n        uint256 nftId;\\n        address creatorAddress;\\n        uint256 creatorSaleBasisPoints;\\n        uint256 optionBits;\\n        string ipfsMetadataHash;\\n        EIP712Signature sig;\\n    }\\n\\n    /**\\n     * @notice A struct containing the parameters required for the `addDispatcherWithSig()` function.\\n     *\\n     * @param account The address of the account adding the dispatcher.\\n     * @param dispatcher The dispatcher address to add for the account.\\n     * @param sig The EIP712Signature struct containing the account's signature.\\n     */\\n    struct AddDispatcherWithSigData {\\n        address account;\\n        address dispatcher;\\n        EIP712Signature sig;\\n    }\\n\\n    /**\\n     * @notice A struct containing the parameters required for the `removeDispatcherWithSig()` function.\\n     *\\n     * @param account The address of the account removing the dispatcher.\\n     * @param dispatcher The dispatcher address to remove from the account.\\n     * @param sig The EIP712Signature struct containing the account's signature.\\n     */\\n    struct RemoveDispatcherWithSigData {\\n        address account;\\n        address dispatcher;\\n        EIP712Signature sig;\\n    }\\n}\\n\",\"keccak256\":\"0x9fde21fcf21b39f5e14f3c48ee50d9b442790224d08b9808af5ec496d66a0d22\",\"license\":\"GPL-3.0\"},\"contracts/WithSig/WithSigEnabled.sol\":{\"content\":\"//SPDX-License-Identifier: GPL-3.0\\npragma solidity 0.8.9;\\n\\nimport {DataTypes} from \\\"./DataTypes.sol\\\";\\n\\ncontract WithSigEnabled {\\n    string public constant SIG_DOMAIN_NAME = \\\"Rara Protocol\\\";\\n    bytes32 internal constant EIP712_REVISION_HASH = keccak256(\\\"1\\\");\\n    bytes32 internal constant EIP712_DOMAIN_TYPEHASH =\\n        keccak256(\\n            \\\"EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)\\\"\\n        );\\n\\n    // Signature Errors\\n    error SignatureInvalid();\\n    error SignatureExpired();\\n\\n    /**\\n     * @dev Wrapper for ecrecover to reduce code size, used in meta-tx specific functions.\\n     */\\n    function _validateRecoveredAddress(\\n        bytes32 digest,\\n        address expectedAddress,\\n        DataTypes.EIP712Signature calldata sig\\n    ) internal view {\\n        if (sig.deadline < block.timestamp) revert SignatureExpired();\\n        address recoveredAddress = ecrecover(digest, sig.v, sig.r, sig.s);\\n        if (\\n            recoveredAddress == address(0) ||\\n            recoveredAddress != expectedAddress\\n        ) revert SignatureInvalid();\\n    }\\n\\n    /**\\n     * @dev Calculates EIP712 DOMAIN_SEPARATOR based on the current contract and chain ID.\\n     */\\n    function _calculateDomainSeparator() internal view returns (bytes32) {\\n        return\\n            keccak256(\\n                abi.encode(\\n                    EIP712_DOMAIN_TYPEHASH,\\n                    keccak256(bytes(SIG_DOMAIN_NAME)),\\n                    EIP712_REVISION_HASH,\\n                    block.chainid,\\n                    address(this)\\n                )\\n            );\\n    }\\n\\n    /**\\n     * @dev Calculates EIP712 digest based on the current DOMAIN_SEPARATOR.\\n     *\\n     * @param hashedMessage The message hash from which the digest should be calculated.\\n     *\\n     * @return bytes32 A 32-byte output representing the EIP712 digest.\\n     */\\n    function _calculateDigest(bytes32 hashedMessage)\\n        internal\\n        view\\n        returns (bytes32)\\n    {\\n        bytes32 digest;\\n        unchecked {\\n            digest = keccak256(\\n                abi.encodePacked(\\n                    \\\"\\\\x19\\\\x01\\\",\\n                    _calculateDomainSeparator(),\\n                    hashedMessage\\n                )\\n            );\\n        }\\n        return digest;\\n    }\\n}\\n\",\"keccak256\":\"0x90e95d8633f649f48070f40979c9651045439b1175b1dff8288cec94b4bd974f\",\"license\":\"GPL-3.0\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610c72806100206000396000f3fe608060405234801561001057600080fd5b50600436106100835760003560e01c8063203624a4146100885780632dac35f81461009d57806333285cd0146100e05780633ab76e9f146100f35780633fb2fdf11461011e5780635229fcb71461013157806375348d351461016a578063c4d66de81461017d578063ef97c55b14610190575b600080fd5b61009b610096366004610a7b565b6101cc565b005b6100cb6100ab366004610a9f565b603460209081526000928352604080842090915290825290205460ff1681565b60405190151581526020015b60405180910390f35b61009b6100ee366004610af0565b61020e565b603354610106906001600160a01b031681565b6040516001600160a01b0390911681526020016100d7565b61009b61012c366004610af0565b610420565b61015d6040518060400160405280600d81526020016c14985c9848141c9bdd1bd8dbdb609a1b81525081565b6040516100d79190610b0c565b61009b610178366004610a7b565b6104a1565b61009b61018b366004610a7b565b6104d3565b6100cb61019e366004610a9f565b6001600160a01b03918216600090815260346020908152604080832093909416825291909152205460ff1690565b600260015414156101f85760405162461bcd60e51b81526004016101ef90610b61565b60405180910390fd5b6002600155610207338261064f565b5060018055565b600260015414156102315760405162461bcd60e51b81526004016101ef90610b61565b60026001556103fb6103e57f6371f5b24693fc8dfb898f10379bddfd94336fa7504f2dc407bac20985a155ac61026a6020850185610a7b565b61027a6040860160208701610a7b565b603360009054906101000a90046001600160a01b03166001600160a01b031663b27bcea16040518163ffffffff1660e01b8152600401602060405180830381600087803b1580156102ca57600080fd5b505af11580156102de573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103029190610b98565b6001600160a01b031663c9fac01c61031d6020890189610a7b565b6040516001600160e01b031960e084901b1681526001600160a01b039091166004820152602401602060405180830381600087803b15801561035e57600080fd5b505af1158015610372573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103969190610bb5565b6040805160208101959095526001600160a01b039384169085015291166060830152608082015260a0848101359082015260c00160405160208183030381529060405280519060200120610736565b6103f26020840184610a7b565b8360400161083b565b61020761040b6020830183610a7b565b61041b6040840160208501610a7b565b61064f565b600260015414156104435760405162461bcd60e51b81526004016101ef90610b61565b600260015561047c6103e57f246352342d4a76225b06d93470bf1b864bd7963c6e724d344a0a94f30023211061026a6020850185610a7b565b61020761048c6020830183610a7b565b61049c6040840160208501610a7b565b61091f565b600260015414156104c45760405162461bcd60e51b81526004016101ef90610b61565b6002600155610207338261091f565b600054610100900460ff16158080156104f35750600054600160ff909116105b8061050d5750303b15801561050d575060005460ff166001145b6105705760405162461bcd60e51b815260206004820152602e60248201527f496e697469616c697a61626c653a20636f6e747261637420697320616c72656160448201526d191e481a5b9a5d1a585b1a5e995960921b60648201526084016101ef565b6000805460ff191660011790558015610593576000805461ff0019166101001790555b60408051808201909152600f81526e125b9d985b1a59080c081a5b9c1d5d608a1b60208201526001600160a01b0383166105e05760405162461bcd60e51b81526004016101ef9190610b0c565b506105e9610a05565b603380546001600160a01b0319166001600160a01b038416179055801561064b576000805461ff0019169055604051600181527f7f26b83ff96e1f2b6a682f133852f6798a09c465da95921460cefb3847402498906020015b60405180910390a15b5050565b6001600160a01b038083166000908152603460209081526040808320938516835292815290829020548251808401909352601d83527f4469737061746368657220616c726561647920756e61737369676e65640000009183019190915260ff1615156001146106d15760405162461bcd60e51b81526004016101ef9190610b0c565b506001600160a01b03828116600081815260346020908152604080832094861680845294825291829020805460ff1916905581519283528201929092527f3ebf5bc2b3019b1a8184599297ad4592117f522c97b984fa23430e9bb762b1119101610642565b6000806107fc604080518082018252600d81526c14985c9848141c9bdd1bd8dbdb609a1b60209182015281517f8b73c3c69bb8fe3d512ecc4cf759cc79239f7b179b0ffacaa9a75d522b39400f818301527f83a4bbdefa59dc908edca29c5353161283046ee5923d073615f615d480d5e519818401527fc89efdaa54c0f20c7adf612882df0950f5a951637e0307cdcb4c672f298b8bc660608201524660808201523060a0808301919091528351808303909101815260c0909101909252815191012090565b60405161190160f01b602082015260228101919091526042810184905260620160408051601f1981840301815291905280516020909101209392505050565b428160600135101561086057604051630819bdcd60e01b815260040160405180910390fd5b60006001846108726020850185610bce565b604080516000815260208181018084529490945260ff9092168282015291850135606082015290840135608082015260a0016020604051602081039080840390855afa1580156108c6573d6000803e3d6000fd5b5050604051601f1901519150506001600160a01b03811615806108fb5750826001600160a01b0316816001600160a01b031614155b15610919576040516337e8456b60e01b815260040160405180910390fd5b50505050565b6001600160a01b038083166000908152603460209081526040808320938516835292815290829020548251808401909352601b83527f4469737061746368657220616c72656164792061737369676e656400000000009183019190915260ff161561099d5760405162461bcd60e51b81526004016101ef9190610b0c565b506001600160a01b03828116600081815260346020908152604080832094861680845294825291829020805460ff1916600117905581519283528201929092527f7d02856c1623b3a0f1ba592da7cb5e5cdf6ec056a1244f503a8db972e0c586989101610642565b600054610100900460ff16610a2c5760405162461bcd60e51b81526004016101ef90610bf1565b610a34610a36565b565b600054610100900460ff16610a5d5760405162461bcd60e51b81526004016101ef90610bf1565b60018055565b6001600160a01b0381168114610a7857600080fd5b50565b600060208284031215610a8d57600080fd5b8135610a9881610a63565b9392505050565b60008060408385031215610ab257600080fd5b8235610abd81610a63565b91506020830135610acd81610a63565b809150509250929050565b600060c08284031215610aea57600080fd5b50919050565b600060c08284031215610b0257600080fd5b610a988383610ad8565b600060208083528351808285015260005b81811015610b3957858101830151858201604001528201610b1d565b81811115610b4b576000604083870101525b50601f01601f1916929092016040019392505050565b6020808252601f908201527f5265656e7472616e637947756172643a207265656e7472616e742063616c6c00604082015260600190565b600060208284031215610baa57600080fd5b8151610a9881610a63565b600060208284031215610bc757600080fd5b5051919050565b600060208284031215610be057600080fd5b813560ff81168114610a9857600080fd5b6020808252602b908201527f496e697469616c697a61626c653a20636f6e7472616374206973206e6f74206960408201526a6e697469616c697a696e6760a81b60608201526080019056fea264697066735822122095f9cf3e431ea2d388883c875238c4637a1ca360da7a2718b3b985e5ec5f455e64736f6c63430008090033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100835760003560e01c8063203624a4146100885780632dac35f81461009d57806333285cd0146100e05780633ab76e9f146100f35780633fb2fdf11461011e5780635229fcb71461013157806375348d351461016a578063c4d66de81461017d578063ef97c55b14610190575b600080fd5b61009b610096366004610a7b565b6101cc565b005b6100cb6100ab366004610a9f565b603460209081526000928352604080842090915290825290205460ff1681565b60405190151581526020015b60405180910390f35b61009b6100ee366004610af0565b61020e565b603354610106906001600160a01b031681565b6040516001600160a01b0390911681526020016100d7565b61009b61012c366004610af0565b610420565b61015d6040518060400160405280600d81526020016c14985c9848141c9bdd1bd8dbdb609a1b81525081565b6040516100d79190610b0c565b61009b610178366004610a7b565b6104a1565b61009b61018b366004610a7b565b6104d3565b6100cb61019e366004610a9f565b6001600160a01b03918216600090815260346020908152604080832093909416825291909152205460ff1690565b600260015414156101f85760405162461bcd60e51b81526004016101ef90610b61565b60405180910390fd5b6002600155610207338261064f565b5060018055565b600260015414156102315760405162461bcd60e51b81526004016101ef90610b61565b60026001556103fb6103e57f6371f5b24693fc8dfb898f10379bddfd94336fa7504f2dc407bac20985a155ac61026a6020850185610a7b565b61027a6040860160208701610a7b565b603360009054906101000a90046001600160a01b03166001600160a01b031663b27bcea16040518163ffffffff1660e01b8152600401602060405180830381600087803b1580156102ca57600080fd5b505af11580156102de573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103029190610b98565b6001600160a01b031663c9fac01c61031d6020890189610a7b565b6040516001600160e01b031960e084901b1681526001600160a01b039091166004820152602401602060405180830381600087803b15801561035e57600080fd5b505af1158015610372573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103969190610bb5565b6040805160208101959095526001600160a01b039384169085015291166060830152608082015260a0848101359082015260c00160405160208183030381529060405280519060200120610736565b6103f26020840184610a7b565b8360400161083b565b61020761040b6020830183610a7b565b61041b6040840160208501610a7b565b61064f565b600260015414156104435760405162461bcd60e51b81526004016101ef90610b61565b600260015561047c6103e57f246352342d4a76225b06d93470bf1b864bd7963c6e724d344a0a94f30023211061026a6020850185610a7b565b61020761048c6020830183610a7b565b61049c6040840160208501610a7b565b61091f565b600260015414156104c45760405162461bcd60e51b81526004016101ef90610b61565b6002600155610207338261091f565b600054610100900460ff16158080156104f35750600054600160ff909116105b8061050d5750303b15801561050d575060005460ff166001145b6105705760405162461bcd60e51b815260206004820152602e60248201527f496e697469616c697a61626c653a20636f6e747261637420697320616c72656160448201526d191e481a5b9a5d1a585b1a5e995960921b60648201526084016101ef565b6000805460ff191660011790558015610593576000805461ff0019166101001790555b60408051808201909152600f81526e125b9d985b1a59080c081a5b9c1d5d608a1b60208201526001600160a01b0383166105e05760405162461bcd60e51b81526004016101ef9190610b0c565b506105e9610a05565b603380546001600160a01b0319166001600160a01b038416179055801561064b576000805461ff0019169055604051600181527f7f26b83ff96e1f2b6a682f133852f6798a09c465da95921460cefb3847402498906020015b60405180910390a15b5050565b6001600160a01b038083166000908152603460209081526040808320938516835292815290829020548251808401909352601d83527f4469737061746368657220616c726561647920756e61737369676e65640000009183019190915260ff1615156001146106d15760405162461bcd60e51b81526004016101ef9190610b0c565b506001600160a01b03828116600081815260346020908152604080832094861680845294825291829020805460ff1916905581519283528201929092527f3ebf5bc2b3019b1a8184599297ad4592117f522c97b984fa23430e9bb762b1119101610642565b6000806107fc604080518082018252600d81526c14985c9848141c9bdd1bd8dbdb609a1b60209182015281517f8b73c3c69bb8fe3d512ecc4cf759cc79239f7b179b0ffacaa9a75d522b39400f818301527f83a4bbdefa59dc908edca29c5353161283046ee5923d073615f615d480d5e519818401527fc89efdaa54c0f20c7adf612882df0950f5a951637e0307cdcb4c672f298b8bc660608201524660808201523060a0808301919091528351808303909101815260c0909101909252815191012090565b60405161190160f01b602082015260228101919091526042810184905260620160408051601f1981840301815291905280516020909101209392505050565b428160600135101561086057604051630819bdcd60e01b815260040160405180910390fd5b60006001846108726020850185610bce565b604080516000815260208181018084529490945260ff9092168282015291850135606082015290840135608082015260a0016020604051602081039080840390855afa1580156108c6573d6000803e3d6000fd5b5050604051601f1901519150506001600160a01b03811615806108fb5750826001600160a01b0316816001600160a01b031614155b15610919576040516337e8456b60e01b815260040160405180910390fd5b50505050565b6001600160a01b038083166000908152603460209081526040808320938516835292815290829020548251808401909352601b83527f4469737061746368657220616c72656164792061737369676e656400000000009183019190915260ff161561099d5760405162461bcd60e51b81526004016101ef9190610b0c565b506001600160a01b03828116600081815260346020908152604080832094861680845294825291829020805460ff1916600117905581519283528201929092527f7d02856c1623b3a0f1ba592da7cb5e5cdf6ec056a1244f503a8db972e0c586989101610642565b600054610100900460ff16610a2c5760405162461bcd60e51b81526004016101ef90610bf1565b610a34610a36565b565b600054610100900460ff16610a5d5760405162461bcd60e51b81526004016101ef90610bf1565b60018055565b6001600160a01b0381168114610a7857600080fd5b50565b600060208284031215610a8d57600080fd5b8135610a9881610a63565b9392505050565b60008060408385031215610ab257600080fd5b8235610abd81610a63565b91506020830135610acd81610a63565b809150509250929050565b600060c08284031215610aea57600080fd5b50919050565b600060c08284031215610b0257600080fd5b610a988383610ad8565b600060208083528351808285015260005b81811015610b3957858101830151858201604001528201610b1d565b81811115610b4b576000604083870101525b50601f01601f1916929092016040019392505050565b6020808252601f908201527f5265656e7472616e637947756172643a207265656e7472616e742063616c6c00604082015260600190565b600060208284031215610baa57600080fd5b8151610a9881610a63565b600060208284031215610bc757600080fd5b5051919050565b600060208284031215610be057600080fd5b813560ff81168114610a9857600080fd5b6020808252602b908201527f496e697469616c697a61626c653a20636f6e7472616374206973206e6f74206960408201526a6e697469616c697a696e6760a81b60608201526080019056fea264697066735822122095f9cf3e431ea2d388883c875238c4637a1ca360da7a2718b3b985e5ec5f455e64736f6c63430008090033",
+  "devdoc": {
+    "events": {
+      "DispatcherAdded(address,address)": {
+        "details": "Event emitted when a dispatcher is added"
+      },
+      "DispatcherRemoved(address,address)": {
+        "details": "Event emitted when a dispatcher is removed"
+      }
+    },
+    "kind": "dev",
+    "methods": {
+      "initialize(address)": {
+        "details": "initializer to call after deployment, can only be called once"
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 2446,
+        "contract": "contracts/DispatcherManager/DispatcherManager.sol:DispatcherManager",
+        "label": "_initialized",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_uint8"
+      },
+      {
+        "astId": 2449,
+        "contract": "contracts/DispatcherManager/DispatcherManager.sol:DispatcherManager",
+        "label": "_initializing",
+        "offset": 1,
+        "slot": "0",
+        "type": "t_bool"
+      },
+      {
+        "astId": 2604,
+        "contract": "contracts/DispatcherManager/DispatcherManager.sol:DispatcherManager",
+        "label": "_status",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 2648,
+        "contract": "contracts/DispatcherManager/DispatcherManager.sol:DispatcherManager",
+        "label": "__gap",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_array(t_uint256)49_storage"
+      },
+      {
+        "astId": 11077,
+        "contract": "contracts/DispatcherManager/DispatcherManager.sol:DispatcherManager",
+        "label": "addressManager",
+        "offset": 0,
+        "slot": "51",
+        "type": "t_contract(IAddressManager)8719"
+      },
+      {
+        "astId": 11084,
+        "contract": "contracts/DispatcherManager/DispatcherManager.sol:DispatcherManager",
+        "label": "dispatchersByAccount",
+        "offset": 0,
+        "slot": "52",
+        "type": "t_mapping(t_address,t_mapping(t_address,t_bool))"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_uint256)49_storage": {
+        "base": "t_uint256",
+        "encoding": "inplace",
+        "label": "uint256[49]",
+        "numberOfBytes": "1568"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_contract(IAddressManager)8719": {
+        "encoding": "inplace",
+        "label": "contract IAddressManager",
+        "numberOfBytes": "20"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_address,t_mapping(t_address,t_bool))": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => mapping(address => bool))",
+        "numberOfBytes": "32",
+        "value": "t_mapping(t_address,t_bool)"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      },
+      "t_uint8": {
+        "encoding": "inplace",
+        "label": "uint8",
+        "numberOfBytes": "1"
+      }
+    }
+  }
+}

@@ -52,7 +52,7 @@ const config: HardhatUserConfig = {
       url: "http://127.0.0.1:8545",
     },
     mumbai: {
-      url: "https://rpc-mumbai.maticvigil.com",
+      url: process.env.INFURA_RPC_MUMBAI,
       accounts: [
         process.env.DEPLOY_PRIVATE_KEY || NULL_PK, // Env should set private key used for deploy
       ],
