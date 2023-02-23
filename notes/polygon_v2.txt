@@ -1,0 +1,78 @@
+Deploying with account 0xa43C0ad9B1B867AdE1FCF0A88b779b2A3642d1b3
+{
+  chainId: '137',
+  rpc: 'https://polygon-mainnet.infura.io/v3/3bd4b032abf14871a9fc0f2574e0016f',
+  wallet: '0xa43C0ad9B1B867AdE1FCF0A88b779b2A3642d1b3'
+}
+
+
+Upgrading existing contracts
+reusing "DefaultProxyAdmin" at 0x2665Aa3846EC61e6D28A0d9F76b70047719F3664
+deploying "RoleManager_Implementation" (tx: 0x1466ee94306532bf5249f2d49b415fd7e2267cf98f61eb8dd021894cc91f5974)...: deployed at 0x8A7f06F3C950A19bdd592f754e4aeECD3F1D03F8 with 760593 gas
+executing DefaultProxyAdmin.upgrade (tx: 0xa61c1219713a045bc87fc0f09e71e1032bc049664d01a32d8bdddef658f98c98) ...: performed with 38373 gas
+{
+  name: 'RoleManager',
+  address: '0x66dBF730A7F9a251C4B3a6b56d01e0749AFDf847',
+  imp: '0x8A7f06F3C950A19bdd592f754e4aeECD3F1D03F8',
+  proxy_imp: '0x8A7f06F3C950A19bdd592f754e4aeECD3F1D03F8'
+}
+reusing "DefaultProxyAdmin" at 0x2665Aa3846EC61e6D28A0d9F76b70047719F3664
+deploying "AddressManager_Implementation" (tx: 0x0134e8e556c6769a3b4a84e0ab9817ac5fe5f3e8c0fb950011b8aa7b5b25fded)...: deployed at 0x1Cf87B7B43F1B9f2A7fCe374e5721a95380e772a with 962693 gas
+executing DefaultProxyAdmin.upgrade (tx: 0xbfade2a32398203964ea6715f1b0ca80da190d370c728d38292f987e7bd15360) ...: performed with 38373 gas
+{
+  name: 'AddressManager',
+  address: '0x2e6C454bde8a946172D0b43cCB84d19F12a0CE49',
+  imp: '0x1Cf87B7B43F1B9f2A7fCe374e5721a95380e772a',
+  proxy_imp: '0x1Cf87B7B43F1B9f2A7fCe374e5721a95380e772a'
+}
+reusing "DefaultProxyAdmin" at 0x2665Aa3846EC61e6D28A0d9F76b70047719F3664
+deploying "ParameterManager_Implementation" (tx: 0xc0d76915451ae439e9eff108d45dbb92376716fd3d655d5d33c8b3c167aa4bf6)...: deployed at 0xD6c6C5bd1B1408A0F54DcD77EE6F7A4974162F9C with 1356046 gas
+executing DefaultProxyAdmin.upgrade (tx: 0x65eb2a05d7f067022a37c5369456bbc2c46bd70641faf0ee93e60f8d43425d95) ...: performed with 38373 gas
+{
+  name: 'ParameterManager',
+  address: '0xF60de25472b10e5886270b13dDec51D8BaDcd764',
+  imp: '0xD6c6C5bd1B1408A0F54DcD77EE6F7A4974162F9C',
+  proxy_imp: '0xD6c6C5bd1B1408A0F54DcD77EE6F7A4974162F9C'
+}
+reusing "DefaultProxyAdmin" at 0x2665Aa3846EC61e6D28A0d9F76b70047719F3664
+deploying "MakerRegistrar_Implementation" (tx: 0xec78567e32cd489cae94e27bf8a3aa32bca1d444a70b4800041922e940461f5e)...: deployed at 0x4F5b982899EB14CfE5749f31F1cFe356cbdF2329 with 1898199 gas
+executing DefaultProxyAdmin.upgrade (tx: 0xb4122d82aab161b97aabf8a0718956bf0de10d633182940625b4a6c01dae8e73) ...: performed with 38373 gas
+{
+  name: 'MakerRegistrar',
+  address: '0x47CD3266FA94E40613B37a88D98196325Cd28412',
+  imp: '0x4F5b982899EB14CfE5749f31F1cFe356cbdF2329',
+  proxy_imp: '0x4F5b982899EB14CfE5749f31F1cFe356cbdF2329'
+}
+reusing "DefaultProxyAdmin" at 0x2665Aa3846EC61e6D28A0d9F76b70047719F3664
+deploying "ReactionVault_Implementation" (tx: 0xb45a33af57590f4e21255b956e6fd25224ebd67afd4ae002f392128117bd5585)...: deployed at 0x5d31B43cEC16e184D2C811eeB5cdF10c4053575b with 4848480 gas
+executing DefaultProxyAdmin.upgrade (tx: 0x54ea17bf807a724e49e980e5c56d748e272e8d73856c2d7b5332710af19f4695) ...: performed with 38373 gas
+{
+  name: 'ReactionVault',
+  address: '0xE5BA5c73378BC8Da94738CB04490680ae3eab88C',
+  imp: '0x5d31B43cEC16e184D2C811eeB5cdF10c4053575b',
+  proxy_imp: '0x5d31B43cEC16e184D2C811eeB5cdF10c4053575b'
+}
+
+
+Deploying new contracts
+reusing "DefaultProxyAdmin" at 0x2665Aa3846EC61e6D28A0d9F76b70047719F3664
+deploying "DispatcherManager_Implementation" (tx: 0xd17c8e98dc1fa62522f80d223ced5a4ef436aacd5205c94a200bf1b3b5647ff0)...: deployed at 0x155359ac7a608CfFA802a1859AD7d1196b5709Fd with 741242 gas
+deploying "DispatcherManager_Proxy" (tx: 0xad4c3faf8389f27b559722c45a45206861521ce81771d463ceb129a6c801c721)...: deployed at 0x45397d5514600732FA285A0F5ce8657De8851a34 with 614730 gas
+
+
+Granting temp permissions
+Granted ADDRESS_MANAGER_ADMIN to 0xa43C0ad9B1B867AdE1FCF0A88b779b2A3642d1b3
+Granted SIG_NONCE_UPDATER to 0xE5BA5c73378BC8Da94738CB04490680ae3eab88C
+Granted SIG_NONCE_UPDATER to 0x47CD3266FA94E40613B37a88D98196325Cd28412
+Granted SIG_NONCE_UPDATER to 0x45397d5514600732FA285A0F5ce8657De8851a34
+
+
+Updating AddressManager
+Set AddressManager.dispatcherManager to 0x45397d5514600732FA285A0F5ce8657De8851a34
+
+
+Revoking temp permissions for deployer
+Revoked ADDRESS_MANAGER_ADMIN to 0xa43C0ad9B1B867AdE1FCF0A88b779b2A3642d1b3
+
+
+Done.
